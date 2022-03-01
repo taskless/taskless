@@ -19,7 +19,7 @@ const secretToKey = (secret: string) => {
  * @param secret
  * @returns
  */
-export const encode = (obj: any, secret?: string) => {
+export const encode = (obj: unknown, secret?: string) => {
   const str = JSON.stringify({
     envelope: obj,
   });
@@ -77,8 +77,12 @@ export const decode = <T>(str: string, secrets: (string | undefined)[]): T => {
       continue;
     }
     try {
+      // break on success
       result = decodeOne<T>(str, secret);
-    } catch (e) {}
+      break;
+    } catch (e) {
+      result = undefined;
+    }
   }
   if (typeof result === "undefined") {
     try {

@@ -23,8 +23,8 @@ export type JobOptions = {
 };
 
 export type JobMeta = {
-  applicationId: string;
-  organizationId: string;
+  applicationId: string | null;
+  organizationId: string | null;
   attempt: number;
 };
 
@@ -87,10 +87,10 @@ export type QueueMethods<T> = {
 };
 
 /** The Job Handler signature, taking a `payload` and `meta` */
-export type JobHandler<T, U = any> = (payload: T, meta: JobMeta) => U;
+export type JobHandler<T, U = never> = (payload: T, meta: JobMeta) => U;
 
 /** An intgeration callback for getting the request body as a JSON object */
-export type GetBodyCallback = () => any | Promise<any>;
+export type GetBodyCallback = () => JSONValue | Promise<JSONValue>;
 
 /** An integration callback for getting the headers as a JSON object */
 export type GetHeadersCallback = () =>
@@ -98,4 +98,18 @@ export type GetHeadersCallback = () =>
   | Promise<IncomingHttpHeaders>;
 
 /** An integration callback for sending JSON back to Taskless.io */
-export type SendJsonCallback = (json: any) => void | Promise<void>;
+export type SendJsonCallback = (json: JSONValue) => void | Promise<void>;
+
+/** The taskless body definition (what is posted to & from the client) */
+export type TasklessBody = {
+  taskless: string;
+};
+
+/** A recursive description of a valid JSON value */
+type JSONValue =
+  | null
+  | string
+  | number
+  | boolean
+  | { [key: string]: JSONValue }
+  | Array<JSONValue>;

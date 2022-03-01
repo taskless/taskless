@@ -10,6 +10,7 @@ import {
   JobOptions,
   QueueOptions,
   SendJsonCallback,
+  TasklessBody,
 } from "../types";
 import { create } from "./getter";
 import { JobMethodEnum } from "../__generated__/schema";
@@ -38,8 +39,21 @@ const defaultJobOptions: JobOptions = {
 };
 
 /** Prefers undefined, defaulting to the second argument */
-const undefinedOr = <T = any>(x?: any, other?: T): T | undefined =>
+const undefinedOr = <T = never>(x?: unknown, other?: T): T | undefined =>
   typeof x === "undefined" ? undefined : other;
+
+const firstOf = <T>(unk: T | T[]) => {
+  return (Array.isArray(unk) ? unk[0] : unk) as T;
+};
+
+/** Typeguard */
+function isTasklessBody(body: unknown): body is TasklessBody {
+  return (
+    typeof body === "object" &&
+    body !== null &&
+    typeof (body as TasklessBody).taskless !== "undefined"
+  );
+}
 
 /** A helper function for keyof typeof access */
 type KeyOf<T> = keyof T;
@@ -53,7 +67,7 @@ type TasklessClientConstructorArgs<T> = {
 
 export class TasklessClient<T> {
   private route: string;
-  private handler: JobHandler<any>;
+  private handler: JobHandler<T>;
   private queueOptions: QueueOptions;
   private jobOptions: JobOptions;
 
@@ -108,15 +122,15 @@ export class TasklessClient<T> {
     return c;
   }
 
-  p2b(payload: any) {
+  p2b(payload: unknown): TasklessBody {
     return {
-      data: encode(payload, this.queueOptions.encryptionKey),
+      taskless: encode(payload, this.queueOptions.encryptionKey),
     };
   }
 
-  b2p(body: any): T {
+  b2p(body: TasklessBody): T {
     return decode(
-      body.data,
+      body.taskless,
       [
         this.queueOptions.encryptionKey,
         ...(this.queueOptions.expiredEncryptionKeys ?? []),
@@ -138,12 +152,17 @@ export class TasklessClient<T> {
   }) {
     const { getBody, getHeaders, send, sendError } = functions;
     const body = await getBody();
+    if (!isTasklessBody(body)) {
+      throw new Error("Malformed data");
+    }
+
     const payload = this.b2p(body);
+    const h = await getHeaders();
 
     const meta: JobMeta = {
-      applicationId: "",
-      organizationId: "",
-      attempt: 0,
+      applicationId: firstOf(h["x-taskless-application"]) ?? null,
+      organizationId: firstOf(h["x-taskless-organization"]) ?? null,
+      attempt: parseInt(firstOf(h["x-taskless-attempt"]) ?? "0", 10),
     };
 
     try {
@@ -155,7 +174,7 @@ export class TasklessClient<T> {
     } catch (e) {
       console.error(e);
       await sendError({
-        error: e,
+        error: JSON.stringify(e),
       });
     }
   }

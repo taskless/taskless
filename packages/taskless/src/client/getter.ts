@@ -4,10 +4,10 @@ import phin from "phin";
 
 /** A Phin GraphQL request error */
 export class RequestError extends Error {
-  raw: any;
-  constructor(err: any, raw: any) {
-    super(err?.message ?? err);
-    this.raw = err;
+  raw: unknown;
+  constructor(err: string | undefined, raw: unknown) {
+    super(err);
+    this.raw = raw;
   }
 }
 
@@ -29,8 +29,8 @@ type RequesterOptions = {
 
 /** A simplified GraphQL response */
 type PhinGraphQLResponse = {
-  data?: any;
-  errors?: any;
+  data?: unknown;
+  errors?: unknown;
 };
 
 /** A simplified GraphQL: request */
@@ -59,11 +59,9 @@ const createGetter = (
   /** A graphql-code-generator friendly fetch function */
   const get: Requester = async <R, V>(
     doc: string,
-    vars: V,
-    options?: any
+    vars: V
+    // options?: object
   ): Promise<R> => {
-    const all = Object.assign({}, phinOptions ?? {}, options ?? {});
-
     const headers = {
       ...(globalOptions?.headers ?? {}),
       ...(phinOptions?.headers ?? {}),
@@ -83,7 +81,7 @@ const createGetter = (
         () =>
           phin<PhinGraphQLResponse>({
             ...phinOptions,
-            url: all.url,
+            url: globalOptions.url,
             method: "POST",
             headers,
             data: JSON.stringify(body),
@@ -97,10 +95,13 @@ const createGetter = (
       if (result.body.errors) {
         throw new RequestError("Unable to run operation", result.body);
       }
+      if (!result.body.data) {
+        throw new RequestError("Received malformed data", result.body);
+      }
 
-      return result.body.data;
-    } catch (err: any) {
-      throw new Error("Could not make request: " + err?.message);
+      return result.body.data as R;
+    } catch (err: unknown) {
+      throw new Error("Could not make request: " + err);
     }
   };
   return get;
