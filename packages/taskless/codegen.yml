@@ -1,0 +1,15 @@
+overwrite: true
+generates:
+  src/__generated__/schema.ts:
+    schema: "./src/__generated__/schema.graphql"
+    documents: "src/graphql/**/*.graphql"
+    config:
+      dedupeFragments: true
+      documentMode: string
+      scalars:
+        timestamptz: string
+        uuid: string
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-generic-sdk
