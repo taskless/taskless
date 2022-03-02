@@ -38,7 +38,7 @@ export function createQueue<T = undefined>(
     req: NextApiRequest,
     res: NextApiResponse
   ) => {
-    t.receive({
+    return t.receive({
       getBody: () => req.body,
       getHeaders: () => req.headers,
       send: (json) => res.status(200).json(json),

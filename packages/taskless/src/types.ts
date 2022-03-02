@@ -87,10 +87,18 @@ export type QueueMethods<T> = {
 };
 
 /** The Job Handler signature, taking a `payload` and `meta` */
-export type JobHandler<T, U = never> = (payload: T, meta: JobMeta) => U;
+export type JobHandler<T> = (
+  payload: T,
+  meta: JobMeta
+) => MaybePromise<JSONValue> | MaybePromise<void>;
+
+type MaybePromise<T> = T | Promise<T>;
+
+/** The result of the Job Handler callback */
+export type JobHandlerResult = MaybePromise<void> | MaybePromise<JSONValue>;
 
 /** An intgeration callback for getting the request body as a JSON object */
-export type GetBodyCallback = () => JSONValue | Promise<JSONValue>;
+export type GetBodyCallback = () => MaybePromise<JSONValue>;
 
 /** An integration callback for getting the headers as a JSON object */
 export type GetHeadersCallback = () =>
@@ -102,8 +110,23 @@ export type SendJsonCallback = (json: JSONValue) => void | Promise<void>;
 
 /** The taskless body definition (what is posted to & from the client) */
 export type TasklessBody = {
+  v: number;
   taskless: string;
 };
+
+/** Supported taskless schema versions. Must be accounted for in typeguard */
+const SUPPORTED_BODY_VERSIONS = [1];
+
+/** Typeguard for TasklessBody */
+export function isTasklessBody(body: unknown): body is TasklessBody {
+  return (
+    typeof body === "object" &&
+    body !== null &&
+    typeof (body as TasklessBody).taskless !== "undefined" &&
+    typeof (body as TasklessBody).v !== "undefined" &&
+    SUPPORTED_BODY_VERSIONS.includes((body as TasklessBody).v)
+  );
+}
 
 /** A recursive description of a valid JSON value */
 type JSONValue =

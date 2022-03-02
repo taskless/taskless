@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 import {
   GetBodyCallback,
   GetHeadersCallback,
+  isTasklessBody,
   Job,
   JobHandler,
   JobHeaders,
@@ -45,15 +46,6 @@ const undefinedOr = <T = never>(x?: unknown, other?: T): T | undefined =>
 const firstOf = <T>(unk: T | T[]) => {
   return (Array.isArray(unk) ? unk[0] : unk) as T;
 };
-
-/** Typeguard */
-function isTasklessBody(body: unknown): body is TasklessBody {
-  return (
-    typeof body === "object" &&
-    body !== null &&
-    typeof (body as TasklessBody).taskless !== "undefined"
-  );
-}
 
 /** A helper function for keyof typeof access */
 type KeyOf<T> = keyof T;
@@ -124,6 +116,7 @@ export class TasklessClient<T> {
 
   p2b(payload: unknown): TasklessBody {
     return {
+      v: 1,
       taskless: encode(payload, this.queueOptions.encryptionKey),
     };
   }
@@ -153,11 +146,33 @@ export class TasklessClient<T> {
     const { getBody, getHeaders, send, sendError } = functions;
     const body = await getBody();
     if (!isTasklessBody(body)) {
-      throw new Error("Malformed data");
+      console.error("Taskless body did not satisfy type checks");
+      await sendError({
+        route: this.route,
+        error:
+          "Unable to extract the body from the request. This may happen if you enqueued this endpoint with an incompatible schema.",
+      });
+      return;
     }
 
-    const payload = this.b2p(body);
-    const h = await getHeaders();
+    let payload: T | undefined;
+    let h:
+      | ReturnType<typeof getHeaders>
+      | ReturnType<Awaited<typeof getHeaders>>;
+    try {
+      payload = this.b2p(body);
+      h = await getHeaders();
+    } catch (e) {
+      console.error(e);
+      const isE = e instanceof Error;
+      await sendError({
+        route: this.route,
+        error: "Could not extract body and headers from request",
+        details: isE ? e.message : "no message",
+        stack: isE ? e.stack ?? "no stack" : "no stack",
+      });
+      return;
+    }
 
     const meta: JobMeta = {
       applicationId: firstOf(h["x-taskless-application"]) ?? null,
@@ -168,13 +183,17 @@ export class TasklessClient<T> {
     try {
       const result = await this.handler(payload, meta);
       await send({
-        result,
+        result: result ?? {},
       });
       return;
     } catch (e) {
       console.error(e);
+      const isE = e instanceof Error;
       await sendError({
-        error: JSON.stringify(e),
+        route: this.route,
+        error: "Error thrown when running job",
+        details: isE ? e.message : "no message",
+        stack: isE ? e.stack ?? "no stack" : "no stack",
       });
     }
   }

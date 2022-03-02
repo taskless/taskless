@@ -25,12 +25,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "run-p watch:tsc:esm watch:tsc:cjs",
+    "dev": "yarn watch",
     "codegen": "graphql-codegen",
     "build": "run-s build:tsc:esm build:tsc:cjs",
     "build:tsc:esm": "tsc --module es2015 --outDir dist/esm",
-    "watch:tsc:esm": "tsc -w --module es2015 --outDir dist/esm",
     "build:tsc:cjs": "tsc --outDir dist/cjs",
+    "watch": "run-p watch:tsc:esm watch:tsc:cjs",
+    "watch:tsc:esm": "tsc -w --module es2015 --outDir dist/esm",
     "watch:tsc:cjs": "tsc -w --outDir dist/cjs",
     "prepack": "run-s build",
     "lint": "eslint"
