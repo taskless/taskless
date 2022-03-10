@@ -1,6 +1,6 @@
 {
   "name": "taskless",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Client for Taskless.io",
   "author": {
     "name": "Taskless.io",
@@ -8,6 +8,7 @@
     "url": "https://taskless.io"
   },
   "repository": "taskless/taskless",
+  "homepage": "https://github.com/taskless/taskless/tree/main/packages/taskless",
   "license": "MIT",
   "files": [
     "dist",
