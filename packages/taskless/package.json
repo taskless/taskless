@@ -79,7 +79,7 @@
       "optional": true
     }
   },
-  "np": {
-    "message": "chore: Increments package.json to %s"
+  "publishConfig": {
+    "access": "public"
   }
 }
