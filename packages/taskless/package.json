@@ -25,7 +25,7 @@
     "node": "12 || 14 || 15 || 16 || 17"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "dev": "yarn watch",
     "codegen": "graphql-codegen",
     "build": "run-s build:tsc:esm build:tsc:cjs",
@@ -35,7 +35,8 @@
     "watch:tsc:esm": "tsc -w --module es2015 --outDir dist/esm",
     "watch:tsc:cjs": "tsc -w --outDir dist/cjs",
     "prepack": "run-s build",
-    "lint": "eslint"
+    "lint": "eslint",
+    "release": "np"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",
@@ -64,6 +65,7 @@
     "graphql": "^15.0.0",
     "graphql-tag": "^2.12.6",
     "next": "^12.1.0",
+    "np": "^7.6.0",
     "npm-run-all": "^4.1.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -77,5 +79,8 @@
     "next": {
       "optional": true
     }
+  },
+  "np": {
+    "message": "chore: Increments package.json to %s"
   }
 }
