@@ -36,7 +36,10 @@
     "plugins": {
       "release-it-yarn-workspaces": true
     },
-    "npm": false
+    "npm": false,
+    "git": {
+      "commitMessage": "chore: Releases version v${version}"
+    }
   },
   "volta": {
     "node": "14.19.0"
