@@ -21,6 +21,6 @@ module.exports = {
   // taskless
   [`{packages/taskless/*, packages/taskless/**/*}.{js,ts,jsx,tsx,vue}`]: [
     ...common,
-    "yarn workspace taskless lint --fix",
+    "yarn workspace @taskless/client lint --fix",
   ],
 };

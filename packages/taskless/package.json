@@ -1,5 +1,5 @@
 {
-  "name": "taskless",
+  "name": "@taskless/client",
   "version": "0.0.1",
   "description": "Client for Taskless.io",
   "author": {

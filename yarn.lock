@@ -1618,6 +1618,47 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@taskless/client@workspace:*, @taskless/client@workspace:packages/taskless":
+  version: 0.0.0-use.local
+  resolution: "@taskless/client@workspace:packages/taskless"
+  dependencies:
+    "@babel/core": ^7.17.5
+    "@babel/eslint-parser": ^7.17.0
+    "@graphql-codegen/cli": ^2.6.2
+    "@graphql-codegen/introspection": ^2.1.1
+    "@graphql-codegen/time": ^3.1.1
+    "@graphql-codegen/typescript": ^2.4.5
+    "@graphql-codegen/typescript-generic-sdk": ^2.3.4
+    "@graphql-codegen/typescript-operations": ^2.3.2
+    "@types/babel__core": ^7
+    "@types/deepmerge": ^2.2.0
+    "@types/eslint": ^8
+    "@types/react": ^17
+    "@types/react-dom": ^17
+    "@types/uuid": ^8
+    "@typescript-eslint/eslint-plugin": ^5.13.0
+    "@typescript-eslint/parser": ^5.13.0
+    deepmerge: ^4.2.2
+    eslint: ^8.10.0
+    graphql: ^15.0.0
+    graphql-tag: ^2.12.6
+    next: ^12.1.0
+    npm-run-all: ^4.1.5
+    p-retry: ^5.0.0
+    phin: ^3.6.1
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    tsdef: ^0.0.14
+    typescript: ^4.6.2
+    uuid: ^8.3.2
+  peerDependencies:
+    next: ^10.0.8 || ^11.0 || ^12.0
+  peerDependenciesMeta:
+    next:
+      optional: true
+  languageName: unknown
+  linkType: soft
+
 "@tootallnate/once@npm:1":
   version: 1.1.2
   resolution: "@tootallnate/once@npm:1.1.2"
@@ -7769,6 +7810,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
   dependencies:
+    "@taskless/client": "workspace:*"
     "@types/eslint": ^8
     "@types/node": 17.0.21
     "@types/react": 17.0.39
@@ -7778,7 +7820,6 @@ __metadata:
     next: 12.1.0
     react: 17.0.2
     react-dom: 17.0.2
-    taskless: "workspace:*"
     typescript: 4.5.5
   languageName: unknown
   linkType: soft
@@ -7798,47 +7839,6 @@ __metadata:
     lint-staged: ^12.1.3
     prettier: ^2.5.1
     typescript: 4.5.5
-  languageName: unknown
-  linkType: soft
-
-"taskless@workspace:*, taskless@workspace:packages/taskless":
-  version: 0.0.0-use.local
-  resolution: "taskless@workspace:packages/taskless"
-  dependencies:
-    "@babel/core": ^7.17.5
-    "@babel/eslint-parser": ^7.17.0
-    "@graphql-codegen/cli": ^2.6.2
-    "@graphql-codegen/introspection": ^2.1.1
-    "@graphql-codegen/time": ^3.1.1
-    "@graphql-codegen/typescript": ^2.4.5
-    "@graphql-codegen/typescript-generic-sdk": ^2.3.4
-    "@graphql-codegen/typescript-operations": ^2.3.2
-    "@types/babel__core": ^7
-    "@types/deepmerge": ^2.2.0
-    "@types/eslint": ^8
-    "@types/react": ^17
-    "@types/react-dom": ^17
-    "@types/uuid": ^8
-    "@typescript-eslint/eslint-plugin": ^5.13.0
-    "@typescript-eslint/parser": ^5.13.0
-    deepmerge: ^4.2.2
-    eslint: ^8.10.0
-    graphql: ^15.0.0
-    graphql-tag: ^2.12.6
-    next: ^12.1.0
-    npm-run-all: ^4.1.5
-    p-retry: ^5.0.0
-    phin: ^3.6.1
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    tsdef: ^0.0.14
-    typescript: ^4.6.2
-    uuid: ^8.3.2
-  peerDependencies:
-    next: ^10.0.8 || ^11.0 || ^12.0
-  peerDependenciesMeta:
-    next:
-      optional: true
   languageName: unknown
   linkType: soft
 
