@@ -1,0 +1,33 @@
+# Documentation Manifest for Taskless
+- title: Introduction to Taskless
+  path: /docs/README.md
+- section: Get Started
+  routes:
+    - title: Next.js
+      path: /docs/get-started/nextjs.md
+    - title: Express
+      path: /docs/get-started/express.md
+    - title: Taskless JS Client
+      path: /docs/get-started/taskless-js-client.md
+    - title: GraphQL
+      path: /docs/get-started/graphql.md
+- section: Jobs and Queues
+  routes:
+    - title: Running a Job
+      path: /docs/jobs-and-queues/running-a-job.md
+    - title: Scheduled Jobs
+      path: /docs/jobs-and-queues/scheduled-jobs.md
+    - title: Cron Jobs
+      path: /docs/jobs-and-queues/cron-jobs.md
+- section: Taskless Client API
+  routes:
+    - title: Helper Interfaces
+      path: /docs/client-api/helpers.md
+    - title: Taskless Client
+      path: /docs/client-api/taskless-client.md
+- section: Taskless GraphQL API Reference
+  routes:
+    - title: Authentication
+      path: /docs/graphql-api/authentication.md
+    - title: Schema and Operations
+      path: /docs/graphql-api/schema.md

@@ -18,12 +18,12 @@ type Application implements Node & Stamped {
   """
   jobs(
     """
-    The maximum number of results to return
+    The maximum number of results to return. The maximum for this value is automatically set to 100.
     """
     limit: Int = 10
 
     """
-    The starting location for pagination
+    The starting location for pagination, defaulting to 0
     """
     offset: Int = 0
   ): [Job]
@@ -80,28 +80,6 @@ input CreateJobInputType {
   """
   runEvery: Duration = null
 }
-
-"""
-Specify a peroud using either shorthand "@duration" syntax or a standard
-5-value cron period such as "* *\/5 1,2,3 * *". If using a standard cron
-period, it is recommended to check your value against an online cron tool
-before submitting your job. (Seconds are not supported)
-
-https://crontab.guru/
-
-Supported shorthand periods:
-
-@yearly - runs once a year at midnight on the first day of the year
-
-@monthly - runs once a month at midnight on the first hour of the month
-
-@weekly - runs once a week at midnight on Sunday morning
-
-@daily - runs once a day at midnight
-
-@hourly - runs once an hour at the begining of the hour
-"""
-scalar Cron
 
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
@@ -221,12 +199,12 @@ type Job implements Node & Stamped {
   """
   runners(
     """
-    The maximum number of results to return
+    The maximum number of results to return. The maximum for this value is automatically set to 100.
     """
     limit: Int = 10
 
     """
-    The starting location for pagination
+    The starting location for pagination, defaulting to 0
     """
     offset: Int = 0
   ): [Runner]
@@ -326,12 +304,12 @@ type Query {
   """
   jobs(
     """
-    The maximum number of results to return
+    The maximum number of results to return. The maximum for this value is automatically set to 100.
     """
     limit: Int = 10
 
     """
-    The starting location for pagination
+    The starting location for pagination, defaulting to 0
     """
     offset: Int = 0
   ): [Job]
@@ -341,12 +319,12 @@ type Query {
   """
   runners(
     """
-    The maximum number of results to return
+    The maximum number of results to return. The maximum for this value is automatically set to 100.
     """
     limit: Int = 10
 
     """
-    The starting location for pagination
+    The starting location for pagination, defaulting to 0
     """
     offset: Int = 0
   ): [Runner]
