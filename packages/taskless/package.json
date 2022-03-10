@@ -36,7 +36,7 @@
     "watch:tsc:cjs": "tsc -w --outDir dist/cjs",
     "prepack": "run-s build",
     "lint": "eslint",
-    "release": "release-it"
+    "release:before:init": "run-s test build"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",
