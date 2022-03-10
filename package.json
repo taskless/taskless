@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "taskless-root",
+  "name": "@taskless/root",
   "version": "0.0.1",
   "scripts": {
     "//global": "echo '----- Global Workspace Helpers -----'",
