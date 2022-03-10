@@ -35,7 +35,8 @@
     "watch:tsc:esm": "tsc -w --module es2015 --outDir dist/esm",
     "watch:tsc:cjs": "tsc -w --outDir dist/cjs",
     "prepack": "run-s build",
-    "lint": "eslint"
+    "lint": "eslint",
+    "publish": "npm publish --access public"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",
