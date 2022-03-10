@@ -1,4 +1,4 @@
-# Taskless Client
+# @taskless/client
 
 A type-safe client for [Taskless.io](https://taskless.io)
 
@@ -12,11 +12,11 @@ This module is installable with yarn, npm, and pnpm:
 
 ```
 # npm
-npm install taskless
+npm install @taskless/client
 
 # yarn
-yarn add taskless
+yarn add @taskless/client
 
 # pnpm
-pnpm add taskless
+pnpm add @taskless/client
 ```

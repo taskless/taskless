@@ -9,7 +9,7 @@
 <!-- Shields (mind the spacing) -->
 <p align="center">
   <a aria-label="Taskless is free to use" href="https://github.com/taskless/taskless/blob/main/LICENSE" target="_blank"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-success.svg?style=flat-square&color=33CC12" target="_blank" /></a>
-  <a aria-label="taskless downloads" href="http://www.npmtrends.com/taskless" target="_blank"><img alt="Downloads" src="https://img.shields.io/npm/dm/taskless.svg?style=flat-square&labelColor=gray&color=33CC12&label=Downloads" /></a>
+  <a aria-label="taskless downloads" href="http://www.npmtrends.com/@taskless/client" target="_blank"><img alt="Downloads" src="https://img.shields.io/npm/dm/taskless.svg?style=flat-square&labelColor=gray&color=33CC12&label=Downloads" /></a>
 </p>
 
 <!-- Docs -->
