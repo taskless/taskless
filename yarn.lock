@@ -1765,7 +1765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@taskless/client@workspace:*, @taskless/client@workspace:packages/taskless":
+"@taskless/client@1.0.0-next.1, @taskless/client@workspace:packages/taskless":
   version: 0.0.0-use.local
   resolution: "@taskless/client@workspace:packages/taskless"
   dependencies:
@@ -1820,7 +1820,7 @@ __metadata:
     husky: ^7.0.4
     lint-staged: ^12.1.3
     prettier: ^2.5.1
-    release-it: ^14.12.5
+    release-it: "*"
     release-it-yarn-workspaces: ^2.0.1
     typescript: 4.5.5
   languageName: unknown
@@ -7761,7 +7761,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"release-it@npm:^14.12.5":
+"release-it@npm:*":
   version: 14.12.5
   resolution: "release-it@npm:14.12.5"
   dependencies:
@@ -8704,7 +8704,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
   dependencies:
-    "@taskless/client": "workspace:*"
+    "@taskless/client": 1.0.0-next.1
     "@types/eslint": ^8
     "@types/node": 17.0.21
     "@types/react": 17.0.39
