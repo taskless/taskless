@@ -35,7 +35,8 @@
     "watch:tsc:esm": "tsc -w --module es2015 --outDir dist/esm",
     "watch:tsc:cjs": "tsc -w --outDir dist/cjs",
     "lint": "eslint",
-    "release:before:init": "run-s test build"
+    "clean": "rm -rf dist",
+    "release:before:init": "run-s clean build test"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",
