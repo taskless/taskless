@@ -34,7 +34,6 @@
     "watch": "run-p watch:tsc:esm watch:tsc:cjs",
     "watch:tsc:esm": "tsc -w --module es2015 --outDir dist/esm",
     "watch:tsc:cjs": "tsc -w --outDir dist/cjs",
-    "prepack": "run-s build",
     "lint": "eslint",
     "release:before:init": "run-s test build"
   },
