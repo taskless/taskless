@@ -10,32 +10,47 @@
   "repository": "taskless/taskless",
   "homepage": "https://github.com/taskless/taskless/tree/main/packages/taskless",
   "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "index.d.js",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts"
+    },
+    "./next": {
+      "import": "./dist/esm/next.js",
+      "require": "./dist/cjs/next.js",
+      "types": "./dist/esm/next.d.ts"
+    }
+  },
   "files": [
     "dist",
-    "*.d.ts",
-    "*.cjs",
-    "*.js",
-    "*.mjs",
-    "!jest.config.js",
-    "README.md"
+    "next.js",
+    "next.d.ts",
+    "index.d.ts"
   ],
-  "main": "dist/cjs/src/index.js",
-  "module": "dist/esm/src/index.js",
   "engines": {
     "node": "12 || 14 || 15 || 16 || 17"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "dev": "yarn watch",
-    "codegen": "graphql-codegen",
-    "build": "run-s build:tsc:esm build:tsc:cjs",
-    "build:tsc:esm": "tsc --module es2015 --outDir dist/esm",
-    "build:tsc:cjs": "tsc --outDir dist/cjs",
-    "watch": "run-p watch:tsc:esm watch:tsc:cjs",
-    "watch:tsc:esm": "tsc -w --module es2015 --outDir dist/esm",
-    "watch:tsc:cjs": "tsc -w --outDir dist/cjs",
+    "dev": "run-s clean build watch",
+    "// build": "echo 'Build commands based on SenseDeep: https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html'",
+    "build": "run-s clean 'build:tsc:**' 'build:copy:**'",
+    "build:tsc:esm": "tsc",
+    "build:tsc:cjs": "tsc -p tsconfig-cjs.json",
+    "build:copy:esm": "cpy --flat --rename=package.json ./.templates/package.esm.json ./dist/esm",
+    "build:copy:cjs": "cpy --flat --rename=package.json ./.templates/package.cjs.json ./dist/cjs",
+    "// watch": "echo 'Watch commands for different build types'",
+    "watch": "run-p 'watch:**'",
+    "watch:tsc:esm": "tsc -w",
+    "watch:tsc:cjs": "tsc -w -p tsconfig-cjs.json",
+    "// utilities": "echo 'Utilities used for development, including release hooks'",
     "lint": "eslint",
     "clean": "rm -rf dist",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "codegen": "graphql-codegen",
     "release:before:init": "run-s clean build test"
   },
   "dependencies": {
@@ -61,6 +76,7 @@
     "@types/uuid": "^8",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
+    "cpy-cli": "^4.1.0",
     "eslint": "^8.10.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.12.6",

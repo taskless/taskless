@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
-    "outDir": "dist/cjs",
+    "outDir": "dist/esm",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "strict": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
     "skipLibCheck": true,
+    "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
     "downlevelIteration": true,
-    "target": "ES2019",
-    "module": "CommonJS",
-    "moduleResolution": "node"
+    "resolveJsonModule": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
 }
