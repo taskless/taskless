@@ -7,7 +7,7 @@
     "lint-all": "yarn workspaces foreach run lint .",
     "husky": "husky",
     "postinstall": "husky install",
-    "release": "release-it --preRelease",
+    "rev": "release-it --preRelease",
     "release-it": "release-it"
   },
   "packageManager": "yarn@3.2.0",
