@@ -12,46 +12,27 @@ export type Scalars = {
   Float: number;
   /** Literally any value */
   Any: any;
-  /**
-   * Specify a peroud using either shorthand "@duration" syntax or a standard
-   * 5-value cron period such as "* *\/5 1,2,3 * *". If using a standard cron
-   * period, it is recommended to check your value against an online cron tool
-   * before submitting your job. (Seconds are not supported)
-   *
-   * https://crontab.guru/
-   *
-   * Supported shorthand periods:
-   *
-   * @yearly - runs once a year at midnight on the first day of the year
-   *
-   * @monthly - runs once a month at midnight on the first hour of the month
-   *
-   * @weekly - runs once a week at midnight on Sunday morning
-   *
-   * @daily - runs once a day at midnight
-   *
-   * @hourly - runs once an hour at the begining of the hour
-   */
-  Cron: any;
   /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
   DateTime: any;
   /**
-   * A string representing a duration conforming to the ISO8601 standard,
-   * such as: P1W1DT13H23M34S
-   * P is the duration designator (for period) placed at the start of the duration representation.
-   * Y is the year designator that follows the value for the number of years.
-   * M is the month designator that follows the value for the number of months.
-   * W is the week designator that follows the value for the number of weeks.
-   * D is the day designator that follows the value for the number of days.
-   * T is the time designator that precedes the time components of the representation.
-   * H is the hour designator that follows the value for the number of hours.
-   * M is the minute designator that follows the value for the number of minutes.
-   * S is the second designator that follows the value for the number of seconds.
    *
-   * Note the time designator, T, that precedes the time value.
+   *     A string representing a duration conforming to the ISO8601 standard,
+   *     such as: P1W1DT13H23M34S
+   *     P is the duration designator (for period) placed at the start of the duration representation.
+   *     Y is the year designator that follows the value for the number of years.
+   *     M is the month designator that follows the value for the number of months.
+   *     W is the week designator that follows the value for the number of weeks.
+   *     D is the day designator that follows the value for the number of days.
+   *     T is the time designator that precedes the time components of the representation.
+   *     H is the hour designator that follows the value for the number of hours.
+   *     M is the minute designator that follows the value for the number of minutes.
+   *     S is the second designator that follows the value for the number of seconds.
    *
-   * Matches moment.js, Luxon and DateFns implementations
-   * ,/. is valid for decimal places and +/- is a valid prefix
+   *     Note the time designator, T, that precedes the time value.
+   *
+   *     Matches moment.js, Luxon and DateFns implementations
+   *     ,/. is valid for decimal places and +/- is a valid prefix
+   *
    */
   Duration: any;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */

@@ -1,5 +1,5 @@
-import { TasklessClient } from "./client";
-import type { JobHandler, QueueMethods, QueueOptions } from "./types";
+import { TasklessClient } from "./client.js";
+import type { JobHandler, QueueMethods, QueueOptions } from "./types.js";
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
 type NextMethods<T> = {

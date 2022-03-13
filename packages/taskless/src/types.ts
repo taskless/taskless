@@ -1,4 +1,4 @@
-import type { IncomingHttpHeaders } from "http";
+import type { IncomingHttpHeaders } from "node:http";
 
 /** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {

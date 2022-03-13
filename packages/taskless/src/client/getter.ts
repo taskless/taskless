@@ -1,4 +1,4 @@
-import { getSdk, Requester } from "../__generated__/schema";
+import { getSdk, Requester } from "../__generated__/schema.js";
 import pRetry from "p-retry";
 import phin from "phin";
 
