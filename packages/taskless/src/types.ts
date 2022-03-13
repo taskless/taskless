@@ -1,12 +1,17 @@
 import type { IncomingHttpHeaders } from "http";
 
+/** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {
+  /** The base url, defaults to process.env.TASKLESS_BASE_URL */
   baseUrl?: string;
+  /** Your Application's credential pair of an Application ID and Application Secret */
   credentials?: {
     appId?: string;
     secret?: string;
   };
+  /** An optional encryption key for e2e encryption of job data */
   encryptionKey?: string;
+  /** Previous encryption keys to assist in key rotation */
   expiredEncryptionKeys?: string[];
 };
 
@@ -14,14 +19,21 @@ export type JobHeaders = {
   [header: string]: string;
 };
 
+/** A set of options on a per-job level */
 export type JobOptions = {
+  /** Is the job enabled */
   enabled?: boolean;
+  /** A set of  key:value pairs to pass as job headers */
   headers?: JobHeaders;
+  /** The number of retries to attempt before the job is failed */
   retries?: number;
+  /** An optional time to run the job, delaying it into the future. ISO-8601 format */
   runAt?: string;
+  /** An optional ISO-8601 duration that enables repeated running of a job*/
   runEvery?: string;
 };
 
+/** Metadata regarding the currently running Job */
 export type JobMeta = {
   applicationId: string | null;
   organizationId: string | null;
