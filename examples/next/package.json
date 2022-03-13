@@ -2,7 +2,7 @@
   "private": true,
   "name": "taskless-example-next",
   "description": "Taskless next.js example app",
-  "version": "1.0.0-next.5",
+  "version": "1.0.0-next.6",
   "type": "module",
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@taskless/client": "1.0.0-next.5",
+    "@taskless/client": "1.0.0-next.6",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
