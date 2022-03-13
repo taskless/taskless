@@ -7,6 +7,18 @@ import crypto from "crypto";
 // - all other values are base64 for portabiity
 // //////////////////////////////////////////////////
 
+const warnUnencrypted = () => {
+  if (process.env.TASKLESS_NO_ENCRYPTION_WARNING !== "1") {
+    console.warn(
+      [
+        "Using unencrypted values means that your job data is stored",
+        "and transmitted in the clear.If this was intentional, please",
+        "set TASKLESS_NO_ENCRYPTION_WARNING = 1 to silence this message",
+      ].join(" ")
+    );
+  }
+};
+
 /** Convert a UTF-8 string into a valid hash key of the matching hash length */
 const strToKey = (str: string, cipher: SupportedCiphers) => {
   return crypto.createHash(hashMap[cipher]).update(Buffer.from(str)).digest();
@@ -62,7 +74,7 @@ export const encode = (obj: unknown, secret?: string) => {
   });
 
   if (!secret) {
-    console.warn("No secret was provided. Data sent will not be encrypted");
+    warnUnencrypted();
     return str;
   }
 
@@ -182,9 +194,15 @@ export const decode = <T>(str: string, secrets: (string | undefined)[]): T => {
   if (typeof result === "undefined") {
     try {
       result = JSON.parse(str)?.envelope as T;
+      warnUnencrypted();
     } catch (e) {
       throw new Error("No valid decryption keys found");
     }
   }
+
+  if (!result) {
+    throw new Error("No valid decryption keys found");
+  }
+
   return result;
 };
