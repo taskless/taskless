@@ -83,11 +83,22 @@ TASKLESS_BASE_URL=http://localhost:3000
 # These credentials come from your Taskless dashboard:
 TASKLESS_APP_ID=your_appid_here
 TASKLESS_SECRET=your_app_secret_key
+
+# This value secures your data by encrypting it before sending to Taskless
+# set it to a sufficiently long string
+TASKLESS_ENCRYPTION_KEY=
+
+# You can include previous encryption keys, comma `,` separated
+# in case you need to rotate your TASKLESS_ENCRYPTION_KEY to a new value
+# but have jobs that need to run using the old key still.
+TASKLESS_PREVIOUS_ENCRYPTION_KEYS=
 ```
 
-<div class="info">
-  <p>The <code>TASKLESS_REFLECT=1</code> tells the Taskless Queue not to send requests to the Taskless server. This is incredibly useful in development, as otherwise we'd need to use a tool such as ngrok or webhook.site to make our Queue accessible on a non-localhost URL.</p>
-</div>
+<!-- info -->
+
+> :information_source: The `TASKLESS_REFLECT=1` tells the Taskless Queue not to send requests to the Taskless server. This is incredibly useful in development, as otherwise we'd need to use a tool such as ngrok or webhook.site to make our Queue accessible on a non-localhost URL
+
+<!-- /info -->
 
 ## Using a Queue
 
