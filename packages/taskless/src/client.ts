@@ -12,10 +12,10 @@ import {
   QueueOptions,
   SendJsonCallback,
   TasklessBody,
-} from "../types";
-import { create } from "./getter";
-import { JobMethodEnum } from "../__generated__/schema";
-import { encode, decode } from "./encoder";
+} from "./types";
+import { create } from "./client/getter";
+import { JobMethodEnum } from "./__generated__/schema";
+import { encode, decode } from "./client/encoder";
 
 /** A set of default options for queue objects, looking at ENV values first */
 const defaultQueueOptions: QueueOptions = {
