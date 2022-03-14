@@ -36,7 +36,9 @@ const defaultQueueOptions: QueueOptions = {
 /** A set of default options for job objects */
 const defaultJobOptions: JobOptions = {
   enabled: true,
-  headers: {},
+  headers: {
+    "content-type": "application/json",
+  },
   retries: 5,
 };
 
