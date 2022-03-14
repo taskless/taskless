@@ -37,6 +37,7 @@ const defaultQueueOptions: QueueOptions = {
 const defaultJobOptions: JobOptions = {
   enabled: true,
   headers: {
+    // actions are always json unless overridden
     "content-type": "application/json",
   },
   retries: 5,
