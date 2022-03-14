@@ -10,7 +10,7 @@ The fastest way to get started with Taskless is to follow a guide for your JavaS
 <div class="flex flex-row flex-wrap space-x-3">
   <div class="w-1/2 border rounded border-gray-300 shadow-md shadow-gray-200 p-3">
     <a href="./get-started/next">
-      <img src="https://placekitten.com/70" />
+      <img src="./assets/next.svg" height="70" />
       <h5 class="font-bold">Next.js</h5>
       <span>Managing Jobs With Next.js</span>
     </a>
@@ -22,7 +22,7 @@ The fastest way to get started with Taskless is to follow a guide for your JavaS
 
   <div class="w-1/2 border rounded border-gray-300 shadow-md shadow-gray-200 p-3">
     <a href="./get-started/express">
-      <img src="https://placekitten.com/70" />
+      <img src="./assets/express.png" height="70" />
       <h5 class="font-bold">Express</h5>
       <span>Managing Jobs With Express</span>
     </a>
@@ -33,7 +33,7 @@ The fastest way to get started with Taskless is to follow a guide for your JavaS
 
   <div class="w-1/2 border rounded border-gray-300 shadow-md shadow-gray-200 p-3">
     <a href="./client-api">
-      <img src="https://placekitten.com/70" />
+      <img src="./assets/taskless.svg" height="70" />
       <h5 class="font-bold">JavaScript Client</h5>
       <span>Custom Integrations</span>
     </a>

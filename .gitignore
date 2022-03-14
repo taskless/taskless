@@ -12,4 +12,5 @@
 
 dist/
 .DS_Code
+.Identifier
 node_modules
