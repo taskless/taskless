@@ -6,42 +6,40 @@ Welcome to the Taskless.io documentation! Taskless.io consists of two main tools
 
 The fastest way to get started with Taskless is to follow a guide for your JavaScript framework. Each guide comes with an integration example from the [Taskless repository](https://github.com/taskless/taskless/tree/main/examples).
 
-<!-- This markup is used to generate our getting started chiclets -->
-<div class="flex flex-row flex-wrap space-x-3">
-  <div class="w-1/2 border rounded border-gray-300 shadow-md shadow-gray-200 p-3">
-    <a href="./get-started/next">
-      <img src="./assets/next.svg" height="70" />
-      <h5 class="font-bold">Next.js</h5>
-      <span>Managing Jobs With Next.js</span>
-    </a>
-    <div class="flex pt-3 space-x-3">
-      <a href="./get-started/next" class="block bg-emerald-700 border rounded px-2 py-1 text-white">Read the Guide</a>
-      <a href="https://github.com/taskless/taskless/tree/main/examples/next" class="block bg-gray-100 rounded px-2 py-1 text-gray-700 border">Example</a>
-    </div>
-  </div>
+<!-- card
+image: ./assets/next.svg
+-->
 
-  <div class="w-1/2 border rounded border-gray-300 shadow-md shadow-gray-200 p-3">
-    <a href="./get-started/express">
-      <img src="./assets/express.png" height="70" />
-      <h5 class="font-bold">Express</h5>
-      <span>Managing Jobs With Express</span>
-    </a>
-    <div class="flex pt-3 space-x-3">
-      <a href="./get-started/express" class="block bg-emerald-700 border rounded px-2 py-1 text-white">Read the Guide</a>
-    </div>
-  </div>
+### Next.js
 
-  <div class="w-1/2 border rounded border-gray-300 shadow-md shadow-gray-200 p-3">
-    <a href="./client-api">
-      <img src="./assets/taskless.svg" height="70" />
-      <h5 class="font-bold">JavaScript Client</h5>
-      <span>Custom Integrations</span>
-    </a>
-    <div class="flex pt-3 space-x-3">
-      <a href="./client-api" class="block bg-emerald-700 border rounded px-2 py-1 text-white">Read the Docs</a>
-    </div>
-  </div>
-</div>
+Managing Jobs with Next.js
+
+- [Read the Guide](./get-started/nextjs.md)
+- [Example](https://github.com/taskless/taskless/tree/main/examples/next)
+<!-- /card -->
+
+<!-- card
+image: ./assets/express.png
+-->
+
+### Express
+
+Managing Jobs with Express
+
+- [Read the Guide](./get-started/express.md)
+- [Example](https://github.com/taskless/taskless/tree/main/examples/express)
+<!-- /card -->
+
+<!-- card
+image: ./assets/js.svg
+-->
+
+### JavaScript Client
+
+Using the Underlying JS Client
+
+- [Read the Docs](./client-api)
+<!-- /card -->
 
 ### System Requirements
 
