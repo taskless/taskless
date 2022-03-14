@@ -7,7 +7,7 @@ import crypto from "crypto";
 // - all other values are base64 for portabiity
 // //////////////////////////////////////////////////
 
-export const warnUnencrypted = () => {
+const warnUnencrypted = () => {
   if (process.env.TASKLESS_NO_ENCRYPTION_WARNING !== "1") {
     console.warn(
       [
