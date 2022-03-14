@@ -1,6 +1,7 @@
 import merge from "deepmerge";
 import { v4 } from "uuid";
 import {
+  cast,
   GetBodyCallback,
   GetHeadersCallback,
   isTasklessBody,
@@ -15,7 +16,7 @@ import {
 } from "./types.js";
 import { create } from "./client/getter.js";
 import { JobMethodEnum } from "./__generated__/schema.js";
-import { encode, decode } from "./client/encoder.js";
+import { encode, decode, warnUnencrypted } from "./client/encoder.js";
 
 /** A set of default options for queue objects, looking at ENV values first */
 const defaultQueueOptions: QueueOptions = {
@@ -121,9 +122,9 @@ export class TasklessClient<T> {
     };
   }
 
-  b2p(body: TasklessBody): T {
+  b2p(body: string): T {
     return decode(
-      body.taskless,
+      body,
       [
         this.queueOptions.encryptionKey,
         ...(this.queueOptions.expiredEncryptionKeys ?? []),
@@ -145,22 +146,20 @@ export class TasklessClient<T> {
   }) {
     const { getBody, getHeaders, send, sendError } = functions;
     const body = await getBody();
-    if (!isTasklessBody(body)) {
-      console.error("Taskless body did not satisfy type checks");
-      await sendError({
-        route: this.route,
-        error:
-          "Unable to extract the body from the request. This may happen if you enqueued this endpoint with an incompatible schema.",
-      });
-      return;
-    }
-
     let payload: T | undefined;
     let h:
       | ReturnType<typeof getHeaders>
       | ReturnType<Awaited<typeof getHeaders>>;
+
     try {
-      payload = this.b2p(body);
+      if (isTasklessBody(body)) {
+        payload = this.b2p(body.taskless);
+      } else {
+        // raw body (would be unencrypted to us)
+        warnUnencrypted();
+        payload = cast<T>(body);
+      }
+
       h = await getHeaders();
     } catch (e) {
       console.error(e);

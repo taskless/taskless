@@ -140,6 +140,10 @@ export function isTasklessBody(body: unknown): body is TasklessBody {
   );
 }
 
+export const cast = <T>(value: unknown) => {
+  return value as T;
+};
+
 /** A recursive description of a valid JSON value */
 type JSONValue =
   | null
