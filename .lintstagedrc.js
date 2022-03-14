@@ -1,26 +1,33 @@
 const path = require("path");
 
-const common = ["prettier --write"];
+// create a Lint Staged file sequence to check all matching files of JS in a directory
+const jsIn = (at) => `{${at}/*,${at}/**/*}.{js,ts,jsx,tsx,vue}`;
+
+// create an xargs-like function that lets us ran 100s of files into the arguments part of a command
+const xargs = (list) => (command, xarg) =>
+  command +
+  (xarg ? ` ${xarg} ` : " ") +
+  list
+    .map((f) => path.resolve(process.cwd(), f))
+    .join(xarg ? ` ${xarg} ` : " ");
 
 module.exports = {
   // global configurations, these are always cleaned
-  "*.{json,gql,graphql,md,yaml,yml}": [...common],
+  "*.{json,gql,graphql,md,yaml,yml}": ["prettier --write"],
 
-  // next.js
-  [`{examples/next/*,examples/next/**/*}.{js,ts,jsx,tsx,vue}`]: [
-    ...common,
-    // https://nextjs.org/docs/basic-features/eslint#lint-staged
-    ...[
-      (filenames) =>
-        `yarn workspace taskless-example-next lint --fix --file ${filenames
-          .map((f) => path.relative(process.cwd(), f))
-          .join(" --file ")}`,
-    ],
+  [jsIn("examples/next")]: [
+    (f) =>
+      xargs(f)("yarn workspace taskless-example-next lint --fix", "--file"),
+    "prettier --write",
   ],
 
-  // taskless
-  [`{packages/taskless/*, packages/taskless/**/*}.{js,ts,jsx,tsx,vue}`]: [
-    ...common,
-    "yarn workspace @taskless/client lint --fix",
+  // taskless client
+  [jsIn("packages/taskless")]: [
+    (f) =>
+      xargs(f)(
+        `yarn workspace @taskless/client eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'`
+      ),
+    `yarn workspace @taskless/client madge --no-spinner --circular`,
+    "prettier --write",
   ],
 };

@@ -9,10 +9,6 @@
       path: /docs/get-started/nextjs.md
     - title: Express
       path: /docs/get-started/express.md
-    - title: Taskless JS Client
-      path: /docs/get-started/taskless-js-client.md
-    - title: GraphQL
-      path: /docs/get-started/graphql.md
 - section: Client API Reference
   routes:
     - title: Introduction
