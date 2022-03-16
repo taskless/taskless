@@ -1,37 +1,51 @@
 import { TasklessClient } from "./client.js";
-import type { JobHandler, QueueMethods, QueueOptions } from "./types.js";
+import type {
+  JobHandler,
+  JobOptions,
+  QueueMethods,
+  QueueOptions,
+} from "./types.js";
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
+/**
+ * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern
+ * @template T Types the {@link TasklessNextApiHandler}
+ */
 type NextMethods<T> = {
   withQueue: (wrappedHandler: NextApiHandler) => TasklessNextApiHandler<T>;
 };
 
 /**
  * A next.js compatible API Handler, with Taskless Queue support
+ * @template T Used for typing the {@link QueueMethods} and {@link NextMethods} objects
  * @param req The NextApiRequest which extends http#IncomingMessage
  * @param res The NextApiResponse which extends http#ServerResponse
  */
-interface TasklessNextApiHandler<T>
+export interface TasklessNextApiHandler<T>
   extends NextApiHandler,
     QueueMethods<T>,
     NextMethods<T> {}
 
 /**
  * Creates a next.js compatible API Route that doubles as a Taskless Queue object
- * @param route
- * @param handler
- * @param defaultJobOptions
- * @returns
+ * @template T Describes the payload and is passed through to {@link JobHandler} and {@link TasklessNextApiHandler}
+ * @param route The URL path to reach this route
+ * @param handler A {@link JobHandler} that supports a payload of type `T`
+ * @param queueOptions The {@link QueueOptions} for this queue
+ * @param defaultJobOptions A set of {@link JobOptions} to apply as defaults for every new job in the Queue
+ * @returns {TasklessNextApiHandler}
  */
 export function createQueue<T = undefined>(
   route: string,
   handler: JobHandler<T>,
-  options?: QueueOptions
+  queueOptions?: QueueOptions,
+  defaultJobOptions?: JobOptions
 ): TasklessNextApiHandler<T> {
   const t = new TasklessClient({
     route,
     handler,
-    queueOptions: options,
+    queueOptions: queueOptions ?? {},
+    jobOptions: defaultJobOptions ?? {},
   });
 
   const handle: TasklessNextApiHandler<T> = async (

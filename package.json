@@ -3,10 +3,11 @@
   "name": "@taskless/root",
   "version": "1.0.0-next.9",
   "scripts": {
-    "//global": "echo '----- Global Workspace Helpers -----'",
+    "// util": "echo '----- Global Workspace Helpers -----'",
     "lint-all": "yarn workspaces foreach run lint .",
     "husky": "husky",
     "postinstall": "husky install",
+    "// release": "echo '----- Release Commands -----'",
     "rev": "release-it --preRelease",
     "release-it": "release-it"
   },

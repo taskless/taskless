@@ -1,5 +1,5 @@
-import crypto, { createHmac } from "node:crypto";
-import { SupportedCiphers, Transport } from "../types";
+import crypto, { createHmac } from "crypto";
+import type { SupportedCiphers, Transport } from "../types.js";
 
 // //////////////////////////////////////////////////
 // Notes about encoding in this file

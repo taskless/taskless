@@ -1,6 +1,6 @@
 import merge from "deepmerge";
 import { v4 } from "uuid";
-import {
+import type {
   GetBodyCallback,
   GetHeadersCallback,
   Job,
@@ -17,11 +17,17 @@ import { create } from "./client/getter.js";
 import { JobMethodEnum } from "./__generated__/schema.js";
 import { encode, decode, sign, verify } from "./client/encoder.js";
 
-/** Constructor arguments for the Taskless Client */
-type TasklessClientConstructorArgs<T> = {
+/**
+ * Constructor arguments for the Taskless Client
+ * @template T Describes the payload used in the {@link JobHandler}
+ */
+export type TasklessClientConstructorArgs<T> = {
   /** The route slug this client is managing */
   route: string;
-  /** A callback handler for processing the job */
+  /**
+   * A callback handler for processing the job
+   * @template T The expected payload object
+   */
   handler: JobHandler<T>;
   /** Options applied to the Queue globally */
   queueOptions?: QueueOptions;

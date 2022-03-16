@@ -1,5 +1,5 @@
-import type { IncomingHttpHeaders } from "node:http";
-import type { CipherGCMTypes } from "node:crypto";
+import type { IncomingHttpHeaders } from "http";
+import type { CipherGCMTypes } from "crypto";
 
 /** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {
@@ -62,6 +62,10 @@ export type Job<T> = {
   runEvery?: string;
 };
 
+/**
+ * Describes the set of Queue Methods available on a Taskless Integration
+ * @template T Types the payload expected in `enqueue` and `update`, as well as the payload key returned from `enqueue`, `update`, `delete`, and `get`
+ */
 export type QueueMethods<T> = {
   /**
    * Adds an item to the queue. If an item of the same name exists, it will be replaced with this new data
@@ -101,18 +105,13 @@ export type QueueMethods<T> = {
 };
 
 /** The Job Handler signature, taking a `payload` and `meta` */
-export type JobHandler<T> = (
-  payload: T,
-  meta: JobMeta
-) => MaybePromise<JSONValue> | MaybePromise<void>;
-
-export type MaybePromise<T> = T | Promise<T>;
+export type JobHandler<T> = (payload: T, meta: JobMeta) => Awaited<JSONValue>;
 
 /** The result of the Job Handler callback */
-export type JobHandlerResult = MaybePromise<void> | MaybePromise<JSONValue>;
+export type JobHandlerResult = Awaited<void> | Awaited<JSONValue>;
 
 /** An intgeration callback for getting the request body as a JSON object */
-export type GetBodyCallback<T> = () => MaybePromise<T>;
+export type GetBodyCallback<T> = () => Awaited<T>;
 
 /** An integration callback for getting the headers as a JSON object */
 export type GetHeadersCallback = () =>
@@ -122,8 +121,8 @@ export type GetHeadersCallback = () =>
 /** An integration callback for sending JSON back to Taskless.io */
 export type SendJsonCallback = (json: JSONValue) => void | Promise<void>;
 
-/** A recursive description of a valid JSON value */
-type JSONValue =
+/** A recursive description of a valid JSON-like value */
+export type JSONValue =
   | null
   | string
   | number
@@ -135,7 +134,7 @@ type JSONValue =
 export type SupportedCiphers = Extract<CipherGCMTypes, "aes-256-gcm"> | "none";
 
 /** Data required for an AES-256-GCM cipher */
-type CipherAes256Gcm = {
+export type CipherAes256Gcm = {
   /** The Cipher used */
   alg: Extract<CipherGCMTypes, "aes-256-gcm">;
   /** The length of the Auth Tag */
@@ -147,12 +146,12 @@ type CipherAes256Gcm = {
 };
 
 /** Data required for a non-ciphertext */
-type CipherNone = {
+export type CipherNone = {
   alg: "none";
 };
 
 /** All Supported Cipher combinations */
-type Ciphers = CipherAes256Gcm | CipherNone;
+export type Ciphers = CipherAes256Gcm | CipherNone;
 
 /** Describes the taskless Transport Metadata */
 export type Transport = {

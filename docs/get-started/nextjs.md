@@ -73,8 +73,8 @@ In order for Taskless to use our Queue, we'll set up some environment variables 
 ```bash
 # /.env.local
 
-# Enables Taskless Reflect, which enables local development
-# by skipping the external Queue
+# Enables Taskless Call Reflection, which avoids invocations by using
+# a local development client to emulate the Taskless client APIs
 TASKLESS_REFLECT=1
 
 # The base URL is the public URL your app is accessible on
