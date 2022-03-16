@@ -18,6 +18,7 @@ export default createQueue<SampleQueue>(
       ],
     };
   },
+  // you may also just set these in process.env and let Taskless use them directly
   {
     baseUrl: process.env.TASKLESS_BASE_URL,
     credentials: {

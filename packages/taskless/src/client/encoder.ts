@@ -1,4 +1,5 @@
-import crypto from "crypto";
+import crypto, { createHmac } from "node:crypto";
+import { SupportedCiphers, Transport } from "../types";
 
 // //////////////////////////////////////////////////
 // Notes about encoding in this file
@@ -7,55 +8,76 @@ import crypto from "crypto";
 // - all other values are base64 for portabiity
 // //////////////////////////////////////////////////
 
-const warnUnencrypted = () => {
-  if (process.env.TASKLESS_NO_ENCRYPTION_WARNING !== "1") {
-    console.warn(
-      [
-        "Using unencrypted values means that your job data is stored",
-        "and transmitted in the clear.If this was intentional, please",
-        "set TASKLESS_NO_ENCRYPTION_WARNING = 1 to silence this message",
-      ].join(" ")
-    );
-  }
+type EncodeResult = {
+  transport: Transport;
+  text: string;
 };
 
 /** Convert a UTF-8 string into a valid hash key of the matching hash length */
-const strToKey = (str: string, cipher: SupportedCiphers) => {
-  return crypto.createHash(hashMap[cipher]).update(Buffer.from(str)).digest();
+const strToKey = (str: string, cipher: SupportedCiphers): Buffer => {
+  const info = hashMap[cipher] ?? null;
+  if (!info) {
+    return Buffer.from("");
+  }
+
+  return crypto.createHash(info).update(Buffer.from(str)).digest();
 };
 
-/** Supported ciphers have iv lengths as well as a matching hash function of equal bits */
-type SupportedCiphers = "aes-256-gcm";
-
-// goes away once node 16 is lowest supported lts for crypto.getCipherInfo
-const cipherInfo: {
-  [cipher in SupportedCiphers]: {
-    mode: string;
-    name: string;
-    nid: number;
-    ivLength: number;
-    keyLength: number;
+/**
+ * Get the cipher info given a supported cipher
+ * @deprecated To be removed once Node 16 lts is lowest supported version
+ * @param name A cipher name
+ * @returns An object containing the cipher's info
+ */
+const getCipherInfo = (name: SupportedCiphers) => {
+  const cipherInfo: {
+    [cipher in SupportedCiphers]?: {
+      mode: string;
+      name: string;
+      nid: number;
+      ivLength: number;
+      keyLength: number;
+    };
+  } = {
+    "aes-256-gcm": {
+      mode: "gcm",
+      name: "id-aes-256-gcm",
+      nid: 901,
+      ivLength: 12,
+      keyLength: 32,
+    },
   };
-} = {
-  "aes-256-gcm": {
-    mode: "gcm",
-    name: "id-aes-256-gcm",
-    nid: 901,
-    ivLength: 12,
-    keyLength: 32,
-  },
+
+  return cipherInfo[name];
 };
 
-/** For any given cipher, there is a hash that will generate a key of proper bit length from a string */
+/** For any given cipher we support, there is a hash that will generate a key of proper bit length from a string */
 const hashMap: {
   [cipher in SupportedCiphers]: string;
 } = {
+  none: "",
   "aes-256-gcm": "sha256",
 };
 
-/** Get the cipher info from node (or local hash), throws if not available */
-const getCipherInfo = (name: SupportedCiphers) => {
-  return cipherInfo[name];
+/** Sign a string against a secret token */
+export const sign = (input: string, secret: string): string => {
+  return createHmac("sha256", secret).update(input).digest("base64");
+};
+
+/** Verify a string against a set of secret tokens */
+export const verify = (
+  input: string,
+  secrets: string[],
+  signature: string
+): boolean => {
+  for (const s of secrets) {
+    if (!s) continue;
+    const sig = sign(input, s);
+    if (sig === signature) {
+      return true;
+    }
+  }
+  return false;
 };
 
 /**
@@ -66,89 +88,57 @@ const getCipherInfo = (name: SupportedCiphers) => {
  * @param secret
  * @returns
  */
-export const encode = (obj: unknown, secret?: string) => {
+export const encode = <T>(obj: T, secret?: string): EncodeResult => {
   const algo = "aes-256-gcm";
   const info = getCipherInfo(algo);
   const str = JSON.stringify({
     envelope: obj,
   });
 
+  if (!info) {
+    throw new Error("Unknown algo: " + algo);
+  }
+
   if (!secret) {
-    warnUnencrypted();
-    return str;
+    return {
+      transport: {
+        ev: 1,
+        alg: "none",
+      },
+      text: str,
+    };
   }
 
   const key = strToKey(secret, algo);
   const iv = crypto.randomBytes(info.ivLength);
+  const authTagLength = 16;
 
   const cipher = crypto.createCipheriv(algo, key, iv, {
-    authTagLength: 16,
+    authTagLength,
   });
   const ciphered = Buffer.concat([cipher.update(str, "utf-8"), cipher.final()]);
 
-  const packed: Packed = [
-    "v1",
-    algo,
-    "16",
-    cipher.getAuthTag().toString("base64"),
-    iv.toString("base64"),
-    ciphered.toString("base64"),
-  ];
-
-  return packed.join(":");
+  return {
+    transport: {
+      ev: 1,
+      alg: algo,
+      atl: authTagLength,
+      at: cipher.getAuthTag().toString("base64"),
+      iv: iv.toString("base64"),
+    },
+    text: ciphered.toString("base64"),
+  };
 };
 
-/** A version identifier for packed strings */
-type Version = string;
-
-/** The length of the Auth Tag */
-type AuthTagLength = string;
-
-/** The auth tag */
-type AuthTag = string;
-
-/** The IV for the cipher */
-type IV = string;
-
-/** Encrypted text */
-type Ciphertext = string;
-
-/** An array of values representing an encrypted payload */
-type Packed = [
-  Version,
-  SupportedCiphers,
-  AuthTagLength,
-  AuthTag,
-  IV,
-  Ciphertext
-];
-
-/** Typeguard: Ensures the array confirms to the Packed object of COUNT strings */
-function isPacked(arr: unknown): arr is Packed {
-  const COUNT = 6;
-  if (!Array.isArray(arr) || arr.length !== COUNT) {
-    return false;
-  }
-  if (arr.map((v) => typeof v === "string").filter((t) => t).length !== COUNT) {
-    return false;
-  }
-  return true;
-}
-
 /** Decodes a single string to JSON and removes the payload from the envelope key */
-const decodeOne = <T>(str: string, secret: string): T => {
-  const parts = str.split(":");
-  if (!isPacked(parts)) {
-    throw new Error("Malformed string");
-  }
-  const [version, algo, authTagLength, authTag, iv, ciphered]: Packed = parts;
-
-  if (!Object.getOwnPropertyNames(hashMap).includes(algo)) {
-    throw new Error("Incompatible cipher: " + algo);
-  }
-
-  if (version !== "v1") {
-    throw new Error("Incompatible encoder version: " + version);
+const decodeOne = (
+  text: string,
+  transport: Transport,
+  secret: string
+): string => {
+  const algo = transport.alg;
+  if (algo === "none") {
+    return text;
   }
 
   const key = strToKey(secret, algo);
@@ -156,18 +146,18 @@ const decodeOne = <T>(str: string, secret: string): T => {
   const decipher = crypto.createDecipheriv(
     algo,
     key,
-    Buffer.from(iv, "base64"),
+    Buffer.from(transport.iv, "base64"),
     {
-      authTagLength: parseInt(authTagLength, 10),
+      authTagLength: transport.atl,
     }
   );
-  decipher.setAuthTag(Buffer.from(authTag, "base64"));
+  decipher.setAuthTag(Buffer.from(transport.at, "base64"));
 
   const deciphered = Buffer.concat([
-    decipher.update(ciphered, "base64"),
+    decipher.update(text, "base64"),
     decipher.final(),
   ]).toString();
-  return JSON.parse(deciphered)?.envelope;
+  return deciphered;
 };
 
 /**
@@ -177,32 +167,28 @@ const decodeOne = <T>(str: string, secret: string): T => {
  * @param secrets
  * @returns
  */
-export const decode = <T>(str: string, secrets: (string | undefined)[]): T => {
-  let result: T | undefined;
+export const decode = <T>(
+  text: string,
+  transport: Transport,
+  secrets: (string | undefined)[]
+): T => {
+  if (transport.alg === "none") {
+    return JSON.parse(text)?.envelope as T;
+  }
+
   for (const secret of secrets) {
     if (typeof secret === "undefined") {
       continue;
     }
     try {
       // break on success
-      result = decodeOne<T>(str, secret);
-      break;
+      const result = decodeOne(text, transport, secret);
+      return JSON.parse(result)?.envelope as T;
     } catch (e) {
-      result = undefined;
-    }
-  }
-  if (typeof result === "undefined") {
-    try {
-      result = JSON.parse(str)?.envelope as T;
-      warnUnencrypted();
-    } catch (e) {
-      throw new Error("No valid decryption keys found");
+      // ignore failures
     }
   }
 
-  if (!result) {
-    throw new Error("No valid decryption keys found");
-  }
-
-  return result;
+  // no keys worked
+  throw new Error("No valid decryption keys found");
 };

@@ -1,17 +1,19 @@
 import type { IncomingHttpHeaders } from "node:http";
+import type { CipherGCMTypes } from "node:crypto";
 
 /** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {
   /** The base url, defaults to process.env.TASKLESS_BASE_URL */
   baseUrl?: string;
-  /** Your Application's credential pair of an Application ID and Application Secret */
+  /** Your Application's credential pair of an Application ID and Application Secret. Defaults to process.env.TASKLESS_APP_ID and process.env.TASKLESS_APP_SECRET */
   credentials?: {
-    appId?: string;
-    secret?: string;
+    appId: string;
+    secret: string;
+    expiredSecrets?: string[];
   };
-  /** An optional encryption key for e2e encryption of job data */
+  /** An optional encryption key for e2e encryption of job data. Defaults to process.env.TASKLESS_ENCRYPTION_KEY */
   encryptionKey?: string;
-  /** Previous encryption keys to assist in key rotation */
+  /** Previous encryption keys to assist in key rotation. Defaults to a comma separated list in process.env.TASKLESS_PREVIOUS_ENCRYPTION_KEYS */
   expiredEncryptionKeys?: string[];
 };
 
@@ -104,13 +106,13 @@ export type JobHandler<T> = (
   meta: JobMeta
 ) => MaybePromise<JSONValue> | MaybePromise<void>;
 
-type MaybePromise<T> = T | Promise<T>;
+export type MaybePromise<T> = T | Promise<T>;
 
 /** The result of the Job Handler callback */
 export type JobHandlerResult = MaybePromise<void> | MaybePromise<JSONValue>;
 
 /** An intgeration callback for getting the request body as a JSON object */
-export type GetBodyCallback = () => MaybePromise<JSONValue>;
+export type GetBodyCallback<T> = () => MaybePromise<T>;
 
 /** An integration callback for getting the headers as a JSON object */
 export type GetHeadersCallback = () =>
@@ -120,30 +122,6 @@ export type GetHeadersCallback = () =>
 /** An integration callback for sending JSON back to Taskless.io */
 export type SendJsonCallback = (json: JSONValue) => void | Promise<void>;
 
-/** The taskless body definition (what is posted to & from the client) */
-export type TasklessBody = {
-  v: number;
-  taskless: string;
-};
-
-/** Supported taskless schema versions. Must be accounted for in typeguard */
-const SUPPORTED_BODY_VERSIONS = [1];
-
-/** Typeguard for TasklessBody */
-export function isTasklessBody(body: unknown): body is TasklessBody {
-  return (
-    typeof body === "object" &&
-    body !== null &&
-    typeof (body as TasklessBody).taskless !== "undefined" &&
-    typeof (body as TasklessBody).v !== "undefined" &&
-    SUPPORTED_BODY_VERSIONS.includes((body as TasklessBody).v)
-  );
-}
-
-export const cast = <T>(value: unknown) => {
-  return value as T;
-};
-
 /** A recursive description of a valid JSON value */
 type JSONValue =
   | null
@@ -152,3 +130,48 @@ type JSONValue =
   | boolean
   | { [key: string]: JSONValue }
   | Array<JSONValue>;
+
+/** Supported ciphers have iv lengths as well as a matching hash function of equal bits */
+export type SupportedCiphers = Extract<CipherGCMTypes, "aes-256-gcm"> | "none";
+
+/** Data required for an AES-256-GCM cipher */
+type CipherAes256Gcm = {
+  /** The Cipher used */
+  alg: Extract<CipherGCMTypes, "aes-256-gcm">;
+  /** The length of the Auth Tag */
+  atl: number;
+  /** The Auth Tag */
+  at: string;
+  /** The Cipher IV value */
+  iv: string;
+};
+
+/** Data required for a non-ciphertext */
+type CipherNone = {
+  alg: "none";
+};
+
+/** All Supported Cipher combinations */
+type Ciphers = CipherAes256Gcm | CipherNone;
+
+/** Describes the taskless Transport Metadata */
+export type Transport = {
+  /** The envelope version used */
+  ev: 1;
+  alg: SupportedCiphers;
+} & Ciphers;
+
+/** The taskless body definition (what is posted to & from the client) */
+export type TasklessBody = {
+  /** The Taskless Body Version */
+  v: number;
+  /** The encoder transport */
+  transport: Transport;
+  /** Possibly ciphered text */
+  text: string;
+  /** Signature of text field */
+  signature: string;
+};
+
+/** A helper type for keyof typeof access */
+export type KeyOf<T> = keyof T;

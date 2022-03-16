@@ -1,22 +1,63 @@
 import merge from "deepmerge";
 import { v4 } from "uuid";
 import {
-  cast,
   GetBodyCallback,
   GetHeadersCallback,
-  isTasklessBody,
   Job,
   JobHandler,
   JobHeaders,
   JobMeta,
   JobOptions,
+  KeyOf,
   QueueOptions,
   SendJsonCallback,
   TasklessBody,
 } from "./types.js";
 import { create } from "./client/getter.js";
 import { JobMethodEnum } from "./__generated__/schema.js";
-import { encode, decode } from "./client/encoder.js";
+import { encode, decode, sign, verify } from "./client/encoder.js";
+
+/** Constructor arguments for the Taskless Client */
+type TasklessClientConstructorArgs<T> = {
+  /** The route slug this client is managing */
+  route: string;
+  /** A callback handler for processing the job */
+  handler: JobHandler<T>;
+  /** Options applied to the Queue globally */
+  queueOptions?: QueueOptions;
+  /** Default options applied to newly enqueued jobs */
+  jobOptions?: JobOptions;
+};
+
+/** Queue options plus required values in order for the client to work properly */
+type ResolvedQueueOptions = QueueOptions & {
+  baseUrl: string;
+  credentials: {
+    appId: string;
+    secret: string;
+  };
+};
+
+/** A console warning if the user hasn't acknowledged unencrypted values are OK in production */
+const warnUnencrypted = () => {
+  if (
+    process.env.TASKLESS_DISABLE_ENCRYPTION_WARNING !== "1" &&
+    process.env.NODE_ENV === "production"
+  ) {
+    console.warn(
+      [
+        "Using unencrypted values means that your job data is stored",
+        "and transmitted in the clear. If this was intentional, please",
+        "set TASKLESS_NO_ENCRYPTION_WARNING = 1 to silence this message",
+      ].join(" ")
+    );
+  }
+};
+
+/** Helper for missing items in the constructor */
+const errorMissing = (optionName: string, envName: string) => {
+  return `options.${optionName} was not defined. You must either define it when creating a Queue or set the environment value process.env.${envName}`;
+};
 
 /** A set of default options for queue objects, looking at ENV values first */
 const defaultQueueOptions: QueueOptions = {
@@ -27,10 +68,18 @@ const defaultQueueOptions: QueueOptions = {
         .split(",")
         .map((s) => s.trim())
     : [],
-  credentials: {
-    appId: process.env.TASKLESS_APP_ID ?? undefined,
-    secret: process.env.TASKLESS_APP_SECRET ?? undefined,
-  },
+  credentials:
+    process.env.TASKLESS_APP_ID && process.env.TASKLESS_APP_SECRET
+      ? {
+          appId: process.env.TASKLESS_APP_ID,
+          secret: process.env.TASKLESS_APP_SECRET,
+          expiredSecrets: process.env.TASKLESS_PREVIOUS_APP_SECRETS
+            ? `${process.env.TASKLESS_PREVIOUS_APP_SECRETS}`
+                .split(",")
+                .map((s) => s.trim())
+            : [],
+        }
+      : undefined,
 };
 
 /** A set of default options for job objects */
@@ -43,42 +92,50 @@ const defaultJobOptions: JobOptions = {
   retries: 5,
 };
 
-/** Prefers undefined, defaulting to the second argument */
-const undefinedOr = <T = never>(x?: unknown, other?: T): T | undefined =>
-  typeof x === "undefined" ? undefined : other;
-
+/** Get either the first object of the array or the object if not an array */
 const firstOf = <T>(unk: T | T[]) => {
   return (Array.isArray(unk) ? unk[0] : unk) as T;
-};
-
-/** A helper function for keyof typeof access */
-type KeyOf<T> = keyof T;
-
-type TasklessClientConstructorArgs<T> = {
-  route: string;
-  handler: JobHandler<T>;
-  queueOptions?: QueueOptions;
-  jobOptions?: JobOptions;
 };
 
 export class TasklessClient<T> {
   private route: string;
   private handler: JobHandler<T>;
-  private queueOptions: QueueOptions;
+  private queueOptions: ResolvedQueueOptions;
   private jobOptions: JobOptions;
 
   constructor(args: TasklessClientConstructorArgs<T>) {
-    this.queueOptions = merge.all([
+    const options: QueueOptions = merge.all([
       defaultQueueOptions,
       args.queueOptions ?? {},
     ]);
+
+    if (!options.baseUrl) {
+      throw new Error(errorMissing("baseUrl", "TASKLESS_BASE_URL"));
+    } else if (!options.credentials || !options.credentials.appId) {
+      throw new Error(errorMissing("credentials.appId", "TASKLESS_APP_ID"));
+    } else if (!options.credentials.secret) {
+      throw new Error(
+        errorMissing("credentials.secret", "TASKLESS_APP_SECRET")
+      );
+    }
+
+    if (!options.encryptionKey) {
+      warnUnencrypted();
+    }
+
+    this.queueOptions = {
+      ...options,
+      baseUrl: options.baseUrl,
+      credentials: options.credentials,
+    };
+
     this.jobOptions = merge.all([defaultJobOptions, args.jobOptions ?? {}]);
     this.route = args.route;
     this.handler = args.handler;
   }
 
   /** Convert option headers into a GraphQL friendly header input */
-  headersToGql(h?: JobHeaders) {
+  protected headersToGql(h?: JobHeaders) {
     // graphql friendly headers input
     return h
       ? Object.keys(h).map((header: KeyOf<typeof h>) => ({
@@ -88,16 +145,59 @@ export class TasklessClient<T> {
       : undefined;
   }
 
+  /** Turn a payload into a Taskless Body */
+  p2b(payload: T): TasklessBody {
+    const { transport, text } = encode(
+      payload,
+      this.queueOptions.encryptionKey ?? undefined
+    );
+    return {
+      v: 1,
+      transport,
+      text,
+      signature: sign(text, this.queueOptions.credentials.secret),
+    };
+  }
+
+  /** Turn a Taskless Body into a payload */
+  b2p(body: TasklessBody): T {
+    if (body.v !== 1) {
+      throw new Error("Unsupported Taskless Envelope");
+    }
+
+    const ver = verify(
+      body.text,
+      [
+        this.queueOptions.credentials.secret,
+        ...(this.queueOptions.credentials.expiredSecrets ?? []),
+      ],
+      body.signature
+    );
+    if (!ver) {
+      throw new Error("Signature mismatch");
+    }
+
+    const payload = decode<T>(
+      body.text,
+      body.transport,
+      [
+        this.queueOptions.encryptionKey,
+        ...(this.queueOptions.expiredEncryptionKeys ?? []),
+      ].filter((t) => t)
+    );
+    return payload;
+  }
+
   /** Resolves a route to a fully qualified URL */
-  resolveRoute() {
+  protected resolveRoute() {
     return (
       this.queueOptions.baseUrl +
       (this.route.indexOf("/") === 0 ? this.route : "/" + this.route)
     );
   }
 
-  /** Gets an instance of the zeus client */
-  getClient() {
+  /** Gets an instance of the GraphQL client */
+  protected getClient() {
     const creds = this.queueOptions.credentials;
     if (typeof creds?.appId === "undefined") {
       throw new Error("credentials.appId or TASKLESS_APP_ID was not set");
@@ -118,62 +218,26 @@ export class TasklessClient<T> {
     return c;
   }
 
-  p2b(payload: unknown): TasklessBody {
-    return {
-      v: 1,
-      taskless: encode(payload, this.queueOptions.encryptionKey),
-    };
-  }
-
-  b2p(body: string): T {
-    return decode(
-      body,
-      [
-        this.queueOptions.encryptionKey,
-        ...(this.queueOptions.expiredEncryptionKeys ?? []),
-      ].filter((t) => t)
-    );
-  }
-
   /**
    * Recieve a message and execute the handler for it
    * errors are caught and converted to a 500 response, while
    * any success is returned as a 200
-   * @param args The req/res pair from common node.js frameworks
+   * @param functions A set of accessory functions for accessing the request and response
+   * @param functions.getBody Gets the body of the request as a JS object
+   * @param functions.getHeaders Gets the request headers as a JS object
+   * @param functions.send Sends a request via ServerResponse or framework equivalent
+   * @param functions.sendError Sends an error via ServerResponse or framework equivalent
    */
   async receive(functions: {
-    getBody: GetBodyCallback;
+    getBody: GetBodyCallback<TasklessBody>;
     getHeaders: GetHeadersCallback;
     send: SendJsonCallback;
     sendError: SendJsonCallback;
   }) {
     const { getBody, getHeaders, send, sendError } = functions;
     const body = await getBody();
-    let payload: T | undefined;
-    let h:
-      | ReturnType<typeof getHeaders>
-      | ReturnType<Awaited<typeof getHeaders>>;
-
-    try {
-      if (isTasklessBody(body)) {
-        payload = this.b2p(body.taskless);
-      } else {
-        // raw body or otherwise doesn't conform to the Taskless envelope
-        payload = cast<T>(body);
-      }
-
-      h = await getHeaders();
-    } catch (e) {
-      console.error(e);
-      const isE = e instanceof Error;
-      await sendError({
-        route: this.route,
-        error: "Could not extract body and headers from request",
-        details: isE ? e.message : "no message",
-        stack: isE ? e.stack ?? "no stack" : "no stack",
-      });
-      return;
-    }
+    const payload = this.b2p(body);
+    const h: Awaited<ReturnType<typeof getHeaders>> = await getHeaders();
 
     const meta: JobMeta = {
       applicationId: firstOf(h["x-taskless-application"]) ?? null,
@@ -199,6 +263,13 @@ export class TasklessClient<T> {
     }
   }
 
+  /**
+   * Adds a job to the queue for processing
+   * @param name The name of the job
+   * @param payload The job's payload
+   * @param options Additional job options overriding the queue's defaults
+   * @returns a Promise containing the Job object enqueued
+   */
   async enqueue(
     name: string | null,
     payload: T,
@@ -229,12 +300,19 @@ export class TasklessClient<T> {
       endpoint: job.replaceJob.endpoint,
       enabled: job.replaceJob.enabled === false ? false : true,
       headers: opts.headers,
-      payload,
+      payload: this.b2p(JSON.parse(job.replaceJob.body ?? "")),
       retries: job.replaceJob.retries,
       runAt: job.replaceJob.runAt,
     };
   }
 
+  /**
+   * Updates a job in the queue
+   * @param name The name of the job
+   * @param payload The job's payload. A value of `undefined` will reuse the existing payload
+   * @param options Additional job options overriding the queue's defaults
+   * @returns a Promise containing the updated Job object
+   */
   async update(
     name: string,
     payload: T | undefined,
@@ -242,40 +320,40 @@ export class TasklessClient<T> {
   ): Promise<Job<T>> {
     const opts = merge.all<JobOptions>([this.jobOptions, options ?? {}]);
     const client = this.getClient();
-    const body = undefinedOr(payload, this.p2b(payload));
+    const body = typeof payload !== "undefined" ? this.p2b(payload) : undefined;
 
     const job = await client.updateJob({
       name,
       job: {
         endpoint: this.resolveRoute(),
         method: JobMethodEnum.Post,
-        headers: undefinedOr(opts.headers, this.headersToGql(opts.headers)),
-        enabled: undefinedOr(
-          opts.enabled,
-          opts.enabled === false ? false : true
-        ),
-        body: undefinedOr(body, JSON.stringify(body)),
-        retries: undefinedOr(
-          opts.retries,
-          opts.retries === 0 ? 0 : opts.retries
-        ),
-        runAt: undefinedOr(opts.runAt, opts.runAt),
-        runEvery: undefinedOr(opts.runEvery, opts.runEvery),
+        headers:
+          typeof opts.headers !== "undefined"
+            ? this.headersToGql(opts.headers)
+            : undefined,
+        enabled: opts.enabled === false ? false : opts.enabled,
+        body: typeof body !== "undefined" ? JSON.stringify(body) : undefined,
+        retries: opts.retries === 0 ? 0 : opts.retries,
+        runAt: opts.runAt,
+        runEvery: opts.runEvery,
       },
     });
-
-    const returnedPayload = this.b2p(JSON.parse(job.updateJob.body ?? ""));
 
     return {
       name: job.updateJob.name,
       endpoint: job.updateJob.endpoint,
       enabled: job.updateJob.enabled === false ? false : true,
-      payload: returnedPayload,
+      payload: this.b2p(JSON.parse(job.updateJob.body ?? "")),
       retries: job.updateJob.retries,
       runAt: job.updateJob.runAt,
     };
   }
 
+  /**
+   * Removes a job from the queue
+   * @param name The name of the job
+   * @returns a Promise containing the Job object that was removed
+   */
   async delete(name: string): Promise<Job<T>> {
     const client = this.getClient();
 
@@ -287,13 +365,11 @@ export class TasklessClient<T> {
       throw new Error("TODO");
     }
 
-    const returnedPayload = this.b2p(JSON.parse(job.deleteJob.body ?? ""));
-
     return {
       name: job.deleteJob.name,
       endpoint: job.deleteJob.endpoint,
       enabled: job.deleteJob.enabled === false ? false : true,
-      payload: returnedPayload,
+      payload: this.b2p(JSON.parse(job.deleteJob.body ?? "")),
       retries: job.deleteJob.retries,
       runAt: job.deleteJob.runAt,
     };
@@ -310,13 +386,11 @@ export class TasklessClient<T> {
       throw new Error("TODO");
     }
 
-    const returnedPayload = this.b2p(JSON.parse(result.job.body ?? ""));
-
     return {
       name: result.job.name,
       endpoint: result.job.endpoint,
       enabled: result.job.enabled === false ? false : true,
-      payload: returnedPayload,
+      payload: this.b2p(JSON.parse(result.job.body ?? "")),
       retries: result.job.retries,
       runAt: result.job.runAt,
     };
