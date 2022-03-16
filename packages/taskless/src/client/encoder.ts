@@ -173,7 +173,7 @@ export const decode = <T>(
   secrets: (string | undefined)[]
 ): T => {
   if (transport.alg === "none") {
-    return JSON.parse(text)?.envelope as T;
+    return text as unknown as T;
   }
 
   for (const secret of secrets) {
