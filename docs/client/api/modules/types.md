@@ -45,7 +45,7 @@ Data required for an AES-256-GCM cipher
 
 #### Defined in
 
-[packages/taskless/src/types.ts:137](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L137)
+[packages/taskless/src/types.ts:137](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L137)
 
 ---
 
@@ -63,7 +63,7 @@ Data required for a non-ciphertext
 
 #### Defined in
 
-[packages/taskless/src/types.ts:149](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L149)
+[packages/taskless/src/types.ts:149](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L149)
 
 ---
 
@@ -75,7 +75,7 @@ All Supported Cipher combinations
 
 #### Defined in
 
-[packages/taskless/src/types.ts:154](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L154)
+[packages/taskless/src/types.ts:154](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L154)
 
 ---
 
@@ -101,7 +101,7 @@ An intgeration callback for getting the request body as a JSON object
 
 #### Defined in
 
-[packages/taskless/src/types.ts:114](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L114)
+[packages/taskless/src/types.ts:114](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L114)
 
 ---
 
@@ -121,7 +121,7 @@ An integration callback for getting the headers as a JSON object
 
 #### Defined in
 
-[packages/taskless/src/types.ts:117](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L117)
+[packages/taskless/src/types.ts:117](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L117)
 
 ---
 
@@ -133,7 +133,7 @@ A recursive description of a valid JSON-like value
 
 #### Defined in
 
-[packages/taskless/src/types.ts:125](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L125)
+[packages/taskless/src/types.ts:125](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L125)
 
 ---
 
@@ -164,7 +164,7 @@ Describes a Taskless.io Job with a payload of type `T`
 
 #### Defined in
 
-[packages/taskless/src/types.ts:46](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L46)
+[packages/taskless/src/types.ts:46](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L46)
 
 ---
 
@@ -197,7 +197,7 @@ The Job Handler signature, taking a `payload` and `meta`
 
 #### Defined in
 
-[packages/taskless/src/types.ts:108](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L108)
+[packages/taskless/src/types.ts:108](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L108)
 
 ---
 
@@ -209,7 +209,7 @@ The result of the Job Handler callback
 
 #### Defined in
 
-[packages/taskless/src/types.ts:111](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L111)
+[packages/taskless/src/types.ts:111](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L111)
 
 ---
 
@@ -223,7 +223,7 @@ The result of the Job Handler callback
 
 #### Defined in
 
-[packages/taskless/src/types.ts:20](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L20)
+[packages/taskless/src/types.ts:20](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L20)
 
 ---
 
@@ -243,7 +243,7 @@ Metadata regarding the currently running Job
 
 #### Defined in
 
-[packages/taskless/src/types.ts:39](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L39)
+[packages/taskless/src/types.ts:39](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L39)
 
 ---
 
@@ -265,7 +265,7 @@ A set of options on a per-job level
 
 #### Defined in
 
-[packages/taskless/src/types.ts:25](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L25)
+[packages/taskless/src/types.ts:25](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L25)
 
 ---
 
@@ -283,7 +283,7 @@ A helper type for keyof typeof access
 
 #### Defined in
 
-[packages/taskless/src/types.ts:176](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L176)
+[packages/taskless/src/types.ts:176](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L176)
 
 ---
 
@@ -310,7 +310,7 @@ Describes the set of Queue Methods available on a Taskless Integration
 
 #### Defined in
 
-[packages/taskless/src/types.ts:69](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L69)
+[packages/taskless/src/types.ts:69](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L69)
 
 ---
 
@@ -334,7 +334,7 @@ A set of options for setting up a Taskless Queue
 
 #### Defined in
 
-[packages/taskless/src/types.ts:5](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L5)
+[packages/taskless/src/types.ts:5](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L5)
 
 ---
 
@@ -360,7 +360,7 @@ An integration callback for sending JSON back to Taskless.io
 
 #### Defined in
 
-[packages/taskless/src/types.ts:122](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L122)
+[packages/taskless/src/types.ts:122](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L122)
 
 ---
 
@@ -372,7 +372,7 @@ Supported ciphers have iv lengths as well as a matching hash function of equal b
 
 #### Defined in
 
-[packages/taskless/src/types.ts:134](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L134)
+[packages/taskless/src/types.ts:134](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L134)
 
 ---
 
@@ -393,7 +393,7 @@ The taskless body definition (what is posted to & from the client)
 
 #### Defined in
 
-[packages/taskless/src/types.ts:164](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L164)
+[packages/taskless/src/types.ts:164](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L164)
 
 ---
 
@@ -405,4 +405,4 @@ Describes the taskless Transport Metadata
 
 #### Defined in
 
-[packages/taskless/src/types.ts:157](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L157)
+[packages/taskless/src/types.ts:157](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L157)

@@ -81,7 +81,7 @@ QueueMethods.delete
 
 #### Defined in
 
-[packages/taskless/src/types.ts:98](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L98)
+[packages/taskless/src/types.ts:98](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L98)
 
 ---
 
@@ -113,7 +113,7 @@ QueueMethods.enqueue
 
 #### Defined in
 
-[packages/taskless/src/types.ts:78](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L78)
+[packages/taskless/src/types.ts:78](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L78)
 
 ---
 
@@ -141,7 +141,7 @@ QueueMethods.get
 
 #### Defined in
 
-[packages/taskless/src/types.ts:104](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L104)
+[packages/taskless/src/types.ts:104](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L104)
 
 ---
 
@@ -173,7 +173,7 @@ QueueMethods.update
 
 #### Defined in
 
-[packages/taskless/src/types.ts:91](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/types.ts#L91)
+[packages/taskless/src/types.ts:91](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L91)
 
 ---
 
@@ -197,4 +197,4 @@ NextMethods.withQueue
 
 #### Defined in
 
-[packages/taskless/src/next.ts:10](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/next.ts#L10)
+[packages/taskless/src/next.ts:15](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/next.ts#L15)

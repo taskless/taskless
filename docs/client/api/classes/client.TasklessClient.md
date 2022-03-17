@@ -46,7 +46,7 @@ Turn a Taskless Body into a payload
 
 #### Defined in
 
-[packages/taskless/src/client.ts:169](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L169)
+[packages/taskless/src/client.ts:169](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L169)
 
 ---
 
@@ -70,7 +70,7 @@ a Promise containing the Job object that was removed
 
 #### Defined in
 
-[packages/taskless/src/client.ts:363](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L363)
+[packages/taskless/src/client.ts:363](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L363)
 
 ---
 
@@ -96,7 +96,7 @@ a Promise containing the Job object enqueued
 
 #### Defined in
 
-[packages/taskless/src/client.ts:279](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L279)
+[packages/taskless/src/client.ts:279](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L279)
 
 ---
 
@@ -116,7 +116,7 @@ a Promise containing the Job object enqueued
 
 #### Defined in
 
-[packages/taskless/src/client.ts:384](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L384)
+[packages/taskless/src/client.ts:384](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L384)
 
 ---
 
@@ -138,7 +138,7 @@ Turn a payload into a Taskless Body
 
 #### Defined in
 
-[packages/taskless/src/client.ts:155](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L155)
+[packages/taskless/src/client.ts:155](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L155)
 
 ---
 
@@ -166,7 +166,7 @@ any success is returned as a 200
 
 #### Defined in
 
-[packages/taskless/src/client.ts:237](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L237)
+[packages/taskless/src/client.ts:237](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L237)
 
 ---
 
@@ -192,7 +192,7 @@ a Promise containing the updated Job object
 
 #### Defined in
 
-[packages/taskless/src/client.ts:322](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L322)
+[packages/taskless/src/client.ts:322](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L322)
 
 ## Constructors
 
@@ -214,4 +214,4 @@ a Promise containing the updated Job object
 
 #### Defined in
 
-[packages/taskless/src/client.ts:112](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L112)
+[packages/taskless/src/client.ts:112](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L112)

@@ -37,4 +37,4 @@ Constructor arguments for the Taskless Client
 
 #### Defined in
 
-[packages/taskless/src/client.ts:24](https://github.com/taskless/taskless/blob/c9e7b9d/packages/taskless/src/client.ts#L24)
+[packages/taskless/src/client.ts:24](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L24)

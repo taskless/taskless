@@ -37,8 +37,9 @@
   "scripts": {
     "dev": "run-s clean build watch",
     "// build": "echo 'Build commands based on SenseDeep: https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html'",
-    "build": "run-s clean 'build:tsc:**' 'build:copy:**'",
-    "build:docs": "typedoc",
+    "build": "run-s clean 'build:tsc:**' 'build:copy:**' build:docs",
+    "build:docs": "run -s typedoc build:docs:prettier",
+    "build:docs:prettier": "prettier --write ../../docs/client/api",
     "build:tsc:esm": "tsc",
     "build:tsc:cjs": "tsc -p tsconfig-cjs.json",
     "build:copy:esm": "cpy --flat --rename=package.json ./.templates/package.esm.json ./dist/esm",
@@ -55,7 +56,8 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "codegen": "graphql-codegen",
     "typedoc": "typedoc",
-    "release:before:init": "run-s clean build test typedoc"
+    "prettier": "prettier",
+    "release:before:init": "run-s clean build test"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",
@@ -75,6 +77,7 @@
     "@types/babel__core": "^7",
     "@types/deepmerge": "^2.2.0",
     "@types/eslint": "^8",
+    "@types/prettier": "^2",
     "@types/react": "^17",
     "@types/react-dom": "^17",
     "@types/uuid": "^8",
@@ -89,6 +92,7 @@
     "madge": "^5.0.1",
     "next": "^12.1.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "tsdef": "^0.0.14",
