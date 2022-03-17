@@ -122,13 +122,7 @@ export type GetHeadersCallback = () =>
 export type SendJsonCallback = (json: JSONValue) => void | Promise<void>;
 
 /** A recursive description of a valid JSON-like value */
-export type JSONValue =
-  | null
-  | string
-  | number
-  | boolean
-  | { [key: string]: JSONValue }
-  | Array<JSONValue>;
+export type JSONValue = ReturnType<typeof JSON.parse>;
 
 /** Supported ciphers have iv lengths as well as a matching hash function of equal bits */
 export type SupportedCiphers = Extract<CipherGCMTypes, "aes-256-gcm"> | "none";
@@ -160,7 +154,10 @@ export type Transport = {
   alg: SupportedCiphers;
 } & Ciphers;
 
-/** The taskless body definition (what is posted to & from the client) */
+/**
+ * The taskless body definition (what is posted to & from the client)
+ * @see {isTasklessBody} ts-auto-guard:type-guard
+ */
 export type TasklessBody = {
   /** The Taskless Body Version */
   v: number;

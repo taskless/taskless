@@ -254,7 +254,7 @@ export class TasklessClient<T> {
     try {
       const result = await this.handler(payload, meta);
       await send({
-        result: result ?? {},
+        result: JSON.parse(JSON.stringify(result)),
       });
       return;
     } catch (e) {

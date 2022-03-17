@@ -27,8 +27,8 @@ module.exports = {
       xargs(f)(
         `yarn workspace @taskless/client eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'`
       ),
-    // See: https://github.com/pahen/madge/issues/306
-    `yarn workspace @taskless/client madge --no-spinner --circular --exclude 'next.ts'`,
+    // See: https://github.com/pahen/madge/issues/306 for why we don't check type imports
+    `yarn workspace @taskless/client madge --no-spinner --circular`,
     "prettier --write",
   ],
 };

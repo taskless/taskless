@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { createQueue } from "../../../../../packages/taskless/dist/esm/next";
+import { createQueue } from "@taskless/client/next";
 
 type SampleQueue = {
   foo: string;

@@ -40,11 +40,11 @@ That's everything you need to create your first Queue!
 
 ## Creating a Queue
 
-Queues in the Express integration are both a standard [Next.js API Route](https://nextjs.org/docs/api-routes/introduction) and a Taskless Queue. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console.
+Queues in the Express integration are Queues first, and an [Express Route](https://expressjs.com/en/4x/api.html#router) second. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console.
 
 ```ts
 // /queues/echo.ts
-
+import express from "express";
 import { createQueue } from "@taskless/client/express";
 
 /** Describes our queue object **/
@@ -56,6 +56,10 @@ export default createQueue<Echo>(
   "/queues/echo", // 👈🏼 The URL path this queue is reachable on
   async (job, meta) => {
     console.log("Received a job with payload and meta:", job, meta);
+  },
+  {
+    router: express.Router(),
+    middleware: [express.json()],
   }
 );
 ```
@@ -64,7 +68,7 @@ export default createQueue<Echo>(
 
 1. The `path` the API route is publicly reachable on. This is combined with your base url to create a full URL that Taskless should ping
 2. The `job` callback. An async function that receives your job along with any additional metadata
-3. The `options` for the Queue, which can be ommitted since we'll define our environment variables as part of our `start` command in our `package.json`
+3. The `options` for the Queue. While we are using an `.env` file for most of our configuration, we must tell Taskless about our express router and middleware configuration via the `router` and `middleware` properties. At a minimum, your middleware must include a body parser that outputs JSON such as the one that comes bundled in express via `express.json()`.
 
 ## Environment Variables
 
@@ -73,8 +77,8 @@ In order for Taskless to use our Queue, we'll set up some environment variables 
 ```bash
 # /.env
 
-# Enables Taskless Reflect, which enables local development
-# by skipping the external Queue
+# Enables Taskless Call Reflection, which avoids invocations by using
+# a local development client to emulate the Taskless client APIs
 TASKLESS_REFLECT=1
 
 # The base URL is the public URL your app is accessible on
@@ -104,19 +108,19 @@ Modify our `scripts.start` section of `package.json` to: `"start": "env-cmd node
 
 ## Adding the Queue to the Express App
 
-In express, our `createQueue` function will create a middleware for handling `POST` requests to the `/queues/echo` endpoint. It can be added to the root app object via `app.use` or a router via `router.use`.
+In express, our `createQueue` function will create a middleware router in the `route` property that takes care of handling your endpoint. It can be added to the root app object via `app.use` or a router via `router.use`.
 
 ```ts
 // /server.ts
 
 import express from "express";
-import withEchoQueue from "./queues/echo";
+import EchoQueue from "./queues/echo";
 
 const app = express();
 // ... your express app setup
 
-// can use app or router, but it's recommended to mount to the root path
-withEchoQueue(app);
+// can use app or router
+app.use(EchoQueue.router);
 
 app.listen(3000, () => {
   console.log("Example app listening on port 3000");
@@ -130,13 +134,13 @@ The `createQueue` both creates an express route handler and attaches the Taskles
 ```ts
 // /server.ts
 import express from "express";
-import withEchoQueue from "./queues/echo";
+import EchoQueue from "./queues/echo";
 
 // ... previous content
 
 // this is using Express 5, but you can also use .then() and .catch()
 app.get("/trigger-echo", async (req, res) => {
-  const job = await withEchoQueue.enqueue(null, {
+  const job = await EchoQueue.enqueue(null, {
     content:
       "This is a test string, generated at: " + new Date().toLocaleString(),
   });

@@ -314,6 +314,8 @@ Supported ciphers have iv lengths as well as a matching hash function of equal b
 
 The taskless body definition (what is posted to & from the client)
 
+**`see`** {isTasklessBody} ts-auto-guard:type-guard
+
 #### Type declaration
 
 | Name        | Type                              | Description               |
