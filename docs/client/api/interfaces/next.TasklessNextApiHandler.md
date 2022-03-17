@@ -39,10 +39,6 @@ Next `API` route handler
 
 `void` \| `Promise`<`void`\>
 
-#### Defined in
-
-node_modules/next/dist/shared/lib/utils.d.ts:251
-
 ## Table of contents
 
 ### Methods
@@ -79,10 +75,6 @@ The deleted `Job` object
 
 QueueMethods.delete
 
-#### Defined in
-
-[packages/taskless/src/types.ts:98](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L98)
-
 ---
 
 ### enqueue
@@ -111,10 +103,6 @@ The `Job` object
 
 QueueMethods.enqueue
 
-#### Defined in
-
-[packages/taskless/src/types.ts:78](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L78)
-
 ---
 
 ### get
@@ -138,10 +126,6 @@ The `Job` object
 #### Inherited from
 
 QueueMethods.get
-
-#### Defined in
-
-[packages/taskless/src/types.ts:104](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L104)
 
 ---
 
@@ -171,10 +155,6 @@ The `Job` object
 
 QueueMethods.update
 
-#### Defined in
-
-[packages/taskless/src/types.ts:91](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L91)
-
 ---
 
 ### withQueue
@@ -194,7 +174,3 @@ QueueMethods.update
 #### Inherited from
 
 NextMethods.withQueue
-
-#### Defined in
-
-[packages/taskless/src/next.ts:15](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/next.ts#L15)

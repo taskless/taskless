@@ -38,7 +38,3 @@ Creates a next.js compatible API Route that doubles as a Taskless Queue object
 #### Returns
 
 [`TasklessNextApiHandler`](../interfaces/next.TasklessNextApiHandler.md)<`T`\>
-
-#### Defined in
-
-[packages/taskless/src/next.ts:38](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/next.ts#L38)

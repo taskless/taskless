@@ -21,6 +21,7 @@
     "excludeProtected": true,
     "excludeInternal": true,
     "excludeExternals": true,
+    "disableSources": true,
     "hideGenerator": true,
     "cleanOutputDir": true,
     "readme": "none",

@@ -44,10 +44,6 @@ Turn a Taskless Body into a payload
 
 `T`
 
-#### Defined in
-
-[packages/taskless/src/client.ts:169](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L169)
-
 ---
 
 ### delete
@@ -67,10 +63,6 @@ Removes a job from the queue
 `Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
 
 a Promise containing the Job object that was removed
-
-#### Defined in
-
-[packages/taskless/src/client.ts:363](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L363)
 
 ---
 
@@ -94,10 +86,6 @@ Adds a job to the queue for processing
 
 a Promise containing the Job object enqueued
 
-#### Defined in
-
-[packages/taskless/src/client.ts:279](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L279)
-
 ---
 
 ### get
@@ -113,10 +101,6 @@ a Promise containing the Job object enqueued
 #### Returns
 
 `Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
-
-#### Defined in
-
-[packages/taskless/src/client.ts:384](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L384)
 
 ---
 
@@ -135,10 +119,6 @@ Turn a payload into a Taskless Body
 #### Returns
 
 [`TasklessBody`](../modules/types.md#tasklessbody)
-
-#### Defined in
-
-[packages/taskless/src/client.ts:155](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L155)
 
 ---
 
@@ -164,10 +144,6 @@ any success is returned as a 200
 
 `Promise`<`void`\>
 
-#### Defined in
-
-[packages/taskless/src/client.ts:237](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L237)
-
 ---
 
 ### update
@@ -190,10 +166,6 @@ Updates a job in the queue
 
 a Promise containing the updated Job object
 
-#### Defined in
-
-[packages/taskless/src/client.ts:322](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L322)
-
 ## Constructors
 
 ### constructor
@@ -211,7 +183,3 @@ a Promise containing the updated Job object
 | Name   | Type                                                                                        |
 | :----- | :------------------------------------------------------------------------------------------ |
 | `args` | [`TasklessClientConstructorArgs`](../modules/client.md#tasklessclientconstructorargs)<`T`\> |
-
-#### Defined in
-
-[packages/taskless/src/client.ts:112](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/client.ts#L112)

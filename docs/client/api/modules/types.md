@@ -43,10 +43,6 @@ Data required for an AES-256-GCM cipher
 | `atl` | `number`                                      | The length of the Auth Tag |
 | `iv`  | `string`                                      | The Cipher IV value        |
 
-#### Defined in
-
-[packages/taskless/src/types.ts:137](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L137)
-
 ---
 
 ### CipherNone
@@ -61,10 +57,6 @@ Data required for a non-ciphertext
 | :---- | :------- |
 | `alg` | `"none"` |
 
-#### Defined in
-
-[packages/taskless/src/types.ts:149](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L149)
-
 ---
 
 ### Ciphers
@@ -72,10 +64,6 @@ Data required for a non-ciphertext
 Ƭ **Ciphers**: [`CipherAes256Gcm`](types.md#cipheraes256gcm) \| [`CipherNone`](types.md#ciphernone)
 
 All Supported Cipher combinations
-
-#### Defined in
-
-[packages/taskless/src/types.ts:154](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L154)
 
 ---
 
@@ -99,10 +87,6 @@ An intgeration callback for getting the request body as a JSON object
 
 `Awaited`<`T`\>
 
-#### Defined in
-
-[packages/taskless/src/types.ts:114](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L114)
-
 ---
 
 ### GetHeadersCallback
@@ -119,10 +103,6 @@ An integration callback for getting the headers as a JSON object
 
 `IncomingHttpHeaders` \| `Promise`<`IncomingHttpHeaders`\>
 
-#### Defined in
-
-[packages/taskless/src/types.ts:117](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L117)
-
 ---
 
 ### JSONValue
@@ -130,10 +110,6 @@ An integration callback for getting the headers as a JSON object
 Ƭ **JSONValue**: `null` \| `string` \| `number` \| `boolean` \| { `[key: string]`: [`JSONValue`](types.md#jsonvalue); } \| [`JSONValue`](types.md#jsonvalue)[]
 
 A recursive description of a valid JSON-like value
-
-#### Defined in
-
-[packages/taskless/src/types.ts:125](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L125)
 
 ---
 
@@ -161,10 +137,6 @@ Describes a Taskless.io Job with a payload of type `T`
 | `retries`   | `number`                            | The number of retries for this Job                                           |
 | `runAt`     | `string`                            | An ISO-8601 timestamp of when this job will be ran                           |
 | `runEvery?` | `string`                            | An ISO-8601 duration for how often this job will repeat its run              |
-
-#### Defined in
-
-[packages/taskless/src/types.ts:46](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L46)
 
 ---
 
@@ -195,10 +167,6 @@ The Job Handler signature, taking a `payload` and `meta`
 
 `Awaited`<[`JSONValue`](types.md#jsonvalue)\>
 
-#### Defined in
-
-[packages/taskless/src/types.ts:108](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L108)
-
 ---
 
 ### JobHandlerResult
@@ -206,10 +174,6 @@ The Job Handler signature, taking a `payload` and `meta`
 Ƭ **JobHandlerResult**: `Awaited`<`void`\> \| `Awaited`<[`JSONValue`](types.md#jsonvalue)\>
 
 The result of the Job Handler callback
-
-#### Defined in
-
-[packages/taskless/src/types.ts:111](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L111)
 
 ---
 
@@ -220,10 +184,6 @@ The result of the Job Handler callback
 #### Index signature
 
 ▪ [header: `string`]: `string`
-
-#### Defined in
-
-[packages/taskless/src/types.ts:20](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L20)
 
 ---
 
@@ -240,10 +200,6 @@ Metadata regarding the currently running Job
 | `applicationId`  | `string` \| `null` |
 | `attempt`        | `number`           |
 | `organizationId` | `string` \| `null` |
-
-#### Defined in
-
-[packages/taskless/src/types.ts:39](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L39)
 
 ---
 
@@ -263,10 +219,6 @@ A set of options on a per-job level
 | `runAt?`    | `string`                            | An optional time to run the job, delaying it into the future. ISO-8601 format |
 | `runEvery?` | `string`                            | An optional ISO-8601 duration that enables repeated running of a job          |
 
-#### Defined in
-
-[packages/taskless/src/types.ts:25](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L25)
-
 ---
 
 ### KeyOf
@@ -280,10 +232,6 @@ A helper type for keyof typeof access
 | Name |
 | :--- |
 | `T`  |
-
-#### Defined in
-
-[packages/taskless/src/types.ts:176](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L176)
 
 ---
 
@@ -308,10 +256,6 @@ Describes the set of Queue Methods available on a Taskless Integration
 | `get`     | (`name`: `string`) => `Promise`<[`Job`](types.md#job)<`T`\>\>                                                                            |
 | `update`  | (`name`: `string`, `payload`: `T`, `options?`: [`JobOptions`](types.md#joboptions)) => `Promise`<[`Job`](types.md#job)<`T`\>\>           |
 
-#### Defined in
-
-[packages/taskless/src/types.ts:69](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L69)
-
 ---
 
 ### QueueOptions
@@ -331,10 +275,6 @@ A set of options for setting up a Taskless Queue
 | `credentials.secret`          | `string`                                                                   | -                                                                                                                                                           |
 | `encryptionKey?`              | `string`                                                                   | An optional encryption key for e2e encryption of job data. Defaults to process.env.TASKLESS_ENCRYPTION_KEY                                                  |
 | `expiredEncryptionKeys?`      | `string`[]                                                                 | Previous encryption keys to assist in key rotation. Defaults to a comma separated list in process.env.TASKLESS_PREVIOUS_ENCRYPTION_KEYS                     |
-
-#### Defined in
-
-[packages/taskless/src/types.ts:5](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L5)
 
 ---
 
@@ -358,10 +298,6 @@ An integration callback for sending JSON back to Taskless.io
 
 `void` \| `Promise`<`void`\>
 
-#### Defined in
-
-[packages/taskless/src/types.ts:122](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L122)
-
 ---
 
 ### SupportedCiphers
@@ -369,10 +305,6 @@ An integration callback for sending JSON back to Taskless.io
 Ƭ **SupportedCiphers**: `Extract`<`CipherGCMTypes`, `"aes-256-gcm"`\> \| `"none"`
 
 Supported ciphers have iv lengths as well as a matching hash function of equal bits
-
-#### Defined in
-
-[packages/taskless/src/types.ts:134](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L134)
 
 ---
 
@@ -391,10 +323,6 @@ The taskless body definition (what is posted to & from the client)
 | `transport` | [`Transport`](types.md#transport) | The encoder transport     |
 | `v`         | `number`                          | The Taskless Body Version |
 
-#### Defined in
-
-[packages/taskless/src/types.ts:164](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L164)
-
 ---
 
 ### Transport
@@ -402,7 +330,3 @@ The taskless body definition (what is posted to & from the client)
 Ƭ **Transport**: { `alg`: [`SupportedCiphers`](types.md#supportedciphers) ; `ev`: `1` } & [`Ciphers`](types.md#ciphers)
 
 Describes the taskless Transport Metadata
-
-#### Defined in
-
-[packages/taskless/src/types.ts:157](https://github.com/taskless/taskless/blob/6436a96/packages/taskless/src/types.ts#L157)

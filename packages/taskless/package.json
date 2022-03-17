@@ -36,16 +36,16 @@
   },
   "scripts": {
     "dev": "run-s clean build watch",
+    "docs": "run-s typedoc typedoc:prettier",
     "// build": "echo 'Build commands based on SenseDeep: https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html'",
-    "build": "run-s clean 'build:tsc:**' 'build:copy:**' build:docs",
-    "build:docs": "run -s typedoc build:docs:prettier",
-    "build:docs:prettier": "prettier --write ../../docs/client/api",
+    "build": "run-s clean 'build:tsc:**' 'build:copy:**'",
     "build:tsc:esm": "tsc",
     "build:tsc:cjs": "tsc -p tsconfig-cjs.json",
     "build:copy:esm": "cpy --flat --rename=package.json ./.templates/package.esm.json ./dist/esm",
     "build:copy:cjs": "cpy --flat --rename=package.json ./.templates/package.cjs.json ./dist/cjs",
     "// watch": "echo 'Watch commands for different build types'",
     "watch": "run-p 'watch:**'",
+    "watch:docs": "typedoc --watch",
     "watch:tsc:esm": "tsc -w",
     "watch:tsc:cjs": "tsc -w -p tsconfig-cjs.json",
     "// utilities": "echo 'Utilities used for development, including release hooks'",
@@ -56,8 +56,9 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "codegen": "graphql-codegen",
     "typedoc": "typedoc",
+    "typedoc:prettier": "prettier --write ../../docs/client/api",
     "prettier": "prettier",
-    "release:before:init": "run-s clean build test"
+    "release:before:init": "run-s clean build test docs"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",
