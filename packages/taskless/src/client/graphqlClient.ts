@@ -2,37 +2,8 @@ import { getSdk } from "../__generated__/schema.js";
 import type { Requester } from "../__generated__/schema.js";
 import pRetry from "p-retry";
 import phin from "phin";
-
-/** A Phin GraphQL request error */
-export class RequestError extends Error {
-  raw: unknown;
-  constructor(err: string | undefined, raw: unknown) {
-    super(err);
-    this.raw = raw;
-  }
-}
-
-/** Options for generating a GraphQL Phin client */
-type RequesterOptions = {
-  /** The GraphQL endpoint URL */
-  url: string;
-  /** Additional headers to pass with the request */
-  headers?: {
-    [header: string]: string;
-  };
-  /** The Taskless App ID */
-  appId: string;
-  /** The Taskless App Secret */
-  secret: string;
-  /** The number of HTTP retries to make when doing GraphQL operations */
-  retries?: number;
-};
-
-/** A simplified GraphQL response */
-type PhinGraphQLResponse = {
-  data?: unknown;
-  errors?: unknown;
-};
+import { GraphQLResponse, RequesterOptions } from "./types.js";
+import { RequestError } from "./error.js";
 
 /** A simplified GraphQL: request */
 type QueryBody<V> = {
@@ -80,7 +51,7 @@ const createGetter = (
     try {
       const result = await pRetry(
         () =>
-          phin<PhinGraphQLResponse>({
+          phin<GraphQLResponse>({
             ...phinOptions,
             url: globalOptions.url,
             method: "POST",

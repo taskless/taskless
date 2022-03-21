@@ -107,7 +107,7 @@ An integration callback for getting the headers as a JSON object
 
 ### JSONValue
 
-Ƭ **JSONValue**: `null` \| `string` \| `number` \| `boolean` \| { `[key: string]`: [`JSONValue`](types.md#jsonvalue); } \| [`JSONValue`](types.md#jsonvalue)[]
+Ƭ **JSONValue**: `ReturnType`<typeof `JSON.parse`\>
 
 A recursive description of a valid JSON-like value
 

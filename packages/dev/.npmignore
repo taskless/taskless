@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+
+# publish the .next directory
+# .next
+
+# ignore webpack cache
+.next/cache/*

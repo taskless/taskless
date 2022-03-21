@@ -1,8 +1,8 @@
-[@taskless/client](../README.md) / [client](../modules/client.md) / TasklessClient
+[@taskless/client](../README.md) / [client/TasklessClient](../modules/client_TasklessClient.md) / TasklessClient
 
 # Class: TasklessClient<T\>
 
-[client](../modules/client.md).TasklessClient
+[client/TasklessClient](../modules/client_TasklessClient.md).TasklessClient
 
 ## Type parameters
 
@@ -14,17 +14,17 @@
 
 ### Methods
 
-- [b2p](client.TasklessClient.md#b2p)
-- [delete](client.TasklessClient.md#delete)
-- [enqueue](client.TasklessClient.md#enqueue)
-- [get](client.TasklessClient.md#get)
-- [p2b](client.TasklessClient.md#p2b)
-- [receive](client.TasklessClient.md#receive)
-- [update](client.TasklessClient.md#update)
+- [b2p](client_TasklessClient.TasklessClient.md#b2p)
+- [delete](client_TasklessClient.TasklessClient.md#delete)
+- [enqueue](client_TasklessClient.TasklessClient.md#enqueue)
+- [get](client_TasklessClient.TasklessClient.md#get)
+- [p2b](client_TasklessClient.TasklessClient.md#p2b)
+- [receive](client_TasklessClient.TasklessClient.md#receive)
+- [update](client_TasklessClient.TasklessClient.md#update)
 
 ### Constructors
 
-- [constructor](client.TasklessClient.md#constructor)
+- [constructor](client_TasklessClient.TasklessClient.md#constructor)
 
 ## Methods
 
@@ -180,6 +180,6 @@ a Promise containing the updated Job object
 
 #### Parameters
 
-| Name   | Type                                                                                        |
-| :----- | :------------------------------------------------------------------------------------------ |
-| `args` | [`TasklessClientConstructorArgs`](../modules/client.md#tasklessclientconstructorargs)<`T`\> |
+| Name   | Type                                                                                                       |
+| :----- | :--------------------------------------------------------------------------------------------------------- |
+| `args` | [`TasklessClientConstructorArgs`](../modules/client_TasklessClient.md#tasklessclientconstructorargs)<`T`\> |

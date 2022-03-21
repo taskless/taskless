@@ -31,4 +31,12 @@ module.exports = {
     `yarn workspace @taskless/client madge --no-spinner --circular`,
     "prettier --write",
   ],
+
+  // taskless dev server
+  [jsIn("packages/dev")]: [
+    (f) =>
+      xargs(f)("yarn workspace taskless-example-next lint --fix", "--file"),
+    `yarn workspace @taskless/dev madge --no-spinner --circular`,
+    "prettier --write",
+  ],
 };

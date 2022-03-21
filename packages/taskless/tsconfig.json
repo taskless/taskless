@@ -13,7 +13,12 @@
     "resolveJsonModule": true
   },
   "typedocOptions": {
-    "entryPoints": ["./src/types.ts", "./src/client.ts", "./src/next.ts"],
+    "entryPoints": [
+      "./src/types.ts",
+      "./src/client/TasklessClient.ts",
+      "./src/next.ts",
+      "./src/express.ts"
+    ],
     "out": "../../docs/client/api",
     "externalPattern": ["__generated__/*"],
     "plugin": ["typedoc-plugin-markdown"],

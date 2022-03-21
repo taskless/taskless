@@ -1,16 +1,16 @@
-[@taskless/client](../README.md) / client
+[@taskless/client](../README.md) / client/TasklessClient
 
-# Module: client
+# Module: client/TasklessClient
 
 ## Table of contents
 
 ### Classes
 
-- [TasklessClient](../classes/client.TasklessClient.md)
+- [TasklessClient](../classes/client_TasklessClient.TasklessClient.md)
 
 ### Type aliases
 
-- [TasklessClientConstructorArgs](client.md#tasklessclientconstructorargs)
+- [TasklessClientConstructorArgs](client_TasklessClient.md#tasklessclientconstructorargs)
 
 ## Type aliases
 

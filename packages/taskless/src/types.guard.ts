@@ -8,7 +8,6 @@ export function isTasklessBody(
   obj: any,
   _argumentName?: string
 ): obj is TasklessBody {
-  if (process.env.NODE_ENV === "production") return true;
   return (
     ((obj !== null && typeof obj === "object") || typeof obj === "function") &&
     typeof obj.v === "number" &&

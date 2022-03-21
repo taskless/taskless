@@ -1,4 +1,3 @@
-import { TasklessClient } from "./client.js";
 import type {
   JobHandler,
   JobOptions,
@@ -7,6 +6,7 @@ import type {
 } from "./types.js";
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { isTasklessBody } from "./types.guard.js";
+import { TasklessClient } from "./client/TasklessClient.js";
 
 /**
  * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern

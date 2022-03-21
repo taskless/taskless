@@ -5,8 +5,8 @@ import type {
   QueueOptions,
 } from "./types";
 import type * as Express from "express";
-import { TasklessClient } from "./client.js";
 import { isTasklessBody } from "./types.guard.js";
+import { TasklessClient } from "./client/TasklessClient";
 
 /**
  * An Express compatible API Handler, with Taskless Queue support

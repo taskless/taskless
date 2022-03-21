@@ -7,7 +7,11 @@
     "email": "oss@taskless.io",
     "url": "https://taskless.io"
   },
-  "repository": "taskless/taskless",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taskless/taskless.git",
+    "directory": "packages/taskless"
+  },
   "homepage": "https://github.com/taskless/taskless/tree/main/packages/taskless",
   "license": "MIT",
   "main": "dist/cjs/index.js",
@@ -18,6 +22,11 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js",
       "types": "./dist/esm/index.d.ts"
+    },
+    "./dev": {
+      "import": "./dist/esm/dev.js",
+      "require": "./dist/cjs/dev.js",
+      "types": "./dist/esm/dev.d.ts"
     },
     "./next": {
       "import": "./dist/esm/next.js",
@@ -32,10 +41,12 @@
   },
   "files": [
     "dist",
-    "next.js",
-    "next.d.ts",
+    "dev.js",
+    "dev.d.ts",
     "express.js",
     "express.d.ts",
+    "next.js",
+    "next.d.ts",
     "index.d.ts"
   ],
   "engines": {
@@ -63,7 +74,7 @@
     "test": "echo \"Error: no test specified\" && exit 0",
     "codegen": "run-p codegen:graphql codegen:guards",
     "codegen:graphql": "graphql-codegen",
-    "codegen:guards": "ts-auto-guard --shortcircuit=\"process.env.NODE_ENV === 'production'\"",
+    "codegen:guards": "ts-auto-guard ./src/types.ts",
     "typedoc": "typedoc",
     "typedoc:prettier": "prettier --write ../../docs/client/api",
     "prettier": "prettier",

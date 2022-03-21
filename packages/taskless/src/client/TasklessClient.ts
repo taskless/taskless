@@ -5,17 +5,21 @@ import type {
   GetHeadersCallback,
   Job,
   JobHandler,
-  JobHeaders,
   JobMeta,
   JobOptions,
-  KeyOf,
   QueueOptions,
   SendJsonCallback,
   TasklessBody,
-} from "./types.js";
-import { create } from "./client/getter.js";
-import { JobMethodEnum } from "./__generated__/schema.js";
-import { encode, decode, sign, verify } from "./client/encoder.js";
+} from "../types.js";
+import { create as createGraphqlClient } from "./graphqlClient.js";
+import { create as createRpcClient } from "./rpcClient.js";
+import { JobMethodEnum } from "../__generated__/schema.js";
+import { encode, decode, sign, verify } from "../client/encoder.js";
+import {
+  TASKLESS_DEVELOPMENT_ENDPOINT,
+  TASKLESS_ENDPOINT,
+} from "../constants.js";
+import { headersToGql } from "../graphql-helpers/headers.js";
 
 /**
  * Constructor arguments for the Taskless Client
@@ -47,14 +51,14 @@ type ResolvedQueueOptions = QueueOptions & {
 /** A console warning if the user hasn't acknowledged unencrypted values are OK in production */
 const warnUnencrypted = () => {
   if (
-    process.env.TASKLESS_DISABLE_ENCRYPTION_WARNING !== "1" &&
+    process.env.TASKLESS_NO_ENCRYPTION_WARNING !== "1" &&
     process.env.NODE_ENV === "production"
   ) {
     console.warn(
       [
         "Using unencrypted values means that your job data is stored",
         "and transmitted in the clear. If this was intentional, please",
-        "set TASKLESS_NO_ENCRYPTION_WARNING = 1 to silence this message",
+        "set TASKLESS_NO_ENCRYPTION_WARNING=1 to silence this message",
       ].join(" ")
     );
   }
@@ -140,17 +144,6 @@ export class TasklessClient<T> {
     this.handler = args.handler;
   }
 
-  /** Convert option headers into a GraphQL friendly header input */
-  protected headersToGql(h?: JobHeaders) {
-    // graphql friendly headers input
-    return h
-      ? Object.keys(h).map((header: KeyOf<typeof h>) => ({
-          name: `${header}`,
-          value: `${h?.[header]}`,
-        }))
-      : undefined;
-  }
-
   /** Turn a payload into a Taskless Body */
   p2b(payload: T): TasklessBody {
     const { transport, text } = encode(
@@ -202,26 +195,43 @@ export class TasklessClient<T> {
     );
   }
 
-  /** Gets an instance of the GraphQL client */
-  protected getClient() {
+  /** Gets an instance of the GraphQL client or a simplified dev client */
+  protected getGraphQLClient() {
+    const endpoint = process.env.TASKLESS_ENDPOINT ?? TASKLESS_ENDPOINT;
     const creds = this.queueOptions.credentials;
+
     if (typeof creds?.appId === "undefined") {
       throw new Error("credentials.appId or TASKLESS_APP_ID was not set");
     }
     if (typeof creds?.secret === "undefined") {
-      throw new Error("credentials.appId or TASKLESS_APP_ID was not set");
+      throw new Error("credentials.secret or TASKLESS_APP_SECRET was not set");
     }
 
-    const endpoint =
-      process.env.TASKLESS_ENDPOINT ?? "https://for.taskless.io/api/graphql";
-
-    const c = create({
+    const c = createGraphqlClient({
       url: endpoint,
       appId: creds.appId,
       secret: creds.secret,
     });
 
     return c;
+  }
+
+  /** Get an RPC client that looks and acts like our GraphQL client for local development */
+  protected getRPCClient() {
+    const endpoint =
+      process.env.TASKLESS_ENDPOINT ?? TASKLESS_DEVELOPMENT_ENDPOINT;
+    const c = createRpcClient({
+      url: endpoint,
+      appId: "",
+      secret: "",
+    });
+    return c;
+  }
+
+  protected getClient() {
+    return process.env.TASKLESS_DEV === "1"
+      ? this.getRPCClient()
+      : this.getGraphQLClient();
   }
 
   /**
@@ -291,7 +301,7 @@ export class TasklessClient<T> {
       job: {
         endpoint: this.resolveRoute(),
         method: JobMethodEnum.Post,
-        headers: this.headersToGql(opts.headers),
+        headers: headersToGql(opts.headers),
         enabled: opts.enabled === false ? false : true,
         body: JSON.stringify(body),
         retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
@@ -335,7 +345,7 @@ export class TasklessClient<T> {
         method: JobMethodEnum.Post,
         headers:
           typeof opts.headers !== "undefined"
-            ? this.headersToGql(opts.headers)
+            ? headersToGql(opts.headers)
             : undefined,
         enabled: opts.enabled === false ? false : opts.enabled,
         body: typeof body !== "undefined" ? JSON.stringify(body) : undefined,
