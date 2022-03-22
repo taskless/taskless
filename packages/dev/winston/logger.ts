@@ -6,7 +6,9 @@ const { combine, timestamp, label, printf } = format;
 
 const getDebugLevel = () => {
   const level = process.env.TASKLESS_DEV_DEBUG ?? "error";
-  return ["log", "info", "warn", "error"].includes(level) ? level : "error";
+  return ["debug", "log", "info", "warn", "error"].includes(level)
+    ? level
+    : "error";
 };
 
 const colorizedLabel = {
@@ -15,14 +17,21 @@ const colorizedLabel = {
   error: chalk.red,
 };
 
-const logFormat = printf(({ level, message, label, timestamp }) => {
+const logFormat = printf(({ level, message, label, job, timestamp }) => {
   const colorizer =
     colorizedLabel[level as keyof typeof colorizedLabel] || colorizedLabel.info;
   const dt = DateTime.fromISO(timestamp);
+
+  const lbl = label ?? "root";
+  const jobLabel = job ? `${lbl} ${job}` : null;
+  const fullLabel = jobLabel ?? lbl;
+
+  const ts = `${dt.toLocaleString(DateTime.TIME_24_WITH_SECONDS)}.${dt.get(
+    "millisecond"
+  )}`;
+
   return `${colorizer(level).padEnd(6, " ")} - ${chalk.gray(
-    dt.toLocaleString(DateTime.TIME_24_WITH_SECONDS) +
-      "." +
-      dt.get("millisecond")
+    `${ts} (${fullLabel})`
   )} ${message}`;
 });
 

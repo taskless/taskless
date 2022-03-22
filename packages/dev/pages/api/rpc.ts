@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { GetJobQueryRPCResponse } from "@taskless/client";
+import { GetJobQueryRPCResponse } from "@taskless/client/dev";
 import { isUpdateJob, updateJob } from "rpc/updateJob";
 import { v5, v4 } from "uuid";
 import { deleteJob, isDeleteJob } from "rpc/deleteJob";

@@ -3,7 +3,6 @@ import type {
   DeleteJobMutationRPCResponse,
   RPCOperation,
 } from "@taskless/client/dev";
-import { Job } from "types";
 import { jobs, jobToJobFragment } from "worker/db";
 import { start } from "worker/loop";
 import { unschedule } from "worker/scheduler";
@@ -18,25 +17,31 @@ export const deleteJob = async (
 ): Promise<DeleteJobMutationRPCResponse["data"]> => {
   start();
   const id = context.v5(variables.name);
-  const job = await jobs.get(id);
-  if (!job) {
+  const ex = await jobs.get(id);
+  if (!ex) {
     return {
       deleteJob: null,
     };
   }
 
   try {
-    jobs.remove(job._id, job._rev);
-    unschedule(job);
+    await unschedule(id);
+
+    const toDelete = await jobs.get(id);
+    await jobs.put({
+      ...toDelete,
+      _deleted: true,
+    });
+
+    const job = await jobs.get(id);
+    return {
+      deleteJob: {
+        ...jobToJobFragment(variables.name, job),
+      },
+    };
   } catch (e) {
     return {
       deleteJob: null,
     };
   }
-
-  return {
-    deleteJob: {
-      ...jobToJobFragment(variables.name, job),
-    },
-  };
 };

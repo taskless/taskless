@@ -56,7 +56,7 @@
     "dev": "run-s clean build watch",
     "docs": "run-s typedoc typedoc:prettier",
     "// build": "echo 'Build commands based on SenseDeep: https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html'",
-    "build": "run-s clean 'build:tsc:**' 'build:copy:**'",
+    "build": "run-s clean codegen 'build:tsc:**' 'build:copy:**'",
     "build:tsc:esm": "tsc",
     "build:tsc:cjs": "tsc -p tsconfig-cjs.json",
     "build:copy:esm": "cpy --flat --rename=package.json ./.templates/package.esm.json ./dist/esm",
@@ -78,7 +78,7 @@
     "typedoc": "typedoc",
     "typedoc:prettier": "prettier --write ../../docs/client/api",
     "prettier": "prettier",
-    "release:before:init": "run-s clean codegen build test docs"
+    "release:before:init": "run-s clean build test docs"
   },
   "dependencies": {
     "deepmerge": "^4.2.2",

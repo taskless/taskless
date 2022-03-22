@@ -3,7 +3,7 @@ import type {
   UpdateJobMutationRPCResponse,
   RPCOperation,
 } from "@taskless/client/dev";
-import { jobs, jobToJobFragment } from "worker/db";
+import { gqlHeadersToObject, jobs, jobToJobFragment } from "worker/db";
 import { start } from "worker/loop";
 import { scheduleNext } from "worker/scheduler";
 
@@ -17,47 +17,47 @@ export const updateJob = async (
 ): Promise<UpdateJobMutationRPCResponse["data"]> => {
   start();
   const id = context.v5(variables.name);
-  const job = await jobs.get(id);
-  if (!job) {
+  const next = await jobs.get(id);
+  if (!next) {
     throw new Error("Job not found");
   }
 
   const input = variables.job;
 
-  if (typeof input.body === "string") {
-    job.data.body = input.body;
+  if (typeof input.body === "string" || input.body === null) {
+    next.data.payload = input.body;
   }
 
   if (typeof input.endpoint === "string") {
-    job.data.endpoint = input.endpoint;
+    next.data.endpoint = input.endpoint;
   }
 
   if (typeof input.enabled === "boolean") {
-    job.data.enabled = input.enabled;
+    next.data.enabled = input.enabled;
   }
 
   if (typeof input.headers !== "undefined") {
-    job.data.headers = input.headers;
-  }
-
-  if (typeof input.method !== "undefined") {
-    job.data.method = input.method;
+    next.data.headers = gqlHeadersToObject(input.headers);
   }
 
   if (typeof input.retries === "number") {
-    job.data.retries = input.retries;
+    next.data.retries = input.retries;
   }
 
   if (typeof input.runAt === "string") {
-    job.data.runAt = input.runAt;
+    next.data.runAt = input.runAt;
   }
 
   if (typeof input.runEvery === "string") {
-    job.data.runEvery = input.runEvery;
+    next.data.runEvery = input.runEvery;
   }
 
-  scheduleNext(job);
-  await jobs.put(job);
+  // manually unschedule
+  next.schedule = {};
+
+  await jobs.put(next);
+  await scheduleNext(id);
+  const job = await jobs.get(id);
 
   return {
     updateJob: {

@@ -18,11 +18,11 @@ const argv = yargs(process.argv.slice(2))
   .default("p", 3001)
   .alias("d", "debug")
   .describe("d", "Set the minimum debug level (info => warn => error)")
-  .default("d", "error")
+  .default("d", "info")
   .help("h")
   .alias("h", "help").argv;
 
-if (argv.d !== "error") {
+if (argv.d !== "info") {
   console.log(
     `${chalk.blue("info").padEnd(6, " ")} - Console debug level set to: ${
       argv.d
