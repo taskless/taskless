@@ -30,10 +30,12 @@ if (argv.d !== "info") {
   );
 }
 
-execaCommand(`next start --hostname 0.0.0.0 -p ${argv.p}`, {
+execaCommand(`npx next start --hostname 0.0.0.0 -p ${argv.p}`, {
   cwd: __root,
   env: {
     TASKLESS_DEV_DEBUG: argv.d,
   },
   stdio: "inherit",
+}).catch((e) => {
+  console.error(e);
 });

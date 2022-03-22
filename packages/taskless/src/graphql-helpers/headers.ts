@@ -1,5 +1,5 @@
-import { JobHeaders, KeyOf } from "../types";
-import { HeaderInputType } from "../__generated__/schema";
+import { JobHeaders, KeyOf } from "../types.js";
+import { HeaderInputType } from "../__generated__/schema.js";
 
 /** Convert optional headers into a GraphQL friendly header input */
 export const headersToGql = (h?: JobHeaders): HeaderInputType[] | undefined => {

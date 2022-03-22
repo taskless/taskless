@@ -1,14 +1,14 @@
 import phin from "phin";
-import { GraphQLResponse, RequesterOptions } from "./types";
-import { create as createGraphql } from "./graphqlClient";
+import { GraphQLResponse, RequesterOptions } from "./types.js";
+import { create as createGraphql } from "./graphqlClient.js";
 import pRetry from "p-retry";
-import { RequestError } from "./error";
+import { RequestError } from "./error.js";
 import {
   DeleteJobMutation,
   EnqueueJobMutation,
   GetJobByNameQuery,
   UpdateJobMutation,
-} from "../__generated__/schema";
+} from "../__generated__/schema.js";
 
 /**
  * Creates a lightweight RPC client mirroring GraphQL functions

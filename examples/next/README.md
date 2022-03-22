@@ -6,9 +6,13 @@ This example also shows how to use a `NextApiHandler` wrapper integration such a
 
 To run:
 
-1. create a `.env.local` file with the necessary values
+1. run `yarn install`
 2. run `yarn dev`
 3. visit `http://localhost:3000/api/run-sample` with your browser or wget the url with `wget http://localhost:3000/api/run-sample` from a terminal window
+
+## Changes from Base App
+
+- Adds [concurrently](https://www.npmjs.com/package/concurrently) for launching the Taskless dev server alongside next in development
 
 ---
 

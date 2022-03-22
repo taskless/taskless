@@ -8,10 +8,10 @@ import {
   getSdk,
   UpdateJobMutation,
   UpdateJobMutationVariables,
-} from "./__generated__/schema";
+} from "./__generated__/schema.js";
 
 // expose schema calls to development client
-export * from "./__generated__/schema";
+export * from "./__generated__/schema.js";
 
 /**
  * A Valid RPC Method from the SDK

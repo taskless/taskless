@@ -4,9 +4,16 @@ This is an example of using the Taskless.io client in an Express application. Pl
 
 To run:
 
-1. create a `.env.local` file with the necessary values
+1. run `yarn install`
 2. run `yarn start`
 3. visit `http://localhost:3000/run-sample` with your browser or wget the url with `wget http://localhost:3000/run-sample` from a terminal window
+
+## Changes from Base App
+
+- Adds [dotenv](https://www.npmjs.com/package/dotenv) to allow loading of env files in development
+- Adds [concurrently](https://www.npmjs.com/package/concurrently) for launching the Taskless dev server alongside express
+- Fixes the `__dirname` const in `app.js` to comply with ES6
+- changes the `www.js` to emit a `console.log` to confirm server start
 
 ---
 

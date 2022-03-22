@@ -1903,6 +1903,7 @@ __metadata:
     pouchdb: ^7.2.2
     pouchdb-adapter-memory: ^7.2.2
     pouchdb-find: ^7.2.2
+    pouchdb-upsert: ^2.2.0
     react: 17.0.2
     react-dom: 17.0.2
     ts-auto-guard: ^2.4.0
@@ -2374,7 +2375,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/pouchdb-upsert@npm:^2, @types/pouchdb-upsert@npm:^2.2.6":
+"@types/pouchdb-upsert@npm:^2.2.6":
   version: 2.2.6
   resolution: "@types/pouchdb-upsert@npm:2.2.6"
   dependencies:
@@ -5782,20 +5783,6 @@ __metadata:
   checksum: 8afe4712248406147f59b369cf5f91f5b1ea4bcd7936dffd67de4466070248fdc7ca2439778077035fd6cdf10a9e55dba245d44acaac7ee2042e368f5560767d
   languageName: node
   linkType: hard
-
-"express@workspace:examples/express":
-  version: 0.0.0-use.local
-  resolution: "express@workspace:examples/express"
-  dependencies:
-    "@taskless/client": 1.0.0-next.9
-    cookie-parser: ~1.4.4
-    debug: ~2.6.9
-    express: ~4.16.1
-    http-errors: ~1.6.3
-    jade: ~1.11.0
-    morgan: ~1.9.1
-  languageName: unknown
-  linkType: soft
 
 "external-editor@npm:^3.0.3":
   version: 3.1.0
@@ -12008,6 +11995,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"taskless-example-express@workspace:examples/express":
+  version: 0.0.0-use.local
+  resolution: "taskless-example-express@workspace:examples/express"
+  dependencies:
+    "@taskless/client": 1.0.0-next.9
+    "@taskless/dev": 0.0.0
+    concurrently: ^7.0.0
+    cookie-parser: ~1.4.4
+    debug: ~2.6.9
+    dotenv: ^16.0.0
+    express: ~4.16.1
+    http-errors: ~1.6.3
+    jade: ~1.11.0
+    morgan: ~1.9.1
+  languageName: unknown
+  linkType: soft
+
 "taskless-example-next@workspace:examples/next":
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
@@ -12016,14 +12020,12 @@ __metadata:
     "@taskless/dev": 0.0.0
     "@types/eslint": ^8
     "@types/node": 17.0.21
-    "@types/pouchdb-upsert": ^2
     "@types/react": 17.0.39
     "@types/react-dom": ^17
     concurrently: ^7.0.0
     eslint: 8.9.0
     eslint-config-next: 12.1.0
     next: 12.1.0
-    pouchdb-upsert: ^2.2.0
     react: 17.0.2
     react-dom: 17.0.2
     typescript: 4.5.5
