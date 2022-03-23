@@ -92,17 +92,13 @@ export const isJob: TypeGuard<Job<unknown>> = new tg.IsInterface()
 export type QueueMethods<T> = {
   /**
    * Adds an item to the queue. If an item of the same name exists, it will be replaced with this new data
-   * @param name The Job's name. Should be unique to the system if you wish to retrieve it later. If `null` will result in a v4 uuid
+   * @param name The Job's identifiable name
    * @param payload The Job's payload to be delivered
    * @param options Job options. These overwrite the default job options specified on the queue at creation time
    * @throws Error when the job could not be created in the Taskless system
    * @returns The `Job` object
    */
-  enqueue: (
-    name: string | null,
-    payload: T,
-    options?: JobOptions
-  ) => Promise<Job<T>>;
+  enqueue: (name: string, payload: T, options?: JobOptions) => Promise<Job<T>>;
   /**
    * Update an existing item in the queue
    * @param name The Job's name

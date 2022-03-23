@@ -1,5 +1,4 @@
 import merge from "deepmerge";
-import { v4 } from "uuid";
 import {
   GetBodyCallback,
   GetHeadersCallback,
@@ -287,17 +286,16 @@ export class TasklessClient<T> {
    * @returns a Promise containing the Job object enqueued
    */
   async enqueue(
-    name: string | null,
+    name: string,
     payload: T,
     options?: JobOptions
   ): Promise<Job<T>> {
     const opts = merge.all<JobOptions>([this.jobOptions, options ?? {}]);
     const client = this.getClient();
-    const resolvedName = name ?? v4();
     const body = this.p2b(payload);
 
     const job = await client.enqueueJob({
-      name: resolvedName,
+      name,
       job: {
         endpoint: this.resolveRoute(),
         method: JobMethodEnum.Post,
