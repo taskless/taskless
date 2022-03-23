@@ -16,8 +16,8 @@
     "entryPoints": [
       "./src/types.ts",
       "./src/client/TasklessClient.ts",
-      "./src/next.ts",
-      "./src/express.ts"
+      "./src/integrations/next.ts",
+      "./src/integrations/express.ts"
     ],
     "out": "../../docs/client/api",
     "externalPattern": ["__generated__/*"],
@@ -29,6 +29,7 @@
     "disableSources": true,
     "hideGenerator": true,
     "cleanOutputDir": true,
+    "treatWarningsAsErrors": true,
     "readme": "none",
     "sort": ["alphabetical", "enum-value-ascending"]
   },

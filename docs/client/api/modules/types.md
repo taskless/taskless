@@ -6,6 +6,9 @@
 
 ### Type aliases
 
+- [Cipher](types.md#cipher)
+- [CipherAes256Gcm](types.md#cipheraes256gcm)
+- [CipherNone](types.md#ciphernone)
 - [GetBodyCallback](types.md#getbodycallback)
 - [GetHeadersCallback](types.md#getheaderscallback)
 - [Job](types.md#job)
@@ -14,7 +17,6 @@
 - [JobHeaders](types.md#jobheaders)
 - [JobMeta](types.md#jobmeta)
 - [JobOptions](types.md#joboptions)
-- [KeyOf](types.md#keyof)
 - [QueueMethods](types.md#queuemethods)
 - [QueueOptions](types.md#queueoptions)
 - [SendJsonCallback](types.md#sendjsoncallback)
@@ -24,11 +26,51 @@
 
 ### Functions
 
+- [isCipher](types.md#iscipher)
 - [isJob](types.md#isjob)
 - [isTasklessBody](types.md#istasklessbody)
 - [isTransport](types.md#istransport)
 
 ## Type aliases
+
+### Cipher
+
+Ƭ **Cipher**: [`CipherAes256Gcm`](types.md#cipheraes256gcm) \| [`CipherNone`](types.md#ciphernone)
+
+All Supported Cipher combinations
+
+---
+
+### CipherAes256Gcm
+
+Ƭ **CipherAes256Gcm**: `Object`
+
+Describes a cipher argument of type AES-256-GCM
+
+#### Type declaration
+
+| Name  | Type                                          | Description                |
+| :---- | :-------------------------------------------- | :------------------------- |
+| `alg` | `Extract`<`CipherGCMTypes`, `"aes-256-gcm"`\> | The Cipher used            |
+| `at`  | `string`                                      | The Auth Tag               |
+| `atl` | `number`                                      | The length of the Auth Tag |
+| `iv`  | `string`                                      | The Cipher IV value        |
+
+---
+
+### CipherNone
+
+Ƭ **CipherNone**: `Object`
+
+Descibes a cipher argument of "none"
+
+#### Type declaration
+
+| Name  | Type     |
+| :---- | :------- |
+| `alg` | `"none"` |
+
+---
 
 ### GetBodyCallback
 
@@ -97,7 +139,7 @@ Describes a Taskless.io Job with a payload of type `T`
 
 ### JobHandler
 
-Ƭ **JobHandler**<`T`\>: (`payload`: `T`, `meta`: [`JobMeta`](types.md#jobmeta)) => `Awaited`<`JSONValue`\>
+Ƭ **JobHandler**<`T`\>: (`payload`: `T`, `meta`: [`JobMeta`](types.md#jobmeta)) => `Awaited`<`unknown`\>
 
 #### Type parameters
 
@@ -107,7 +149,7 @@ Describes a Taskless.io Job with a payload of type `T`
 
 #### Type declaration
 
-▸ (`payload`, `meta`): `Awaited`<`JSONValue`\>
+▸ (`payload`, `meta`): `Awaited`<`unknown`\>
 
 The Job Handler signature, taking a `payload` and `meta`
 
@@ -120,13 +162,13 @@ The Job Handler signature, taking a `payload` and `meta`
 
 ##### Returns
 
-`Awaited`<`JSONValue`\>
+`Awaited`<`unknown`\>
 
 ---
 
 ### JobHandlerResult
 
-Ƭ **JobHandlerResult**: `Awaited`<`void`\> \| `Awaited`<`JSONValue`\>
+Ƭ **JobHandlerResult**: `Awaited`<`void`\> \| `Awaited`<`unknown`\>
 
 The result of the Job Handler callback
 
@@ -176,20 +218,6 @@ A set of options on a per-job level
 
 ---
 
-### KeyOf
-
-Ƭ **KeyOf**<`T`\>: keyof `T`
-
-A helper type for keyof typeof access
-
-#### Type parameters
-
-| Name |
-| :--- |
-| `T`  |
-
----
-
 ### QueueMethods
 
 Ƭ **QueueMethods**<`T`\>: `Object`
@@ -235,7 +263,7 @@ A set of options for setting up a Taskless Queue
 
 ### SendJsonCallback
 
-Ƭ **SendJsonCallback**: (`json`: `JSONValue`) => `void` \| `Promise`<`void`\>
+Ƭ **SendJsonCallback**: (`json`: `unknown`) => `void` \| `Promise`<`void`\>
 
 #### Type declaration
 
@@ -245,9 +273,9 @@ An integration callback for sending JSON back to Taskless.io
 
 ##### Parameters
 
-| Name   | Type        |
-| :----- | :---------- |
-| `json` | `JSONValue` |
+| Name   | Type      |
+| :----- | :-------- |
+| `json` | `unknown` |
 
 ##### Returns
 
@@ -282,11 +310,29 @@ The taskless body definition (what is posted to & from the client)
 
 ### Transport
 
-Ƭ **Transport**: { `alg`: [`SupportedCiphers`](types.md#supportedciphers) ; `ev`: `1` } & `Cipher`
+Ƭ **Transport**: { `alg`: [`SupportedCiphers`](types.md#supportedciphers) ; `ev`: `1` } & [`Cipher`](types.md#cipher)
 
 Describes the taskless Transport Metadata
 
 ## Functions
+
+### isCipher
+
+▸ **isCipher**(`value`): value is Cipher
+
+Typeguard for [Cipher](types.md#cipher)
+
+#### Parameters
+
+| Name    | Type      |
+| :------ | :-------- |
+| `value` | `unknown` |
+
+#### Returns
+
+value is Cipher
+
+---
 
 ### isJob
 
