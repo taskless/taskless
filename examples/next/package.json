@@ -2,7 +2,7 @@
   "private": true,
   "name": "taskless-example-next",
   "description": "Taskless next.js example app",
-  "version": "1.0.0-next.9",
+  "version": "1.0.0-next.10",
   "type": "module",
   "scripts": {
     "dev": "concurrently -n taskless,next taskless 'next dev'",
@@ -11,13 +11,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@taskless/client": "1.0.0-next.9",
+    "@taskless/client": "1.0.0-next.10",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
-    "@taskless/dev": "0.0.0",
+    "@taskless/dev": "1.0.0-next.10",
     "@types/eslint": "^8",
     "@types/node": "17.0.21",
     "@types/react": "17.0.39",
