@@ -81,8 +81,7 @@
   "dependencies": {
     "deepmerge": "^4.2.2",
     "p-retry": "^5.0.0",
-    "phin": "^3.6.1",
-    "uuid": "^8.3.2"
+    "phin": "^3.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -100,7 +99,6 @@
     "@types/prettier": "^2",
     "@types/react": "^17",
     "@types/react-dom": "^17",
-    "@types/uuid": "^8",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "cpy-cli": "^4.1.0",
