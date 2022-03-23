@@ -1,6 +1,6 @@
 {
   "name": "@taskless/dev",
-  "version": "1.0.0-next.11",
+  "version": "1.0.0-next.12",
   "description": "Development Server for Taskless.io",
   "author": {
     "name": "Taskless.io",
@@ -30,7 +30,7 @@
     "taskless": "bin/cli.js"
   },
   "dependencies": {
-    "@taskless/client": "^1.0.0-next.11",
+    "@taskless/client": "^1.0.0-next.12",
     "chalk": "^5.0.1",
     "deepmerge": "^4.2.2",
     "execa": "^6.1.0",
