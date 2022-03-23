@@ -6,12 +6,8 @@
 
 ### Type aliases
 
-- [CipherAes256Gcm](types.md#cipheraes256gcm)
-- [CipherNone](types.md#ciphernone)
-- [Ciphers](types.md#ciphers)
 - [GetBodyCallback](types.md#getbodycallback)
 - [GetHeadersCallback](types.md#getheaderscallback)
-- [JSONValue](types.md#jsonvalue)
 - [Job](types.md#job)
 - [JobHandler](types.md#jobhandler)
 - [JobHandlerResult](types.md#jobhandlerresult)
@@ -26,46 +22,13 @@
 - [TasklessBody](types.md#tasklessbody)
 - [Transport](types.md#transport)
 
+### Functions
+
+- [isJob](types.md#isjob)
+- [isTasklessBody](types.md#istasklessbody)
+- [isTransport](types.md#istransport)
+
 ## Type aliases
-
-### CipherAes256Gcm
-
-Ƭ **CipherAes256Gcm**: `Object`
-
-Data required for an AES-256-GCM cipher
-
-#### Type declaration
-
-| Name  | Type                                          | Description                |
-| :---- | :-------------------------------------------- | :------------------------- |
-| `alg` | `Extract`<`CipherGCMTypes`, `"aes-256-gcm"`\> | The Cipher used            |
-| `at`  | `string`                                      | The Auth Tag               |
-| `atl` | `number`                                      | The length of the Auth Tag |
-| `iv`  | `string`                                      | The Cipher IV value        |
-
----
-
-### CipherNone
-
-Ƭ **CipherNone**: `Object`
-
-Data required for a non-ciphertext
-
-#### Type declaration
-
-| Name  | Type     |
-| :---- | :------- |
-| `alg` | `"none"` |
-
----
-
-### Ciphers
-
-Ƭ **Ciphers**: [`CipherAes256Gcm`](types.md#cipheraes256gcm) \| [`CipherNone`](types.md#ciphernone)
-
-All Supported Cipher combinations
-
----
 
 ### GetBodyCallback
 
@@ -105,14 +68,6 @@ An integration callback for getting the headers as a JSON object
 
 ---
 
-### JSONValue
-
-Ƭ **JSONValue**: `ReturnType`<typeof `JSON.parse`\>
-
-A recursive description of a valid JSON-like value
-
----
-
 ### Job
 
 Ƭ **Job**<`T`\>: `Object`
@@ -142,7 +97,7 @@ Describes a Taskless.io Job with a payload of type `T`
 
 ### JobHandler
 
-Ƭ **JobHandler**<`T`\>: (`payload`: `T`, `meta`: [`JobMeta`](types.md#jobmeta)) => `Awaited`<[`JSONValue`](types.md#jsonvalue)\>
+Ƭ **JobHandler**<`T`\>: (`payload`: `T`, `meta`: [`JobMeta`](types.md#jobmeta)) => `Awaited`<`JSONValue`\>
 
 #### Type parameters
 
@@ -152,7 +107,7 @@ Describes a Taskless.io Job with a payload of type `T`
 
 #### Type declaration
 
-▸ (`payload`, `meta`): `Awaited`<[`JSONValue`](types.md#jsonvalue)\>
+▸ (`payload`, `meta`): `Awaited`<`JSONValue`\>
 
 The Job Handler signature, taking a `payload` and `meta`
 
@@ -165,13 +120,13 @@ The Job Handler signature, taking a `payload` and `meta`
 
 ##### Returns
 
-`Awaited`<[`JSONValue`](types.md#jsonvalue)\>
+`Awaited`<`JSONValue`\>
 
 ---
 
 ### JobHandlerResult
 
-Ƭ **JobHandlerResult**: `Awaited`<`void`\> \| `Awaited`<[`JSONValue`](types.md#jsonvalue)\>
+Ƭ **JobHandlerResult**: `Awaited`<`void`\> \| `Awaited`<`JSONValue`\>
 
 The result of the Job Handler callback
 
@@ -249,12 +204,12 @@ Describes the set of Queue Methods available on a Taskless Integration
 
 #### Type declaration
 
-| Name      | Type                                                                                                                                     |
-| :-------- | :--------------------------------------------------------------------------------------------------------------------------------------- |
-| `delete`  | (`name`: `string`) => `Promise`<[`Job`](types.md#job)<`T`\>\>                                                                            |
-| `enqueue` | (`name`: `null` \| `string`, `payload`: `T`, `options?`: [`JobOptions`](types.md#joboptions)) => `Promise`<[`Job`](types.md#job)<`T`\>\> |
-| `get`     | (`name`: `string`) => `Promise`<[`Job`](types.md#job)<`T`\>\>                                                                            |
-| `update`  | (`name`: `string`, `payload`: `T`, `options?`: [`JobOptions`](types.md#joboptions)) => `Promise`<[`Job`](types.md#job)<`T`\>\>           |
+| Name      | Type                                                                                                                           |
+| :-------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| `delete`  | (`name`: `string`) => `Promise`<[`Job`](types.md#job)<`T`\>\>                                                                  |
+| `enqueue` | (`name`: `string`, `payload`: `T`, `options?`: [`JobOptions`](types.md#joboptions)) => `Promise`<[`Job`](types.md#job)<`T`\>\> |
+| `get`     | (`name`: `string`) => `Promise`<[`Job`](types.md#job)<`T`\>\>                                                                  |
+| `update`  | (`name`: `string`, `payload`: `T`, `options?`: [`JobOptions`](types.md#joboptions)) => `Promise`<[`Job`](types.md#job)<`T`\>\> |
 
 ---
 
@@ -280,7 +235,7 @@ A set of options for setting up a Taskless Queue
 
 ### SendJsonCallback
 
-Ƭ **SendJsonCallback**: (`json`: [`JSONValue`](types.md#jsonvalue)) => `void` \| `Promise`<`void`\>
+Ƭ **SendJsonCallback**: (`json`: `JSONValue`) => `void` \| `Promise`<`void`\>
 
 #### Type declaration
 
@@ -290,9 +245,9 @@ An integration callback for sending JSON back to Taskless.io
 
 ##### Parameters
 
-| Name   | Type                              |
-| :----- | :-------------------------------- |
-| `json` | [`JSONValue`](types.md#jsonvalue) |
+| Name   | Type        |
+| :----- | :---------- |
+| `json` | `JSONValue` |
 
 ##### Returns
 
@@ -304,7 +259,7 @@ An integration callback for sending JSON back to Taskless.io
 
 Ƭ **SupportedCiphers**: `Extract`<`CipherGCMTypes`, `"aes-256-gcm"`\> \| `"none"`
 
-Supported ciphers have iv lengths as well as a matching hash function of equal bits
+Supported ciphers for end to end encryption
 
 ---
 
@@ -313,8 +268,6 @@ Supported ciphers have iv lengths as well as a matching hash function of equal b
 Ƭ **TasklessBody**: `Object`
 
 The taskless body definition (what is posted to & from the client)
-
-**`see`** {isTasklessBody} ts-auto-guard:type-guard
 
 #### Type declaration
 
@@ -329,6 +282,60 @@ The taskless body definition (what is posted to & from the client)
 
 ### Transport
 
-Ƭ **Transport**: { `alg`: [`SupportedCiphers`](types.md#supportedciphers) ; `ev`: `1` } & [`Ciphers`](types.md#ciphers)
+Ƭ **Transport**: { `alg`: [`SupportedCiphers`](types.md#supportedciphers) ; `ev`: `1` } & `Cipher`
 
 Describes the taskless Transport Metadata
+
+## Functions
+
+### isJob
+
+▸ **isJob**(`value`): value is Job<unknown\>
+
+Typeguard for [Job](types.md#job) with an unknown payload
+
+#### Parameters
+
+| Name    | Type      |
+| :------ | :-------- |
+| `value` | `unknown` |
+
+#### Returns
+
+value is Job<unknown\>
+
+---
+
+### isTasklessBody
+
+▸ **isTasklessBody**(`value`): value is TasklessBody
+
+Typeguard for [TasklessBody](types.md#tasklessbody)
+
+#### Parameters
+
+| Name    | Type      |
+| :------ | :-------- |
+| `value` | `unknown` |
+
+#### Returns
+
+value is TasklessBody
+
+---
+
+### isTransport
+
+▸ **isTransport**(`value`): value is Transport
+
+Typeguard for [Transport](types.md#transport)
+
+#### Parameters
+
+| Name    | Type      |
+| :------ | :-------- |
+| `value` | `unknown` |
+
+#### Returns
+
+value is Transport

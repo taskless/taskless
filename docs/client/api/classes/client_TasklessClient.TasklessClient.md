@@ -76,7 +76,7 @@ Adds a job to the queue for processing
 
 | Name       | Type                                           | Description                                            |
 | :--------- | :--------------------------------------------- | :----------------------------------------------------- |
-| `name`     | `null` \| `string`                             | The name of the job                                    |
+| `name`     | `string`                                       | The name of the job                                    |
 | `payload`  | `T`                                            | The job's payload                                      |
 | `options?` | [`JobOptions`](../modules/types.md#joboptions) | Additional job options overriding the queue's defaults |
 
