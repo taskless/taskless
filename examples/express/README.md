@@ -1,6 +1,6 @@
 # Taskless & Express Using `@taskless/client/express`
 
-This is an example of using the Taskless.io client in an Express application. Please see [routes/queues/sample.ts](./routes/queues/sample.ts) for how to set up the queue, and [routes/run-sample.js](./routes/run-sample.js) for an example of triggering a queue.
+This is an example of using the Taskless.io client in an Express application. Please see [routes/queues/sample.ts](./routes/queues/sample.js) for how to set up the queue, and [routes/run-sample.js](./routes/run-sample.js) for an example of triggering a queue.
 
 To run:
 
