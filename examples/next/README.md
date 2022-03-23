@@ -1,4 +1,4 @@
-# Taskless & Next.js Using `taskless/next`
+# Taskless & Next.js Using `@taskless/client/next`
 
 This is an example of using the Taskless.io client in a Next.js application. Please see [pages/api/queues/sample.ts](./pages/api/queues/sample.ts) for how to set up the queue, and [pages/api/queue/sample-trigger.ts](./pages/api/queues/sample-trigger.ts) for an example of triggering a queue.
 
