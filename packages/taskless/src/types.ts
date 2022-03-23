@@ -1,5 +1,7 @@
 import type { IncomingHttpHeaders } from "http";
 import type { CipherGCMTypes } from "crypto";
+import type { TypeGuard } from "generic-type-guard";
+import tg from "generic-type-guard";
 
 /** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {
@@ -19,6 +21,11 @@ export type QueueOptions = {
 
 export type JobHeaders = {
   [header: string]: string;
+};
+
+/** Typeguard for {@link JobHeaders} */
+const isJobHeaders: TypeGuard<JobHeaders> = (o: unknown): o is JobHeaders => {
+  return tg.isObject(o);
 };
 
 /** A set of options on a per-job level */
@@ -61,6 +68,22 @@ export type Job<T> = {
   /** An ISO-8601 duration for how often this job will repeat its run */
   runEvery?: string;
 };
+
+/** Typeguard for {@link Job} with an unknown payload */
+export const isJob: TypeGuard<Job<unknown>> = new tg.IsInterface()
+  .with(
+    tg.hasProperties({
+      name: tg.isString,
+      endpoint: tg.isString,
+      headers: tg.isOptional(isJobHeaders),
+      enabled: tg.isBoolean,
+      payload: tg.isUnknown,
+      retries: tg.isNumber,
+      runAt: tg.isString,
+      runEvery: tg.isOptional(tg.isString),
+    })
+  )
+  .get();
 
 /**
  * Describes the set of Queue Methods available on a Taskless Integration
@@ -122,13 +145,13 @@ export type GetHeadersCallback = () =>
 export type SendJsonCallback = (json: JSONValue) => void | Promise<void>;
 
 /** A recursive description of a valid JSON-like value */
-export type JSONValue = ReturnType<typeof JSON.parse>;
+type JSONValue = ReturnType<typeof JSON.parse>;
 
-/** Supported ciphers have iv lengths as well as a matching hash function of equal bits */
+/** Supported ciphers for end to end encryption */
 export type SupportedCiphers = Extract<CipherGCMTypes, "aes-256-gcm"> | "none";
 
 /** Data required for an AES-256-GCM cipher */
-export type CipherAes256Gcm = {
+type CipherAes256Gcm = {
   /** The Cipher used */
   alg: Extract<CipherGCMTypes, "aes-256-gcm">;
   /** The length of the Auth Tag */
@@ -139,24 +162,63 @@ export type CipherAes256Gcm = {
   iv: string;
 };
 
+/** Typeguard for {@link CipherAes256Gcm} */
+const isCipherAes256Gcm: TypeGuard<CipherAes256Gcm> = new tg.IsInterface()
+  .with(
+    tg.combine(
+      tg.isObject,
+      tg.hasProperties({
+        alg: tg.isSingletonString("aes-256-gcm"),
+        atl: tg.isNumber,
+        at: tg.isString,
+        iv: tg.isString,
+      })
+    )
+  )
+  .get();
+
 /** Data required for a non-ciphertext */
-export type CipherNone = {
+type CipherNone = {
   alg: "none";
 };
 
+/** Typeguard for {@link CipherNone} */
+const isCipherNone: TypeGuard<CipherNone> = new tg.IsInterface()
+  .with(
+    tg.combine(
+      tg.isObject,
+      tg.hasProperties({
+        alg: tg.isSingletonString("none"),
+      })
+    )
+  )
+  .get();
+
 /** All Supported Cipher combinations */
-export type Ciphers = CipherAes256Gcm | CipherNone;
+type Cipher = CipherAes256Gcm | CipherNone;
+
+/** Typeguard for {@link Cipher} */
+const isCipher: TypeGuard<Cipher> = new tg.UnionOf(isCipherNone)
+  .with(isCipherAes256Gcm)
+  .get();
 
 /** Describes the taskless Transport Metadata */
 export type Transport = {
   /** The envelope version used */
   ev: 1;
   alg: SupportedCiphers;
-} & Ciphers;
+} & Cipher;
+
+/** Typeguard for {@link Transport} */
+export const isTransport: TypeGuard<Transport> = new tg.IsInterface()
+  .withProperties({
+    ev: tg.isSingletonNumber(1),
+  })
+  .with(isCipher)
+  .get();
 
 /**
  * The taskless body definition (what is posted to & from the client)
- * @see {isTasklessBody} ts-auto-guard:type-guard
  */
 export type TasklessBody = {
   /** The Taskless Body Version */
@@ -168,6 +230,21 @@ export type TasklessBody = {
   /** Signature of text field */
   signature: string;
 };
+
+/** Typeguard for {@link TasklessBody} */
+export const isTasklessBody: TypeGuard<TasklessBody> = new tg.IsInterface()
+  .with(
+    tg.combine(
+      tg.isObject,
+      tg.hasProperties({
+        v: tg.isNumber,
+        transport: isTransport,
+        text: tg.isString,
+        signature: tg.isString,
+      })
+    )
+  )
+  .get();
 
 /** A helper type for keyof typeof access */
 export type KeyOf<T> = keyof T;

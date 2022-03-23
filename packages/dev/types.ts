@@ -1,14 +1,9 @@
-import type { Job as TasklessJob } from "@taskless/client";
+import { Job as TasklessJob } from "@taskless/client";
 
 /** The context for an RPC request */
 export type Context = {
   v5: (str: string) => string;
 };
-
-/**
- * Defines the devserver version of a Taskless Job, where the payload (as far as we care) is a JSON-encoded string or null if empty
- */
-type RPCJob = TasklessJob<string | null>;
 
 export type LogEntry = {
   ts: string;
@@ -21,7 +16,7 @@ export type LogEntry = {
  * @see {isJob} ts-auto-guard:type-guard
  */
 export type Job = {
-  data: RPCJob;
+  data: TasklessJob<unknown>;
   schedule: {
     check?: boolean;
     next?: number;

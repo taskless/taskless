@@ -3,5 +3,12 @@
     "ts": {
       "skipTypeImports": true
     }
-  }
+  },
+  "excludeRegExp": [
+    "@see https://github.com/pahen/madge/issues/306",
+    "next\\.ts",
+    "next\\.d\\.ts",
+    "express\\.ts",
+    "express\\.d\\.ts"
+  ]
 }

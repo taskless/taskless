@@ -21,22 +21,22 @@
     ".": {
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js",
-      "types": "./dist/esm/index.d.ts"
+      "types": "./index.d.ts"
     },
     "./dev": {
       "import": "./dist/esm/dev.js",
       "require": "./dist/cjs/dev.js",
-      "types": "./dist/esm/dev.d.ts"
+      "types": "./dev.d.ts"
     },
     "./next": {
-      "import": "./dist/esm/next.js",
-      "require": "./dist/cjs/next.js",
-      "types": "./dist/esm/next.d.ts"
+      "import": "./dist/esm/integrations/t-next.js",
+      "require": "./dist/cjs/integrations/t-next.js",
+      "types": "./next.d.ts"
     },
     "./express": {
-      "import": "./dist/esm/express.js",
-      "require": "./dist/cjs/express.js",
-      "types": "./dist/esm/express.d.ts"
+      "import": "./dist/esm/integrations/t-express.js",
+      "require": "./dist/cjs/integrations/t-express.js",
+      "types": "./express.d.ts"
     }
   },
   "files": [
@@ -72,9 +72,7 @@
     "madge": "madge",
     "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 0",
-    "codegen": "run-p codegen:graphql codegen:guards",
-    "codegen:graphql": "graphql-codegen",
-    "codegen:guards": "ts-auto-guard ./src/types.ts",
+    "codegen": "graphql-codegen",
     "typedoc": "typedoc",
     "typedoc:prettier": "prettier --write ../../docs/client/api",
     "prettier": "prettier",
@@ -109,6 +107,7 @@
     "eslint": "^8.10.0",
     "eslint-plugin-tsc": "^2.0.0",
     "express": "^4.17.3",
+    "generic-type-guard": "^3.6.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.12.6",
     "madge": "^5.0.1",
@@ -117,7 +116,6 @@
     "prettier": "^2.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "ts-auto-guard": "^2.3.0",
     "tsdef": "^0.0.14",
     "typedoc": "^0.22.13",
     "typedoc-plugin-markdown": "^3.11.14",

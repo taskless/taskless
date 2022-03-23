@@ -1,6 +1,6 @@
 import merge from "deepmerge";
 import { v4 } from "uuid";
-import type {
+import {
   GetBodyCallback,
   GetHeadersCallback,
   Job,
@@ -222,7 +222,7 @@ export class TasklessClient<T> {
       process.env.TASKLESS_ENDPOINT ?? TASKLESS_DEVELOPMENT_ENDPOINT;
     const c = createRpcClient({
       url: endpoint,
-      appId: "",
+      appId: "", // avoid using appId/secret in development client
       secret: "",
     });
     return c;

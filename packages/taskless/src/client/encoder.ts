@@ -1,4 +1,4 @@
-import crypto, { createHmac } from "crypto";
+import crypto, { createHmac } from "node:crypto";
 import type { SupportedCiphers, Transport } from "../types.js";
 
 // //////////////////////////////////////////////////

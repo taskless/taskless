@@ -1,12 +1,12 @@
-import type {
+import {
   JobHandler,
   JobOptions,
   QueueMethods,
   QueueOptions,
-} from "./types.js";
-import type * as Express from "express";
-import { isTasklessBody } from "./types.guard.js";
-import { TasklessClient } from "./client/TasklessClient.js";
+  isTasklessBody,
+} from "../types.js";
+import * as express from "express";
+import { TasklessClient } from "../client/TasklessClient.js";
 
 /**
  * An Express compatible API Handler, with Taskless Queue support
@@ -14,28 +14,13 @@ import { TasklessClient } from "./client/TasklessClient.js";
  */
 export interface TasklessExpressRouter<T> extends QueueMethods<T> {
   /** The Express router object which should be mounted at Application root via `app.use()` */
-  router: Express.Router;
+  router: express.Router;
 }
 
 /**
- * Express Queue Options take all of the optional {@link QueueOptions}, but also
- * require you to declare your `router` and `middleware` implementation. In most
- * cases, you can pass in an instance of an express Router and a middleware that
- * includes at a minimum the express json body parser.
- * @example ```ts
- * {
- *   // other QueueOptions can be included
- *   router: express.Router(),
- *   middleware: [express.json()]
- * }
- * ```
+ * Express Queue Options take all of the optional {@link QueueOptions}
  */
-export type ExpressQueueOptions = QueueOptions & {
-  /** An instance of an Express Router */
-  router: Express.Router;
-  /** An array of Express middleware, containing at a minimum express.json() */
-  middleware: Express.RequestHandler[];
-};
+export type ExpressQueueOptions = QueueOptions;
 
 /**
  * Creates an Express Router object augmented with Taskess Queue methods
@@ -59,35 +44,28 @@ export function createQueue<T = undefined>(
     jobOptions: defaultJobOptions ?? {},
   });
 
-  const handle: Express.RequestHandler = (request, response, next) => {
+  const router = express.Router();
+
+  const handle: express.RequestHandler = (request, response) => {
     t.receive({
       getBody: () => {
         // https://expressjs.com/en/4x/api.html#express.json
         if (isTasklessBody(request.body)) {
           return request.body;
         }
-        throw new Error(
-          "req.body was not a properly formatted JavaScript object"
-        );
+        throw new Error("request.body does not match a Taskless payload");
       },
       getHeaders: () => request.headers,
       send: (json) => {
-        response.status(200);
-        response.json(json);
-        response.end();
+        response.status(200).json(json);
       },
       sendError: (json) => {
-        response.status(500);
-        response.json(json);
-        response.end();
+        response.status(500).json(json);
       },
-    }).then(next);
+    });
   };
 
-  // attach route
-  const router = queueOptions.router;
-  const mw = [queueOptions.middleware ?? undefined, handle].filter((t) => t);
-  router.post(route, ...mw);
+  router.post(route, [express.json(), handle]);
 
   // return API
   const queueApi: TasklessExpressRouter<T> = {

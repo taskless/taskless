@@ -7,6 +7,7 @@ import logger from "morgan";
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
 import sampleQueue from "./routes/queues/sample.js";
+import runSample from "./routes/run-sample.js";
 
 // es6 __dirname
 import { dirname } from "path";
@@ -27,7 +28,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+
+// queue must be mounted at app root
 app.use("/", sampleQueue.router);
+app.use("/run-sample", runSample);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
