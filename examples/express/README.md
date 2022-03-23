@@ -1,4 +1,4 @@
-# Taskless & Express Using `taskless/express`
+# Taskless & Express Using `@taskless/client/express`
 
 This is an example of using the Taskless.io client in an Express application. Please see [routes/queues/sample.ts](./routes/queues/sample.ts) for how to set up the queue, and [routes/run-sample.js](./routes/run-sample.js) for an example of triggering a queue.
 
@@ -13,7 +13,7 @@ To run:
 - Adds [dotenv](https://www.npmjs.com/package/dotenv) to allow loading of env files in development
 - Adds [concurrently](https://www.npmjs.com/package/concurrently) for launching the Taskless dev server alongside express
 - Fixes the `__dirname` const in `app.js` to comply with ES6
-- changes the `www.js` to emit a `console.log` to confirm server start
+- changes `www.js` to emit a `console.log` to confirm server start
 
 ---
 
