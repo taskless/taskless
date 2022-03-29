@@ -2,13 +2,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { GetJobQueryRPCResponse } from "@taskless/client/dev";
 import { isUpdateJob, updateJob } from "rpc/updateJob";
-import { v5, v4 } from "uuid";
+import { v5 } from "uuid";
 import { deleteJob, isDeleteJob } from "rpc/deleteJob";
 import { getJobByName, isGetJobByName } from "rpc/getJobByName";
 import { enqueueJob, isEnqueueJob } from "rpc/enqueueJob";
 import { logger } from "winston/logger";
 
-const initAppId = v4();
+const initAppId = "00000000-0000-0000-0000-000000000000";
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,11 +22,7 @@ export default async function handler(
     v5: (value: string) => v5(value, appId),
   };
 
-  logger.info(
-    `Received request for Application ID ${appId}${
-      appId !== initAppId ? "" : " (generated)"
-    }`
-  );
+  logger.info(`Received request for Application ID ${appId}`);
 
   // success operation
   const success = (v: any) => {

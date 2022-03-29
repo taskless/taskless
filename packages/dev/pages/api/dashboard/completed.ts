@@ -1,29 +1,21 @@
-import { DateTime } from "luxon";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Job } from "types.js";
 import { jobs } from "worker/db";
 
-export type GetScheduledJobsResponse = Job[];
+export type GetCompletedJobsResponse = Job[];
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GetScheduledJobsResponse>
+  res: NextApiResponse<GetCompletedJobsResponse>
 ) {
-  const after = Array.isArray(req.query.after)
-    ? req.query.after[0]
-    : req.query.after;
-  const now = DateTime.now();
   const db = await jobs.connect();
   const next = await db.find({
     selector: {
-      "schedule.check": {
-        $eq: true,
-      },
-      "schedule.next": {
-        $gt: after ?? now.toISO(),
+      lastLog: {
+        $exists: true,
       },
     },
-    sort: [{ "schedule.next": "desc" }],
+    sort: [{ lastLog: "desc" }],
   });
 
   // remove log data from schedule pane

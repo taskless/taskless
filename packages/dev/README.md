@@ -1,6 +1,6 @@
 # @taskless/dev
 
-A local development server for Taskless.io. Using a local development server saves on roundtrips to Taskless.io and also allows you to inspect, invoke, and manage your job queues. Under the hood, it uses [LokiJS](https://github.com/techfort/LokiJS) for a simple in-memory database while managing responses similar to the `for.taskless.io` service.
+A local development server for Taskless.io. Using a local development server saves on roundtrips to Taskless.io and also allows you to inspect, invoke, and manage your job queues. Under the hood, it uses PouchDB for a simple in-memory database while managing responses similar to the `for.taskless.io` service.
 
 # Getting Started
 
