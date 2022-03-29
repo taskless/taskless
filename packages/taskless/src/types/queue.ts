@@ -44,15 +44,15 @@ export type QueueMethods<T> = {
    * Delete an item from the queue
    * @param name The Job's name
    * @throws Error if the job could not be deleted
-   * @returns The deleted `Job` object
+   * @returns The deleted `Job` object, or `null` if no job was deleted
    */
-  delete: (name: string) => Promise<Job<T>>;
+  delete: (name: string) => Promise<Job<T> | null>;
   /**
    * Retrieve an item from the Taskless queue
    * @param name the Job's name
-   * @returns The `Job` object
+   * @returns The `Job` object or `null` if no job was deleted
    */
-  get: (name: string) => Promise<Job<T>>;
+  get: (name: string) => Promise<Job<T> | null>;
 };
 
 /** The Job Handler signature, taking a `payload` and `meta` */

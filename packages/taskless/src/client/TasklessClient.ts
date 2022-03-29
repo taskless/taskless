@@ -368,7 +368,7 @@ export class TasklessClient<T> {
    * @param name The name of the job
    * @returns a Promise containing the Job object that was removed
    */
-  async delete(name: string): Promise<Job<T>> {
+  async delete(name: string): Promise<Job<T> | null> {
     const client = this.getClient();
 
     const job = await client.deleteJob({
@@ -376,7 +376,7 @@ export class TasklessClient<T> {
     });
 
     if (!job.deleteJob) {
-      throw new Error("TODO");
+      return null;
     }
 
     return {
@@ -389,7 +389,7 @@ export class TasklessClient<T> {
     };
   }
 
-  async get(name: string): Promise<Job<T>> {
+  async get(name: string): Promise<Job<T> | null> {
     const client = this.getClient();
 
     const result = await client.getJobByName({
@@ -397,7 +397,7 @@ export class TasklessClient<T> {
     });
 
     if (!result.job) {
-      throw new Error("TODO");
+      return null;
     }
 
     return {
