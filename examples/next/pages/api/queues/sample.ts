@@ -2,20 +2,16 @@
 import { createQueue } from "@taskless/client/next";
 
 type SampleQueue = {
-  foo: string;
+  message: string;
 };
 
 export default createQueue<SampleQueue>(
   "/api/queues/sample",
   async (job, meta) => {
-    console.log("Received a job with payload and meta:", job, meta);
+    console.log("Echoing recevied message: " + job.message);
     return {
-      about: [
-        "This entire JSON object is returned to Taskless on success.",
-        "If an unhandled exception is thrown, the error is captured and sent",
-        "back to Taskless as an error JSON containing 'route', 'error', 'details',",
-        "and 'stack'.",
-      ],
+      success: true,
+      originalMessage: job.message,
     };
   },
   // you may also just set these in process.env and let Taskless use them directly

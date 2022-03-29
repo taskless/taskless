@@ -2,18 +2,16 @@ import { DateTime } from "luxon";
 import { NextApiRequest, NextApiResponse } from "next";
 import SampleQueue from "./queues/sample";
 
+const DELAYED_JOB_NAME = "delayed";
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const job = await SampleQueue.enqueue("sample", {
-    foo: "success",
-  });
-
-  const delayed = await SampleQueue.enqueue(
-    "delayed-job",
+  const job = await SampleQueue.enqueue(
+    DELAYED_JOB_NAME,
     {
-      foo: "This is delayed for 3 days",
+      message: "Message from a delayed job, 3 days into the future",
     },
     {
       runAt: DateTime.now().plus({ days: 3 }).toISO(),
@@ -21,8 +19,7 @@ export default async function handler(
   );
 
   res.status(200).json({
-    message: [`Immediate job: ${job.name}`, `Delayed job: ${delayed.name}`],
+    message: "Successfully scheduled delayed job",
     job,
-    delayed,
   });
 }

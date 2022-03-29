@@ -1,18 +1,26 @@
 # Taskless & Next.js Using `@taskless/client/next`
 
-This is an example of using the Taskless.io client in a Next.js application. Please see [pages/api/queues/sample.ts](./pages/api/queues/sample.ts) for how to set up the queue, and [pages/api/queue/sample-trigger.ts](./pages/api/queues/sample-trigger.ts) for an example of triggering a queue.
+This is an example of using the Taskless.io client in a Next.js application. Please see [pages/api/queues/sample.ts](./pages/api/queues/sample.ts) for how to set up the queue, and one of the below triggering examples for how to enqueue items.
 
-This example also shows how to use a `NextApiHandler` wrapper integration such as `@sentry/next` in order to provide a consistent queue interface and reattach the queue functions to the main export, viewable at [pages/api/queue/sentry.ts](./pages/api/queues/sentry.ts)
+This example also shows how to use a `NextApiHandler` wrapper integration such as `@sentry/next` in order to provide a consistent queue interface and reattach the queue functions to the main export, viewable at [pages/api/queue/sentry.ts](./pages/api/queues/sentry.ts).
 
 To run:
 
 1. run `yarn install`
 2. run `yarn dev`
-3. visit `http://localhost:3000/api/run-sample` with your browser or wget the url with `wget http://localhost:3000/api/run-sample` from a terminal window
+
+A set of sample API endpoints are available that demonstrate the various job types you can enqueue
+
+- http://localhost:3001/api/immediate [an immediately queued job](./pages/api/immediate.ts) that runs at the first opportunity
+- http://localhost:3001/api/delayed [a delayed job](./pages/api/delayed.ts) that is scheduled `3 days` after enqueueing
+- http://localhost:3001/api/cron [a recurring job](./pages/api/cron.ts) that runs every `5 minutes` and can be removed via http://localhost:3001/api/cron-end
+
+These endpoints are for instructional purposes. In a production environment, you would likely call `.enqueue()` in response to a user action as opposed to manually hitting an API endpoint.
 
 ## Changes from Base App
 
 - Adds [concurrently](https://www.npmjs.com/package/concurrently) for launching the Taskless dev server alongside next in development
+- Adds [luxon](https://github.com/moment/luxon) for a sane way of managing dates, times, and durations
 
 ---
 
