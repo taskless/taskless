@@ -31,6 +31,9 @@ export const scheduleNext = async (id: string) => {
     const next = findNextTime(DateTime.fromISO(ex.data.runAt), interval, now);
     ex.schedule.check = true;
     ex.schedule.next = next.toMillis();
+  } else if (runAt.toMillis() !== ex.schedule.next) {
+    ex.schedule.check = true;
+    ex.schedule.next = runAt.toMillis();
   } else {
     // no changes
     return ex;

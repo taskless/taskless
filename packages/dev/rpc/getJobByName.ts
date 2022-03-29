@@ -3,6 +3,7 @@ import type {
   GetJobQueryRPCResponse,
   RPCOperation,
 } from "@taskless/client/dev";
+import { isPouchError } from "types";
 import { jobs, jobToJobFragment } from "worker/db";
 import { start } from "worker/loop";
 
@@ -18,14 +19,23 @@ export const getJobByName = async (
   const id = context.v5(variables.name);
   const db = await jobs.connect();
 
-  const job = await db.get(id);
-  if (!job) {
-    return null;
-  }
+  try {
+    const job = await db.get(id);
+    if (!job) {
+      return null;
+    }
 
-  return {
-    job: {
-      ...jobToJobFragment(variables.name, job),
-    },
-  };
+    return {
+      job: {
+        ...jobToJobFragment(variables.name, job),
+      },
+    };
+  } catch (e) {
+    if ((isPouchError(e) && e.status === 404) || !isPouchError(e)) {
+      return {
+        job: null,
+      };
+    }
+    throw e;
+  }
 };

@@ -6,7 +6,7 @@ import { GetScheduledJobsResponse } from "./api/dashboard/scheduled";
 import React from "react";
 
 type PromoteVariables = {
-  name: string;
+  id: string;
 };
 
 const promoteJob = async (variables: PromoteVariables): Promise<void> => {
@@ -16,7 +16,7 @@ const promoteJob = async (variables: PromoteVariables): Promise<void> => {
       "content-type": "application/json",
     },
     body: JSON.stringify({
-      name: variables.name,
+      id: variables.id,
     }),
   });
 };
@@ -64,7 +64,7 @@ const Home: NextPage = () => {
                       <button
                         onClick={() =>
                           promote.mutate({
-                            name: row.data.name,
+                            id: row._id,
                           })
                         }
                         className="border rounded border-fuchsia-500 px-1 hover:bg-fuchsia-900 hover:text-white hover:border-fuchsia-900"

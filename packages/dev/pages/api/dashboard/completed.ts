@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Job } from "types.js";
+import { Document, Job } from "types.js";
 import { jobs } from "worker/db";
 
-export type GetCompletedJobsResponse = Job[];
+export type GetCompletedJobsResponse = Document<Job>[];
 
 export default async function handler(
   req: NextApiRequest,

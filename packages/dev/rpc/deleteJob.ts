@@ -3,6 +3,8 @@ import type {
   DeleteJobMutationRPCResponse,
   RPCOperation,
 } from "@taskless/client/dev";
+import { isPouchError } from "types";
+import { logger } from "winston/logger";
 import { jobs, jobToJobFragment } from "worker/db";
 import { start } from "worker/loop";
 import { unschedule } from "worker/scheduler";
@@ -18,14 +20,15 @@ export const deleteJob = async (
   start();
   const id = context.v5(variables.name);
   const db = await jobs.connect();
-  const ex = await db.get(id);
-  if (!ex) {
-    return {
-      deleteJob: null,
-    };
-  }
 
   try {
+    const ex = await db.get(id);
+    if (!ex) {
+      return {
+        deleteJob: null,
+      };
+    }
+
     await unschedule(id);
 
     const toDelete = await db.get(id);
@@ -41,8 +44,13 @@ export const deleteJob = async (
       },
     };
   } catch (e) {
-    return {
-      deleteJob: null,
-    };
+    if ((isPouchError(e) && e.status === 404) || !isPouchError(e)) {
+      return {
+        deleteJob: null,
+      };
+    }
+
+    // rethrow as unhandled
+    throw e;
   }
 };

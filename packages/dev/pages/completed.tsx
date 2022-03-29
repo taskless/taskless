@@ -2,19 +2,16 @@ import type { NextPage } from "next";
 import { useQuery } from "react-query";
 import { Layout } from "components/Layout";
 import { GetCompletedJobsResponse } from "./api/dashboard/completed";
-import { DateTime } from "luxon";
+import { CompletedRecord } from "components/CompletedRecord";
 
-const getCompletedJobs = async () => {
+const getCompletedJobs = async (): Promise<GetCompletedJobsResponse> => {
   const response = await fetch("/api/dashboard/completed");
   const result = await response.json();
   return result;
 };
 
 const Home: NextPage = () => {
-  const { data } = useQuery<GetCompletedJobsResponse>(
-    "completed",
-    getCompletedJobs
-  );
+  const { data } = useQuery("completed", getCompletedJobs);
 
   return (
     <Layout title="Taskless Development Server" route="/completed">
@@ -30,25 +27,15 @@ const Home: NextPage = () => {
               <th className="text-left">Payload</th>
             </tr>
           </thead>
-          {(data || []).map((row) => {
-            const dt = row.lastLog
-              ? DateTime.fromISO(row.lastLog)
-              : DateTime.now();
-            const ep = new URL(row.data.endpoint);
-            return (
-              <tr key={row.data.name}>
-                <td></td>
-                <td title={dt.toISO()}>
-                  {dt.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)}
-                </td>
-                <td className="truncate">{row.data.name}</td>
-                <td className="truncate" title={ep.toString()}>
-                  {ep.pathname}
-                </td>
-                <td className="truncate">{`${row.data.payload}`}</td>
-              </tr>
-            );
-          })}
+          <tbody>
+            {(data || []).map((row) => (
+              <CompletedRecord
+                key={row._id}
+                row={row}
+                widths={["w-20", "w-56", "w-40", "w-48"]}
+              />
+            ))}
+          </tbody>
         </table>
       </section>
     </Layout>

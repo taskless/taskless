@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Job } from "types.js";
+import { Document, Job } from "types.js";
 import { jobs } from "worker/db";
 
-export type GetScheduledJobsResponse = Job[];
+export type GetScheduledJobsResponse = Document<Job>[];
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,7 +24,7 @@ export default async function handler(
         $gt: afterTs.toMillis(),
       },
     },
-    sort: [{ "schedule.next": "desc" }],
+    sort: [{ "schedule.next": "asc" }],
   });
 
   // remove log data from schedule pane

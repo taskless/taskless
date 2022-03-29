@@ -5,7 +5,6 @@ import find from "pouchdb-find";
 import memoryAdapter from "pouchdb-adapter-memory";
 import { Job } from "types";
 import { JobHeaders } from "@taskless/client";
-import { string } from "yargs";
 
 PouchDB.plugin(upsert);
 PouchDB.plugin(find);

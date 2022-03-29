@@ -1,4 +1,7 @@
 import { Job as TasklessJob } from "@taskless/client";
+import * as tg from "generic-type-guard";
+
+export type Document<T> = PouchDB.Core.ExistingDocument<T>;
 
 /** The context for an RPC request */
 export type Context = {
@@ -26,3 +29,20 @@ export type Job = {
   lastLog?: string;
   logs?: LogEntry[];
 };
+
+// https://github.com/pouchdb/pouchdb/blob/master/packages/node_modules/pouchdb-errors/src/index.js
+export interface PouchError extends Error {
+  status: number;
+  name: string;
+  message: string;
+  error: boolean;
+}
+
+export const isPouchError = new tg.IsInterface()
+  .withProperties({
+    status: tg.isNumber,
+    name: tg.isString,
+    message: tg.isString,
+    error: tg.isBoolean,
+  })
+  .get();
