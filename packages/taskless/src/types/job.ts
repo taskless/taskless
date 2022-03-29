@@ -18,8 +18,8 @@ export type JobOptions = {
   headers?: JobHeaders;
   /** The number of retries to attempt before the job is failed */
   retries?: number;
-  /** An optional time to run the job, delaying it into the future. ISO-8601 format */
-  runAt?: string;
+  /** An optional time to run the job, delaying it into the future. ISO-8601 format. A value of `null` will be assigned the current time */
+  runAt?: string | null;
   /** An optional ISO-8601 duration that enables repeated running of a job*/
   runEvery?: string;
 };
@@ -45,7 +45,7 @@ export type Job<T> = {
   payload: T;
   /** The number of retries for this Job */
   retries: number;
-  /** An ISO-8601 timestamp of when this job will be ran */
+  /** An ISO-8601 timestamp of when this job will be ran. An explcit null will be treated as "immediately" */
   runAt: string;
   /** An ISO-8601 duration for how often this job will repeat its run */
   runEvery?: string;

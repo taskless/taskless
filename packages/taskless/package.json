@@ -81,6 +81,7 @@
   "dependencies": {
     "deepmerge": "^4.2.2",
     "generic-type-guard": "^3.6.0",
+    "luxon": "^2.3.1",
     "p-retry": "^5.0.0",
     "phin": "^3.6.1"
   },
@@ -97,6 +98,7 @@
     "@types/deepmerge": "^2.2.0",
     "@types/eslint": "^8",
     "@types/express": "^4.17.13",
+    "@types/luxon": "^2.3.1",
     "@types/prettier": "^2",
     "@types/react": "^17",
     "@types/react-dom": "^17",

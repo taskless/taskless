@@ -1853,6 +1853,7 @@ __metadata:
     "@types/deepmerge": ^2.2.0
     "@types/eslint": ^8
     "@types/express": ^4.17.13
+    "@types/luxon": ^2.3.1
     "@types/prettier": ^2
     "@types/react": ^17
     "@types/react-dom": ^17
@@ -1866,6 +1867,7 @@ __metadata:
     generic-type-guard: ^3.6.0
     graphql: ^15.0.0
     graphql-tag: ^2.12.6
+    luxon: ^2.3.1
     madge: ^5.0.1
     next: ^12.1.0
     npm-run-all: ^4.1.5
@@ -1895,7 +1897,7 @@ __metadata:
   dependencies:
     "@headlessui/react": ^1.5.0
     "@heroicons/react": ^1.0.6
-    "@taskless/client": ^1.0.0-next.12
+    "@taskless/client": ^1.0.0-next.13
     "@types/eslint": ^8
     "@types/luxon": ^2.3.0
     "@types/node": 17.0.21
@@ -12239,8 +12241,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express@workspace:examples/express"
   dependencies:
-    "@taskless/client": 1.0.0-next.12
-    "@taskless/dev": 1.0.0-next.12
+    "@taskless/client": 1.0.0-next.13
+    "@taskless/dev": 1.0.0-next.13
     concurrently: ^7.0.0
     cookie-parser: ~1.4.4
     debug: ~2.6.9
@@ -12256,8 +12258,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
   dependencies:
-    "@taskless/client": 1.0.0-next.12
-    "@taskless/dev": 1.0.0-next.12
+    "@taskless/client": 1.0.0-next.13
+    "@taskless/dev": 1.0.0-next.13
     "@types/eslint": ^8
     "@types/luxon": ^2.3.1
     "@types/node": 17.0.21

@@ -19,6 +19,7 @@ import {
   TASKLESS_ENDPOINT,
 } from "../constants.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
+import { DateTime } from "luxon";
 
 /**
  * Constructor arguments for the Taskless Client
@@ -303,7 +304,10 @@ export class TasklessClient<T> {
         enabled: opts.enabled === false ? false : true,
         body: JSON.stringify(body),
         retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
-        runAt: opts.runAt ?? undefined,
+        runAt:
+          opts.runAt === null
+            ? DateTime.now().toISO()
+            : opts.runAt ?? undefined,
         runEvery: opts.runEvery ?? undefined,
       },
     });
@@ -348,7 +352,10 @@ export class TasklessClient<T> {
         enabled: opts.enabled === false ? false : opts.enabled,
         body: typeof body !== "undefined" ? JSON.stringify(body) : undefined,
         retries: opts.retries === 0 ? 0 : opts.retries,
-        runAt: opts.runAt,
+        runAt:
+          opts.runAt === null
+            ? DateTime.now().toISO()
+            : opts.runAt ?? undefined,
         runEvery: opts.runEvery,
       },
     });
