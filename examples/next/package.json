@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -n taskless,next taskless 'next dev'",
+    "nd": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

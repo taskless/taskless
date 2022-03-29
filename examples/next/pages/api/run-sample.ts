@@ -5,13 +5,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const job = await SampleQueue.enqueue(null, {
+  const job = await SampleQueue.enqueue("sample", {
     foo: "success",
   });
-  res
-    .status(200)
-    .json({
-      message: "Job was scheduled successfully with name: " + job.name,
-      job,
-    });
+  res.status(200).json({
+    message: "Job was scheduled successfully with name: " + job.name,
+    job,
+  });
 }

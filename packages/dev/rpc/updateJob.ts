@@ -17,7 +17,8 @@ export const updateJob = async (
 ): Promise<UpdateJobMutationRPCResponse["data"]> => {
   start();
   const id = context.v5(variables.name);
-  const next = await jobs.get(id);
+  const db = await jobs.connect();
+  const next = await db.get(id);
   if (!next) {
     throw new Error("Job not found");
   }
@@ -55,9 +56,9 @@ export const updateJob = async (
   // manually unschedule
   next.schedule = {};
 
-  await jobs.put(next);
+  await db.put(next);
   await scheduleNext(id);
-  const job = await jobs.get(id);
+  const job = await db.get(id);
 
   return {
     updateJob: {

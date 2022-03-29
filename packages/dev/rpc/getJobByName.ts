@@ -16,8 +16,9 @@ export const getJobByName = async (
 ): Promise<GetJobQueryRPCResponse["data"]> => {
   start();
   const id = context.v5(variables.name);
+  const db = await jobs.connect();
 
-  const job = await jobs.get(id);
+  const job = await db.get(id);
   if (!job) {
     return null;
   }

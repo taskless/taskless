@@ -13,7 +13,8 @@ const findNextTime = (start: DateTime, interval: Duration, until: DateTime) => {
 
 /** Schedules the next job run into the scheduler section of a job */
 export const scheduleNext = async (id: string) => {
-  const ex = await jobs.get(id);
+  const db = await jobs.connect();
+  const ex = await db.get(id);
   const now = DateTime.now();
   const runAt = DateTime.fromISO(ex.data.runAt);
 
@@ -35,15 +36,16 @@ export const scheduleNext = async (id: string) => {
     return ex;
   }
 
-  await jobs.put(ex);
+  await db.put(ex);
   return ex;
 };
 
 /** Removes a scheduling info from a job */
 export const unschedule = async (id: string) => {
-  const ex = await jobs.get(id);
+  const db = await jobs.connect();
+  const ex = await db.get(id);
   ex.schedule = {};
-  await jobs.put(ex);
+  await db.put(ex);
 
   return ex;
 };

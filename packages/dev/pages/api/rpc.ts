@@ -65,6 +65,9 @@ export default async function handler(
       return success(v);
     }
   } catch (e) {
+    if (process.env.TASKLESS_FULL_ERRORS === "1") {
+      console.error(e);
+    }
     return error(e);
   }
 

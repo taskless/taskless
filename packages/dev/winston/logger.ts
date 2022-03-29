@@ -5,10 +5,10 @@ import { DateTime } from "luxon";
 const { combine, timestamp, label, printf } = format;
 
 const getDebugLevel = () => {
-  const level = process.env.TASKLESS_DEV_DEBUG ?? "error";
+  const level = process.env.TASKLESS_DEV_DEBUG ?? "info";
   return ["debug", "log", "info", "warn", "error"].includes(level)
     ? level
-    : "error";
+    : "info";
 };
 
 const colorizedLabel = {

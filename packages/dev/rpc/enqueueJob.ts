@@ -20,8 +20,12 @@ export const enqueueJob = async (
   start();
   const id = context.v5(variables.name);
   const runAt = variables.job.runAt ?? DateTime.now().toISO();
+  const db = await jobs.connect();
 
-  await jobs.upsert(id, (doc) => {
+  await db.upsert(id, (doc) => {
+    if (typeof doc.runs === "undefined") {
+      doc.runs = 0;
+    }
     if (!doc.schedule) {
       doc.schedule = {};
     }
@@ -44,7 +48,7 @@ export const enqueueJob = async (
 
   await scheduleNext(id);
 
-  const job = await jobs.get(id);
+  const job = await db.get(id);
 
   if (!job) {
     throw new Error("Could not create or replace Job");

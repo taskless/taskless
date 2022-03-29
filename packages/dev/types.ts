@@ -22,5 +22,7 @@ export type Job = {
     next?: number;
     attempt?: number;
   };
+  runs: number;
+  lastLog?: string;
   logs?: LogEntry[];
 };

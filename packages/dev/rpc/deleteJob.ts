@@ -17,7 +17,8 @@ export const deleteJob = async (
 ): Promise<DeleteJobMutationRPCResponse["data"]> => {
   start();
   const id = context.v5(variables.name);
-  const ex = await jobs.get(id);
+  const db = await jobs.connect();
+  const ex = await db.get(id);
   if (!ex) {
     return {
       deleteJob: null,
@@ -27,13 +28,13 @@ export const deleteJob = async (
   try {
     await unschedule(id);
 
-    const toDelete = await jobs.get(id);
-    await jobs.put({
+    const toDelete = await db.get(id);
+    await db.put({
       ...toDelete,
       _deleted: true,
     });
 
-    const job = await jobs.get(id);
+    const job = await db.get(id);
     return {
       deleteJob: {
         ...jobToJobFragment(variables.name, job),

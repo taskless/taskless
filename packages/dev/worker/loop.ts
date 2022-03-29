@@ -16,6 +16,7 @@ export const start = () => {
   if (started) {
     return;
   }
+
   started = true;
   setTimeout(tick, WAIT_INTERVAL);
   log.info("Started worker");
@@ -24,7 +25,8 @@ export const start = () => {
 /** Find all jobs that are ready to run and asynchronously handle them */
 const tick = async () => {
   const now = DateTime.now().toMillis();
-  const next = await jobs.find({
+  const db = await jobs.connect();
+  const next = await db.find({
     selector: {
       "schedule.check": {
         $eq: true,
@@ -35,13 +37,13 @@ const tick = async () => {
     },
   });
 
-  if (next.docs.length === 0) {
+  if (!next || !next?.docs || next.docs?.length === 0) {
     // nothing to do
     setTimeout(tick, WAIT_INTERVAL);
     return;
   }
 
-  log.debug(`Found ${next.docs.length} item(s)`);
+  log.debug(`Found ${next?.docs?.length ?? 0} item(s)`);
 
   // run all pending jobs to complete/fail state
   await Promise.allSettled(next.docs.map((doc) => handle(doc._id, doc)));
@@ -50,6 +52,7 @@ const tick = async () => {
 
 /** Handle a single instance of a job */
 const handle = async (id: string, doc: Job) => {
+  const db = await jobs.connect();
   const now = DateTime.now();
   const l = log.child({ job: doc.data.name });
   l.info("Handler invoked");
@@ -111,6 +114,15 @@ const handle = async (id: string, doc: Job) => {
     doc.logs = [logEntry];
   }
 
+  // run
+  if (typeof doc.runs === "undefined") {
+    doc.runs = 1;
+  } else {
+    doc.runs += 1;
+  }
+
+  doc.lastLog = now.toISO();
+
   // update doc record. If retrying, schedule the retry
   doc.schedule.check = false;
   if (retry) {
@@ -119,7 +131,7 @@ const handle = async (id: string, doc: Job) => {
     doc.schedule.next = now.plus({ seconds: 3 }).toMillis();
     doc.schedule.attempt = (doc.schedule.attempt ?? 0) + 1;
   }
-  await jobs.put(doc);
+  await db.put(doc);
 
   // if not retrying, schedule the next occurence (if applicable)
   if (!retry && doc.data.runEvery) {
