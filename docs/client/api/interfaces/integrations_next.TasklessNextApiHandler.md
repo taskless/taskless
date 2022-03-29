@@ -53,7 +53,7 @@ Next `API` route handler
 
 ### delete
 
-▸ **delete**(`name`): `Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
+▸ **delete**(`name`): `Promise`<`null` \| [`Job`](../modules/types.md#job)<`T`\>\>
 
 Delete an item from the queue
 
@@ -67,9 +67,9 @@ Delete an item from the queue
 
 #### Returns
 
-`Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
+`Promise`<`null` \| [`Job`](../modules/types.md#job)<`T`\>\>
 
-The deleted `Job` object
+The deleted `Job` object, or `null` if no job was deleted
 
 #### Inherited from
 
@@ -107,7 +107,7 @@ QueueMethods.enqueue
 
 ### get
 
-▸ **get**(`name`): `Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
+▸ **get**(`name`): `Promise`<`null` \| [`Job`](../modules/types.md#job)<`T`\>\>
 
 Retrieve an item from the Taskless queue
 
@@ -119,9 +119,9 @@ Retrieve an item from the Taskless queue
 
 #### Returns
 
-`Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
+`Promise`<`null` \| [`Job`](../modules/types.md#job)<`T`\>\>
 
-The `Job` object
+The `Job` object or `null` if no job was deleted
 
 #### Inherited from
 

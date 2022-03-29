@@ -234,9 +234,9 @@ Describes the set of Queue Methods available on a Taskless Integration
 
 | Name      | Type                                                                                                                           |
 | :-------- | :----------------------------------------------------------------------------------------------------------------------------- |
-| `delete`  | (`name`: `string`) => `Promise`<[`Job`](types.md#job)<`T`\>\>                                                                  |
+| `delete`  | (`name`: `string`) => `Promise`<`null` \| [`Job`](types.md#job)<`T`\>\>                                                        |
 | `enqueue` | (`name`: `string`, `payload`: `T`, `options?`: [`JobOptions`](types.md#joboptions)) => `Promise`<[`Job`](types.md#job)<`T`\>\> |
-| `get`     | (`name`: `string`) => `Promise`<[`Job`](types.md#job)<`T`\>\>                                                                  |
+| `get`     | (`name`: `string`) => `Promise`<`null` \| [`Job`](types.md#job)<`T`\>\>                                                        |
 | `update`  | (`name`: `string`, `payload`: `T`, `options?`: [`JobOptions`](types.md#joboptions)) => `Promise`<[`Job`](types.md#job)<`T`\>\> |
 
 ---

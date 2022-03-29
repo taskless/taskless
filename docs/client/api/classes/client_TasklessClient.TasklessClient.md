@@ -48,7 +48,7 @@ Turn a Taskless Body into a payload
 
 ### delete
 
-▸ **delete**(`name`): `Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
+▸ **delete**(`name`): `Promise`<`null` \| [`Job`](../modules/types.md#job)<`T`\>\>
 
 Removes a job from the queue
 
@@ -60,7 +60,7 @@ Removes a job from the queue
 
 #### Returns
 
-`Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
+`Promise`<`null` \| [`Job`](../modules/types.md#job)<`T`\>\>
 
 a Promise containing the Job object that was removed
 
@@ -90,7 +90,7 @@ a Promise containing the Job object enqueued
 
 ### get
 
-▸ **get**(`name`): `Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
+▸ **get**(`name`): `Promise`<`null` \| [`Job`](../modules/types.md#job)<`T`\>\>
 
 #### Parameters
 
@@ -100,7 +100,7 @@ a Promise containing the Job object enqueued
 
 #### Returns
 
-`Promise`<[`Job`](../modules/types.md#job)<`T`\>\>
+`Promise`<`null` \| [`Job`](../modules/types.md#job)<`T`\>\>
 
 ---
 
