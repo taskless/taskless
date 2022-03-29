@@ -124,16 +124,16 @@ Describes a Taskless.io Job with a payload of type `T`
 
 #### Type declaration
 
-| Name        | Type                                | Description                                                                  |
-| :---------- | :---------------------------------- | :--------------------------------------------------------------------------- |
-| `enabled`   | `boolean`                           | Determines if the job is enabled or not                                      |
-| `endpoint`  | `string`                            | The fully-qualified URL that will be called when this job executes           |
-| `headers?`  | [`JobHeaders`](types.md#jobheaders) | An optional set of key-value pairs to pass as headers when this job executes |
-| `name`      | `string`                            | The name of the job, unique to the application                               |
-| `payload`   | `T`                                 | The Job's payload to be delivered                                            |
-| `retries`   | `number`                            | The number of retries for this Job                                           |
-| `runAt`     | `string`                            | An ISO-8601 timestamp of when this job will be ran                           |
-| `runEvery?` | `string`                            | An ISO-8601 duration for how often this job will repeat its run              |
+| Name        | Type                                | Description                                                                                          |
+| :---------- | :---------------------------------- | :--------------------------------------------------------------------------------------------------- |
+| `enabled`   | `boolean`                           | Determines if the job is enabled or not                                                              |
+| `endpoint`  | `string`                            | The fully-qualified URL that will be called when this job executes                                   |
+| `headers?`  | [`JobHeaders`](types.md#jobheaders) | An optional set of key-value pairs to pass as headers when this job executes                         |
+| `name`      | `string`                            | The name of the job, unique to the application                                                       |
+| `payload`   | `T`                                 | The Job's payload to be delivered                                                                    |
+| `retries`   | `number`                            | The number of retries for this Job                                                                   |
+| `runAt`     | `string`                            | An ISO-8601 timestamp of when this job will be ran. An explcit null will be treated as "immediately" |
+| `runEvery?` | `string`                            | An ISO-8601 duration for how often this job will repeat its run                                      |
 
 ---
 
@@ -208,13 +208,13 @@ A set of options on a per-job level
 
 #### Type declaration
 
-| Name        | Type                                | Description                                                                   |
-| :---------- | :---------------------------------- | :---------------------------------------------------------------------------- |
-| `enabled?`  | `boolean`                           | Is the job enabled                                                            |
-| `headers?`  | [`JobHeaders`](types.md#jobheaders) | A set of key:value pairs to pass as job headers                               |
-| `retries?`  | `number`                            | The number of retries to attempt before the job is failed                     |
-| `runAt?`    | `string`                            | An optional time to run the job, delaying it into the future. ISO-8601 format |
-| `runEvery?` | `string`                            | An optional ISO-8601 duration that enables repeated running of a job          |
+| Name        | Type                                | Description                                                                                                                        |
+| :---------- | :---------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled?`  | `boolean`                           | Is the job enabled                                                                                                                 |
+| `headers?`  | [`JobHeaders`](types.md#jobheaders) | A set of key:value pairs to pass as job headers                                                                                    |
+| `retries?`  | `number`                            | The number of retries to attempt before the job is failed                                                                          |
+| `runAt?`    | `string` \| `null`                  | An optional time to run the job, delaying it into the future. ISO-8601 format. A value of `null` will be assigned the current time |
+| `runEvery?` | `string`                            | An optional ISO-8601 duration that enables repeated running of a job                                                               |
 
 ---
 
