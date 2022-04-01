@@ -4,9 +4,6 @@
   path: README.md
 - title: Get Started
   routes:
-    - title: Introduction
-      slug: get-started
-      path: get-started/README.md
     - title: Next.js
       slug: get-started/nextjs
       path: get-started/nextjs.md
