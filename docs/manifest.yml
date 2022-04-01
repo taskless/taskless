@@ -1,37 +1,41 @@
 # Documentation Manifest for Taskless
-- title: Introduction to Taskless
-  path: /docs/README.md
-- section: Get Started
-  routes:
-    - title: Introduction
-      path: /docs/get-started/README.md
-    - title: Next.js
-      path: /docs/get-started/nextjs.md
-    - title: Express
-      path: /docs/get-started/express.md
-- section: Client API Reference
-  routes:
-    - title: Introduction
-      path: /docs/client-api/README.md
-    - title: Creating a Queue
-      path: /docs/client-api/createQueue.md
-    - title: Enqueueing Jobs
-      path: /docs/client-api/queue.md
-    - title: Adding Retries
-      path: /docs/client-api/adding-retries.md
-    - title: Scheduled Jobs
-      path: /docs/client-api/scheduled-jobs.md
-    - title: Repeating Jobs
-      path: /docs/client-api/repeating-jobs.md
-    - title: Cron Jobs
-      path: /docs/client-api/cron-jobs.md
-    - title: API Reference
-      path: /docs/client-api/reference.md
-- section: The Taskless Website
-  routes:
-    - title: Taskless Dashboard
-      path: /docs/site/README.md
-    - title: Creating an Account
-      path: /docs/site/creating-an-account
-    - title: Organizations and Apps
-      path: /docs/site/organizations-and-applications
+config:
+  index: README.md
+  missingStrategy: ["depth", "404"]
+routes:
+  - title: Introduction to Taskless
+    path: ./introduction
+  - title: Get Started
+    routes:
+      - title: Introduction
+        path: ./get-started
+      - title: Next.js
+        path: ./get-started/nextjs.md
+      - title: Express
+        path: ./get-started/express.md
+  - title: Client API Reference
+    routes:
+      - title: Introduction
+        path: ./client-api/introduction
+      - title: Creating a Queue
+        path: ./client-api/createQueue.md
+      - title: Enqueueing Jobs
+        path: ./client-api/queue.md
+      - title: Adding Retries
+        path: ./client-api/adding-retries.md
+      - title: Scheduled Jobs
+        path: ./client-api/scheduled-jobs.md
+      - title: Repeating Jobs
+        path: ./client-api/repeating-jobs.md
+      - title: Cron Jobs
+        path: ./client-api/cron-jobs.md
+      - title: API Reference
+        path: ./client-api/reference.md
+  - title: The Taskless Website
+    routes:
+      - title: Taskless Dashboard
+        path: ./site/README.md
+      - title: Creating an Account
+        path: ./site/creating-an-account
+      - title: Organizations and Apps
+        path: /docs/site/organizations-and-applications
