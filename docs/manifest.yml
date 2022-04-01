@@ -1,41 +1,27 @@
 # Documentation Manifest for Taskless
-config:
-  index: README.md
-  missingStrategy: ["depth", "404"]
-routes:
-  - title: Introduction to Taskless
-    path: introduction
-  - title: Get Started
-    routes:
-      - title: Introduction
-        path: get-started
-      - title: Next.js
-        path: get-started/nextjs.md
-      - title: Express
-        path: get-started/express.md
-  - title: Client API Reference
-    routes:
-      - title: Introduction
-        path: client-api/introduction
-      - title: Creating a Queue
-        path: client-api/createQueue.md
-      - title: Enqueueing Jobs
-        path: client-api/queue.md
-      - title: Adding Retries
-        path: client-api/adding-retries.md
-      - title: Scheduled Jobs
-        path: client-api/scheduled-jobs.md
-      - title: Repeating Jobs
-        path: client-api/repeating-jobs.md
-      - title: Cron Jobs
-        path: client-api/cron-jobs.md
-      - title: API Reference
-        path: client-api/reference.md
-  - title: The Taskless Website
-    routes:
-      - title: Taskless Dashboard
-        path: site
-      - title: Creating an Account
-        path: site/creating-an-account
-      - title: Organizations and Apps
-        path: site/organizations-and-applications
+- title: Introduction to Taskless
+  slug: introduction
+  path: README.md
+- title: Get Started
+  routes:
+    - title: Introduction
+      slug: get-started
+      path: get-started/README.md
+    - title: Next.js
+      slug: get-started/nextjs
+      path: get-started/nextjs.md
+    - title: Express
+      slug: get-started/express
+      path: get-started/express.md
+- title: Taskless Client
+  routes:
+    - title: Introduction
+      slug: client
+      path: client/README.md
+    - title: API Reference
+      path: client/api/README.md
+- title: Taskless.io
+  routes:
+    - title: Using the Dashboard
+      slug: tasklessio/dashboard
+      path: tasklessio/dashboard.md
