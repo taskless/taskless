@@ -1,39 +1,39 @@
 # Documentation Manifest for Taskless
 - title: Introduction to Taskless
-  slug: /
-  file: ./README.md
+  url: /docs
+  file: /docs/README.md
 - title: Getting Started
   routes:
     - title: Next.js
-      slug: get-started/nextjs
-      file: ./get-started/nextjs.md
+      url: /docs/get-started/nextjs
+      file: /docs/get-started/nextjs.md
     - title: Express
-      slug: get-started/express
-      file: ./get-started/express.md
+      url: /docs/get-started/express
+      file: /docs/get-started/express.md
     - title: Other Integrations
-      slug: get-started/other
-      file: ./get-started/other.md
+      url: /docs/get-started/other
+      file: /docs/get-started/other.md
 - title: Concepts
   routes:
     - title: Jobs
-      slug: concepts/jobs
-      file: ./concepts/jobs.md
+      url: /docs/concepts/jobs
+      file: /docs/concepts/jobs.md
     - title: E2E Encryption
-      slug: concepts/encryption
-      file: ./concepts/encryption.md
+      url: /docs/concepts/encryption
+      file: /docs/concepts/encryption.md
 - title: Features
   routes:
     - title: Dev Server
-      slug: features/dev
-      file: ./features/dev-server.md
+      url: /docs/features/dev
+      file: /docs/features/dev-server.md
 - title: API Reference
   routes:
     - title: createQueue
-      slug: api/integrations/create-queue
-      file: ./api/integrations/createQueue.md
+      url: /docs/api/integrations/create-queue
+      file: /docs/api/integrations/createQueue.md
     - title: Next.js
-      slug: api/integrations/nextjs
-      file: ./api/integrations/nextjs.md
+      url: /docs/api/integrations/nextjs
+      file: /docs/api/integrations/nextjs.md
     - title: Express
-      slug: api/integrations/express
-      file: ./api/integrations/exporess.md
+      url: /docs/api/integrations/express
+      file: /docs/api/integrations/exporess.md
