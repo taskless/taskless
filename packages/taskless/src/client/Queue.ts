@@ -1,5 +1,6 @@
 import merge from "deepmerge";
 import {
+  DefaultJobOptions,
   GetBodyCallback,
   GetHeadersCallback,
   Job,
@@ -13,20 +14,17 @@ import {
 import { create as createGraphqlClient } from "./graphqlClient.js";
 import { create as createRpcClient } from "./rpcClient.js";
 import { JobMethodEnum } from "../__generated__/schema.js";
-import { encode, decode, sign, verify } from "../client/encoder.js";
-import {
-  TASKLESS_DEVELOPMENT_ENDPOINT,
-  TASKLESS_ENDPOINT,
-} from "../constants.js";
+import { encode, decode, sign, verify } from "./encoder.js";
+import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
 import { DateTime } from "luxon";
 
 /**
- * Constructor arguments for the Taskless Client
+ * Constructor arguments for the Taskless Queue
  * @template T Describes the payload used in the {@link JobHandler}
  */
-export type TasklessClientConstructorArgs<T> = {
-  /** The route slug this client is managing */
+export type TasklessQueueConfig<T> = {
+  /** The route slug this Queue is managing */
   route: string;
   /**
    * A callback handler for processing the job
@@ -36,7 +34,7 @@ export type TasklessClientConstructorArgs<T> = {
   /** Options applied to the Queue globally */
   queueOptions?: QueueOptions;
   /** Default options applied to newly enqueued jobs */
-  jobOptions?: JobOptions;
+  jobOptions?: DefaultJobOptions;
 };
 
 /** Queue options plus required values in order for the client to work properly */
@@ -95,6 +93,7 @@ const defaultQueueOptions: QueueOptions = {
 /** A set of default options for job objects */
 const defaultJobOptions: JobOptions = {
   enabled: true,
+  runAt: null,
   headers: {
     // actions are always json unless overridden
     "content-type": "application/json",
@@ -107,13 +106,13 @@ const firstOf = <T>(unk: T | T[]) => {
   return (Array.isArray(unk) ? unk[0] : unk) as T;
 };
 
-export class TasklessClient<T> {
+export class Queue<T> {
   private route: string;
   private handler: JobHandler<T>;
   private queueOptions: ResolvedQueueOptions;
-  private jobOptions: JobOptions;
+  private jobOptions: DefaultJobOptions;
 
-  constructor(args: TasklessClientConstructorArgs<T>) {
+  constructor(args: TasklessQueueConfig<T>) {
     const options: QueueOptions = merge.all([
       defaultQueueOptions,
       args.queueOptions ?? {},
@@ -139,7 +138,10 @@ export class TasklessClient<T> {
       credentials: options.credentials,
     };
 
-    this.jobOptions = merge.all([defaultJobOptions, args.jobOptions ?? {}]);
+    this.jobOptions = {
+      ...defaultJobOptions,
+      ...(args.jobOptions ?? {}),
+    };
     this.route = args.route;
     this.handler = args.handler;
   }
@@ -197,7 +199,7 @@ export class TasklessClient<T> {
 
   /** Gets an instance of the GraphQL client or a simplified dev client */
   protected getGraphQLClient() {
-    const endpoint = process.env.TASKLESS_ENDPOINT ?? TASKLESS_ENDPOINT;
+    const endpoint = TASKLESS_ENDPOINT;
     const creds = this.queueOptions.credentials;
 
     if (typeof creds?.appId === "undefined") {
@@ -218,8 +220,7 @@ export class TasklessClient<T> {
 
   /** Get an RPC client that looks and acts like our GraphQL client for local development */
   protected getRPCClient() {
-    const endpoint =
-      process.env.TASKLESS_ENDPOINT ?? TASKLESS_DEVELOPMENT_ENDPOINT;
+    const endpoint = process.env.TASKLESS_DEV_ENDPOINT ?? TASKLESS_DEV_ENDPOINT;
     const c = createRpcClient({
       url: endpoint,
       appId: "", // avoid using appId/secret in development client
@@ -229,9 +230,19 @@ export class TasklessClient<T> {
   }
 
   protected getClient() {
-    return process.env.TASKLESS_DEV === "1"
-      ? this.getRPCClient()
-      : this.getGraphQLClient();
+    const isDevelopment = process.env.NODE_ENV !== "production";
+    const isForcedDev = process.env.TASKLESS_DEV_ENABLED === "1";
+    const isForcedProd = process.env.TASKLESS_DEV_ENABLED === "0";
+
+    if (isForcedDev) {
+      return this.getRPCClient();
+    } else if (isForcedProd) {
+      return this.getGraphQLClient();
+    } else if (isDevelopment) {
+      return this.getRPCClient();
+    }
+
+    return this.getGraphQLClient();
   }
 
   /**

@@ -1,3 +1,3 @@
-import { TasklessClient } from "./client/TasklessClient.js";
+import { Queue } from "./client/Queue.js";
 
-export const Client = TasklessClient;
+export { Queue };

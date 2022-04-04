@@ -1,12 +1,12 @@
 import {
   JobHandler,
-  JobOptions,
   QueueMethods,
   QueueOptions,
   isTasklessBody,
+  DefaultJobOptions,
 } from "../types.js";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { TasklessClient } from "../client/TasklessClient.js";
+import { Queue } from "../client/Queue.js";
 
 /**
  * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern
@@ -33,16 +33,16 @@ export interface TasklessNextApiHandler<T>
  * @param route The URL path to reach this route
  * @param handler A {@link JobHandler} that supports a payload of type `T`
  * @param queueOptions The {@link QueueOptions} for this queue
- * @param defaultJobOptions A set of {@link JobOptions} to apply as defaults for every new job in the Queue
+ * @param defaultJobOptions A set of {@link DefaultJobOptions} to apply as defaults for every new job in the Queue
  * @returns {TasklessNextApiHandler}
  */
 export function createQueue<T = undefined>(
   route: string,
   handler: JobHandler<T>,
   queueOptions?: QueueOptions,
-  defaultJobOptions?: JobOptions
+  defaultJobOptions?: DefaultJobOptions
 ): TasklessNextApiHandler<T> {
-  const t = new TasklessClient({
+  const t = new Queue({
     route,
     handler,
     queueOptions: queueOptions ?? {},

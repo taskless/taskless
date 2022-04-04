@@ -1,12 +1,12 @@
 import {
   JobHandler,
-  JobOptions,
   QueueMethods,
   QueueOptions,
   isTasklessBody,
+  DefaultJobOptions,
 } from "../types.js";
 import * as express from "express";
-import { TasklessClient } from "../client/TasklessClient.js";
+import { Queue } from "../client/Queue.js";
 
 /**
  * An Express compatible API Handler, with Taskless Queue support
@@ -35,9 +35,9 @@ export function createQueue<T = undefined>(
   route: string,
   handler: JobHandler<T>,
   queueOptions: ExpressQueueOptions,
-  defaultJobOptions?: JobOptions
+  defaultJobOptions?: DefaultJobOptions
 ): TasklessExpressRouter<T> {
-  const t = new TasklessClient({
+  const t = new Queue({
     route,
     handler,
     queueOptions: queueOptions ?? {},

@@ -1,57 +1,21 @@
 # Introduction to Taskless
 
-Welcome to the Taskless.io documentation! Taskless.io consists of two main tools: The Taskless Client libraries which are used by developers to schedule and respond to jobs in an asynchronous manner, and the Taskless Site where you can manage user accounts, billing, access job history graphs, logs, and more.
-
-## Quickstart
+Welcome to Taskless! Taskless is designed to take the infrastructure pain out of setting up and maintaing a Job Queueing system, and excels in a serverless or edge-function environment though it can be used anywhere you've got publicly reachable URLs and wish to call them on a schedule or in response to a user action.
 
 The fastest way to get started with Taskless is to follow a guide for your JavaScript framework. Each guide comes with an integration example from the [Taskless repository](https://github.com/taskless/taskless/tree/main/examples).
 
-<!-- card
-image: ./assets/next.svg
--->
+- **Next.js** [Guide](./get-started/nextjs.md) | [Example](https://github.com/taskless/taskless/tree/main/examples/next)
+- **Express** [Guide](./get-started/express.md) | [Example](https://github.com/taskless/taskless/tree/main/examples/express)
+- **Taskless Queue** [Guide](./get-started/raw-queue.md) (for integrations not covered above)
 
-### Next.js
+Jobs in Taskless generally take on two forms.
 
-Managing Jobs with Next.js
+- **Evented Jobs** ([read more](./concepts/jobs.md#eventedjobs)) that are in response to a user action or external triggering event, and
+- **Scheduled Jobs** ([read more](./concepts/jobs.md#scheduledjobs)) that are planned for a time in the future and may also recur
 
-- [Read the Guide](./get-started/nextjs.md)
-- [Example](https://github.com/taskless/taskless/tree/main/examples/next)
-<!-- /card -->
+All Taskless Jobs share the same common API, with the difference being the existence of `runAt` and `runEvery` in the options to denote a job that is scheduled to run at a specific time and/or with a specific recurrence. Scheduled and Evented jobs are both available on the main Taskless site at Taskless.io.
 
-<!-- card
-image: ./assets/express.png
--->
-
-### Express
-
-Managing Jobs with Express
-
-- [Read the Guide](./get-started/express.md)
-- [Example](https://github.com/taskless/taskless/tree/main/examples/express)
-<!-- /card -->
-
-<!-- card
-image: ./assets/js.svg
--->
-
-### JavaScript Client
-
-Using the Underlying JS Client
-
-- [Read the Docs](./client-api)
-<!-- /card -->
-
-### System Requirements
-
-- [Node.js 12.22.0 or later](https://nodejs.org/)
-- MacOS, Windows (including WSL), and Linux are supported
-
-## Products and Features
-
-If you're already using Taskless, learn more about the Products and features that power it:
-
-- [#](Creating a Taskless Account)
-- [./site](Taskless Dashboard)
+> :information_source: To provide consistency, all examples are written in Typescript
 
 ## Getting Help
 

@@ -12,22 +12,36 @@ const isJobHeaders: TypeGuard<JobHeaders> = (o: unknown): o is JobHeaders => {
 
 /** A set of options on a per-job level */
 export type JobOptions = {
-  /** Is the job enabled */
+  /** Is the job enabled. Defaults to true. */
   enabled?: boolean;
-  /** A set of  key:value pairs to pass as job headers */
+
+  /** A key/value object to recieve as headers when your job is called. Defaults to an empty object */
   headers?: JobHeaders;
-  /** The number of retries to attempt before the job is failed */
+
+  /** The number of retries to attempt before the job is failed. Defaults to 5 */
   retries?: number;
-  /** An optional time to run the job, delaying it into the future. ISO-8601 format. A value of `null` will be assigned the current time */
-  runAt?: string | null;
-  /** An optional ISO-8601 duration that enables repeated running of a job*/
+
+  /**
+   * An time to run the job, delaying it into the future in
+   * ISO-8601 format. An explicit value of `null` will result in the job
+   * running at the first available opportunity
+   */
+  runAt: string | null;
+
+  /** An optional ISO-8601 Duration that enables repeated running of a job*/
   runEvery?: string;
 };
 
+/** An optional set of job options */
+export type DefaultJobOptions = Partial<JobOptions>;
+
 /** Metadata regarding the currently running Job */
 export type JobMeta = {
+  /** The application ID that made the request */
   applicationId: string | null;
+  /** The organization ID that made the request */
   organizationId: string | null;
+  /** A counter representing the number of attempts made */
   attempt: number;
 };
 

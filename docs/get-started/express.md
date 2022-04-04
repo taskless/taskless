@@ -1,6 +1,6 @@
 # Getting Started with Taskless and Express
 
-This document guides you through setting up Taskless for Express and creating your first Queue in an existing project.
+This document guides you through setting up Taskless for Express and creating your first Queue in a new project.
 
 ## Installation
 
@@ -9,41 +9,44 @@ Taskless consists of two parts:
 1. A _server_ which receives your API requests and will call them at a future defined time and
 2. The Taskless _client_ which your application uses to interface with the server
 
-This guide assumes you've already [created a Taskless account](https://taskless.io/signup). The first thing you'll want to do is install the Taskless client. The `express` integration is bundled with the main `@taskless/client` npm package, and available as a tree-shaking friendly import.
+This guide assumes you've already [created a Taskless account](https://taskless.io). The first thing you'll want to do is install the Taskless client and dev server. The `express` integration is bundled with the main `@taskless/client` npm package, and available as a tree-shaking friendly import.
 
-<!-- tabs -->
-
-### npm
+We're also going to use [concurrently](https://www.npmjs.com/package/concurrently) to make it easier to start multiple services.
 
 ```sh
 # install the package using npm
 npm install @taskless/client
-```
+npm install --save-dev @taskless/dev concurrently
 
-### yarn
-
-```sh
-# install the package using yarn
+# or install the package using yarn
 yarn add @taskless/client
-```
+yarn add -D @taskless/dev concurrently
 
-### pnpm
-
-```sh
-# install the package using pnpm
+# or install the package using pnpm
 pnpm add @taskless/client
+pnpm add -D @taskless/dev concurrently
 ```
 
-<!-- /tabs -->
+And update your `package.json` to launch the Taskless Dev Server alongside your express app in development.
 
-That's everything you need to create your first Queue!
+```json
+{
+  "scripts": {
+    "...": "...",
+    "dev": "concurrently -n taskless,express \"yarn:taskless\" \"yarn:start\"",
+    "start": "node server.js"
+  }
+}
+```
+
+That's it for the setup. Let's create our first Queue!
 
 ## Creating a Queue
 
 Queues in the Express integration are Queues first, and an [Express Route](https://expressjs.com/en/4x/api.html#router) second. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console.
 
 ```ts
-// /queues/echo.ts
+// routes/queues/echo.ts
 import express from "express";
 import { createQueue } from "@taskless/client/express";
 
@@ -56,65 +59,23 @@ export default createQueue<Echo>(
   "/queues/echo", // 👈🏼 The URL path this queue is reachable on
   async (job, meta) => {
     console.log("Received a job with payload and meta:", job, meta);
-  },
-  {
-    router: express.Router(),
-    middleware: [express.json()],
   }
 );
 ```
 
-`createQueue` takes three arguments:
+Our `createQueue` function takes two arguments:
 
 1. The `path` the API route is publicly reachable on. This is combined with your base url to create a full URL that Taskless should ping
 2. The `job` callback. An async function that receives your job along with any additional metadata
-3. The `options` for the Queue. While we are using an `.env` file for most of our configuration, we must tell Taskless about our express router and middleware configuration via the `router` and `middleware` properties. At a minimum, your middleware must include a body parser that outputs JSON such as the one that comes bundled in express via `express.json()`.
 
-## Environment Variables
+## Routing to the Queue
 
-In order for Taskless to use our Queue, we'll set up some environment variables using [env-cmd](https://github.com/toddbluhm/env-cmd). First, Install `env-cmd` into your depencies using your package manager of choice. Then, create a `.env` file, add the file to your `.gitignore` if it isn't already, and specify your `TASKLESS_BASE_URL`, `TASKLESS_APP_ID`, and `TASKLESS_SECRET`. We'll also set `TASKLES_REFLECT=1` to avoid using our plan's invocations.
-
-```bash
-# /.env
-
-# Enables Taskless Call Reflection, which avoids invocations by using
-# a local development client to emulate the Taskless client APIs
-TASKLESS_REFLECT=1
-
-# The base URL is the public URL your app is accessible on
-TASKLESS_BASE_URL=http://localhost:3000
-
-# These credentials come from your Taskless dashboard:
-TASKLESS_APP_ID=your_appid_here
-TASKLESS_SECRET=your_app_secret_key
-
-# This value secures your data by encrypting it before sending to Taskless
-# set it to a sufficiently long string
-TASKLESS_ENCRYPTION_KEY=
-
-# You can include previous encryption keys, comma `,` separated
-# in case you need to rotate your TASKLESS_ENCRYPTION_KEY to a new value
-# but have jobs that need to run using the old key still.
-TASKLESS_PREVIOUS_ENCRYPTION_KEYS=
-```
-
-<!-- info -->
-
-> :information_source: The `TASKLESS_REFLECT=1` tells the Taskless Queue not to send requests to the Taskless server. This is incredibly useful in development, as otherwise we'd need to use a tool such as ngrok or webhook.site to make our Queue accessible on a non-localhost URL
-
-<!-- /info -->
-
-Modify our `scripts.start` section of `package.json` to: `"start": "env-cmd node server.js"` (or the equivalent for your setup).
-
-## Adding the Queue to the Express App
-
-In express, our `createQueue` function will create a middleware router in the `route` property that takes care of handling your endpoint. It can be added to the root app object via `app.use` or a router via `router.use`.
+Express doesn't have a default convention for URL routes, instead relying on developers to string `app.use` and `router.use` statements together to map their URLs to handlers. An Express Route returned from `createQueue` contains a router at `<yourqueue>.router` suitable for mounting to your Application root.
 
 ```ts
-// /server.ts
-
+// /app.ts
 import express from "express";
-import EchoQueue from "./queues/echo";
+import EchoQueue from "./routes/queues/echo";
 
 const app = express();
 // ... your express app setup
@@ -122,40 +83,49 @@ const app = express();
 // can use app or router
 app.use(EchoQueue.router);
 
-app.listen(3000, () => {
-  console.log("Example app listening on port 3000");
+export default app;
 });
 ```
 
-## Using a Queue
+## Adding Items
 
-The `createQueue` both creates an express route handler and attaches the Taskless Queue methods. Using the queue is as simple as importing the queue object just like any other module and calling the `enqueue` method. We'll create an API endpoint that we can visit which triggers our job in Taskless.
+With the queue set up, sending items to your Queue is as easy as importing the queue and calling the `enqueue` method.
 
 ```ts
-// /server.ts
-import express from "express";
-import EchoQueue from "./queues/echo";
+// /some/hypothetical/file.ts
 
-// ... previous content
+import EchoQueue from "routes/queues/echo";
 
-// this is using Express 5, but you can also use .then() and .catch()
-app.get("/trigger-echo", async (req, res) => {
-  const job = await EchoQueue.enqueue(null, {
-    content:
-      "This is a test string, generated at: " + new Date().toLocaleString(),
-  });
-  res.send("Job was scheduled successfully with name: " + job.name);
-});
-
-app.listen(3000, () => {
-  console.log("Example app listening on port 3000");
+EchoQueue.enqueue("job-name", {
+  content: "This is a sample message",
 });
 ```
 
-The `enqueue` method takes three arguments:
+Enqueing a new Job takes two required arguments.
 
-1. An optional `name` for your job. If set to `null`, a uuid will be generated, though it's often helpful to specify the name of the job you're running.
-2. Your Job's `payload`. If using TypeScript, it will be automatically typechecked against your Queue's payload description
-3. A set of options for the Job, allowing retries, delayed runs, and repeated jobs.
+1. The `jobName`, which uniquely identifies the job. It's a good idea to provide a recognizable name for debugging purposes. It can be either a string `"<name>" + uniqueid`, or an array of values which will be collapsed into a key `["name", uniqueId]`. When a job is enqueued with an identical name, it will be updated to the new payload; making it easy to search and track when a job is rerun.
+2. The `payload`, as was defined during your `createQueue` function
 
-Accessing the URL `http://localhost:3000/trigger-echo` will trigger a call to the Taskless server and enqueue your job. Since we've enabled Taskless Reflect, we'll see a note in the console that our endpoint is being run immediately. A moment later, we'll see our "Received a job" string with our payload. Success!
+When you enqueue this job, Taskless will moments later call `/queues/echo` with the payload `{ "content": "This is a sample message" }` at least once, and will confirm it receives a `200` response code.
+
+## Next
+
+While this is a fabricated example designed to show how to build Queues with Taskless, there's a variety of other ways you can leverage a queueing system:
+
+- Move event based actions such as email verification or calling Mailchimp APIs out of the main path, giving users faster responses
+- Generate contact suggestions at a time relative to each individual user, spreading work and resource usage out over the day
+- Do computationally expensive operations one chunk at a time while reusing your serverless infrastructure
+
+There's no limit to what you can build.
+
+_View the full Express example at [github:taskless/examples/express](https://github.com/taskless/taskless/tree/main/examples/express)_
+
+## Related
+
+For more information on what to do next, we recommend the following sections:
+
+- [integrations/express](../api/integrations/express.md) - The Express Integration
+- [Jobs](../concepts/jobs.md) - Learn the difference between Evented and Scheduled Jobs in Taskless
+- [Environment Variables](../client/env.md) - Before going to production, learn what environment variables Taskless looks for
+- [Encryption](../concepts/encryption.md) - Learn how end-to-end encryption works with Taskless
+- [Dev Server](../dev/README.md) - Learn about the Taskless Dev Server

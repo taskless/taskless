@@ -1,24 +1,39 @@
 # Documentation Manifest for Taskless
 - title: Introduction to Taskless
-  slug: introduction
-  path: README.md
-- title: Get Started
+  slug: /
+  file: ./README.md
+- title: Getting Started
   routes:
     - title: Next.js
       slug: get-started/nextjs
-      path: get-started/nextjs.md
+      file: ./get-started/nextjs.md
     - title: Express
       slug: get-started/express
-      path: get-started/express.md
-- title: Taskless Client
+      file: ./get-started/express.md
+    - title: Other Integrations
+      slug: get-started/other
+      file: ./get-started/other.md
+- title: Concepts
   routes:
-    - title: Introduction
-      slug: client
-      path: client/README.md
-    - title: API Reference
-      path: client/api/README.md
-- title: Taskless.io
+    - title: Jobs
+      slug: concepts/jobs
+      file: ./concepts/jobs.md
+    - title: E2E Encryption
+      slug: concepts/encryption
+      file: ./concepts/encryption.md
+- title: Features
   routes:
-    - title: Using the Dashboard
-      slug: tasklessio/dashboard
-      path: tasklessio/dashboard.md
+    - title: Dev Server
+      slug: features/dev
+      file: ./features/dev-server.md
+- title: API Reference
+  routes:
+    - title: createQueue
+      slug: api/integrations/create-queue
+      file: ./api/integrations/createQueue.md
+    - title: Next.js
+      slug: api/integrations/nextjs
+      file: ./api/integrations/nextjs.md
+    - title: Express
+      slug: api/integrations/express
+      file: ./api/integrations/exporess.md

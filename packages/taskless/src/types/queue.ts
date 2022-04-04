@@ -1,20 +1,50 @@
 import type { IncomingHttpHeaders } from "http";
-import { Job, JobMeta, JobOptions } from "./job.js";
+import { DefaultJobOptions, Job, JobMeta, JobOptions } from "./job.js";
 
 /** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {
   /** The base url, defaults to process.env.TASKLESS_BASE_URL */
   baseUrl?: string;
-  /** Your Application's credential pair of an Application ID and Application Secret. Defaults to process.env.TASKLESS_APP_ID and process.env.TASKLESS_APP_SECRET */
+
+  /** Your Application's credential pair */
   credentials?: {
+    /**
+     * The Application ID from Taskless
+     * If unset, will default to process.env.TASKLESS_APP_ID
+     */
     appId: string;
+    /**
+     * The secret for Application ID
+     * If unset, will default to process.env.TASKLESS_APP_SECRET
+     */
     secret: string;
+    /**
+     * A list of expired / rotated secrets to maintain compatibility
+     * for unprocessed jobs. If unset, will default to a comma
+     * separated string in process.env.TASKLESS_PREVIOUS_APP_SECRETS
+     * and will be automatically split into an array by the Taskless
+     * client.
+     */
     expiredSecrets?: string[];
   };
-  /** An optional encryption key for e2e encryption of job data. Defaults to process.env.TASKLESS_ENCRYPTION_KEY */
+
+  /**
+   * An optional encryption key for e2e encryption of job data.
+   * Defaults to process.env.TASKLESS_ENCRYPTION_KEY. Must be
+   * set in either the process.env or at Queue creation in
+   * production to enable end-to-end encryption
+   */
   encryptionKey?: string;
-  /** Previous encryption keys to assist in key rotation. Defaults to a comma separated list in process.env.TASKLESS_PREVIOUS_ENCRYPTION_KEYS */
+
+  /**
+   * Previous encryption keys to assist in key rotation. If using
+   * process.env.TASKLESS_PREVIOUS_ENCRYPTION_KEYS, a comma separated list
+   * will be automatically split into an array for you
+   */
   expiredEncryptionKeys?: string[];
+
+  /** A default set of job options to apply to every job created in this queue */
+  jobOptions?: DefaultJobOptions;
 };
 
 /**
