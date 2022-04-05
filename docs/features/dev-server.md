@@ -37,7 +37,7 @@ And update your `package.json` to launch the Taskless Dev Server alongside your 
 
 ## Usage
 
-When you run your `dev` command, Taskless Dev Server will now start alongside your original code. By default, `@taskless/client` will prefer the development server when `process.env.NODE_ENV !== "production"`. You can explicitly change this behavior by setting the [env value](../api/env.md) `TASKLESS_DEV_ENABLED` to either `1` (force enable) or `0` (force disable).
+When you run your `dev` command, Taskless Dev Server will now start alongside your original code. By default, `@taskless/client` will prefer the development server when `process.env.NODE_ENV !== "production"`. You can explicitly change this behavior by setting the [env value](/docs/api/env.md) `TASKLESS_DEV_ENABLED` to either `1` (force enable) or `0` (force disable).
 
 Additional options can be specified when launching the Taskless Dev Server, outlined below.
 
@@ -54,5 +54,5 @@ Options:
   -h, --help     Show help                                             [boolean]
 ```
 
-- `-p --port` Sometimes, `3001` is already in use by part of your stack. If you change this value when launching the Taskless Dev Server, you should also set the [env value](../api/env.md) `TASKLESS_ENDPOINT` to point to the new base URL such as `http://localhost:8080`
+- `-p --port` Sometimes, `3001` is already in use by part of your stack. If you change this value when launching the Taskless Dev Server, you should also set the [env value](/docs/api/env.md) `TASKLESS_ENDPOINT` to point to the new base URL such as `http://localhost:8080`
 - `d --debug` TDS defaults to sharing more information in the console with you about job processing to help with debugging. You can lower the noise substantially by changing the debug level to `warn` or `error`

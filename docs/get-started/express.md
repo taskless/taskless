@@ -124,8 +124,8 @@ _View the full Express example at [github:taskless/examples/express](https://git
 
 For more information on what to do next, we recommend the following sections:
 
-- [integrations/express](../api/integrations/express.md) - The Express Integration
-- [Jobs](../concepts/jobs.md) - Learn the difference between Evented and Scheduled Jobs in Taskless
-- [Environment Variables](../client/env.md) - Before going to production, learn what environment variables Taskless looks for
-- [Encryption](../concepts/encryption.md) - Learn how end-to-end encryption works with Taskless
-- [Dev Server](../dev/README.md) - Learn about the Taskless Dev Server
+- [integrations/express](/docs/api/integrations/express.md) - The Express Integration
+- [Jobs](/docs/concepts/jobs.md) - Learn the difference between Evented and Scheduled Jobs in Taskless
+- [Environment Variables](/docs/api/env.md) - Before going to production, learn what environment variables Taskless looks for
+- [Encryption](/docs/concepts/encryption.md) - Learn how end-to-end encryption works with Taskless
+- [Dev Server](/docs/features/dev-server.md) - Learn about the Taskless Dev Server

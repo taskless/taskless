@@ -35,7 +35,7 @@ Jobs can be both disabled (by calling `.enqueue()` or `.update()` with `enabled:
 
 # Scheduled Jobs
 
-Scheduled Jobs behave similarly to Evented Jobs, but use the `runAt` and `runEvery` properties of the [`JobOptions`](../api/queue.md#job-options).
+Scheduled Jobs behave similarly to Evented Jobs, but use the `runAt` and `runEvery` properties of the [`JobOptions`](/docs/api/queue.md#job-options).
 
 - `runAt` is an [ISO-8601 Date and Time](https://en.wikipedia.org/wiki/ISO_8601), specifying a point in the future when a job should be run
 - `runEvery` is an [ISO-8601 Duration](https://en.wikipedia.org/wiki/ISO_8601#Durations) that, if set, specifies a recurring amount of time after `runAt` in which a job will be repeated

@@ -4,7 +4,7 @@ Creating a Taskless Queue directly lets you manage the integration with a framew
 
 ## Creating a Taskless Queue
 
-To create a Taskless Queue, you'll pass it a set of options that describe its routable URL, a callback for handling jobs, a set of [queue options](../api/queue.md#queue-options), and the default [job options](../api/queue.md#job-options).
+To create a Taskless Queue, you'll pass it a set of options that describe its routable URL, a callback for handling jobs, a set of [queue options](/docs/api/queue.md#queue-options), and the default [job options](/docs/api/queue.md#job-options).
 
 ```ts
 import { Queue } from "@taskless/client";
@@ -21,8 +21,8 @@ const queue = new Queue<T>({
 
 - `route`: The URL path name this Queue will be reachable on
 - `handler`: A Promise-returning callback that recieves a Job of type `T` and associated metadata
-- `queueOptions`: The [`QueueOptions`](../api/queue.md#queue-options) for this queue
-- `jobOptions`: The default [`JobOptions`](../api/queue.md#job-options) for this queue
+- `queueOptions`: The [`QueueOptions`](/docs/api/queue.md#queue-options) for this queue
+- `jobOptions`: The default [`JobOptions`](/docs/api/queue.md#job-options) for this queue
 
 ## Exposing Taskless Queue Methods
 
@@ -48,8 +48,8 @@ queue.receive({
 
 ## Examples
 
-- [next.js](../../packages/taskless/src/next.ts) is a full example of creating a custom intgeration that adhears to the Next.JS API signature while also providing the standard set of Taskless methods. Additionally, it exposes `withQueue`, a pattern that's used for Next.js middleware when wrapping handlers with new behavior.
+- [next.js](https://github.com/taskless/taskless/blob/main/packages/taskless/src/integrations/next.ts) is a full example of creating a custom intgeration that adhears to the Next.JS API signature while also providing the standard set of Taskless methods. Additionally, it exposes `withQueue`, a pattern that's used for Next.js middleware when wrapping handlers with new behavior.
 
 ## Related
 
-- [Queue Documentation](../api/queue.md)
+- [Queue Documentation](/docs/api/queue.md)

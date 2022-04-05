@@ -16,7 +16,7 @@ export default createQueue<Job>(
 
 - `path` Combined with the Base URL, this path resolves to a publicly accessible URL for your queue. In most cases, this is the part after your `.com` or `.io` such as `/api/queues/myQueueName`
 - `callback` A promise-returning function that will receive the job payload and metadata as arguments.
-- `config` A set of [`QueueOptions`](../queue.md#queueoptions) for this queue. You can use the config to set defaults for every job in the queue, override default environment values, or (if required by your integration) pass additional information into the queue generator
+- `config` A set of [`QueueOptions`](/docs/api/queue.md#queue-options) for this queue. You can use the config to set defaults for every job in the queue, override default environment values, or (if required by your integration) pass additional information into the queue generator
 
 Calling `createQueue` will return a Queue interface with, at a minimum, the following methods:
 
@@ -28,5 +28,4 @@ Calling `createQueue` will return a Queue interface with, at a minimum, the foll
 
 ## Related
 
-- [Queue](../queue.md) Queue Methods and Creation Options
-- [Job](../job.md) Job handlers, data, and metadata
+- [Queue](/docs/api/queue.md) Queue Methods and Creation Options

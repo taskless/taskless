@@ -6,7 +6,7 @@ Queues are the backbone of Taskless, representing both the dispatch and receptio
 
 Most Queue options at creation time have equivalent values in `process.env` that will be checked if not explicitly set during Queue creation. However, it may at times be useful to override a specific queue, change its encryption keys, or set specific default job options.
 
-For more information on environment variables beyond the definition below, see [Environment Variables](./env.md) for a full list.
+For more information on environment variables beyond the definition below, see [Environment Variables](/docs/api/env.md) for a full list.
 
 ```ts
 type QueueOptions = {
@@ -140,7 +140,7 @@ const job = await MyQueue.enqueue(
 
 **Enqueing a Job of the Same Name** If you enqueue a job with the same `name` property, the Job will instead be updated to your new configuration. This makes it easier to write idempotent tasks and debounce your job during periods of high activity.
 
-**Returns** A `Promise` that resolves to the [Job](./job) object generated from this method.
+**Returns** A `Promise` that resolves to the [Job](/docs/api/queue.md#job-options) object generated from this method.
 
 ### Update a Job `.update()`
 
@@ -158,11 +158,11 @@ const job = await MyQueue.update(
 
 - `name` (`string`) A unique name for this job within your application.
 - `?payload` (`<T>`, optional) Your job payload. If you defined the typing for `<T>` when creating your Queue, your payload will be type-checked against this value.
-- `?jobOptions` ([JobOptions](./job.md#joboptions), optional) Describes overrides to the Job Options for this specific Job such as a specific `runAt` value or an alternate number of `retries`.
+- `?jobOptions` ([JobOptions](/docs/api/queue.md#job-options), optional) Describes overrides to the Job Options for this specific Job such as a specific `runAt` value or an alternate number of `retries`.
 
 Updating a Job (instead of the default `enqueue()` method) is rarely used, but made available for operations such as altering a repeating task with new data. If a Job of the specified `name` does not exist, then `update()` will throw an error.
 
-**Returns** A `Promise` that resolves to the [Job](./job.md) object updated from this method.
+**Returns** A `Promise` that resolves to the `Job` object updated from this method.
 
 ### Delete a Job `.delete()`
 
@@ -178,7 +178,7 @@ const job = await MyQueue.delete(name as string);
 
 Deleting the Job should be seen as a last resort (for example, sensitive information exposed in the body payload). Instead, consider using `enqueue` or `update` to change the Job's `enabled` state to `false` which will prevent future runs.
 
-**Returns** A `Promise` that resolves to the [Job](./job.md) object deleted by this method.
+**Returns** A `Promise` that resolves to the `Job` object deleted by this method.
 
 ### Retrieve a Job `.get()`
 
@@ -194,7 +194,7 @@ Retrieving a Job may be important to ongoing health checks or reporting, and is 
 
 - `name` (`string`) A unique name for this job within your application.
 
-**Returns** A `Promise` that resolves to the [Job](./job.md) object retrieved by this method, or `null` if no job exists with the specified name.
+**Returns** A `Promise` that resolves to the `Job` object retrieved by this method, or `null` if no job exists with the specified name.
 
 ## Creating a Queue Directly
 

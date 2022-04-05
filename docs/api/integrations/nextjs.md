@@ -24,7 +24,7 @@ const Queue: TasklessNextApiHandler<Job> = createQueue<Job>(
 export default Queue;
 ```
 
-- See [createQueue](./createQueue.md) for the queue methods and options shared by all integrations
+- See [createQueue](/docs/api/integrations/createQueue.md) for the queue methods and options shared by all integrations
 
 In addition, `createQueue` for Next.js also exposes the following methods & properties
 
