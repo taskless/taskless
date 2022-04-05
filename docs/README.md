@@ -10,8 +10,8 @@ The fastest way to get started with Taskless is to follow a guide for your JavaS
 
 Jobs in Taskless generally take on two forms.
 
-- **Evented Jobs** ([read more](/docs/concepts/jobs.md#eventedjobs)) that are in response to a user action or external triggering event, and
-- **Scheduled Jobs** ([read more](/docs/concepts/jobs.md#scheduledjobs)) that are planned for a time in the future and may also recur
+- **Evented Jobs** ([read more](/docs/concepts/jobs.md#evented-jobs)) that are in response to a user action or external triggering event, and
+- **Scheduled Jobs** ([read more](/docs/concepts/jobs.md#scheduled-jobs)) that are planned for a time in the future and may also recur
 
 All Taskless Jobs share the same common API, with the difference being the existence of `runAt` and `runEvery` in the options to denote a job that is scheduled to run at a specific time and/or with a specific recurrence. Scheduled and Evented jobs are both available on the main Taskless site at Taskless.io.
 
