@@ -28,12 +28,18 @@
       file: /docs/features/dev-server.md
 - title: API Reference
   routes:
+    - title: Environment Variables
+      url: /docs/api/env
+      file: /docs/api/env.md
+    - title: Queue
+      url: /docs/api/queue
+      file: /docs/api/queue.md
     - title: createQueue
       url: /docs/api/integrations/create-queue
       file: /docs/api/integrations/createQueue.md
-    - title: Next.js
+    - title: Next.js Reference
       url: /docs/api/integrations/nextjs
       file: /docs/api/integrations/nextjs.md
-    - title: Express
+    - title: Express Reference
       url: /docs/api/integrations/express
-      file: /docs/api/integrations/exporess.md
+      file: /docs/api/integrations/express.md
