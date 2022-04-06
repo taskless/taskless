@@ -32,12 +32,14 @@ export type ExpressQueueOptions = QueueOptions;
  * @returns {TasklessNextApiHandler}
  */
 export function createQueue<T = undefined>(
+  name: string,
   route: string,
   handler: JobHandler<T>,
   queueOptions: ExpressQueueOptions,
   defaultJobOptions?: DefaultJobOptions
 ): TasklessExpressRouter<T> {
   const t = new Queue({
+    name,
     route,
     handler,
     queueOptions: queueOptions ?? {},
@@ -59,8 +61,12 @@ export function createQueue<T = undefined>(
       send: (json) => {
         response.status(200).json(json);
       },
-      sendError: (json) => {
-        response.status(500).json(json);
+      sendError: (statusCode, headers, json) => {
+        response.status(statusCode);
+        Object.getOwnPropertyNames(headers).forEach((name) => {
+          response.setHeader(name, headers[name] ?? "");
+        });
+        response.json(json);
       },
     });
   };

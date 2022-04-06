@@ -1,6 +1,6 @@
 # Jobs in Taskless
 
-Jobs in Taskless take two primary forms: **Evented Jobs** which are in response to either a user's action (or even another Job), and **Scheduled Jobs** which recur after a period of time. Under the hood, _a Scheduled Job is just an Evented Job with a known delay_ but it's useful to think of the concepts separately when planning your Queues.
+Jobs in Taskless take two primary forms: **Evented Jobs** which are in response to either a user's action (or even another Job), and **Scheduled Jobs** which occur and/or recur after a period of time. Under the hood, _a Scheduled Job is just an Evented Job with a known delay_ but it's useful to think of the concepts separately when planning your Queues.
 
 # Evented Jobs
 

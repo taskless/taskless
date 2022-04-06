@@ -56,6 +56,7 @@ type Echo = {
 };
 
 export default createQueue<Echo>(
+  "My Queue Name", // 👈🏼 The name of this queue
   "/queues/echo", // 👈🏼 The URL path this queue is reachable on
   async (job, meta) => {
     console.log("Received a job with payload and meta:", job, meta);
@@ -65,8 +66,9 @@ export default createQueue<Echo>(
 
 Our `createQueue` function takes two arguments:
 
-1. The `path` the API route is publicly reachable on. This is combined with your base url to create a full URL that Taskless should ping
-2. The `job` callback. An async function that receives your job along with any additional metadata
+1. The `name` of the Queue, making it easier to query and search later
+2. The `path` the API route is publicly reachable on. This is combined with your base url to create a full URL that Taskless should ping
+3. The `job` callback. An async function that receives your job along with any additional metadata
 
 ## Routing to the Queue
 
@@ -107,6 +109,10 @@ Enqueing a new Job takes two required arguments.
 2. The `payload`, as was defined during your `createQueue` function
 
 When you enqueue this job, Taskless will moments later call `/queues/echo` with the payload `{ "content": "This is a sample message" }` at least once, and will confirm it receives a `200` response code.
+
+## Errors
+
+By default, returning from your job handler will be seen as a successful call, regardless of return value. If you throw an error or have an unhandled exception, it will be caught by Taskless and the job will be marked as a failing call with the number of retries you specified at the queue and job level.
 
 ## Next
 

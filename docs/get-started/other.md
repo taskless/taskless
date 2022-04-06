@@ -46,6 +46,10 @@ queue.receive({
 - `send(obj)`: Given a JSON object as an argument, generate a success response and deliver the provided JSON argument as the result
 - `sendError(obj)`: Given a JSON object as an argument, generate an error response (most often 500) and deliver the provided JSON argument as the result
 
+## Errors
+
+By default, returning from your job handler will be seen as a successful call, regardless of return value. If you throw an error or have an unhandled exception, it will be caught by Taskless and the job will be marked as a failing call with the number of retries you specified at the queue and job level.
+
 ## Examples
 
 - [next.js](https://github.com/taskless/taskless/blob/main/packages/taskless/src/integrations/next.ts) is a full example of creating a custom intgeration that adhears to the Next.JS API signature while also providing the standard set of Taskless methods. Additionally, it exposes `withQueue`, a pattern that's used for Next.js middleware when wrapping handlers with new behavior.

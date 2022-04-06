@@ -37,12 +37,14 @@ export interface TasklessNextApiHandler<T>
  * @returns {TasklessNextApiHandler}
  */
 export function createQueue<T = undefined>(
+  name: string,
   route: string,
   handler: JobHandler<T>,
   queueOptions?: QueueOptions,
   defaultJobOptions?: DefaultJobOptions
 ): TasklessNextApiHandler<T> {
   const t = new Queue({
+    name,
     route,
     handler,
     queueOptions: queueOptions ?? {},
@@ -62,7 +64,13 @@ export function createQueue<T = undefined>(
       },
       getHeaders: () => req.headers,
       send: (json) => res.status(200).json(json),
-      sendError: (json) => res.status(500).json(json),
+      sendError: (code, headers, json) => {
+        res.status(code);
+        Object.getOwnPropertyNames(headers).forEach((name) => {
+          res.setHeader(name, headers[name] ?? "");
+        });
+        res.json(json);
+      },
     });
   };
 

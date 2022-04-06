@@ -26,6 +26,11 @@
     - title: Dev Server
       url: /docs/features/dev
       file: /docs/features/dev-server.md
+- title: Advanced
+  routes:
+    - title: Custom Errors
+      url: /docs/advanced/return-codes
+      file: /docs/advanced/return-codes.md
 - title: API Reference
   routes:
     - title: Environment Variables

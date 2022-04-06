@@ -1,8 +1,6 @@
-### Taskless.io GraphQL Schema @ https://for.taskless.io/api/graphql
-### Last Generated: 2022-03-02T16:04:11.575-08:00
-###
-### For details about connecting via GraphQL,
-### please see https://docs.taskless.io
+### for.taskless.io GraphQL Schema
+### Generated 2022-04-05T23:45:08.367-07:00
+### Questions? https://taskless.io/docs
 
 """
 Literally any value
@@ -69,6 +67,11 @@ input CreateJobInputType {
   method: JobMethodEnum = POST
 
   """
+  Specify a cosmetic name for the queue to help with searching and debugging
+  """
+  queue: String = "default"
+
+  """
   If the job fails, how many times should it be retried? Defaults to 5.
   """
   retries: Int = 5
@@ -89,7 +92,24 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-"\n    A string representing a duration conforming to the ISO8601 standard,\n    such as: P1W1DT13H23M34S\n    P is the duration designator (for period) placed at the start of the duration representation.\n    Y is the year designator that follows the value for the number of years.\n    M is the month designator that follows the value for the number of months.\n    W is the week designator that follows the value for the number of weeks.\n    D is the day designator that follows the value for the number of days.\n    T is the time designator that precedes the time components of the representation.\n    H is the hour designator that follows the value for the number of hours.\n    M is the minute designator that follows the value for the number of minutes.\n    S is the second designator that follows the value for the number of seconds.\n\n    Note the time designator, T, that precedes the time value.\n\n    Matches moment.js, Luxon and DateFns implementations\n    ,/. is valid for decimal places and +/- is a valid prefix\n  "
+"""
+A string representing a duration conforming to the ISO8601 standard,
+such as: P1W1DT13H23M34S
+P is the duration designator (for period) placed at the start of the duration representation.
+Y is the year designator that follows the value for the number of years.
+M is the month designator that follows the value for the number of months.
+W is the week designator that follows the value for the number of weeks.
+D is the day designator that follows the value for the number of days.
+T is the time designator that precedes the time components of the representation.
+H is the hour designator that follows the value for the number of hours.
+M is the minute designator that follows the value for the number of minutes.
+S is the second designator that follows the value for the number of seconds.
+
+Note the time designator, T, that precedes the time value.
+
+Matches moment.js, Luxon and DateFns implementations
+,/. is valid for decimal places and +/- is a valid prefix
+"""
 scalar Duration
 
 """
@@ -343,6 +363,11 @@ input ReplaceJobInputType {
   method: JobMethodEnum = POST
 
   """
+  Specify a cosmetic name for the queue to help with searching and debugging
+  """
+  queue: String = "default"
+
+  """
   If the job fails, how many times should it be retried? Defaults to 5.
   """
   retries: Int = 5
@@ -453,6 +478,11 @@ input UpdateJobInputType {
   The HTTP method to use when calling the endpoint
   """
   method: JobMethodEnum = POST
+
+  """
+  Specify a cosmetic name for the queue to help with searching and debugging
+  """
+  queue: String = "default"
 
   """
   If the job fails, how many times should it be retried? Defaults to 5.

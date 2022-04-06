@@ -1,4 +1,4 @@
-import type { IncomingHttpHeaders } from "http";
+import type { IncomingHttpHeaders, OutgoingHttpHeaders } from "http";
 import { DefaultJobOptions, Job, JobMeta, JobOptions } from "./job.js";
 
 /** A set of options for setting up a Taskless Queue */
@@ -99,5 +99,12 @@ export type GetHeadersCallback = () =>
   | IncomingHttpHeaders
   | Promise<IncomingHttpHeaders>;
 
-/** An integration callback for sending JSON back to Taskless.io */
+/** An integration callback for sending JSON back to Taskless.io with a success response */
 export type SendJsonCallback = (json: unknown) => void | Promise<void>;
+
+/** An integration callback for sending JSON back to Taskless.io with a status code */
+export type SendErrorJsonCallback = (
+  statusCode: number,
+  headers: OutgoingHttpHeaders,
+  json: unknown
+) => void | Promise<void>;

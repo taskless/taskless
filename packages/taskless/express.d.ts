@@ -4,4 +4,5 @@
 
 import express from "./dist/esm/integrations/express.js";
 export * from "./dist/esm/integrations/express.js";
+export * from "./dist/esm/client/error.js";
 export default express;

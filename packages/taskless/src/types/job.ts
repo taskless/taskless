@@ -1,5 +1,6 @@
 import type { TypeGuard } from "generic-type-guard";
 import tg from "generic-type-guard";
+import { OutgoingHttpHeaders } from "http";
 
 export type JobHeaders = {
   [header: string]: string;

@@ -8,6 +8,7 @@ import {
   JobMeta,
   JobOptions,
   QueueOptions,
+  SendErrorJsonCallback,
   SendJsonCallback,
   TasklessBody,
 } from "../types.js";
@@ -18,12 +19,16 @@ import { encode, decode, sign, verify } from "./encoder.js";
 import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
 import { DateTime } from "luxon";
+import { JobError } from "./error.js";
+import { OutgoingHttpHeaders } from "http";
 
 /**
  * Constructor arguments for the Taskless Queue
  * @template T Describes the payload used in the {@link JobHandler}
  */
 export type TasklessQueueConfig<T> = {
+  /** The name for the queue */
+  name: string;
   /** The route slug this Queue is managing */
   route: string;
   /**
@@ -259,7 +264,7 @@ export class Queue<T> {
     getBody: GetBodyCallback<TasklessBody>;
     getHeaders: GetHeadersCallback;
     send: SendJsonCallback;
-    sendError: SendJsonCallback;
+    sendError: SendErrorJsonCallback;
   }) {
     const { getBody, getHeaders, send, sendError } = functions;
     const body = await getBody();
@@ -274,19 +279,23 @@ export class Queue<T> {
 
     try {
       const result = await this.handler(payload, meta);
-      await send({
-        result: JSON.parse(JSON.stringify(result)),
-      });
+      await send(JSON.parse(JSON.stringify(result)));
       return;
     } catch (e) {
       console.error(e);
-      const isE = e instanceof Error;
-      await sendError({
-        route: this.route,
-        error: "Error thrown when running job",
-        details: isE ? e.message : "no message",
-        stack: isE ? e.stack ?? "no stack" : "no stack",
-      });
+      let statusCode = 500;
+      let statusMessage = "Internal Server Error";
+      let message = e instanceof Error ? e.message : undefined;
+      let headers: OutgoingHttpHeaders = {};
+
+      if (e instanceof JobError) {
+        statusCode = e.statusCode;
+        statusMessage = e.statusMessage;
+        message = e.message;
+        headers = e.headers;
+      }
+
+      await sendError(statusCode, headers, message ?? statusMessage);
     }
   }
 
