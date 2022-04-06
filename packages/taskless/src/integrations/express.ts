@@ -25,6 +25,7 @@ export type ExpressQueueOptions = QueueOptions;
 /**
  * Creates an Express Router object augmented with Taskess Queue methods
  * @template T Describes the payload and is passed through to {@link JobHandler}
+ * @param name A friendly Queue name for debugging and querying on Taskless.io
  * @param route The URL path to reach this route
  * @param handler A {@link JobHandler} that supports a payload of type `T`
  * @param queueOptions The {@link QueueOptions} for this queue

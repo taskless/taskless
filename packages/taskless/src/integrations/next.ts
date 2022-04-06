@@ -30,6 +30,7 @@ export interface TasklessNextApiHandler<T>
 /**
  * Creates a next.js compatible API Route that doubles as a Taskless Queue object
  * @template T Describes the payload and is passed through to {@link JobHandler} and {@link TasklessNextApiHandler}
+ * @param name A friendly Queue name for debugging and querying on Taskless.io
  * @param route The URL path to reach this route
  * @param handler A {@link JobHandler} that supports a payload of type `T`
  * @param queueOptions The {@link QueueOptions} for this queue
