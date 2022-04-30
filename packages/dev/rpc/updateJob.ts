@@ -53,6 +53,8 @@ export const updateJob = async (
     next.data.runEvery = input.runEvery;
   }
 
+  next.updatedAt = new Date().getTime();
+
   // manually unschedule
   next.schedule = {};
 

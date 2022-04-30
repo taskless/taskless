@@ -3,7 +3,7 @@ import PouchDB from "pouchdb";
 import upsert from "pouchdb-upsert";
 import find from "pouchdb-find";
 import memoryAdapter from "pouchdb-adapter-memory";
-import { Job } from "types";
+import { Job, JobLog } from "types";
 import { JobHeaders } from "@taskless/client";
 
 PouchDB.plugin(upsert);
@@ -40,19 +40,42 @@ const jobs = createPouch<Job>(
   async (db) => {
     await db.createIndex({
       index: {
-        fields: ["schedule.next", "schedule.check"],
+        // jobs with a check enabled, sort by next
+        fields: ["schedule.check", "schedule.next"],
       },
     });
 
     await db.createIndex({
       index: {
-        fields: ["lastLog"],
+        // jobs, sorted by updatedAt
+        fields: ["updatedAt"],
       },
     });
   }
 );
 
-export { jobs };
+const logs = createPouch<JobLog>(
+  new PouchDB<JobLog>("logs", {
+    adapter: "memory",
+  }),
+  async (db) => {
+    await db.createIndex({
+      index: {
+        // logs sorted by creation
+        fields: ["createdAt"],
+      },
+    });
+
+    await db.createIndex({
+      index: {
+        // logs by job id sorted by creation
+        fields: ["jobId", "createdAt"],
+      },
+    });
+  }
+);
+
+export { jobs, logs };
 
 export const jobToJobFragment = (name: string, job: Job): JobDataFragment => {
   return {

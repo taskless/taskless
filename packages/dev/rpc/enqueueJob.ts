@@ -23,15 +23,13 @@ export const enqueueJob = async (
   const db = await jobs.connect();
 
   await db.upsert(id, (doc) => {
-    if (typeof doc.runs === "undefined") {
-      doc.runs = 0;
-    }
+    doc.createdAt = new Date().getTime();
+    doc.updatedAt = new Date().getTime();
+
     if (!doc.schedule) {
       doc.schedule = {};
     }
-    if (!doc.logs) {
-      doc.logs = [];
-    }
+
     doc.data = {
       name: variables.name,
       headers: gqlHeadersToObject(variables.job.headers),

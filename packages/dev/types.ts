@@ -8,26 +8,33 @@ export type Context = {
   v5: (str: string) => string;
 };
 
-export type LogEntry = {
-  ts: string;
-  status: number;
-  output: string;
-};
-
 /**
  * A Taskless Dev Job as a document object
  * @see {isJob} ts-auto-guard:type-guard
  */
 export type Job = {
+  createdAt: number;
+  updatedAt: number;
   data: TasklessJob<unknown>;
   schedule: {
     check?: boolean;
     next?: number;
     attempt?: number;
   };
-  runs: number;
-  lastLog?: string;
-  logs?: LogEntry[];
+};
+
+/**
+ * A log entry as a document object
+ * Job (1) -> (M) JobLog
+ */
+export type JobLog = {
+  createdAt: number;
+  jobId: string;
+  data: {
+    status: string;
+    statusCode: number;
+    output: string;
+  };
 };
 
 // https://github.com/pouchdb/pouchdb/blob/master/packages/node_modules/pouchdb-errors/src/index.js

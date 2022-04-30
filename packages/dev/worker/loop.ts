@@ -1,9 +1,10 @@
 import { DateTime } from "luxon";
-import { jobs } from "./db";
+import { jobs, logs } from "./db";
 import { logger } from "winston/logger";
-import { Job, LogEntry } from "types";
+import { Job, JobLog } from "types";
 import phin from "phin";
 import { scheduleNext } from "./scheduler";
+import { v4 } from "uuid";
 
 const WAIT_INTERVAL = 300;
 const log = logger.child({
@@ -53,11 +54,13 @@ const tick = async () => {
 /** Handle a single instance of a job */
 const handle = async (id: string, doc: Job) => {
   const db = await jobs.connect();
+  const ldb = await logs.connect();
+
   const now = DateTime.now();
   const l = log.child({ job: doc.data.name });
   l.info("Handler invoked");
   let retry = false;
-  let logEntry: LogEntry | undefined = undefined;
+  let logEntry: JobLog["data"] | undefined = undefined;
 
   const headers = {
     ...(doc.data.headers ?? {}),
@@ -82,8 +85,8 @@ const handle = async (id: string, doc: Job) => {
       parse: "json",
     });
     logEntry = {
-      ts: now.toISO(),
-      status: resp.statusCode ?? 200,
+      status: `${resp.statusCode}`.indexOf("2") === 0 ? "COMPLETED" : "FAILED",
+      statusCode: resp.statusCode ?? 200,
       output: JSON.stringify(resp.body),
     };
     if (`${resp.statusCode}`.indexOf("2") !== 0) {
@@ -96,8 +99,8 @@ const handle = async (id: string, doc: Job) => {
     l.error(`Error received: ${msg}`);
     retry = (doc.schedule.attempt ?? 0) < doc.data.retries;
     logEntry = {
-      ts: now.toISO(),
-      status: 500,
+      status: "FAILED",
+      statusCode: 500,
       output: JSON.stringify({
         "@taskless/dev": true,
         error: msg,
@@ -105,37 +108,31 @@ const handle = async (id: string, doc: Job) => {
     };
   }
 
-  // add log
-  if (typeof logEntry === "undefined") {
-    // TODO
-  } else if (doc.logs) {
-    doc.logs.push(logEntry);
-  } else {
-    doc.logs = [logEntry];
-  }
+  try {
+    // log result
+    await ldb.put({
+      _id: v4(),
+      jobId: id,
+      createdAt: new Date().getTime(),
+      data: logEntry,
+    });
 
-  // run
-  if (typeof doc.runs === "undefined") {
-    doc.runs = 1;
-  } else {
-    doc.runs += 1;
-  }
+    // update doc record. If retrying, schedule the retry
+    doc.schedule.check = false;
+    if (retry) {
+      l.info("Linear rescheduling of job");
+      doc.schedule.check = true;
+      doc.schedule.next = now.plus({ seconds: 3 }).toMillis();
+      doc.schedule.attempt = (doc.schedule.attempt ?? 0) + 1;
+    }
+    await db.put(doc);
 
-  doc.lastLog = now.toISO();
-
-  // update doc record. If retrying, schedule the retry
-  doc.schedule.check = false;
-  if (retry) {
-    l.info("Linear rescheduling of job");
-    doc.schedule.check = true;
-    doc.schedule.next = now.plus({ seconds: 3 }).toMillis();
-    doc.schedule.attempt = (doc.schedule.attempt ?? 0) + 1;
-  }
-  await db.put(doc);
-
-  // if not retrying, schedule the next occurence (if applicable)
-  if (!retry && doc.data.runEvery) {
-    l.info("Scheduling next occurence");
-    await scheduleNext(id);
+    // if not retrying, schedule the next occurence (if applicable)
+    if (!retry && doc.data.runEvery) {
+      l.info("Scheduling next occurence");
+      await scheduleNext(id);
+    }
+  } catch (e) {
+    l.error(`Error received: ${e}`);
   }
 };
