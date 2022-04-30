@@ -12,6 +12,7 @@ type SampleQueue = {
 };
 
 const queue = createQueue<SampleQueue>(
+  "Sentry Queue",
   "/api/queues/sentry",
   async (job, meta) => {
     console.log("Echoing recevied message: " + job.message);

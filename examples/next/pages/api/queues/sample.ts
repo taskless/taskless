@@ -6,6 +6,7 @@ type SampleQueue = {
 };
 
 export default createQueue<SampleQueue>(
+  "Sample Queue",
   "/api/queues/sample",
   async (job, taskless) => {
     console.log("Echoing recevied message: " + job.message);
