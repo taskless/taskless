@@ -43,7 +43,7 @@ That's it for the setup. Let's create our first Queue!
 
 ## Creating a Queue
 
-Queues in the Express integration are Queues first, and an [Express Route](https://expressjs.com/en/4x/api.html#router) second. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console. Express comes with an integration pre-built into Taskless, available under `@taskless/client/express`.
+Queues in the Express integration are Queues first, and an [Express Route](https://expressjs.com/en/4x/api.html#router) second. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console. Taskless comes with an integration pre-built for Express, available under `@taskless/client/express`.
 
 ```ts
 // routes/queues/echo.ts

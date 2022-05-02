@@ -42,7 +42,7 @@ That's it for the setup. Let's create our first Queue!
 
 ## Creating a Queue
 
-Queues in the Next.js integration are both a standard [Next.js API Route](https://nextjs.org/docs/api-routes/introduction) and a Taskless Queue. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console.
+Queues in the Next.js integration are both a standard [Next.js API Route](https://nextjs.org/docs/api-routes/introduction) and a Taskless Queue. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console. Taskless comes with an integration pre-built for Next.js, available under `@taskless/client/next`.
 
 ```ts
 // /pages/api/queues/echo.ts
@@ -69,13 +69,11 @@ Our `createQueue` function takes three arguments:
 2. The `path` the API route is publicly reachable on. This is combined with your base url to create a full URL that Taskless should ping
 3. The `job` callback. An async function that receives your job along with any additional metadata
 
-## Routing to the Queue
-
-Next.js takes care of automatically routing requests to our API endpoint. If we're using a provider with edge functions such as Vercel, these API routes will also be packaged up for a serverless environment.
+If using Typescript, you can define `<T>` to establish typings for the Job's payload. Once created, we can use the default export from this file both for receiving job requests from Taskless. Next.js will automatically manage the routing to this file for us as a Serverless API function.
 
 ## Adding Items
 
-With the queue set up, sending items to your Queue is as easy as importing the queue and calling the `enqueue` method.
+With the queue set up, sending items to your Queue is straightforward. Import the API endpoint and call the `enqueue` method.
 
 ```ts
 // /some/hypothetical/file.ts
@@ -92,7 +90,9 @@ Enqueing a new Job takes two required arguments.
 1. The `jobName`, which uniquely identifies the job. It's a good idea to provide a recognizable name for debugging purposes. It can be either a string `"<name>" + uniqueid`, or an array of values which will be collapsed into a key `["name", uniqueId]`. When a job is enqueued with an identical name, it will be updated to the new payload; making it easy to search and track when a job is rerun.
 2. The `payload`, as was defined during your `createQueue` function
 
-When you enqueue this job, Taskless will moments later call `/queues/echo` with the payload `{ "content": "This is a sample message" }` at least once, and will confirm it receives a `200` response code.
+If you're using Typescript, the typings for `enqueue()`'s `payload` object will be typed to the definition you provided during `createQueue`.
+
+When you enqueue this job via `enqueue`, Taskless will send a request to `/api/queues/echo` with the payload `{ "content": "This is a sample message" }` at least once, and will confirm it receives a `200` response code.
 
 ## Errors
 
