@@ -43,7 +43,7 @@ That's it for the setup. Let's create our first Queue!
 
 ## Creating a Queue
 
-Queues in the Express integration are Queues first, and an [Express Route](https://expressjs.com/en/4x/api.html#router) second. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console.
+Queues in the Express integration are Queues first, and an [Express Route](https://expressjs.com/en/4x/api.html#router) second. In this example, we're going to create a queue called "echo", which just mirrors the job's body content to the console. Express comes with an integration pre-built into Taskless, available under `@taskless/client/express`.
 
 ```ts
 // routes/queues/echo.ts
@@ -70,6 +70,29 @@ Our `createQueue` function takes two arguments:
 2. The `path` the API route is publicly reachable on. This is combined with your base url to create a full URL that Taskless should ping
 3. The `job` callback. An async function that receives your job along with any additional metadata
 
+If using Typescript, you can define `<T>` to establish typings for the Job's payload. These typings are reserviced on `job` in your async callback.
+
+Once created, we can use the default export from this file both for enqueueing items and for receiving job requests from Taskless.
+
+## Adding Items
+
+With the queue set up, sending items to your Queue is straightforward. Import your Queue object and call `enqueue` with a Job name and a payload. If you're using Typescript, the typings for `enqueue()` will be typed to the definition you provided during `createQueue`.
+
+```ts
+// /some/hypothetical/file.ts
+
+import EchoQueue from "routes/queues/echo";
+
+EchoQueue.enqueue("job-name", {
+  content: "This is a sample message",
+});
+```
+
+Enqueing a new Job takes two required arguments.
+
+1. The `jobName`, which uniquely identifies the job. It's a good idea to provide a recognizable name for debugging purposes. It can be either a string `"<name>" + uniqueid`, or an array of values which will be collapsed into a key `["name", uniqueId]`. When a job is enqueued with an identical name, it will be updated to the new payload; making it easy to search and track when a job is rerun.
+2. The `payload`, as was defined during your `createQueue` function
+
 ## Routing to the Queue
 
 Express doesn't have a default convention for URL routes, instead relying on developers to string `app.use` and `router.use` statements together to map their URLs to handlers. An Express Route returned from `createQueue` contains a router at `<yourqueue>.router` suitable for mounting to your Application root.
@@ -89,26 +112,7 @@ export default app;
 });
 ```
 
-## Adding Items
-
-With the queue set up, sending items to your Queue is as easy as importing the queue and calling the `enqueue` method.
-
-```ts
-// /some/hypothetical/file.ts
-
-import EchoQueue from "routes/queues/echo";
-
-EchoQueue.enqueue("job-name", {
-  content: "This is a sample message",
-});
-```
-
-Enqueing a new Job takes two required arguments.
-
-1. The `jobName`, which uniquely identifies the job. It's a good idea to provide a recognizable name for debugging purposes. It can be either a string `"<name>" + uniqueid`, or an array of values which will be collapsed into a key `["name", uniqueId]`. When a job is enqueued with an identical name, it will be updated to the new payload; making it easy to search and track when a job is rerun.
-2. The `payload`, as was defined during your `createQueue` function
-
-When you enqueue this job, Taskless will moments later call `/queues/echo` with the payload `{ "content": "This is a sample message" }` at least once, and will confirm it receives a `200` response code.
+Now, when you enqueue this job, Taskless will send a request to `/queues/echo` with the payload `{ "content": "This is a sample message" }` at least once, and will confirm it receives a `200` response code.
 
 ## Errors
 
