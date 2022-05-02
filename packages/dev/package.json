@@ -1,6 +1,6 @@
 {
   "name": "@taskless/dev",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Development Server for Taskless.io",
   "author": {
     "name": "Taskless.io",
@@ -35,7 +35,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.5.0",
     "@tailwindcss/typography": "^0.5.2",
-    "@taskless/client": "^1.0.0",
+    "@taskless/client": "^1.1.0",
     "chalk": "^5.0.1",
     "classnames": "^2.3.1",
     "deepmerge": "^4.2.2",
