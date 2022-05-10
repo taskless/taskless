@@ -2,13 +2,11 @@ import { JobDataFragment } from "@taskless/client/dev";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose, { Schema, Types, Document } from "mongoose";
 
-// @ts-ignore
-if (!global.mongod) {
-  // @ts-ignore
-  global.mongod = true;
+// used to ensure a single mongod instance in development, even when HMR is running
+if (!globalThis.mongod) {
+  globalThis.mongod = true;
   MongoMemoryServer.create().then((mongod) => {
-    // @ts-ignore
-    global.mongod = mongod;
+    globalThis.mongod = mongod;
     mongoose.connect(mongod.getUri());
   });
 }
