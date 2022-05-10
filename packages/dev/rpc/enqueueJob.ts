@@ -4,10 +4,10 @@ import {
   RPCOperation,
 } from "@taskless/client/dev";
 import { DateTime } from "luxon";
-import { Context, Job } from "types";
-import { gqlHeadersToObject, jobs, jobToJobFragment } from "worker/db";
+import { Job as MJ, jobToJobFragment } from "mongo/db";
+import { Context } from "types";
 import { start } from "worker/loop";
-import { scheduleNext } from "worker/scheduler";
+import { gqlHeadersToObject } from "./common";
 
 export const isEnqueueJob = (v: RPCOperation): v is EnqueueJobMutationRPC => {
   return v.method === "enqueueJob";
@@ -20,36 +20,33 @@ export const enqueueJob = async (
   start();
   const id = context.v5(variables.name);
   const runAt = variables.job.runAt ?? DateTime.now().toISO();
-  const db = await jobs.connect();
 
-  await db.upsert(id, (doc) => {
-    doc.createdAt = new Date().getTime();
-    doc.updatedAt = new Date().getTime();
-
-    if (!doc.schedule) {
-      doc.schedule = {};
+  const job = await MJ.findOneAndUpdate(
+    { v5id: { $eq: id } },
+    {
+      $set: {
+        body: variables.job.body ?? undefined,
+        endpoint: variables.job.endpoint,
+        headers: gqlHeadersToObject(variables.job.headers),
+        name: variables.name,
+        retries: variables.job.retries === 0 ? 0 : variables.job.retries ?? 5,
+        runAt,
+        runEvery: variables.job.runEvery ?? undefined,
+        updatedAt: new Date(),
+        v5id: id,
+        schedule: {
+          next: DateTime.fromISO(runAt).toJSDate(),
+        },
+      },
+    },
+    {
+      returnDocument: "after",
+      upsert: true,
     }
-
-    doc.data = {
-      name: variables.name,
-      headers: gqlHeadersToObject(variables.job.headers),
-      enabled: variables.job.enabled === false ? false : true,
-      endpoint: variables.job.endpoint,
-      payload: variables.job.body ?? null,
-      retries: variables.job.retries === 0 ? 0 : variables.job.retries ?? 5,
-      runAt,
-      runEvery: variables.job.runEvery ?? null,
-    };
-
-    return doc as Job;
-  });
-
-  await scheduleNext(id);
-
-  const job = await db.get(id);
+  ).exec();
 
   if (!job) {
-    throw new Error("Could not create or replace Job");
+    throw new Error("No job could be created or updated");
   }
 
   return {

@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { QueryFunction, QueryKey, useQuery } from "react-query";
+import { QueryFunction, useQuery } from "react-query";
 import { Layout } from "components/Layout";
 import { DataTable } from "components/shared/DataTable";
 import { DateTime } from "luxon";
@@ -7,33 +7,26 @@ import { XIcon } from "@heroicons/react/solid";
 import { GetLogsResponse } from "./api/rest/logs";
 import { useRouter } from "next/router";
 
-type getLogsVariables = [QueryKey, { filters: any }];
-const getLogs: QueryFunction<GetLogsResponse, getLogsVariables> = async ({
-  queryKey,
-}) => {
-  const [_key, { filters }] = queryKey;
-  const sp = filters
-    ? "?" +
-      new URLSearchParams({
-        filters: JSON.stringify(filters),
-      }).toString()
-    : "";
-
-  const response = await fetch("/api/rest/logs" + sp);
+export const getLogs: QueryFunction<
+  GetLogsResponse,
+  ["logs", { search: string }]
+> = async ({ queryKey }) => {
+  const [_key, { search }] = queryKey;
+  const wl =
+    typeof window === "undefined"
+      ? "http://localhost:3001"
+      : window.location.href;
+  const u = new URL("/api/rest/logs", wl);
+  u.searchParams.append("q", search);
+  const response = await fetch(u.toString());
   const result = await response.json();
   return result;
 };
 
 const Logs: NextPage = () => {
   const r = useRouter();
-  const f = Array.isArray(r.query.filter) ? r.query.filter[0] : r.query.filter;
-  const filters = f ? JSON.parse(f) : null;
-  const { data } = useQuery<
-    GetLogsResponse,
-    unknown,
-    GetLogsResponse,
-    getLogsVariables
-  >(["jobs", { filters }], getLogs, {
+  const q = Array.isArray(r.query.q) ? r.query.q[0] : r.query.q;
+  const { data } = useQuery(["logs", { search: q ?? "" }], getLogs, {
     refetchInterval: 5000,
   });
 
@@ -42,9 +35,9 @@ const Logs: NextPage = () => {
       <div className="bg-white shadow-lg rounded p-3">
         <div className="flex flex-row items-center gap-3">
           <h2 className="text-xl font-medium pb-1 text-ellipsis flex flex-row items-center">
-            {filters ? "Results for:" : "All Logs"}
+            {q ? "Results for:" : "All Logs"}
           </h2>
-          <code className="text-xs">{JSON.stringify(filters)}</code>
+          {q ? <code className="text-xs">{q}</code> : null}
         </div>
         <DataTable<GetLogsResponse["logs"][0]>
           data={data?.logs ?? []}
@@ -59,7 +52,7 @@ const Logs: NextPage = () => {
               cellClassName: "relative",
               renderValue: ({ record }) => (
                 <span className="absolute left-3 right-3 top-4 whitespace-nowrap overflow-hidden text-ellipsis">
-                  {record.job?.data.name ?? "-"}
+                  {record.job?.name ?? "-"}
                 </span>
               ),
             },
@@ -67,17 +60,19 @@ const Logs: NextPage = () => {
               name: "Run",
               renderValue: ({ record }) => (
                 <span
-                  title={DateTime.fromMillis(record.createdAt)
+                  title={DateTime.fromJSDate(new Date(record.createdAt ?? 0))
                     .toLocal()
                     .toISO()}
                 >
-                  {DateTime.fromMillis(record.createdAt).toRelative()}
+                  {DateTime.fromJSDate(
+                    new Date(record.createdAt ?? 0)
+                  ).toRelative()}
                 </span>
               ),
             },
             {
               name: "Status",
-              renderValue: ({ record }) => <>{record.data.status}</>,
+              renderValue: ({ record }) => <>{record.status}</>,
             },
           ]}
           hasDetailsColumn
@@ -97,7 +92,7 @@ const Logs: NextPage = () => {
                     Headers
                   </span>
                   <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
-                    {JSON.stringify(record.job?.data.headers ?? {}, null, 2)}
+                    {JSON.stringify(record.job?.headers ?? {}, null, 2)}
                   </pre>
                 </div>
 
@@ -107,7 +102,7 @@ const Logs: NextPage = () => {
                   </span>
                   <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
                     {JSON.stringify(
-                      JSON.parse(record.job?.data.payload as string) ?? {},
+                      JSON.parse(record.job?.body as string) ?? {},
                       null,
                       2
                     )}
@@ -120,7 +115,7 @@ const Logs: NextPage = () => {
                   </span>
                   <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
                     {JSON.stringify(
-                      JSON.parse(record.data.output as string) ?? {},
+                      JSON.parse(record.output as string) ?? {},
                       null,
                       2
                     )}

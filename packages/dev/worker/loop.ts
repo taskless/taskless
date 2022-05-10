@@ -1,15 +1,20 @@
-import { DateTime } from "luxon";
-import { jobs, logs } from "./db";
+import { DateTime, Duration } from "luxon";
 import { logger } from "winston/logger";
-import { Job, JobLog } from "types";
 import phin from "phin";
-import { scheduleNext } from "./scheduler";
-import { v4 } from "uuid";
+import { Job, JobDoc, Log, Schedule } from "mongo/db";
+import { findNextTime } from "./scheduler";
 
-const WAIT_INTERVAL = 300;
+const WAIT_INTERVAL = 100;
+const MAX_JOB_CHUNK = 10;
+
 const log = logger.child({
   label: "worker/loop.ts",
 });
+
+/** Simple typeguard to discard null results */
+function isJobDoc(v: any): v is JobDoc {
+  return v !== null;
+}
 
 let started = false;
 /** Start the in-memory worker process. Protects itself against multiple instances */
@@ -25,55 +30,76 @@ export const start = () => {
 
 /** Find all jobs that are ready to run and asynchronously handle them */
 const tick = async () => {
-  const now = DateTime.now().toMillis();
-  const db = await jobs.connect();
-  const next = await db.find({
-    selector: {
-      "schedule.check": {
-        $eq: true,
+  let jobs: JobDoc[] = [];
+  while (jobs.length < MAX_JOB_CHUNK) {
+    const next = await Job.findOneAndUpdate(
+      {
+        "schedule.next": {
+          $lt: new Date(),
+        },
       },
-      "schedule.next": {
-        $lte: now,
+      {
+        $set: {
+          schedule: null,
+        },
       },
-    },
-  });
+      {
+        new: true,
+      }
+    ).exec();
 
-  if (!next || !next?.docs || next.docs?.length === 0) {
+    if (!next) {
+      break;
+    }
+    jobs.push(next);
+  }
+
+  if (jobs.length === 0) {
     // nothing to do
     setTimeout(tick, WAIT_INTERVAL);
     return;
   }
 
-  log.debug(`Found ${next?.docs?.length ?? 0} item(s)`);
+  log.debug(`Found ${jobs.length} item(s)`);
 
-  // run all pending jobs to complete/fail state
-  await Promise.allSettled(next.docs.map((doc) => handle(doc._id, doc)));
+  await Promise.allSettled(
+    jobs.filter<JobDoc>(isJobDoc).map((job) => handle(job))
+  );
   setTimeout(tick, WAIT_INTERVAL);
 };
 
 /** Handle a single instance of a job */
-const handle = async (id: string, doc: Job) => {
-  const db = await jobs.connect();
-  const ldb = await logs.connect();
+const handle = async (job: JobDoc) => {
+  if (job.enabled === false) {
+    // disabled
+    return;
+  }
 
   const now = DateTime.now();
-  const l = log.child({ job: doc.data.name });
+  const l = log.child({ job: job.name });
   l.info("Handler invoked");
+
   let retry = false;
-  let logEntry: JobLog["data"] | undefined = undefined;
+
+  const entry = new Log({
+    job: job._id,
+    jobId: job.v5id,
+  });
+
+  const jjson = job.toJSON();
 
   const headers = {
-    ...(doc.data.headers ?? {}),
+    ...(jjson.headers ?? {}),
     "user-agent": "Taskless DevServer Worker",
     "content-type": "application/json",
   };
 
   const request: phin.IOptions = {
-    url: doc.data.endpoint,
+    url: job.endpoint,
     method: "POST",
     headers,
     // attach data if set
-    ...(doc.data.payload ? { data: doc.data.payload } : {}),
+    ...(job.body ? { data: job.body } : {}),
     followRedirects: true,
     timeout: 15000,
   };
@@ -84,55 +110,54 @@ const handle = async (id: string, doc: Job) => {
       ...request,
       parse: "json",
     });
-    logEntry = {
-      status: `${resp.statusCode}`.indexOf("2") === 0 ? "COMPLETED" : "FAILED",
-      statusCode: resp.statusCode ?? 200,
-      output: JSON.stringify(resp.body),
-    };
+
+    entry.status =
+      `${resp.statusCode}`.indexOf("2") === 0 ? "COMPLETED" : "FAILED";
+    entry.statusCode = resp.statusCode ?? 200;
+    entry.output = JSON.stringify(resp.body);
     if (`${resp.statusCode}`.indexOf("2") !== 0) {
-      l.warn(`Non-2xx received from url: ${doc.data.endpoint}`);
-      retry = (doc.schedule.attempt ?? 0) < doc.data.retries;
+      l.warn(`Non-2xx received from url: ${job.endpoint}`);
+      retry = (job.schedule.attempt ?? 0) < (job.retries ?? 0) - 1;
     }
   } catch (e) {
     const msg =
       typeof e === "string" ? e : e instanceof Error ? e.message : `${e}`;
     l.error(`Error received: ${msg}`);
-    retry = (doc.schedule.attempt ?? 0) < doc.data.retries;
-    logEntry = {
-      status: "FAILED",
-      statusCode: 500,
-      output: JSON.stringify({
-        "@taskless/dev": true,
-        error: msg,
-      }),
-    };
-  }
-
-  try {
-    // log result
-    await ldb.put({
-      _id: v4(),
-      jobId: id,
-      createdAt: new Date().getTime(),
-      data: logEntry,
+    retry = (job.schedule.attempt ?? 0) < (job.retries ?? 0) - 1;
+    entry.status = "FAILED";
+    entry.statusCode = 500;
+    entry.output = JSON.stringify({
+      "@taskless/dev": true,
+      error: msg,
     });
-
-    // update doc record. If retrying, schedule the retry
-    doc.schedule.check = false;
-    if (retry) {
-      l.info("Linear rescheduling of job");
-      doc.schedule.check = true;
-      doc.schedule.next = now.plus({ seconds: 3 }).toMillis();
-      doc.schedule.attempt = (doc.schedule.attempt ?? 0) + 1;
-    }
-    await db.put(doc);
-
-    // if not retrying, schedule the next occurence (if applicable)
-    if (!retry && doc.data.runEvery) {
-      l.info("Scheduling next occurence");
-      await scheduleNext(id);
-    }
-  } catch (e) {
-    l.error(`Error received: ${e}`);
   }
+
+  if (!job.logs) {
+    job.logs = [];
+  }
+  job.logs.push(entry._id);
+
+  // save log
+  await entry.save();
+
+  // next scheduling
+  if (retry) {
+    l.info("Linear rescheduling of job");
+    job.schedule = new Schedule({
+      next: now.plus({ seconds: 3 }).toJSDate(),
+      attempt: (job.schedule.attempt ?? 0) + 1,
+    });
+  }
+  if (!retry && job.runEvery) {
+    l.info("Scheduling next occurence");
+    const runAt = DateTime.fromISO(job.runAt);
+    const interval = Duration.fromISO(job.runEvery);
+    const nextRun = findNextTime(runAt, interval, now);
+    job.schedule = new Schedule({
+      next: nextRun.toJSDate(),
+      attempt: 0,
+    });
+  }
+
+  await job.save();
 };

@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import {
   MutationFunction,
   QueryFunction,
-  QueryKey,
   useMutation,
   useQuery,
   useQueryClient,
@@ -10,19 +9,43 @@ import {
 import { Layout } from "components/Layout";
 import { DataTable } from "components/shared/DataTable";
 import { DateTime, Duration } from "luxon";
-import { FastForwardIcon, ReplyIcon, XIcon } from "@heroicons/react/solid";
+import {
+  FastForwardIcon,
+  PlusIcon,
+  ReplyIcon,
+  XIcon,
+} from "@heroicons/react/solid";
 import Link from "next/link";
+import React, { useCallback } from "react";
+import { useBoolean } from "usehooks-ts";
+import { AlterJobModal, Fields } from "components/shared/Modals/AlterJob";
 import { GetJobsResponse } from "./api/rest/jobs";
-import { useCallback } from "react";
 import { PromoteJobResponse } from "./api/rest/job/[id]/promote";
 import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
+import { UpsertJobResponse } from "./api/rest/job/upsert";
+import { EnqueueJobMutationVariables } from "@taskless/client/dev";
 
-type promoteJobMutationVariables = {
-  id: string;
+const getJobs: QueryFunction<
+  GetJobsResponse,
+  ["jobs", { search: string }]
+> = async ({ queryKey }) => {
+  const [_key, { search }] = queryKey;
+  const wl =
+    typeof window === "undefined"
+      ? "http://localhost:3001"
+      : window.location.href;
+  const u = new URL("/api/rest/jobs", wl);
+  u.searchParams.append("q", search);
+  const response = await fetch(u.toString());
+  const result = await response.json();
+  return result;
 };
+
 const promoteJob: MutationFunction<
   PromoteJobResponse,
-  promoteJobMutationVariables
+  {
+    id: string;
+  }
 > = async (args) => {
   const response = await fetch(`/api/rest/job/${args.id}/promote`, {
     method: "POST",
@@ -31,12 +54,11 @@ const promoteJob: MutationFunction<
   return result;
 };
 
-type replayJobMutationVariables = {
-  id: string;
-};
 const replayJob: MutationFunction<
   ReplayJobResponse,
-  replayJobMutationVariables
+  {
+    id: string;
+  }
 > = async (args) => {
   const response = await fetch(`/api/rest/job/${args.id}/replay`, {
     method: "POST",
@@ -45,34 +67,32 @@ const replayJob: MutationFunction<
   return result;
 };
 
-type getJobsVariables = [QueryKey, { filters: any }];
-const getJobs: QueryFunction<GetJobsResponse, getJobsVariables> = async ({
-  queryKey,
-}) => {
-  const [_key, { filters }] = queryKey;
-  const sp = filters
-    ? "?" +
-      new URLSearchParams({
-        filters: JSON.stringify(filters),
-      }).toString()
-    : "";
-
-  const response = await fetch("/api/rest/jobs" + sp);
+const upsertJob: MutationFunction<
+  UpsertJobResponse,
+  EnqueueJobMutationVariables
+> = async (args) => {
+  const response = await fetch(`/api/rest/job/upsert`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(args),
+  });
   const result = await response.json();
   return result;
 };
 
 /** Get run data (next and last) from a record */
 const extractRunData = (row: GetJobsResponse["jobs"][0]) => {
-  const now = DateTime.local();
-  const lastRunner = row.lastLog ?? null;
+  const now = DateTime.now();
+  const lastRunner = row.logs?.[0] ?? null;
 
-  const runAt = row.schedule.next
-    ? DateTime.fromMillis(row.schedule.next)
+  const runAt = row.schedule?.next
+    ? DateTime.fromJSDate(new Date(row.schedule.next))
     : null;
   const nextRun = runAt && runAt > now ? runAt.toLocal() : undefined;
-  const lastRun = lastRunner
-    ? DateTime.fromMillis(lastRunner.createdAt).toLocal()
+  const lastRun = lastRunner?.createdAt
+    ? DateTime.fromJSDate(new Date(lastRunner.createdAt)).toLocal()
     : undefined;
 
   return {
@@ -82,13 +102,14 @@ const extractRunData = (row: GetJobsResponse["jobs"][0]) => {
 };
 
 const Home: NextPage = () => {
+  const {
+    value: showCreate,
+    setTrue: openCreateModal,
+    setFalse: closeCreateModal,
+  } = useBoolean(false);
+
   const qc = useQueryClient();
-  const { data } = useQuery<
-    GetJobsResponse,
-    unknown,
-    GetJobsResponse,
-    getJobsVariables
-  >(["jobs", { filters: null }], getJobs, {
+  const { data } = useQuery(["jobs", { search: "" }], getJobs, {
     refetchInterval: 5000,
   });
 
@@ -104,8 +125,54 @@ const Home: NextPage = () => {
     },
   });
 
+  const { mutate: upsert } = useMutation(upsertJob, {
+    onSuccess: () => {
+      qc.invalidateQueries("jobs");
+    },
+  });
+
+  const onCreateJob = useCallback(
+    (d: Fields) => {
+      // object => gql-like
+      const headers =
+        typeof d.headers !== "undefined"
+          ? Object.keys(d.headers).map((h) => ({
+              name: h,
+              value: `${d.headers?.[h as keyof typeof d.headers]}`,
+            }))
+          : undefined;
+      upsert({
+        name: d.name,
+        job: {
+          endpoint: d.endpoint,
+          enabled: d.enabled === false ? false : true,
+          runAt: d.runAt,
+          runEvery: d.runEvery,
+          headers,
+          body: d.body,
+        },
+      });
+    },
+    [upsert]
+  );
+
   return (
     <Layout title="Jobs - Taskless Development Server">
+      <div className="flex flex-row gap-3 pb-3">
+        <div className="w-full relative flex flex-row">{/* Search */}</div>
+        <button
+          className="flex-shrink-0 bg-brand-700 text-white px-3 py-2 rounded-md flex flex-row items-center gap-3 hover:bg-brand-500 transition"
+          onClick={openCreateModal}
+        >
+          <PlusIcon className="h-5 w-5" />
+          Create a Job
+        </button>
+        <AlterJobModal
+          show={showCreate}
+          close={closeCreateModal}
+          onConfirm={onCreateJob}
+        />
+      </div>
       <div className="bg-white shadow-lg rounded p-3">
         <div className="flex flex-row items-center gap-3">
           <h2 className="text-xl font-medium pb-1 text-ellipsis flex-grow">
@@ -120,7 +187,7 @@ const Home: NextPage = () => {
               renderValue: ({ data: row }) => {
                 return (
                   <div>
-                    <span className="truncate">{row.data.name}</span>
+                    <span className="truncate">{row.name}</span>
                   </div>
                 );
               },
@@ -172,7 +239,7 @@ const Home: NextPage = () => {
             {
               name: "Last Status",
               renderValue: ({ data: row }) => (
-                <>{row.lastLog?.data.status ?? "-"}</>
+                <>{row.logs?.[0]?.status ?? "-"}</>
               ),
             },
           ]}
@@ -192,14 +259,14 @@ const Home: NextPage = () => {
                   <div className="flex flex-col w-full md:w-1/3 lg:w-1/4">
                     <div className="font-semibold">Enabled</div>
                     <div className="text-xs overflow-hidden text-ellipsis">
-                      {row.data.enabled ? "TRUE" : "FALSE"}
+                      {row.enabled ? "TRUE" : "FALSE"}
                     </div>
                   </div>
 
                   <div className="flex flex-col w-full md:w-1/3 lg:w-1/4">
                     <div className="font-semibold">Endpoint</div>
                     <div className="text-xs overflow-hidden text-ellipsis">
-                      {row.data.endpoint}
+                      {row.endpoint}
                     </div>
                   </div>
 
@@ -227,13 +294,13 @@ const Home: NextPage = () => {
                     <div
                       className="text-xs overflow-hidden text-ellipsis"
                       title={
-                        row.data.runEvery
-                          ? Duration.fromISO(row.data.runEvery).toISO()
+                        row.runEvery
+                          ? Duration.fromISO(row.runEvery).toISO()
                           : "-"
                       }
                     >
-                      {row.data.runEvery
-                        ? Duration.fromISO(row.data.runEvery).toHuman()
+                      {row.runEvery
+                        ? Duration.fromISO(row.runEvery).toHuman()
                         : "-"}
                     </div>
                   </div>
@@ -245,7 +312,7 @@ const Home: NextPage = () => {
                   Headers
                 </span>
                 <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
-                  {JSON.stringify(row.data.headers ?? {}, null, 2)}
+                  {JSON.stringify(row.headers ?? {}, null, 2)}
                 </pre>
               </div>
 
@@ -254,20 +321,20 @@ const Home: NextPage = () => {
                   Body
                 </span>
                 <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
-                  {JSON.stringify(
-                    JSON.parse(row.data.payload as string) ?? {},
-                    null,
-                    2
-                  )}
+                  {row.body
+                    ? JSON.stringify(
+                        JSON.parse(row.body as string) ?? {},
+                        null,
+                        2
+                      )
+                    : ""}
                 </pre>
               </div>
 
               <div className="pt-6 text-sm">
                 <Link
                   href={`/logs?${new URLSearchParams({
-                    filter: JSON.stringify({
-                      jobId: row._id,
-                    }),
+                    q: `jobId:${row.v5id}`,
                   }).toString()}`}
                 >
                   <a className="underline text-gray-700 decoration-gray-700 hover:text-brand-700 hover:decoration-brand-700 transition">
