@@ -44,7 +44,7 @@ const Logs: NextPage = () => {
           columns={[
             {
               name: "ID",
-              renderValue: ({ record }) => <code>{record._id}</code>,
+              renderValue: ({ record }) => <code>{record.v4id ?? ""}</code>,
             },
             {
               name: "Job",

@@ -1,6 +1,7 @@
 import { JobDataFragment } from "@taskless/client/dev";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose, { Schema, Types, Document } from "mongoose";
+import { v4 } from "uuid";
 
 // used to ensure a single mongod instance in development, even when HMR is running
 if (!globalThis.mongod) {
@@ -12,31 +13,32 @@ if (!globalThis.mongod) {
 }
 
 interface ScheduleDoc extends Document {
-  next: Date;
   attempt?: number;
+  next: Date;
 }
 
 const schedule = new Schema<ScheduleDoc>({
-  next: Date,
   attempt: {
     type: Number,
     default: 0,
   },
+  next: Date,
 });
 
 export interface LogDoc extends Document {
   createdAt?: Date;
-  status: string;
-  statusCode: number;
-  output: string;
   job?: JobDoc;
   jobId: string;
+  output: string;
+  status: string;
+  statusCode: number;
+  v4id: string;
 }
 
 const logs = new Schema<LogDoc>({
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: () => Date.now(),
   },
   status: String,
   statusCode: Number,
@@ -46,6 +48,10 @@ const logs = new Schema<LogDoc>({
     ref: () => Job,
   },
   jobId: String,
+  v4id: {
+    type: String,
+    default: () => v4(),
+  },
 });
 
 export interface JobDoc extends Document {
