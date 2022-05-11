@@ -1,6 +1,6 @@
-Packages in @taskless are synchronized, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder which maps to our published packages.
+Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
-# next (tentative 1.2.0)
+# 1.2.0 (upcoming)
 
 #### 🎉Features
 
@@ -13,6 +13,7 @@ Packages in @taskless are synchronized, with a single changelog across all pacak
 #### 🎒 Misc
 
 - **@taskless/dev** Switches PouchDB for [mongo-memory-server](https://www.npmjs.com/package/mongodb-memory-server). While it adds a bit more overhead to start up a Mongo server in development, it makes it much easier to use Mango queries for querying task and job information.
+- **@taskless/client** Moved to home in `/packages` matching its package name to reduce confusion
 
 # 1.1.0 - released May 2, 2022
 
