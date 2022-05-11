@@ -3,8 +3,8 @@ import { DefaultJobOptions, Job, JobMeta, JobOptions } from "./job.js";
 
 /** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {
-  /** The base url, defaults to process.env.TASKLESS_BASE_URL */
-  baseUrl?: string;
+  /** The base url, defaults to process.env.TASKLESS_BASE_URL. Set to `false` to manage the full URL yourself */
+  baseUrl?: string | boolean;
 
   /** Your Application's credential pair */
   credentials?: {

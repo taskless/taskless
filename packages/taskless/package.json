@@ -1,7 +1,7 @@
 {
   "name": "@taskless/client",
-  "version": "1.1.0",
   "description": "Client for Taskless.io",
+  "version": "1.1.0",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -14,29 +14,33 @@
   },
   "homepage": "https://github.com/taskless/taskless/tree/main/packages/taskless",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "./index.js",
   "types": "index.d.js",
   "exports": {
+    "./package.json": "./package.json",
     ".": {
+      "types": "./index.d.ts",
+      "module": "./dist/esm/index.js",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./index.d.ts"
+      "default": "./dist/cjs/index.js"
     },
     "./dev": {
+      "types": "./dev.d.ts",
+      "module": "./dist/esm/dev.js",
       "import": "./dist/esm/dev.js",
-      "require": "./dist/cjs/dev.js",
-      "types": "./dev.d.ts"
+      "default": "./dist/cjs/dev.js"
     },
     "./next": {
+      "types": "./next.d.ts",
       "import": "./dist/esm/integrations/next.js",
-      "require": "./dist/cjs/integrations/next.js",
-      "types": "./next.d.ts"
+      "module": "./dist/esm/integrations/next.js",
+      "require": "./dist/cjs/integrations/next.js"
     },
     "./express": {
+      "types": "./express.d.ts",
       "import": "./dist/esm/integrations/express.js",
-      "require": "./dist/cjs/integrations/express.js",
-      "types": "./express.d.ts"
+      "module": "./dist/esm/integrations/express.js",
+      "require": "./dist/cjs/integrations/express.js"
     }
   },
   "files": [
@@ -47,8 +51,10 @@
     "express.d.ts",
     "next.js",
     "next.d.ts",
+    "index.js",
     "index.d.ts"
   ],
+  "sideEffects": false,
   "engines": {
     "node": "12 || 14 || 15 || 16 || 17"
   },
@@ -131,5 +137,13 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "keywords": [
+    "job",
+    "queue",
+    "nextjs",
+    "express",
+    "task",
+    "taskless"
+  ]
 }

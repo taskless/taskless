@@ -18,12 +18,11 @@ import {
 import Link from "next/link";
 import React, { useCallback } from "react";
 import { useBoolean } from "usehooks-ts";
-import { AlterJobModal, Fields } from "components/shared/Modals/AlterJob";
+import { AlterJobModal, Fields } from "components/Modals/AlterJob";
 import { GetJobsResponse } from "./api/rest/jobs";
 import { PromoteJobResponse } from "./api/rest/job/[id]/promote";
 import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
-import { UpsertJobResponse } from "./api/rest/job/upsert";
-import { EnqueueJobMutationVariables } from "@taskless/client/dev";
+import { UpsertJobResponse, UpsertJobVariables } from "./api/rest/job/upsert";
 
 const getJobs: QueryFunction<
   GetJobsResponse,
@@ -69,7 +68,7 @@ const replayJob: MutationFunction<
 
 const upsertJob: MutationFunction<
   UpsertJobResponse,
-  EnqueueJobMutationVariables
+  UpsertJobVariables
 > = async (args) => {
   const response = await fetch(`/api/rest/job/upsert`, {
     method: "POST",
@@ -99,6 +98,12 @@ const extractRunData = (row: GetJobsResponse["jobs"][0]) => {
     next: nextRun,
     last: lastRun,
   };
+};
+
+type AdvancedFields = {
+  queueName: string;
+  appID: string;
+  appSecret: string;
 };
 
 const Home: NextPage = () => {
@@ -131,7 +136,7 @@ const Home: NextPage = () => {
     },
   });
 
-  const onCreateJob = useCallback(
+  const onConfirm = useCallback(
     (d: Fields) => {
       // object => gql-like
       const headers =
@@ -143,6 +148,11 @@ const Home: NextPage = () => {
           : undefined;
       upsert({
         name: d.name,
+        __meta: {
+          appId: d.appId ?? undefined,
+          queueName: d.queueName ?? undefined,
+          secret: d.appSecret ?? undefined,
+        },
         job: {
           endpoint: d.endpoint,
           enabled: d.enabled === false ? false : true,
@@ -170,7 +180,7 @@ const Home: NextPage = () => {
         <AlterJobModal
           show={showCreate}
           close={closeCreateModal}
-          onConfirm={onCreateJob}
+          onConfirm={onConfirm}
         />
       </div>
       <div className="bg-white shadow-lg rounded p-3">

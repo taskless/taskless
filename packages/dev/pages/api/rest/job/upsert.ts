@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { enqueueJob } from "rpc/enqueueJob";
-import { v5 } from "uuid";
-import {
-  EnqueueJobMutation,
-  EnqueueJobMutationRPC,
-} from "@taskless/client/dev";
+import { EnqueueJobMutationRPC } from "@taskless/client/dev";
+import { Queue, Job } from "@taskless/client";
 
 const initAppId = "00000000-0000-0000-0000-000000000000";
 
@@ -12,32 +8,46 @@ type ErrorResponse = {
   error: string;
 };
 
-export type UpsertJobResponse = EnqueueJobMutation;
+export type UpsertJobResponse = {
+  upsertJob: Job<any>;
+};
+
+export type UpsertJobVariables = EnqueueJobMutationRPC["variables"] & {
+  /** Describes unique data required to process this entry */
+  __meta?: {
+    queueName?: string;
+    appId?: string;
+    secret?: string;
+  };
+};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<EnqueueJobMutation | ErrorResponse | null>
+  res: NextApiResponse<UpsertJobResponse | ErrorResponse>
 ) {
-  let h;
-  try {
-    h = JSON.parse(req.body.headers);
-  } catch {}
+  const variables: UpsertJobVariables = req.body;
 
-  const appId = h?.["x-taskless-app-id"] ?? initAppId;
+  const q = new Queue({
+    name: variables.__meta?.queueName ?? "manual",
+    route: variables.job.endpoint,
+    queueOptions: {
+      baseUrl: false,
+      credentials: {
+        appId: variables.__meta?.appId ?? initAppId,
+        secret: variables.__meta?.secret ?? "",
+      },
+    },
+  });
 
-  const context = {
-    v5: (value: string) => v5(value, appId),
-  };
+  const j = await q.enqueue("job name", variables.job.body, {
+    enabled: variables.job.enabled,
+    headers: variables.job.headers,
+    retries: variables.job.retries,
+    runAt: variables.job.runAt ?? null,
+    runEvery: variables.job.runEvery,
+  });
 
-  const variables: EnqueueJobMutationRPC["variables"] = req.body;
-
-  if (!variables.name || !variables.job.endpoint) {
-    return res.status(500).json({
-      error: "Missing fields: name, job.endpoint",
-    });
-  }
-
-  const result = await enqueueJob(variables, context);
-
-  return res.status(200).json(result);
+  return res.status(200).json({
+    upsertJob: j,
+  });
 }

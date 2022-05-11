@@ -1,3 +1,1 @@
-import { Queue } from "./client/Queue.js";
-
-export { Queue };
+export { Queue } from "./client/Queue.js";

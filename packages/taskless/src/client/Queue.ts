@@ -35,7 +35,7 @@ export type TasklessQueueConfig<T> = {
    * A callback handler for processing the job
    * @template T The expected payload object
    */
-  handler: JobHandler<T>;
+  handler?: JobHandler<T>;
   /** Options applied to the Queue globally */
   queueOptions?: QueueOptions;
   /** Default options applied to newly enqueued jobs */
@@ -44,27 +44,11 @@ export type TasklessQueueConfig<T> = {
 
 /** Queue options plus required values in order for the client to work properly */
 type ResolvedQueueOptions = QueueOptions & {
-  baseUrl: string;
+  baseUrl: string | boolean;
   credentials: {
     appId: string;
     secret: string;
   };
-};
-
-/** A console warning if the user hasn't acknowledged unencrypted values are OK in production */
-const warnUnencrypted = () => {
-  if (
-    process.env.TASKLESS_NO_ENCRYPTION_WARNING !== "1" &&
-    process.env.NODE_ENV === "production"
-  ) {
-    console.warn(
-      [
-        "Using unencrypted values means that your job data is stored",
-        "and transmitted in the clear. If this was intentional, please",
-        "set TASKLESS_NO_ENCRYPTION_WARNING=1 to silence this message",
-      ].join(" ")
-    );
-  }
 };
 
 /** Helper for missing items in the constructor */
@@ -113,7 +97,7 @@ const firstOf = <T>(unk: T | T[]) => {
 
 export class Queue<T> {
   private route: string;
-  private handler: JobHandler<T>;
+  private handler?: JobHandler<T>;
   private queueOptions: ResolvedQueueOptions;
   private jobOptions: DefaultJobOptions;
 
@@ -123,18 +107,17 @@ export class Queue<T> {
       args.queueOptions ?? {},
     ]);
 
-    if (!options.baseUrl) {
+    if (typeof options.baseUrl === "undefined") {
       throw new Error(errorMissing("baseUrl", "TASKLESS_BASE_URL"));
-    } else if (!options.credentials || !options.credentials.appId) {
+    } else if (
+      typeof options.credentials === "undefined" ||
+      typeof options.credentials.appId === "undefined"
+    ) {
       throw new Error(errorMissing("credentials.appId", "TASKLESS_APP_ID"));
-    } else if (!options.credentials.secret) {
+    } else if (typeof options.credentials.secret === "undefined") {
       throw new Error(
         errorMissing("credentials.secret", "TASKLESS_APP_SECRET")
       );
-    }
-
-    if (!options.encryptionKey) {
-      warnUnencrypted();
     }
 
     this.queueOptions = {
@@ -196,10 +179,10 @@ export class Queue<T> {
 
   /** Resolves a route to a fully qualified URL */
   protected resolveRoute() {
-    return (
-      this.queueOptions.baseUrl +
-      (this.route.indexOf("/") === 0 ? this.route : "/" + this.route)
-    );
+    return this.queueOptions.baseUrl === false
+      ? this.route
+      : this.queueOptions.baseUrl +
+          (this.route.indexOf("/") === 0 ? this.route : "/" + this.route);
   }
 
   /** Gets an instance of the GraphQL client or a simplified dev client */
@@ -267,6 +250,13 @@ export class Queue<T> {
     sendError: SendErrorJsonCallback;
   }) {
     const { getBody, getHeaders, send, sendError } = functions;
+
+    // skip missing handler (enqueue-only)
+    if (typeof this.handler === "undefined") {
+      await sendError(500, {}, "This Queue was not configured with a handler");
+      return;
+    }
+
     const body = await getBody();
     const payload = this.b2p(body);
     const h: Awaited<ReturnType<typeof getHeaders>> = await getHeaders();

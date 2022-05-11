@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { Dialog, Switch, Transition } from "@headlessui/react";
 import {
   AdjustmentsIcon,
+  BeakerIcon,
   CalendarIcon,
   CodeIcon,
 } from "@heroicons/react/solid";
@@ -33,6 +34,12 @@ export type Fields = {
   headers?: string;
   /** Payload body to include with the request, collapsed to a JSON string */
   body?: string;
+  /** A custom app id to use with the request */
+  appId?: string;
+  /** A custom queue name to use with the request */
+  queueName?: string;
+  /** An app secret for signing the job */
+  appSecret?: string;
 };
 
 interface AlterJobModalProps {
@@ -47,7 +54,7 @@ const BUTTON_CLASS =
   "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition";
 
 type Modality = "create" | "edit";
-type Panels = "basic" | "scheduling" | "data";
+type Panels = "basic" | "scheduling" | "data" | "advanced";
 type Recurrence = "none" | "cron" | "iso";
 
 export const AlterJobModal: React.FC<AlterJobModalProps> = ({
@@ -59,7 +66,6 @@ export const AlterJobModal: React.FC<AlterJobModalProps> = ({
 }) => {
   const { handleSubmit, register, reset, clearErrors, formState } = useForm({
     mode: "onSubmit",
-    reValidateMode: "onSubmit",
     shouldFocusError: false,
     defaultValues: {
       name: initialValues?.name ?? "",
@@ -69,6 +75,9 @@ export const AlterJobModal: React.FC<AlterJobModalProps> = ({
       recuriso: initialValues?.runEvery ?? "",
       headers: initialValues?.headers ?? "",
       body: initialValues?.body ?? "",
+      appId: "",
+      appSecret: "none",
+      queueName: initialValues?.queueName ?? "manual",
     },
   });
   const { value: enabled, toggle: swapEnabled } = useBoolean(true);
@@ -117,6 +126,9 @@ export const AlterJobModal: React.FC<AlterJobModalProps> = ({
         runEvery: runEvery,
         headers: ifc(data.headers, initialValues?.headers),
         body: ifc(data.body, initialValues?.body),
+        appId: data.appId,
+        appSecret: data.appSecret,
+        queueName: data.queueName,
       });
     },
     [
@@ -201,6 +213,7 @@ export const AlterJobModal: React.FC<AlterJobModalProps> = ({
                 className="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all w-full sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full sm:p-6"
                 onSubmit={handleSubmit(handleCreate)}
                 as="form"
+                autoComplete="off"
               >
                 <div className="flex flex-row gap-6">
                   <div className="flex flex-col gap-4 text-sm pt-8 flex-shrink-0">
@@ -238,6 +251,19 @@ export const AlterJobModal: React.FC<AlterJobModalProps> = ({
                     >
                       <CodeIcon className="h-4 w-4 md:mr-1" />
                       <span className="hidden md:inline-block">Job Data</span>
+                    </button>
+                    <button
+                      type="button"
+                      className={cx(
+                        "flex flex-row items-center rounded-md hover:bg-gray-100 px-3 py-2",
+                        panel === "advanced"
+                          ? "text-brand-500"
+                          : "text-gray-500"
+                      )}
+                      onClick={() => setPanel("advanced")}
+                    >
+                      <BeakerIcon className="h-4 w-4 md:mr-1" />
+                      <span className="hidden md:inline-block">Advanced</span>
                     </button>
                   </div>
                   <div className="flex-grow">
@@ -582,6 +608,108 @@ export const AlterJobModal: React.FC<AlterJobModalProps> = ({
                                 }
                               `}
                               {...register("body")}
+                            />
+                          </div>
+                        </fieldset>
+                      </div>
+                      {/* Advanced Settings */}
+                      <div
+                        className={cx(
+                          "flex flex-col gap-6 transition-all w-full",
+                          panel === "advanced"
+                            ? ""
+                            : "w-0 opacity-0 overflow-hidden"
+                        )}
+                      >
+                        <fieldset>
+                          {/* search- for 1password https://1password.community/discussion/comment/606453/#Comment_606453 */}
+                          <label
+                            htmlFor="search-appId"
+                            className="block text-sm font-medium text-gray-700 whitespace-nowrap"
+                          >
+                            App ID
+                            <em
+                              className={cx(
+                                "text-xs ml-2",
+                                formState.errors.appId?.message
+                                  ? "text-orange-500"
+                                  : "text-gray-500"
+                              )}
+                            >
+                              {formState.errors.appId?.message ??
+                                "Set a specific application ID in development"}
+                            </em>
+                          </label>
+                          <div className="mt-1">
+                            <input
+                              type="text"
+                              id="search-appId"
+                              className={cx(
+                                "shadow-sm block w-full sm:text-sm border-gray-300 rounded-md"
+                              )}
+                              placeholder="00000000-00..."
+                              {...register("appId")}
+                              autoComplete="off"
+                            />
+                          </div>
+                        </fieldset>
+                        <fieldset>
+                          {/* search- for 1password https://1password.community/discussion/comment/606453/#Comment_606453 */}
+                          <label
+                            htmlFor="search-appSecret"
+                            className="block text-sm font-medium text-gray-700 whitespace-nowrap"
+                          >
+                            Application Secret
+                            <em
+                              className={cx(
+                                "text-xs ml-2",
+                                formState.errors.appSecret?.message
+                                  ? "text-orange-500"
+                                  : "text-gray-500"
+                              )}
+                            >
+                              {formState.errors.appSecret?.message ??
+                                "Set an application secret for signing this job"}
+                            </em>
+                          </label>
+                          <div className="mt-1">
+                            <input
+                              type="text"
+                              id="search-appSecret"
+                              className={cx(
+                                "shadow-sm block w-full sm:text-sm border-gray-300 rounded-md"
+                              )}
+                              {...register("appSecret")}
+                              autoComplete="off"
+                            />
+                          </div>
+                        </fieldset>
+                        <fieldset>
+                          <label
+                            htmlFor="queueName"
+                            className="block text-sm font-medium text-gray-700 whitespace-nowrap"
+                          >
+                            Queue Name
+                            <em
+                              className={cx(
+                                "text-xs ml-2",
+                                formState.errors.queueName?.message
+                                  ? "text-orange-500"
+                                  : "text-gray-500"
+                              )}
+                            >
+                              {formState.errors.queueName?.message ??
+                                "Override the queue name used to group this job in search results"}
+                            </em>
+                          </label>
+                          <div className="mt-1">
+                            <input
+                              type="text"
+                              id="queueName"
+                              className={cx(
+                                "shadow-sm block w-full sm:text-sm border-gray-300 rounded-md"
+                              )}
+                              {...register("queueName")}
                             />
                           </div>
                         </fieldset>
