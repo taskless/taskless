@@ -1870,9 +1870,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@taskless/client@workspace:*, @taskless/client@workspace:packages/taskless":
+"@taskless/client@workspace:*, @taskless/client@workspace:packages/client":
   version: 0.0.0-use.local
-  resolution: "@taskless/client@workspace:packages/taskless"
+  resolution: "@taskless/client@workspace:packages/client"
   dependencies:
     "@babel/core": ^7.17.5
     "@babel/eslint-parser": ^7.17.0
