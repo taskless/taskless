@@ -47,7 +47,7 @@
     },
     "hooks": {
       "before:init": [
-        "yarn release:before:init || true"
+        "yarn workspace run release:before:init || true"
       ]
     }
   },
