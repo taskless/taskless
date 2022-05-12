@@ -162,8 +162,15 @@ export class Queue<T> {
       ],
       body.signature
     );
+
     if (!ver) {
-      throw new Error("Signature mismatch");
+      if (process.env.NODE_ENV !== "development") {
+        throw new Error("Signature mismatch");
+      } else {
+        console.error(
+          "Signature mismatch. This can happen if you've enqueued a job with one secret, but dequeued the job with another. In production, this will generate an error."
+        );
+      }
     }
 
     const payload = decode<T>(
@@ -174,6 +181,7 @@ export class Queue<T> {
         ...(this.queueOptions.expiredEncryptionKeys ?? []),
       ].filter((t) => t)
     );
+
     return payload;
   }
 

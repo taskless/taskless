@@ -134,14 +134,14 @@ export const encode = <T>(obj: T, secret?: string): EncodeResult => {
 const decodeOne = (
   text: string,
   transport: Transport,
-  secret: string
+  secret?: string
 ): string => {
   const algo = transport.alg;
   if (algo === "none") {
     return text;
   }
 
-  const key = strToKey(secret, algo);
+  const key = strToKey(secret ?? "", algo);
 
   const decipher = crypto.createDecipheriv(
     algo,
@@ -172,14 +172,7 @@ export const decode = <T>(
   transport: Transport,
   secrets: (string | undefined)[]
 ): T => {
-  if (transport.alg === "none") {
-    return text as unknown as T;
-  }
-
-  for (const secret of secrets) {
-    if (typeof secret === "undefined") {
-      continue;
-    }
+  for (const secret of secrets.concat(undefined)) {
     try {
       // break on success
       const result = decodeOne(text, transport, secret);
