@@ -1,5 +1,6 @@
-import type { TypeGuard } from "generic-type-guard";
 import tg from "generic-type-guard";
+
+import type { TypeGuard } from "generic-type-guard";
 
 export type JobHeaders = {
   [header: string]: string;
@@ -9,6 +10,13 @@ export type JobHeaders = {
 const isJobHeaders: TypeGuard<JobHeaders> = (o: unknown): o is JobHeaders => {
   return tg.isObject(o);
 };
+
+/**
+ * A Taskless Job identifier, either a string, number, or an array of
+ * strings and numbers to namespace a job record. Job Identifiers must be unique to
+ * the Taskless application.
+ */
+export type JobIdentifier = string | number | (string | number)[];
 
 /** A set of options on a per-job level */
 export type JobOptions = {

@@ -1,10 +1,19 @@
-import type { IncomingHttpHeaders, OutgoingHttpHeaders } from "http";
-import { DefaultJobOptions, Job, JobMeta, JobOptions } from "./job.js";
+import type { IncomingHttpHeaders, OutgoingHttpHeaders } from "node:http";
+import type {
+  DefaultJobOptions,
+  Job,
+  JobIdentifier,
+  JobMeta,
+  JobOptions,
+} from "./job.js";
 
 /** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {
   /** The base url, defaults to process.env.TASKLESS_BASE_URL. Set to `false` to manage the full URL yourself */
   baseUrl?: string | boolean;
+
+  /** A separator for compound keys (passed as arrays). Defaults to `-` */
+  separator?: string;
 
   /** Your Application's credential pair */
   credentials?: {
@@ -51,39 +60,49 @@ export type QueueOptions = {
  * Describes the set of Queue Methods available on a Taskless Integration
  * @template T Types the payload expected in `enqueue` and `update`, as well as the payload key returned from `enqueue`, `update`, `delete`, and `get`
  */
-export type QueueMethods<T> = {
+export interface CreateQueueMethods<T> {
   /**
    * Adds an item to the queue. If an item of the same name exists, it will be replaced with this new data
-   * @param name The Job's identifiable name
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
    * @param payload The Job's payload to be delivered
    * @param options Job options. These overwrite the default job options specified on the queue at creation time
    * @throws Error when the job could not be created in the Taskless system
    * @returns The `Job` object
    */
-  enqueue: (name: string, payload: T, options?: JobOptions) => Promise<Job<T>>;
+  enqueue: (
+    name: JobIdentifier,
+    payload: T,
+    options?: JobOptions
+  ) => Promise<Job<T>>;
+
   /**
    * Update an existing item in the queue
-   * @param name The Job's name
-   * @param payload
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
+   * @param payload The Job's new payload of type T. If not provded, the existing payload will be used
    * @param options The Job Options. These are merged on top of the default Job Options specified on the queue at creation time
    * @throws Error when there is no existing item to update
    * @returns The `Job` object
    */
-  update: (name: string, payload: T, options?: JobOptions) => Promise<Job<T>>;
+  update: (
+    name: JobIdentifier,
+    payload?: T,
+    options?: JobOptions
+  ) => Promise<Job<T>>;
+
   /**
    * Delete an item from the queue
-   * @param name The Job's name
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
    * @throws Error if the job could not be deleted
    * @returns The deleted `Job` object, or `null` if no job was deleted
    */
-  delete: (name: string) => Promise<Job<T> | null>;
+  delete: (name: JobIdentifier) => Promise<Job<T> | null>;
   /**
    * Retrieve an item from the Taskless queue
-   * @param name the Job's name
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
    * @returns The `Job` object or `null` if no job was deleted
    */
-  get: (name: string) => Promise<Job<T> | null>;
-};
+  get: (name: JobIdentifier) => Promise<Job<T> | null>;
+}
 
 /** The Job Handler signature, taking a `payload` and `meta` */
 export type JobHandler<T> = (payload: T, meta: JobMeta) => Awaited<unknown>;

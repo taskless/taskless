@@ -8,7 +8,8 @@
     "dev": "concurrently -n taskless,express \"yarn:dev:taskless\" \"yarn:dev:express\"",
     "dev:taskless": "taskless",
     "dev:express": "node -r dotenv/config ./bin/www.js dotenv_config_path=./.env.development",
-    "start": "node ./bin/www.js"
+    "start": "node ./bin/www.js",
+    "build": "echo 'no express build step required'"
   },
   "dependencies": {
     "@taskless/client": "1.2.0-next.1",

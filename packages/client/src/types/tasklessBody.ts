@@ -1,5 +1,8 @@
-import tg, { TypeGuard } from "generic-type-guard";
-import { Cipher, isCipher, SupportedCiphers } from "./ciphers.js";
+import tg from "generic-type-guard";
+import { isCipher } from "./ciphers.js";
+
+import type { TypeGuard } from "generic-type-guard";
+import type { Cipher, SupportedCiphers } from "./ciphers.js";
 
 /** Describes the taskless Transport Metadata */
 export type Transport = {

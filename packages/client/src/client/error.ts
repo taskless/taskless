@@ -1,4 +1,4 @@
-import { OutgoingHttpHeaders } from "http";
+import type { OutgoingHttpHeaders } from "node:http";
 
 /** A stand-in error object that works with Phin */
 export class RequestError extends Error {

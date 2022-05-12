@@ -1,11 +1,12 @@
-import {
+import { getSdk } from "./__generated__/schema.js";
+
+import type {
   DeleteJobMutation,
   DeleteJobMutationVariables,
   EnqueueJobMutation,
   EnqueueJobMutationVariables,
   GetJobByNameQuery,
   GetJobByNameQueryVariables,
-  getSdk,
   UpdateJobMutation,
   UpdateJobMutationVariables,
 } from "./__generated__/schema.js";

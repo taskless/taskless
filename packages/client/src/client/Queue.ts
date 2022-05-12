@@ -1,10 +1,22 @@
 import merge from "deepmerge";
-import {
+import { DateTime } from "luxon";
+
+import { JobError } from "./error.js";
+import { JobMethodEnum } from "../__generated__/schema.js";
+import { create as createGraphqlClient } from "./graphqlClient.js";
+import { create as createRpcClient } from "./rpcClient.js";
+import { encode, decode, sign, verify } from "./encoder.js";
+import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
+import { headersToGql } from "../graphql-helpers/headers.js";
+
+import type { OutgoingHttpHeaders } from "node:http";
+import type {
   DefaultJobOptions,
   GetBodyCallback,
   GetHeadersCallback,
   Job,
   JobHandler,
+  JobIdentifier,
   JobMeta,
   JobOptions,
   QueueOptions,
@@ -12,32 +24,32 @@ import {
   SendJsonCallback,
   TasklessBody,
 } from "../types.js";
-import { create as createGraphqlClient } from "./graphqlClient.js";
-import { create as createRpcClient } from "./rpcClient.js";
-import { JobMethodEnum } from "../__generated__/schema.js";
-import { encode, decode, sign, verify } from "./encoder.js";
-import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
-import { headersToGql } from "../graphql-helpers/headers.js";
-import { DateTime } from "luxon";
-import { JobError } from "./error.js";
-import { OutgoingHttpHeaders } from "http";
 
 /**
  * Constructor arguments for the Taskless Queue
  * @template T Describes the payload used in the {@link JobHandler}
  */
 export type TasklessQueueConfig<T> = {
-  /** The name for the queue */
+  /**
+   * The name for the queue
+   * Queues in Taskless are a search based grouping, used to quickly search for related jobs. If
+   * you need to separate traffic for the purposes of rate limiting, consider using applications,
+   * each which can receive its own ID and secret.
+   */
   name: string;
-  /** The route slug this Queue is managing */
-  route: string;
+
+  /** The route slug this Queue is managing. Can either be a string or a function that provides a string */
+  route: string | (() => string);
+
   /**
    * A callback handler for processing the job
    * @template T The expected payload object
    */
   handler?: JobHandler<T>;
-  /** Options applied to the Queue globally */
+
+  /** Options applied to the Queue globally such as custom credentials or a base URL */
   queueOptions?: QueueOptions;
+
   /** Default options applied to newly enqueued jobs */
   jobOptions?: DefaultJobOptions;
 };
@@ -96,7 +108,7 @@ const firstOf = <T>(unk: T | T[]) => {
 };
 
 export class Queue<T> {
-  private route: string;
+  private route: string | (() => string);
   private handler?: JobHandler<T>;
   private queueOptions: ResolvedQueueOptions;
   private jobOptions: DefaultJobOptions;
@@ -132,6 +144,12 @@ export class Queue<T> {
     };
     this.route = args.route;
     this.handler = args.handler;
+  }
+
+  /** Packs a name into string format */
+  packName(name: JobIdentifier): string {
+    const s = this.queueOptions.separator ?? "-";
+    return Array.isArray(name) ? name.join(s) : `${name}`;
   }
 
   /** Turn a payload into a Taskless Body */
@@ -187,10 +205,13 @@ export class Queue<T> {
 
   /** Resolves a route to a fully qualified URL */
   protected resolveRoute() {
+    const route =
+      typeof this.route === "function" ? this.route() : this.route ?? "";
+
     return this.queueOptions.baseUrl === false
-      ? this.route
+      ? route
       : this.queueOptions.baseUrl +
-          (this.route.indexOf("/") === 0 ? this.route : "/" + this.route);
+          (route.indexOf("/") === 0 ? route : "/" + route);
   }
 
   /** Gets an instance of the GraphQL client or a simplified dev client */
@@ -304,17 +325,14 @@ export class Queue<T> {
    * @param options Additional job options overriding the queue's defaults
    * @returns a Promise containing the Job object enqueued
    */
-  async enqueue(
-    name: string,
-    payload: T,
-    options?: JobOptions
-  ): Promise<Job<T>> {
+  async enqueue(name: JobIdentifier, payload: T, options?: JobOptions) {
     const opts = merge.all<JobOptions>([this.jobOptions, options ?? {}]);
     const client = this.getClient();
     const body = this.p2b(payload);
+    const resolvedName = this.packName(name);
 
     const job = await client.enqueueJob({
-      name,
+      name: resolvedName,
       job: {
         endpoint: this.resolveRoute(),
         method: JobMethodEnum.Post,
@@ -350,16 +368,17 @@ export class Queue<T> {
    * @returns a Promise containing the updated Job object
    */
   async update(
-    name: string,
+    name: JobIdentifier,
     payload: T | undefined,
     options?: JobOptions
   ): Promise<Job<T>> {
     const opts = merge.all<JobOptions>([this.jobOptions, options ?? {}]);
     const client = this.getClient();
     const body = typeof payload !== "undefined" ? this.p2b(payload) : undefined;
+    const resolvedName = this.packName(name);
 
     const job = await client.updateJob({
-      name,
+      name: resolvedName,
       job: {
         endpoint: this.resolveRoute(),
         method: JobMethodEnum.Post,
@@ -393,11 +412,12 @@ export class Queue<T> {
    * @param name The name of the job
    * @returns a Promise containing the Job object that was removed
    */
-  async delete(name: string): Promise<Job<T> | null> {
+  async delete(name: JobIdentifier): Promise<Job<T> | null> {
     const client = this.getClient();
+    const resolvedName = this.packName(name);
 
     const job = await client.deleteJob({
-      name,
+      name: resolvedName,
     });
 
     if (!job.deleteJob) {
@@ -414,11 +434,12 @@ export class Queue<T> {
     };
   }
 
-  async get(name: string): Promise<Job<T> | null> {
+  async get(name: JobIdentifier): Promise<Job<T> | null> {
     const client = this.getClient();
+    const resolvedName = this.packName(name);
 
     const result = await client.getJobByName({
-      name,
+      name: resolvedName,
     });
 
     if (!result.job) {

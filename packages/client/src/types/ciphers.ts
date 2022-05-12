@@ -1,6 +1,7 @@
-import type { CipherGCMTypes } from "crypto";
-import type { TypeGuard } from "generic-type-guard";
 import tg from "generic-type-guard";
+
+import type { CipherGCMTypes } from "node:crypto";
+import type { TypeGuard } from "generic-type-guard";
 
 /** Supported ciphers for end to end encryption */
 export type SupportedCiphers = Extract<CipherGCMTypes, "aes-256-gcm"> | "none";

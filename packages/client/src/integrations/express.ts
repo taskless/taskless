@@ -1,20 +1,26 @@
-import {
-  JobHandler,
-  QueueMethods,
-  QueueOptions,
-  isTasklessBody,
-  DefaultJobOptions,
-} from "../types.js";
 import * as express from "express";
+
 import { Queue } from "../client/Queue.js";
+import { isTasklessBody } from "../types.js";
+
+import type {
+  JobHandler,
+  QueueOptions,
+  DefaultJobOptions,
+  CreateQueueMethods,
+} from "../types.js";
+
+export { JobError } from "../types.js";
 
 /**
  * An Express compatible API Handler, with Taskless Queue support
- * @template T Used for typing the {@link QueueMethods}
+ * @template T Used for typing the {@link CreateQueueMethods}
  */
-export interface TasklessExpressRouter<T> extends QueueMethods<T> {
+export interface TasklessExpressRouter<T> extends CreateQueueMethods<T> {
   /** The Express router object which should be mounted at Application root via `app.use()` */
   router: express.Router;
+  /** Change the mount point for this queue when using Express' sub routers */
+  mount: (at: string) => void;
 }
 
 /**
@@ -36,12 +42,13 @@ export function createQueue<T = undefined>(
   name: string,
   route: string,
   handler: JobHandler<T>,
-  queueOptions: ExpressQueueOptions,
+  queueOptions?: ExpressQueueOptions,
   defaultJobOptions?: DefaultJobOptions
 ): TasklessExpressRouter<T> {
+  let mountAt: string | undefined;
   const t = new Queue({
     name,
-    route,
+    route: () => (mountAt ?? "") + route,
     handler,
     queueOptions: queueOptions ?? {},
     jobOptions: defaultJobOptions ?? {},
@@ -80,6 +87,9 @@ export function createQueue<T = undefined>(
     update: (name, payload, options) => t.update(name, payload, options),
     delete: (name) => t.delete(name),
     get: (name) => t.get(name),
+    mount: (at: string) => {
+      mountAt = at;
+    },
     router: router,
   };
 

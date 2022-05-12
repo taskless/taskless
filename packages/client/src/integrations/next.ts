@@ -1,12 +1,15 @@
-import {
-  JobHandler,
-  QueueMethods,
-  QueueOptions,
-  isTasklessBody,
-  DefaultJobOptions,
-} from "../types.js";
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { Queue } from "../client/Queue.js";
+import { isTasklessBody } from "../types.js";
+
+import type {
+  JobHandler,
+  QueueOptions,
+  DefaultJobOptions,
+  CreateQueueMethods,
+} from "../types.js";
+import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+
+export { JobError } from "../types.js";
 
 /**
  * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern
@@ -18,13 +21,13 @@ type NextMethods<T> = {
 
 /**
  * A next.js compatible API Handler, with Taskless Queue support
- * @template T Used for typing the {@link QueueMethods} and {@link NextMethods} objects
+ * @template T Used for typing the {@link CreateQueueMethods} and {@link NextMethods} objects
  * @param req The NextApiRequest which extends http#IncomingMessage
  * @param res The NextApiResponse which extends http#ServerResponse
  */
 export interface TasklessNextApiHandler<T>
   extends NextApiHandler,
-    QueueMethods<T>,
+    CreateQueueMethods<T>,
     NextMethods<T> {}
 
 /**

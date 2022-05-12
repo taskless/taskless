@@ -1,8 +1,11 @@
-import { Requester, getSdk } from "../__generated__/schema.js";
 import pRetry from "p-retry";
 import phin from "phin";
-import { GraphQLResponse, RequesterOptions } from "./types.js";
+
+import { getSdk } from "../__generated__/schema.js";
 import { RequestError } from "./error.js";
+
+import type { Requester } from "../__generated__/schema.js";
+import type { GraphQLResponse, RequesterOptions } from "./types.js";
 
 /** A simplified GraphQL: request */
 type QueryBody<V> = {

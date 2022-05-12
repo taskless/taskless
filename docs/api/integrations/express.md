@@ -14,7 +14,7 @@ type Job = {
 const Queue: TasklessExpressRouter = createQueue<Job>(
   path as string,
   async function callback(job: Job, meta) {},
-  config as QueueOptions
+  options as ExpressQueueOptions
 );
 export default Queue;
 ```
@@ -23,7 +23,7 @@ export default Queue;
 
 In addition, `createQueue` for Express also exposes the following methods & properties
 
-- `.router` An Express-compatible Router instance, suitable for mounting to your application root
+- `.mount(path)` Informs the Taskless Queue it was mounted at a sub-path when using Express' nested routers. Unfortunately, [mountpath](http://expressjs.com/en/api.html#app.mountpath) is only available on the `app` object and not on the Router, so we must inform Taskless where it was placed.
 
 ## System Requirements
 

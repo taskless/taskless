@@ -5,6 +5,8 @@
   "scripts": {
     "// util": "echo '----- Global Workspace Helpers -----'",
     "lint-all": "yarn workspaces foreach run lint .",
+    "build-all": "yarn workspaces foreach run build",
+    "build": "echo 'no build from root required'",
     "husky": "husky",
     "postinstall": "husky install",
     "// release": "echo '----- Release Commands -----'",
