@@ -16,7 +16,7 @@
     "dev:next": "yarn workspace taskless-example-next dev:next",
     "// release": "echo '----- Release Commands -----'",
     "rev": "release-it --preRelease",
-    "release-it": "release-it"
+    "rel": "release-it"
   },
   "packageManager": "yarn@3.2.0",
   "workspaces": [
