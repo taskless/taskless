@@ -22,7 +22,7 @@ module.exports = {
   ],
 
   // taskless client
-  [jsIn("packages/taskless")]: [
+  [jsIn("packages/client")]: [
     (f) =>
       xargs(f)(
         `yarn workspace @taskless/client eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'`
