@@ -18,11 +18,11 @@ import {
 import Link from "next/link";
 import React, { useCallback } from "react";
 import { useBoolean } from "usehooks-ts";
-import { AlterJobModal, Fields } from "components/Modals/AlterJob";
 import { GetJobsResponse } from "./api/rest/jobs";
 import { PromoteJobResponse } from "./api/rest/job/[id]/promote";
 import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
 import { UpsertJobResponse, UpsertJobVariables } from "./api/rest/job/upsert";
+import { CreateJobModal, Fields } from "components/Modals/CreateJob";
 
 const getJobs: QueryFunction<
   GetJobsResponse,
@@ -136,16 +136,17 @@ const Home: NextPage = () => {
     },
   });
 
-  const onConfirm = useCallback(
+  const createJob = useCallback(
     (d: Fields) => {
+      const h = d.headers ? JSON.parse(d.headers) : {};
       // object => gql-like
-      const headers =
-        typeof d.headers !== "undefined"
-          ? Object.keys(d.headers).map((h) => ({
-              name: h,
-              value: `${d.headers?.[h as keyof typeof d.headers]}`,
-            }))
-          : undefined;
+      const headers = Object.keys(h).map((hd) => ({
+        name: hd,
+        value: `${h?.[hd as keyof typeof h]}`,
+      }));
+
+      console.log(d);
+
       upsert({
         name: d.name,
         __meta: {
@@ -155,15 +156,17 @@ const Home: NextPage = () => {
         },
         job: {
           endpoint: d.endpoint,
-          enabled: d.enabled === false ? false : true,
+          enabled: d.enabled,
           runAt: d.runAt,
           runEvery: d.runEvery,
           headers,
           body: d.body,
         },
       });
+
+      closeCreateModal();
     },
-    [upsert]
+    [upsert, closeCreateModal]
   );
 
   return (
@@ -177,10 +180,10 @@ const Home: NextPage = () => {
           <PlusIcon className="h-5 w-5" />
           Create a Job
         </button>
-        <AlterJobModal
+        <CreateJobModal
           show={showCreate}
-          close={closeCreateModal}
-          onConfirm={onConfirm}
+          onRequestClose={closeCreateModal}
+          onRequestConfirm={createJob}
         />
       </div>
       <div className="bg-white shadow-lg rounded p-3">
