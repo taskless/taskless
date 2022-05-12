@@ -47,7 +47,8 @@
     },
     "hooks": {
       "before:init": [
-        "yarn workspace run release:before:init || true"
+        "yarn workspace @taskless/client release:before:init",
+        "yarn workspace @taskless/dev release:before:init"
       ]
     }
   },
