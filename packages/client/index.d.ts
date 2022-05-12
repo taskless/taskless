@@ -7,4 +7,5 @@
 /// <reference path="./next.d.ts" />
 /// <reference path="./express.d.ts" />
 
+export * from "./src/index.js";
 export * from "./src/types.js";

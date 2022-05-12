@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { EnqueueJobMutationRPC } from "@taskless/client/dev";
-import { Queue, Job } from "@taskless/client";
+import { Job, JobHeaders, Queue } from "@taskless/client";
 import { DateTime } from "luxon";
 
 const initAppId = "00000000-0000-0000-0000-000000000000";
@@ -51,9 +51,9 @@ export default async function handler(
   }
 
   const j = await q.enqueue(variables.name, body, {
-    enabled: variables.job.enabled,
-    headers: variables.job.headers,
-    retries: variables.job.retries,
+    enabled: variables.job.enabled ?? undefined,
+    headers: (variables.job.headers ?? undefined) as JobHeaders | undefined,
+    retries: variables.job.retries ?? undefined,
     runAt: variables.job.runAt === "" ? now : variables.job.runAt ?? now,
     runEvery: variables.job.runEvery,
   });

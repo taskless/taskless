@@ -14,45 +14,41 @@
   },
   "homepage": "https://github.com/taskless/taskless/tree/main/packages/taskless",
   "license": "MIT",
-  "main": "./index.js",
-  "types": "index.d.js",
+  "main": "./dist/cjs/index.js",
+  "types": "./index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "types": "./index.d.ts",
-      "module": "./dist/esm/index.js",
       "import": "./dist/esm/index.js",
+      "module": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
       "default": "./dist/cjs/index.js"
     },
     "./dev": {
       "types": "./dev.d.ts",
-      "module": "./dist/esm/dev.js",
       "import": "./dist/esm/dev.js",
+      "module": "./dist/esm/dev.js",
+      "require": "./dist/cjs/dev.js",
       "default": "./dist/cjs/dev.js"
     },
     "./next": {
       "types": "./next.d.ts",
       "import": "./dist/esm/integrations/next.js",
       "module": "./dist/esm/integrations/next.js",
-      "require": "./dist/cjs/integrations/next.js"
+      "require": "./dist/cjs/integrations/next.js",
+      "default": "./dist/cjs/integrations/next.js"
     },
     "./express": {
       "types": "./express.d.ts",
       "import": "./dist/esm/integrations/express.js",
       "module": "./dist/esm/integrations/express.js",
-      "require": "./dist/cjs/integrations/express.js"
+      "require": "./dist/cjs/integrations/express.js",
+      "default": "./dist/cjs/integrations/express.js"
     }
   },
   "files": [
-    "dist",
-    "dev.js",
-    "dev.d.ts",
-    "express.js",
-    "express.d.ts",
-    "next.js",
-    "next.d.ts",
-    "index.js",
-    "index.d.ts"
+    "**"
   ],
   "sideEffects": false,
   "engines": {

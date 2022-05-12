@@ -1,6 +1,5 @@
 import type { TypeGuard } from "generic-type-guard";
 import tg from "generic-type-guard";
-import { OutgoingHttpHeaders } from "http";
 
 export type JobHeaders = {
   [header: string]: string;
@@ -25,9 +24,10 @@ export type JobOptions = {
   /**
    * An time to run the job, delaying it into the future in
    * ISO-8601 format. An explicit value of `null` will result in the job
-   * running at the first available opportunity
+   * running at the first available opportunity. If creating a job for the
+   * first time, `undefined` will also be synonymous with `null`
    */
-  runAt: string | null;
+  runAt?: string | null;
 
   /** An optional ISO-8601 Duration that enables repeated running of a job*/
   runEvery?: string;
@@ -60,7 +60,7 @@ export type Job<T> = {
   payload: T;
   /** The number of retries for this Job */
   retries: number;
-  /** An ISO-8601 timestamp of when this job will be ran. An explcit null will be treated as "immediately" */
+  /** An ISO-8601 timestamp of when this job will be ran */
   runAt: string;
   /** An ISO-8601 duration for how often this job will repeat its run */
   runEvery?: string;
