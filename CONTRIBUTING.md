@@ -44,6 +44,6 @@ To help land your contribution, please make sure of the following:
 
 - Remember to be concise in your Conventional Commit. These will enventually be automatically rolled up into an auto-generated CHANGELOG file
 - If you modified anything in `packages/`:
-  - You transpiled the TypeScript with `yarn build` in the directory of whichever package you modified.
+  - You verified the transpiled TypeScript with `yarn build` in the directory of whichever package you modified.
   - Run `yarn lint --fix .` to fix the formatting of the code. Ensure that `yarn lint` succeeds without errors or warnings.
   - Run `yarn test` to ensure all existing tests pass for that package, along with any new tests you would've written.

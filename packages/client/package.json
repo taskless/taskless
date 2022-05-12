@@ -14,37 +14,29 @@
   },
   "homepage": "https://github.com/taskless/taskless/tree/main/packages/taskless",
   "license": "MIT",
-  "main": "./dist/cjs/index.js",
+  "type": "module",
   "types": "./index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "types": "./index.d.ts",
       "import": "./dist/esm/index.js",
-      "module": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "default": "./dist/cjs/index.js"
+      "module": "./dist/esm/index.js"
     },
     "./dev": {
       "types": "./dev.d.ts",
       "import": "./dist/esm/dev.js",
-      "module": "./dist/esm/dev.js",
-      "require": "./dist/cjs/dev.js",
-      "default": "./dist/cjs/dev.js"
+      "module": "./dist/esm/dev.js"
     },
     "./next": {
       "types": "./next.d.ts",
       "import": "./dist/esm/integrations/next.js",
-      "module": "./dist/esm/integrations/next.js",
-      "require": "./dist/cjs/integrations/next.js",
-      "default": "./dist/cjs/integrations/next.js"
+      "module": "./dist/esm/integrations/next.js"
     },
     "./express": {
       "types": "./express.d.ts",
       "import": "./dist/esm/integrations/express.js",
-      "module": "./dist/esm/integrations/express.js",
-      "require": "./dist/cjs/integrations/express.js",
-      "default": "./dist/cjs/integrations/express.js"
+      "module": "./dist/esm/integrations/express.js"
     }
   },
   "files": [
@@ -58,14 +50,11 @@
     "dev": "run-s clean build watch",
     "// build": "echo 'Build commands based on SenseDeep: https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html'",
     "build": "run-s clean codegen 'build:tsc:**' 'build:copy:**'",
-    "build:tsc:esm": "tsc",
-    "build:tsc:cjs": "tsc -p tsconfig-cjs.json",
+    "build:tsc:esm": "tsc --preserveWatchOutput",
     "build:copy:esm": "cpy --flat --rename=package.json ./.templates/package.esm.json ./dist/esm",
-    "build:copy:cjs": "cpy --flat --rename=package.json ./.templates/package.cjs.json ./dist/cjs",
     "// watch": "echo 'Watch commands for different build types'",
     "watch": "run-p 'watch:**'",
-    "watch:tsc:esm": "tsc -w",
-    "watch:tsc:cjs": "tsc -w -p tsconfig-cjs.json",
+    "watch:tsc:esm": "tsc -w --preserveWatchOutput",
     "// utilities": "echo 'Utilities used for development, including release hooks'",
     "lint": "eslint",
     "eslint": "eslint",

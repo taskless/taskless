@@ -25,7 +25,7 @@ pnpm add @taskless/client
 
 ## `node` vs `node12` and `.js` extensions
 
-As an ESM + cjs module, we want to eventually enable the `node12` flag in our `tsconfig.json` for ESM builds. Until that time, we must manually verify all relative paths include a `.js` extension unless they are explicitly importing types.
+As an ESM + cjs module, we want to eventually enable the `node12` flag in our `tsconfig.json` for ESM builds. Until that time, we must manually verify all relative paths include a `.js` extension unless they are explicitly importing types. The issue is [tracked on Typescript's repository](https://github.com/microsoft/TypeScript/issues/46452) as well as a proposal to require [`.ts extensions`](https://github.com/microsoft/TypeScript/issues/37582)
 
 # Notes
 
