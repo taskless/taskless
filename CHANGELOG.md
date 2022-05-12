@@ -9,6 +9,7 @@ Packages in this repository are synchronized on release, with a single changelog
 #### 🔧 Fixes
 
 - **@taskless/client** Fixed default export of `Queue` in CJS environments
+- **@taskless/client** Fixed issue in development where a mismatched signature would throw instead of logging an error
 
 #### 🎒 Misc
 
