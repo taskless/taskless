@@ -1,7 +1,7 @@
 {
   "name": "@taskless/client",
   "description": "Client for Taskless.io",
-  "version": "2.0.0-next.0",
+  "version": "2.0.0-next.1",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
