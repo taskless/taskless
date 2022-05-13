@@ -1,15 +1,15 @@
-import { Queue } from "../client/Queue.js";
-import { isTasklessBody } from "../types.js";
+import { Queue } from "../../client/src/client/Queue.js";
+import { isTasklessBody } from "../../client/src/types.js";
 
 import type {
   JobHandler,
   QueueOptions,
   DefaultJobOptions,
   CreateQueueMethods,
-} from "../types.js";
+} from "../../client/src/types.js";
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
-export { JobError } from "../types.js";
+export { JobError } from "../../client/src/types.js";
 
 /**
  * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern

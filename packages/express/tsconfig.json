@@ -4,7 +4,10 @@
   "exclude": ["node_modules", "dist"],
 
   // point to dependent types
-  "references": [{ "path": "../types/tsconfig.types.json" }],
+  "references": [
+    { "path": "../types/tsconfig.types.json" },
+    { "path": "../client/tsconfig.types.json" }
+  ],
 
   "compilerOptions": {
     // package-specific options

@@ -12,30 +12,27 @@ const xargs = (list) => (command, xarg) =>
     .join(xarg ? ` ${xarg} ` : " ");
 
 module.exports = {
-  // global configurations, these are always cleaned
-  "*.{json,gql,graphql,md,yaml,yml}": ["prettier --write"],
-
-  [jsIn("examples/next")]: [
-    (f) =>
-      xargs(f)("yarn workspace taskless-example-next lint --fix", "--file"),
-    "prettier --write",
-  ],
-
-  // taskless client
-  [jsIn("packages/client")]: [
-    (f) =>
-      xargs(f)(
-        `yarn workspace @taskless/client eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'`
-      ),
-    `yarn workspace @taskless/client madge --no-spinner --circular`,
-    "prettier --write",
-  ],
-
-  // taskless dev server
-  [jsIn("packages/dev")]: [
-    (f) =>
-      xargs(f)("yarn workspace taskless-example-next lint --fix", "--file"),
-    `yarn workspace @taskless/dev madge --no-spinner --circular`,
-    "prettier --write",
-  ],
+  // // global configurations, these are always cleaned
+  // "*.{json,gql,graphql,md,yaml,yml}": ["prettier --write"],
+  // [jsIn("examples/next")]: [
+  //   (f) =>
+  //     xargs(f)("yarn workspace taskless-example-next lint --fix", "--file"),
+  //   "prettier --write",
+  // ],
+  // // taskless client
+  // [jsIn("packages/client")]: [
+  //   (f) =>
+  //     xargs(f)(
+  //       `yarn workspace @taskless/client eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'`
+  //     ),
+  //   `yarn workspace @taskless/client madge --no-spinner --circular`,
+  //   "prettier --write",
+  // ],
+  // // taskless dev server
+  // [jsIn("packages/dev")]: [
+  //   (f) =>
+  //     xargs(f)("yarn workspace taskless-example-next lint --fix", "--file"),
+  //   `yarn workspace @taskless/dev madge --no-spinner --circular`,
+  //   "prettier --write",
+  // ],
 };

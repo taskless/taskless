@@ -24,15 +24,10 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@babel/core": "^7.17.5",
-    "@babel/eslint-parser": "^7.16.5",
-    "@babel/eslint-plugin": "^7.16.5",
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
-    "@types/sqlite3": "^3.1.8",
     "concurrently": "^7.1.0",
     "eslint": "^8.10.0",
-    "eslint-visitor-keys": "^3.1.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.3",
     "prettier": "^2.5.1",
@@ -43,6 +38,10 @@
   "resolutions": {
     "@taskless/client": "workspace:*",
     "@taskless/dev": "workspace:*",
+    "@taskless/express": "workspace:*",
+    "@taskless/next": "workspace:*",
+    "@taskless/types": "workspace:*",
+    "@types/react": "^16.0.0",
     "typescript": "4.6.4"
   },
   "release-it": {

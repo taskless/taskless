@@ -1,6 +1,6 @@
 import crypto, { createHmac } from "node:crypto";
 
-import type { SupportedCiphers, Transport } from "../types.js";
+import type { SupportedCiphers, Transport } from "@taskless/types";
 
 // //////////////////////////////////////////////////
 // Notes about encoding in this file

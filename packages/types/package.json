@@ -1,6 +1,6 @@
 {
-  "name": "@taskless/client",
-  "description": "Core JavaScript client for Taskless.io",
+  "name": "@taskless/types",
+  "description": "Common type definitions for Taskless.io",
   "version": "2.0.0-next.4",
   "author": {
     "name": "Taskless.io",
@@ -10,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/taskless/taskless.git",
-    "directory": "packages/client"
+    "directory": "packages/taskless"
   },
   "homepage": "https://github.com/taskless/taskless/",
   "license": "MIT",
@@ -32,9 +32,9 @@
     "build:pre": "run-s clean 'pkg:build:pre'",
     "build:all": "run-p 'build:x:**'",
     "build:post": "run-s 'pkg:build:post'",
-    "build:x:esm": "tsc -p tsconfig.esm.json",
-    "build:x:cjs": "tsc -p tsconfig.cjs.json",
-    "build:x:types": "tsc -p tsconfig.types.json",
+    "build:x:esm": "tsc --build tsconfig.esm.json",
+    "build:x:cjs": "tsc --build tsconfig.cjs.json",
+    "build:x:types": "tsc --build tsconfig.types.json",
     "// watch": "echo '----- Watch Commands --------------------------------'",
     "watch": "run-p 'watch:**' 'pkg:watch:**",
     "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
@@ -51,33 +51,19 @@
     "lint-staged:prettier": "prettier --write \"{src,test,scripts}/**/*.ts\"",
     "release:before:init": "run-s clean build test",
     "// additional": "echo '----- Custom Commands ----------------------'",
-    "pkg:build:pre": "run-s codegen",
-    "pkg:build:post": "echo 'no pkg:build:post tasks for @taskless/client'",
-    "pkg:watch:codegen": "graphql-codegen --watch",
-    "codegen": "graphql-codegen"
+    "pkg:build:pre": "echo 'no pkg:build:pre tasks for @taskless/types'",
+    "pkg:build:post": "echo 'no pkg:build:post tasks for @taskless/types'"
   },
   "dependencies": {
-    "deepmerge": "^4.2.2",
-    "luxon": "^2.3.1",
-    "p-retry": "^5.0.0",
-    "phin": "^3.6.1"
+    "generic-type-guard": "^3.7.0"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.6.2",
-    "@graphql-codegen/introspection": "^2.1.1",
-    "@graphql-codegen/time": "^3.1.1",
-    "@graphql-codegen/typescript": "^2.4.5",
-    "@graphql-codegen/typescript-generic-sdk": "^2.3.4",
-    "@graphql-codegen/typescript-operations": "^2.3.2",
-    "@taskless/types": "workspace:*",
     "@types/eslint": "^8",
     "@types/prettier": "^2",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "eslint": "^8.10.0",
     "eslint-plugin-tsc": "^2.0.0",
-    "graphql": "^16.5.0",
-    "graphql-tag": "^2.12.6",
     "madge": "^5.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.0",

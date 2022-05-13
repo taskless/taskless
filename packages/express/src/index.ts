@@ -1,16 +1,14 @@
 import * as express from "express";
 
-import { Queue } from "../client/Queue.js";
-import { isTasklessBody } from "../types.js";
+import { Queue } from "@taskless/client";
 
-import type {
+import {
+  Guards,
   JobHandler,
   QueueOptions,
   DefaultJobOptions,
   CreateQueueMethods,
-} from "../types.js";
-
-export { JobError } from "../types.js";
+} from "@taskless/types";
 
 /**
  * An Express compatible API Handler, with Taskless Queue support
@@ -60,7 +58,7 @@ export function createQueue<T = undefined>(
     t.receive({
       getBody: () => {
         // https://expressjs.com/en/4x/api.html#express.json
-        if (isTasklessBody(request.body)) {
+        if (Guards.TasklessBody.isTasklessBody(request.body)) {
           return request.body;
         }
         throw new Error("request.body does not match a Taskless payload");

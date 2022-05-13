@@ -23,7 +23,7 @@ import type {
   SendErrorJsonCallback,
   SendJsonCallback,
   TasklessBody,
-} from "../types.js";
+} from "@taskless/types";
 
 /**
  * Constructor arguments for the Taskless Queue

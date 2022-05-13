@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": false,
+    "declaration": true,
+    "declarationMap": true,
+    "downlevelIteration": true,
+    "importHelpers": true,
+    "inlineSources": true,
+    "lib": ["es6"],
+    // "module": "commonjs", // implied by "target" : "es5"
+    "target": "es6",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noEmitHelpers": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitUseStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "preserveWatchOutput": true,
+    "pretty": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictBindCallApply": false
+  }
+}

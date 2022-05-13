@@ -1,6 +1,6 @@
 {
-  "name": "@taskless/client",
-  "description": "Core JavaScript client for Taskless.io",
+  "name": "@taskless/express",
+  "description": "Express JS Integration for Taskless.io",
   "version": "2.0.0-next.4",
   "author": {
     "name": "Taskless.io",
@@ -10,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/taskless/taskless.git",
-    "directory": "packages/client"
+    "directory": "packages/express"
   },
   "homepage": "https://github.com/taskless/taskless/",
   "license": "MIT",
@@ -51,37 +51,31 @@
     "lint-staged:prettier": "prettier --write \"{src,test,scripts}/**/*.ts\"",
     "release:before:init": "run-s clean build test",
     "// additional": "echo '----- Custom Commands ----------------------'",
-    "pkg:build:pre": "run-s codegen",
-    "pkg:build:post": "echo 'no pkg:build:post tasks for @taskless/client'",
-    "pkg:watch:codegen": "graphql-codegen --watch",
-    "codegen": "graphql-codegen"
-  },
-  "dependencies": {
-    "deepmerge": "^4.2.2",
-    "luxon": "^2.3.1",
-    "p-retry": "^5.0.0",
-    "phin": "^3.6.1"
+    "pkg:build:pre": "echo 'no pkg:build:pre tasks for @taskless/express'",
+    "pkg:build:post": "echo 'no pkg:build:post tasks for @taskless/express'"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.6.2",
-    "@graphql-codegen/introspection": "^2.1.1",
-    "@graphql-codegen/time": "^3.1.1",
-    "@graphql-codegen/typescript": "^2.4.5",
-    "@graphql-codegen/typescript-generic-sdk": "^2.3.4",
-    "@graphql-codegen/typescript-operations": "^2.3.2",
+    "@taskless/client": "workspace:*",
     "@taskless/types": "workspace:*",
     "@types/eslint": "^8",
+    "@types/express": "^4.17.13",
     "@types/prettier": "^2",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "eslint": "^8.10.0",
     "eslint-plugin-tsc": "^2.0.0",
-    "graphql": "^16.5.0",
-    "graphql-tag": "^2.12.6",
     "madge": "^5.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.0",
     "shx": "^0.3.4",
     "typescript": "*"
+  },
+  "peerDependencies": {
+    "express": ">= 4.16.0"
+  },
+  "peerDependenciesMeta": {
+    "express": {
+      "optional": true
+    }
   }
 }

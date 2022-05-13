@@ -1,14 +1,5 @@
-import tg from "generic-type-guard";
-
-import type { TypeGuard } from "generic-type-guard";
-
 export type JobHeaders = {
   [header: string]: string;
-};
-
-/** Typeguard for {@link JobHeaders} */
-const isJobHeaders: TypeGuard<JobHeaders> = (o: unknown): o is JobHeaders => {
-  return tg.isObject(o);
 };
 
 /**
@@ -73,19 +64,3 @@ export type Job<T> = {
   /** An ISO-8601 duration for how often this job will repeat its run */
   runEvery?: string;
 };
-
-/** Typeguard for {@link Job} with an unknown payload */
-export const isJob: TypeGuard<Job<unknown>> = new tg.IsInterface()
-  .with(
-    tg.hasProperties({
-      name: tg.isString,
-      endpoint: tg.isString,
-      headers: tg.isOptional(isJobHeaders),
-      enabled: tg.isBoolean,
-      payload: tg.isUnknown,
-      retries: tg.isNumber,
-      runAt: tg.isString,
-      runEvery: tg.isOptional(tg.isString),
-    })
-  )
-  .get();

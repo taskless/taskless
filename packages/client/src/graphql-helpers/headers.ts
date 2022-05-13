@@ -1,4 +1,4 @@
-import { JobHeaders } from "../types.js";
+import { JobHeaders } from "@taskless/types";
 import { HeaderInputType } from "../__generated__/schema.js";
 
 type KeyOf<T> = keyof T;

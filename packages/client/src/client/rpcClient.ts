@@ -10,7 +10,7 @@ import type {
   GetJobByNameQuery,
   UpdateJobMutation,
 } from "../__generated__/schema.js";
-import type { GraphQLResponse, RequesterOptions } from "./types.js";
+import type { GraphQLResponse, RequesterOptions } from "../types.js";
 
 /**
  * Creates a lightweight RPC client mirroring GraphQL functions
