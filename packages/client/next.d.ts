@@ -4,5 +4,4 @@
 
 import next from "./dist/esm/integrations/next.js";
 export * from "./dist/esm/integrations/next.js";
-export * from "./dist/esm/client/error.js";
 export default next;

@@ -14,39 +14,53 @@
   },
   "homepage": "https://github.com/taskless/taskless/tree/main/packages/taskless",
   "license": "MIT",
-  "type": "module",
-  "types": "./index.d.ts",
+  "main": "./index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./index.d.ts",
-      "import": "./dist/esm/index.js"
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "module": "./dist/esm/index.js",
+      "require": "./index.js"
     },
     "./dev": {
-      "types": "./dev.d.ts",
-      "import": "./dist/esm/dev.js"
+      "types": "./dist/esm/dev.d.ts",
+      "import": "./dist/esm/dev.js",
+      "module": "./dist/esm/dev.js",
+      "require": "./dev.js"
     },
     "./next": {
-      "types": "./next.d.ts",
-      "import": "./dist/esm/integrations/next.js"
+      "types": "./dist/esm/integrations/next.d.ts",
+      "import": "./dist/esm/integrations/next.js",
+      "module": "./dist/esm/integrations/next.js",
+      "require": "./next.js"
     },
     "./express": {
-      "types": "./express.d.ts",
-      "import": "./dist/esm/integrations/express.js"
+      "types": "./dist/esm/integrations/express.d.ts",
+      "import": "./dist/esm/integrations/express.js",
+      "module": "./dist/esm/integrations/express.js",
+      "require": "./express.js"
     }
   },
   "files": [
-    "**"
+    "package.json",
+    "README.md",
+    "*.js",
+    "*.d.ts",
+    "dist"
   ],
   "sideEffects": false,
   "engines": {
-    "node": "12 || 14 || 15 || 16 || 17"
+    "node": "14 || 15 || 16 || 17"
   },
   "scripts": {
     "dev": "run-s clean build watch",
     "// build": "echo 'Build commands based on SenseDeep: https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html'",
-    "build": "run-s clean codegen 'build:tsc:**'",
-    "build:tsc:esm": "tsc --preserveWatchOutput",
+    "build": "run-s clean codegen 'build:tsc:**' 'build:copy:**'",
+    "build:tsc:esm": "tsc --build --verbose",
+    "build:copy:esm": "cpy --flat --rename=package.json ./.templates/package.esm.json ./dist/esm",
     "// watch": "echo 'Watch commands for different build types'",
     "watch": "run-p 'watch:**'",
     "watch:tsc:esm": "tsc -w --preserveWatchOutput",
@@ -101,7 +115,7 @@
     "tsdef": "^0.0.14",
     "typedoc": "^0.22.13",
     "typedoc-plugin-markdown": "^3.11.14",
-    "typescript": "^4.6.2"
+    "typescript": "*"
   },
   "peerDependencies": {
     "express": ">= 4.16.0",
