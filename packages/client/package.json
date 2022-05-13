@@ -20,23 +20,19 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./index.d.ts",
-      "import": "./dist/esm/index.js",
-      "module": "./dist/esm/index.js"
+      "import": "./dist/esm/index.js"
     },
     "./dev": {
       "types": "./dev.d.ts",
-      "import": "./dist/esm/dev.js",
-      "module": "./dist/esm/dev.js"
+      "import": "./dist/esm/dev.js"
     },
     "./next": {
       "types": "./next.d.ts",
-      "import": "./dist/esm/integrations/next.js",
-      "module": "./dist/esm/integrations/next.js"
+      "import": "./dist/esm/integrations/next.js"
     },
     "./express": {
       "types": "./express.d.ts",
-      "import": "./dist/esm/integrations/express.js",
-      "module": "./dist/esm/integrations/express.js"
+      "import": "./dist/esm/integrations/express.js"
     }
   },
   "files": [
@@ -49,9 +45,8 @@
   "scripts": {
     "dev": "run-s clean build watch",
     "// build": "echo 'Build commands based on SenseDeep: https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html'",
-    "build": "run-s clean codegen 'build:tsc:**' 'build:copy:**'",
+    "build": "run-s clean codegen 'build:tsc:**'",
     "build:tsc:esm": "tsc --preserveWatchOutput",
-    "build:copy:esm": "cpy --flat --rename=package.json ./.templates/package.esm.json ./dist/esm",
     "// watch": "echo 'Watch commands for different build types'",
     "watch": "run-p 'watch:**'",
     "watch:tsc:esm": "tsc -w --preserveWatchOutput",
