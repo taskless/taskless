@@ -5,7 +5,6 @@ Packages in this repository are synchronized on release, with a single changelog
 #### 💥 BREAKING CHANGES
 
 - **@taskless/client** Dropped support for Node 12, as it is no longer supported in LTS. It's recommended to use node 14 or 16 at this time.
-- **@taskless/client** ESM Only Module. As of 2.0.0, Taskless is ESM only. Node 14 (now LTS until 2023) [recommends a switch from CJS+ESM to ESM only as a major version bump](https://nodejs.org/dist./v14.10.0/docs/api/esm.html#esm_writing_dual_packages_while_avoiding_or_minimizing_hazards). With the backwards-incompatible removal of Node 12 support, this felt like the ideal time to make this change.
 
 #### 🎉Features
 
