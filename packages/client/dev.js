@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 // --- Legacy Root File
 // The purpose of this file is to allow for seamless importing of
 // subdirectory-style imports such as @taskless/client/foo. For this to work,
@@ -9,4 +7,4 @@
 // we are gain the benefits of running as a pure ESM module, while still
 // offering the expected imports.
 
-module.exports = require("./dist/esm/dev.js");
+export * from "./dist/esm/dev.js";
