@@ -4,15 +4,19 @@
   "exclude": ["node_modules", "dist"],
 
   // point to dependent types
-  "references": [
-    { "path": "../client/tsconfig.types.json" },
-    { "path": "../types/tsconfig.types.json" }
-  ],
+  // "references": [
+  //   { "path": "../client/tsconfig.types.json" },
+  //   { "path": "../types/tsconfig.types.json" }
+  // ],
 
   "compilerOptions": {
     // package-specific options
     "composite": true,
     "rootDir": "./src",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+
+    // for next.js, we're skipping lib checks
+    // todo: in future, remove and solve
+    "skipLibCheck": true
   }
 }

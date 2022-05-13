@@ -28,13 +28,11 @@
     "clean": "shx rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 0",
     "// build": "echo '----- Build Commands --------------------------------'",
-    "build": "run-s 'build:pre' 'build:all' 'build:post'",
-    "build:pre": "run-s clean 'pkg:build:pre'",
+    "build": "run-s clean 'build:pre' 'build:all' 'build:post'",
     "build:all": "run-p 'build:x:**'",
-    "build:post": "run-s 'pkg:build:post'",
-    "build:x:esm": "tsc --build tsconfig.esm.json",
-    "build:x:cjs": "tsc --build tsconfig.cjs.json",
-    "build:x:types": "tsc --build tsconfig.types.json",
+    "build:x:esm": "tsc -p tsconfig.esm.json",
+    "build:x:cjs": "tsc -p tsconfig.cjs.json",
+    "build:x:types": "tsc -p tsconfig.types.json",
     "// watch": "echo '----- Watch Commands --------------------------------'",
     "watch": "run-p 'watch:**' 'pkg:watch:**",
     "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
@@ -45,14 +43,9 @@
     "madge": "madge",
     "prettier": "prettier",
     "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
-    "lint-staged": "run-s lint-staged:*",
-    "lint-staged:eslint": "eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "lint-staged:circular": "madge --circular src/index.ts # see https://github.com/pahen/madge/issues/306",
-    "lint-staged:prettier": "prettier --write \"{src,test,scripts}/**/*.ts\"",
     "release:before:init": "run-s clean build test",
-    "// additional": "echo '----- Custom Commands ----------------------'",
-    "pkg:build:pre": "echo 'no pkg:build:pre tasks for @taskless/types'",
-    "pkg:build:post": "echo 'no pkg:build:post tasks for @taskless/types'"
+    "build:pre": "echo 'no pkg:build:pre tasks for @taskless/types'",
+    "build:post": "echo 'no pkg:build:post tasks for @taskless/types'"
   },
   "dependencies": {
     "generic-type-guard": "^3.7.0"
@@ -69,5 +62,10 @@
     "prettier": "^2.6.0",
     "shx": "^0.3.4",
     "typescript": "*"
+  },
+  "ts-standard": {
+    "ignore": [
+      "dist"
+    ]
   }
 }

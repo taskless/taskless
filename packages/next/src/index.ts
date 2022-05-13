@@ -1,15 +1,13 @@
-import { Queue } from "../../client/src/client/Queue.js";
-import { isTasklessBody } from "../../client/src/types.js";
-
-import type {
+import { Queue } from "@taskless/client";
+import {
+  Guards,
   JobHandler,
   QueueOptions,
   DefaultJobOptions,
   CreateQueueMethods,
-} from "../../client/src/types.js";
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+} from "@taskless/types";
 
-export { JobError } from "../../client/src/types.js";
+import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
 /**
  * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern
@@ -61,7 +59,7 @@ export function createQueue<T = undefined>(
   ) => {
     return t.receive({
       getBody: () => {
-        if (isTasklessBody(req.body)) {
+        if (Guards.TasklessBody.isTasklessBody(req.body)) {
           return req.body;
         }
         throw new Error("req.body does not match a Taskless payload");

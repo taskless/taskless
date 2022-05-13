@@ -1,13 +1,11 @@
-export type JobHeaders = {
-  [header: string]: string;
-};
+export type JobHeaders = Record<string, string>;
 
 /**
  * A Taskless Job identifier, either a string, number, or an array of
  * strings and numbers to namespace a job record. Job Identifiers must be unique to
  * the Taskless application.
  */
-export type JobIdentifier = string | number | (string | number)[];
+export type JobIdentifier = string | number | Array<string | number>;
 
 /** A set of options on a per-job level */
 export type JobOptions = {
@@ -21,14 +19,14 @@ export type JobOptions = {
   retries?: number;
 
   /**
-   * An time to run the job, delaying it into the future in
-   * ISO-8601 format. An explicit value of `null` will result in the job
+   * A time to run the job, delaying it into the future in
+   * ISO-8601 format. An explicit value of `now` will result in the job
    * running at the first available opportunity. If creating a job for the
-   * first time, `undefined` will also be synonymous with `null`
+   * first time, `undefined` will also be synonymous with `now`
    */
-  runAt?: string | null;
+  runAt?: string | "now";
 
-  /** An optional ISO-8601 Duration that enables repeated running of a job*/
+  /** An optional ISO-8601 Duration that enables repeated running of a job */
   runEvery?: string;
 };
 
@@ -38,9 +36,9 @@ export type DefaultJobOptions = Partial<JobOptions>;
 /** Metadata regarding the currently running Job */
 export type JobMeta = {
   /** The application ID that made the request */
-  applicationId: string | null;
+  applicationId: string;
   /** The organization ID that made the request */
-  organizationId: string | null;
+  organizationId: string;
   /** A counter representing the number of attempts made */
   attempt: number;
 };

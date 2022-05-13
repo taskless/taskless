@@ -93,15 +93,15 @@ export interface CreateQueueMethods<T> {
    * Delete an item from the queue
    * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
    * @throws Error if the job could not be deleted
-   * @returns The deleted `Job` object, or `null` if no job was deleted
+   * @returns The deleted `Job` object, or `undefined` if no job was deleted
    */
-  delete: (name: JobIdentifier) => Promise<Job<T> | null>;
+  delete: (name: JobIdentifier) => Promise<Job<T> | undefined>;
   /**
    * Retrieve an item from the Taskless queue
    * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
-   * @returns The `Job` object or `null` if no job was deleted
+   * @returns The `Job` object or `undefined` if no job was deleted
    */
-  get: (name: JobIdentifier) => Promise<Job<T> | null>;
+  get: (name: JobIdentifier) => Promise<Job<T> | undefined>;
 }
 
 /** The Job Handler signature, taking a `payload` and `meta` */
