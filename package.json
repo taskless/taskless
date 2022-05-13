@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@taskless/root",
-  "version": "2.0.0-next.3",
+  "version": "2.0.0-next.4",
   "scripts": {
     "// util": "echo '----- Global Workspace Helpers -----'",
     "lint-all": "yarn workspaces foreach run lint .",
