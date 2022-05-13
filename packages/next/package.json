@@ -63,7 +63,8 @@
     "react": "*",
     "react-dom": "*",
     "shx": "^0.3.4",
-    "typescript": "*"
+    "typescript": "*",
+    "xo": "^0.48.0"
   },
   "peerDependencies": {
     "next": ">=11.0"
