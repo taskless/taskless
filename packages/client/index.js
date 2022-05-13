@@ -1,2 +1,2 @@
 /* eslint-disable */
-module.exports = require("./src/index.js");
+module.exports = require("./dist/esm/index.js");

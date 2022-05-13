@@ -1,2 +1,2 @@
 /* eslint-disable */
-module.exports = require("./src/dev.js");
+module.exports = require("./dist/esm/dev.js");

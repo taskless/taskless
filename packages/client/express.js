@@ -1,2 +1,2 @@
 /* eslint-disable */
-module.exports = require("./src/express.js");
+module.exports = require("./dist/esm/express.js");

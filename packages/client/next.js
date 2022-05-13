@@ -1,2 +1,2 @@
 /* eslint-disable */
-module.exports = require("./src/next.js");
+module.exports = require("./dist/esm/next.js");
