@@ -120,19 +120,19 @@ const Home: NextPage = () => {
 
   const { mutate: promote } = useMutation(promoteJob, {
     onSuccess: () => {
-      qc.invalidateQueries("jobs");
+      void qc.invalidateQueries("jobs");
     },
   });
 
   const { mutate: replay } = useMutation(replayJob, {
     onSuccess: () => {
-      qc.invalidateQueries("jobs");
+      void qc.invalidateQueries("jobs");
     },
   });
 
   const { mutate: upsert } = useMutation(upsertJob, {
     onSuccess: () => {
-      qc.invalidateQueries("jobs");
+      void qc.invalidateQueries("jobs");
     },
   });
 

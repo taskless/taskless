@@ -1,19 +1,20 @@
-import type {
-  GetJobQueryRPC,
-  GetJobQueryRPCResponse,
-  RPCOperation,
-} from "@taskless/client/dev";
+import type { DEV } from "@taskless/client";
 import { Job, jobToJobFragment } from "mongo/db";
 import { start } from "worker/loop";
 
-export const isGetJobByName = (v: RPCOperation): v is GetJobQueryRPC => {
+// local types
+type RPCOperation = DEV["RPCOperation"];
+type GetRPC = DEV["RPCMethods"]["Get"]["Request"];
+type GetResponse = DEV["RPCMethods"]["Get"]["Response"];
+
+export const isGetJobByName = (v: RPCOperation): v is GetRPC => {
   return v.method === "getJobByName";
 };
 
 export const getJobByName = async (
-  variables: GetJobQueryRPC["variables"],
+  variables: GetRPC["variables"],
   context: any
-): Promise<GetJobQueryRPCResponse["data"]> => {
+): Promise<GetResponse["data"]> => {
   start();
   const id = context.v5(variables.name);
 

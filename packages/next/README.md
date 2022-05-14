@@ -13,24 +13,22 @@
 
 ---
 
-# @taskless/client
+# @taskless/next
 
-A typescript client for communicating with Taskless.io
+Next.js integration for Taskless.io
 
-**[Getting Started Guide](https://taskless.io/docs/get-started/other)**
-
-In some cases, you may not want to use a Taskless integration directly. For those situations, there's @taskless/client 💪🏻
+**[Getting Started Guide](https://taskless.io/docs/get-started/nextjs)**
 
 ### Installation
 
 ```
-npm install @taskless/client
+npm install @taskless/next
 ```
 
 ```
-yarn add @taskless/client
+yarn add @taskless/next
 ```
 
 ```
-pnpm add @taskless/client
+pnpm add @taskless/next
 ```

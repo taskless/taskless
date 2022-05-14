@@ -13,24 +13,8 @@
 
 ---
 
-# @taskless/client
+# @taskless/types
 
-A typescript client for communicating with Taskless.io
+Type definitions for Taskless modules.
 
-**[Getting Started Guide](https://taskless.io/docs/get-started/other)**
-
-In some cases, you may not want to use a Taskless integration directly. For those situations, there's @taskless/client 💪🏻
-
-### Installation
-
-```
-npm install @taskless/client
-```
-
-```
-yarn add @taskless/client
-```
-
-```
-pnpm add @taskless/client
-```
+Most of the time, you won't need these modules explicitly, but if you do want to build something that is type-specific, they're here for you. 🎉

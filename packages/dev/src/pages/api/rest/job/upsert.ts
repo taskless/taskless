@@ -1,7 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { EnqueueJobMutationRPC } from "@taskless/client/dev";
-import { Job, JobHeaders, Queue } from "@taskless/client";
+import { DEV } from "@taskless/client";
+import { Queue } from "@taskless/client";
 import { DateTime } from "luxon";
+import { Job, JobHeaders } from "@taskless/types";
+
+type UpsertRPC = DEV["RPCMethods"]["Enqueue"]["Request"];
 
 const initAppId = "00000000-0000-0000-0000-000000000000";
 
@@ -13,7 +16,7 @@ export type UpsertJobResponse = {
   upsertJob: Job<any>;
 };
 
-export type UpsertJobVariables = EnqueueJobMutationRPC["variables"] & {
+export type UpsertJobVariables = UpsertRPC["variables"] & {
   /** Describes unique data required to process this entry */
   __meta?: {
     queueName?: string;

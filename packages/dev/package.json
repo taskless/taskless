@@ -18,11 +18,13 @@
     "dev": "next dev --hostname 0.0.0.0 -p 3001",
     "start": "./bin/cli.js",
     "taskless": "./bin/cli.js",
-    "build": "next build",
-    "lint": "next lint",
-    "madge": "madge",
-    "lint:types": "eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "release:before:init": "run-s build"
+    "clean": "shx rm -rf ./.next",
+    "build": "run-s clean 'build:pre' 'build:next' 'build:post'",
+    "build:next": "next build",
+    "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
+    "release:before:init": "run-s build",
+    "build:pre": "echo 'no build:pre tasks for @taskless/dev'",
+    "build:post": "echo 'no build:post tasks for @taskless/dev'"
   },
   "engines": {
     "node": "12 || 14 || 15 || 16 || 17"
@@ -36,7 +38,8 @@
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.5.0",
     "@tailwindcss/typography": "^0.5.2",
-    "@taskless/client": "^2.0.0-next.4",
+    "@taskless/client": "workspace:*",
+    "@taskless/types": "workspace:*",
     "boolean-parser": "^0.0.2",
     "chalk": "^5.0.1",
     "classnames": "^2.3.1",
@@ -68,13 +71,12 @@
     "@types/uuid": "^8.3.4",
     "@types/yargs": "^17",
     "autoprefixer": "^10.4.4",
-    "eslint": "8.11.0",
+    "eslint": "^8.15.0",
     "eslint-config-next": "12.1.0",
-    "eslint-plugin-tsc": "^2.0.0",
-    "madge": "^5.0.1",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.12",
-    "typescript": "4.6.2"
+    "shx": "^0.3.4",
+    "typescript": "*"
   },
   "publishConfig": {
     "access": "public"

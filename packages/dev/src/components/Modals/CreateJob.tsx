@@ -155,7 +155,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
 
   return (
     <Modal show={show} closeOnTapOutside onRequestClose={onRequestClose}>
-      <form onSubmit={handleSubmit(handleCreate)} autoComplete="off">
+      <form onSubmit={() => void handleSubmit(handleCreate)} autoComplete="off">
         <div className="flex flex-row gap-6">
           <div className="flex flex-col gap-4 text-sm pt-8 flex-shrink-0">
             <TabButton

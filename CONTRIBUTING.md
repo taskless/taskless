@@ -1,5 +1,6 @@
 # Contributing to the Taskless Libraries
 
+- [🗺 Repository Layout](#-repository-layout)
 - [📦 Download and Setup](#-download-and-setup)
 - [⏱ Testing Your Changes](#-testing-your-changes)
   - [✅ Unit Testing](#-unit-testing)
@@ -10,18 +11,20 @@
 
 Thanks for the help! We currently review PRs for `packages/`, `docs/`, `examples/`, and markdown files.
 
-The Taskless client for JavaScript is easy to test and contribute compared to other languages, and we welcome all contributions to it.
+The Taskless client for JavaScript is easy to test and contribute compared to other languages, and we welcome all contributions to it. This file is designed to help you find your way around.
 
-> 💡 Why GraphQL?
->
-> The simplest answer is that by basing our clients on GraphQL, we can provide a consistent and testable schema for integrations. Anything you can do with a Taskless client, you should be able to also do with direct GraphQL calls. Taskless clients should instead offer additional features that make it easier to integrate with existing frameworks, offer type-safe methods, and more.
+## 🗺 Repository Layout
+
+The Taskless repository has the bulk of its code in the `packages` directory, where every folder reprents a 1:1 package released on npm under the `@taskless/*` namespace.
+
+In the root of the repository, we have a few common files that affect nearly every package. Some (eslint, prettier) affect formatting, while others (tsconfig) affect build scripts. If you're inside of a package and see it extending `../../something`, it's relying on the common config.
 
 ## 📦 Download and Setup
 
 > 💽 The development environment for this repository does not support Windows. To contribute from Windows you must use WSL.
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device. (`git remote add upstream git@github.com:taskless/taskless.git` 😉). You can use `git clone --depth 1 --single-branch --branch main git@github.com:taskless/taskless.git`, discarding most of branches and history to clone it faster.
-2. Ensure [Node 14](https://nodejs.org/) is installed on your computer. (Check version with `node -v`)
+2. Ensure [Node 14](https://nodejs.org/) is installed on your computer. (Check version with `node -v`). We have [Volta](https://volta.sh) defined on the root package.json to help out.
 3. Install the dependencies using yarn with `yarn install`
 
 > If this didn't work for you as described, please [open an issue.](https://github.com/taskless/taskless/issues/new/choose)
@@ -29,8 +32,6 @@ The Taskless client for JavaScript is easy to test and contribute compared to ot
 ## 📚 Updating Documentation
 
 Our docs are made with [Next.js](https://github.com/vercel/next.js), built as part of the main Taskless.io website. They're located here in the `docs/` directory as Markdown files, and are deployed regularly.
-
-If you see a typo in our TypeScript documentation, you'll want to change the source TypeScript file. These files can be found via the **Defined in** section.
 
 ## 📝 Writing a Commit Message
 
@@ -45,5 +46,4 @@ To help land your contribution, please make sure of the following:
 - Remember to be concise in your Conventional Commit. These will enventually be automatically rolled up into an auto-generated CHANGELOG file
 - If you modified anything in `packages/`:
   - You verified the transpiled TypeScript with `yarn build` in the directory of whichever package you modified.
-  - Run `yarn lint --fix .` to fix the formatting of the code. Ensure that `yarn lint` succeeds without errors or warnings.
   - Run `yarn test` to ensure all existing tests pass for that package, along with any new tests you would've written.

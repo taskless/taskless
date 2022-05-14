@@ -10,7 +10,7 @@ import type {
   GetJobByNameQuery,
   UpdateJobMutation,
 } from "../__generated__/schema.js";
-import type { GraphQLResponse, RequesterOptions } from "../types.js";
+import type { GraphQLResponse, RequesterOptions } from "./types.js";
 
 /**
  * Creates a lightweight RPC client mirroring GraphQL functions
@@ -60,7 +60,10 @@ export const create = (
 
       return result.body.data as R;
     } catch (err: unknown) {
-      throw new Error("Could not make request: " + err);
+      console.warn(err);
+      throw new Error(
+        "Could not make request: " + (typeof err === "string" ? err : "unknown")
+      );
     }
   };
 

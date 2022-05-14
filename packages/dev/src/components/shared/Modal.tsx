@@ -62,7 +62,7 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> & {
   );
 };
 
-type ActionsComponent = React.FC<PropsWithChildren<{}>>;
+type ActionsComponent = React.FC<PropsWithChildren<Record<string, unknown>>>;
 const Actions: ActionsComponent = ({ children }) => (
   <div className="mt-5 pt-5 border-t border-gray-100 sm:mt-4 sm:flex sm:flex-row-reverse">
     {children}

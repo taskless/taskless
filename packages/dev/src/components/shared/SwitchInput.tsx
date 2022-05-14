@@ -47,7 +47,8 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
               "w-10 h-6",
               "flex items-center flex-shrink-0 p-0.5 bg-gray-300 rounded-full duration-300 ease-in-out",
               "peer-checked:bg-brand-500",
-              "after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-4"
+              "after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-4",
+              inputClassName
             )}
           />
         </div>

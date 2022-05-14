@@ -7,6 +7,7 @@ interface TabButtonProps extends React.HTMLProps<HTMLButtonElement> {
   label: string;
   iconClassName?: React.ComponentPropsWithoutRef<"svg">["className"];
   labelClassName?: React.ComponentPropsWithoutRef<"span">["className"];
+  type?: "submit" | "reset" | "button";
 }
 
 export const TabButton: React.FC<TabButtonProps> = ({
@@ -20,7 +21,7 @@ export const TabButton: React.FC<TabButtonProps> = ({
   ...rest
 }) => (
   <button
-    type={"button"}
+    type={type ?? "button"}
     className={cx(
       "flex flex-row items-center rounded-md hover:bg-gray-100 px-3 py-2",
       active ? "text-brand-500" : "text-gray-500",

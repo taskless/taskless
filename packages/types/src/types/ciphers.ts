@@ -4,7 +4,7 @@ import type { CipherGCMTypes } from "node:crypto";
 export type SupportedCiphers = Extract<CipherGCMTypes, "aes-256-gcm"> | "none";
 
 /** Describes a cipher argument of type AES-256-GCM */
-export type CipherAes256Gcm = {
+export interface CipherAes256Gcm {
   /** The Cipher used */
   alg: Extract<CipherGCMTypes, "aes-256-gcm">;
   /** The length of the Auth Tag */
@@ -13,12 +13,12 @@ export type CipherAes256Gcm = {
   at: string;
   /** The Cipher IV value */
   iv: string;
-};
+}
 
 /** Descibes a cipher argument of "none" */
-export type CipherNone = {
+export interface CipherNone {
   alg: "none";
-};
+}
 
 /** All Supported Cipher combinations */
 export type Cipher = CipherAes256Gcm | CipherNone;

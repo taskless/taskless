@@ -1,15 +1,22 @@
-import { JobDataFragment } from "@taskless/client/dev";
+import type { DEV } from "@taskless/client";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose, { Schema, Types, Document } from "mongoose";
 import { v4 } from "uuid";
 
+type JobDataFragment = DEV["JobDataFragment"];
+
 // used to ensure a single mongod instance in development, even when HMR is running
 if (!globalThis.mongod) {
   globalThis.mongod = true;
-  MongoMemoryServer.create().then((mongod) => {
-    globalThis.mongod = mongod;
-    mongoose.connect(mongod.getUri());
-  });
+  MongoMemoryServer.create()
+    .then((mongod) => {
+      globalThis.mongod = mongod;
+      mongoose.connect(mongod.getUri());
+    })
+    .catch(() => {
+      throw new Error("Could not start a mongo server in-memory");
+      process.exit(1);
+    });
 }
 
 interface ScheduleDoc extends Document {

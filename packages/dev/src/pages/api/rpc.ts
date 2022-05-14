@@ -1,6 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { GetJobQueryRPCResponse } from "@taskless/client/dev";
 import { isUpdateJob, updateJob } from "rpc/updateJob";
 import { v5 } from "uuid";
 import { deleteJob, isDeleteJob } from "rpc/deleteJob";
@@ -12,7 +11,7 @@ const initAppId = "00000000-0000-0000-0000-000000000000";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GetJobQueryRPCResponse>
+  res: NextApiResponse
 ) {
   const headerAppId = Array.isArray(req.headers["x-taskless-app-id"])
     ? req.headers["x-taskless-app-id"][0]

@@ -4,12 +4,12 @@ Packages in this repository are synchronized on release, with a single changelog
 
 #### 💥 BREAKING CHANGES
 
-- **@taskless/client** Dropped support for Node 12, as it is no longer supported in LTS. It's recommended to use node 14 or 16 at this time.
+- **@taskless/client** Integrations were split out to avoid conflicting namespace issues. Next and Express users can now reference `@taskless/next` and `@taskless/express` respectively. The `@taskless/client` contains only the raw Taskless client.
 
 #### 🎉Features
 
-- **@taskless/client** Added the ability to specify an array as a job identifier instead of just a string key, making namespacing identifiers require less cognitive overhead
-- **@taskless/client** (express) Added a `mount` method for working with Taskless when it's attached to a sub-router.
+- **@taskless/client**, **@taskless/next**, **@taskless/express** Added the ability to specify an array as a job identifier instead of just a string key, making namespacing identifiers require less cognitive overhead
+- **@taskless/express** Added a `mount` method for working with Taskless when it's attached to a sub-router.
 - **@taskless/dev** Added the ability to create jobs via the Taskless dev dashboard
 
 #### 🔧 Fixes
@@ -20,7 +20,6 @@ Packages in this repository are synchronized on release, with a single changelog
 #### 🎒 Misc
 
 - **@taskless/dev** Switched PouchDB for [mongo-memory-server](https://www.npmjs.com/package/mongodb-memory-server). While it adds a bit more overhead to start up a Mongo server in development, it makes it much easier to use Mango queries for querying task and job information.
-- **@taskless/client** Switched to `type` imports wherever possible. While it doesn't offer direct improvements, this matches the Typescript recommendation.
 - **@taskless/client** Updated node specific modules to import from the `node:` namespace
 - **@taskless/client** Moved to home in `/packages` matching its package name to reduce confusion
 - **@taskless/root** Added a `dev` script that gets every integration up and running in dev mode for fast debugging

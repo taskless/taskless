@@ -1,8 +1,4 @@
 {
   "*.(md|json)": "prettier --write",
-  "**/*.ts?(x)": [
-    "eslint",
-    "madge --circular packages/types/src/index.ts",
-    "prettier --write"
-  ]
+  "**/*.ts?(x)": ["eslint", "madge --circular", "prettier --write"]
 }

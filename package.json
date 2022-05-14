@@ -4,9 +4,8 @@
   "version": "2.0.0-next.4",
   "scripts": {
     "// util": "echo '----- Global Workspace Helpers -----'",
-    "lint-all": "yarn workspaces foreach run lint .",
-    "build-all": "yarn workspaces foreach run build",
-    "build": "echo 'no build from root required'",
+    "lint": "eslint .",
+    "build": "yarn workspaces foreach -p --interlaced --topological-dev --no-private run build",
     "husky": "husky",
     "postinstall": "husky install",
     "// ittr": "echo '----- Itteration Commands for development -----'",
@@ -45,6 +44,7 @@
     "@taskless/express": "workspace:*",
     "@taskless/next": "workspace:*",
     "@taskless/types": "workspace:*",
+    "@types/react": "^17.0.40",
     "eslint-plugin-tsc": "^2.0.0",
     "typescript": "^4.6.4"
   },
@@ -58,8 +58,7 @@
     },
     "hooks": {
       "before:init": [
-        "yarn workspace @taskless/client release:before:init",
-        "yarn workspace @taskless/dev release:before:init"
+        "yarn workspace foreach -p --interlaced --topological-dev --no-private release:before:init || true"
       ]
     }
   },

@@ -13,24 +13,22 @@
 
 ---
 
-# @taskless/client
+# @taskless/express
 
-A typescript client for communicating with Taskless.io
+Express integration for Taskless.io
 
-**[Getting Started Guide](https://taskless.io/docs/get-started/other)**
-
-In some cases, you may not want to use a Taskless integration directly. For those situations, there's @taskless/client 💪🏻
+**[Getting Started Guide](https://taskless.io/docs/get-started/express)**
 
 ### Installation
 
 ```
-npm install @taskless/client
+npm install @taskless/express
 ```
 
 ```
-yarn add @taskless/client
+yarn add @taskless/express
 ```
 
 ```
-pnpm add @taskless/client
+pnpm add @taskless/express
 ```

@@ -1,21 +1,22 @@
-import type {
-  UpdateJobMutationRPC,
-  UpdateJobMutationRPCResponse,
-  RPCOperation,
-} from "@taskless/client/dev";
+import type { DEV } from "@taskless/client";
 import { start } from "worker/loop";
 import { Job, JobDoc, jobToJobFragment, Schedule } from "mongo/db";
 import { gqlHeadersToObject } from "./common";
 import { DateTime } from "luxon";
 
-export const isUpdateJob = (v: RPCOperation): v is UpdateJobMutationRPC => {
+// local types
+type RPCOperation = DEV["RPCOperation"];
+type UpdateRPC = DEV["RPCMethods"]["Update"]["Request"];
+type UpdateResponse = DEV["RPCMethods"]["Update"]["Response"];
+
+export const isUpdateJob = (v: RPCOperation): v is UpdateRPC => {
   return v.method === "updateJob";
 };
 
 export const updateJob = async (
-  variables: UpdateJobMutationRPC["variables"],
+  variables: UpdateRPC["variables"],
   context: any
-): Promise<UpdateJobMutationRPCResponse["data"]> => {
+): Promise<UpdateResponse["data"]> => {
   start();
   const id = context.v5(variables.name);
 
