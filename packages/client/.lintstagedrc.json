@@ -2,7 +2,7 @@
   "*.(md|json)": "prettier --write",
   "**/*.ts?(x)": [
     "eslint --fix",
-    "madge --circular packages/next/src/index.ts",
+    "madge --circular packages/client/src/index.ts",
     "prettier --write"
   ]
 }

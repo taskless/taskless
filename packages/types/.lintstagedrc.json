@@ -1,7 +1,8 @@
 {
   "*.(md|json)": "prettier --write",
   "**/*.ts?(x)": [
-    "eslint --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "madge --circular src/index.ts # see https://github.com/pahen/madge/issues/306"
+    "eslint",
+    "madge --circular packages/types/src/index.ts",
+    "prettier --write"
   ]
 }
