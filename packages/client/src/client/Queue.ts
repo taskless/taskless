@@ -9,7 +9,6 @@ import { encode, decode, sign, verify } from "./encoder.js";
 import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
 
-import type { OutgoingHttpHeaders } from "node:http";
 import type {
   DefaultJobOptions,
   GetBodyCallback,
@@ -303,19 +302,15 @@ export class Queue<T> {
       return;
     } catch (e) {
       console.error(e);
-      let statusCode = 500;
-      let statusMessage = "Internal Server Error";
-      let message = e instanceof Error ? e.message : undefined;
-      let headers: OutgoingHttpHeaders = {};
-
       if (e instanceof JobError) {
-        statusCode = e.statusCode;
-        statusMessage = e.statusMessage;
-        message = e.message;
-        headers = e.headers;
+        await sendError(e.statusCode, e.headers, e.message ?? e.statusMessage);
+      } else {
+        await sendError(
+          500,
+          {},
+          e instanceof Error ? e.message : "Internal Server Error"
+        );
       }
-
-      await sendError(statusCode, headers, message ?? statusMessage);
     }
   }
 

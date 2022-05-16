@@ -17,6 +17,11 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
+  "files": [
+    "package.json",
+    "README.md",
+    "dist"
+  ],
   "engines": {
     "node": "14 || 15 || 16 || 17"
   },

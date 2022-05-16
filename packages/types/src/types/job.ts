@@ -1,6 +1,16 @@
 import { OutgoingHttpHeaders } from "node:http";
 
 /**
+ * The set of headers to pass with a request, matching the set of valid HTTP request headers
+ * extends the core {@link OutgoingHttpHeaders}
+ */
+export interface JobHeaders extends OutgoingHttpHeaders {
+  "x-taskless-application"?: string;
+  "x-taskless-organization"?: string;
+  "x-taskless-attempt"?: string;
+}
+
+/**
  * A Taskless Job identifier, either a string, number, or an array of
  * strings and numbers to namespace a job record. Job Identifiers must be unique to
  * the Taskless application.
@@ -13,7 +23,7 @@ export type JobOptions = {
   enabled?: boolean;
 
   /** A key/value object to recieve as headers when your job is called. Defaults to an empty object */
-  headers?: OutgoingHttpHeaders;
+  headers?: JobHeaders;
 
   /** The number of retries to attempt before the job is failed. Defaults to 5 */
   retries?: number;
@@ -26,8 +36,8 @@ export type JobOptions = {
    */
   runAt?: string | null;
 
-  /** An optional ISO-8601 Duration that enables repeated running of a job*/
-  runEvery?: string;
+  /** An optional ISO-8601 Duration that enables repeated running of a job, or null to clear recurrence */
+  runEvery?: string | null;
 };
 
 /** A partial set of job options */
@@ -50,7 +60,7 @@ export type Job<T> = {
   /** The fully-qualified URL that will be called when this job executes */
   endpoint: string;
   /** An optional set of key-value pairs to pass as headers when this job executes */
-  headers?: OutgoingHttpHeaders;
+  headers?: JobHeaders;
   /** Is the Job enabled? */
   enabled: boolean;
   /** The Job's payload to be delivered */

@@ -100,12 +100,6 @@ const extractRunData = (row: GetJobsResponse["jobs"][0]) => {
   };
 };
 
-type AdvancedFields = {
-  queueName: string;
-  appID: string;
-  appSecret: string;
-};
-
 const Home: NextPage = () => {
   const {
     value: showCreate,

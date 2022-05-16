@@ -1,4 +1,4 @@
-import { OutgoingHttpHeaders } from "http";
+import { JobHeaders } from "@taskless/types";
 
 type GQLHeaders =
   | {
@@ -7,13 +7,11 @@ type GQLHeaders =
     }[]
   | null;
 
-export const gqlHeadersToObject = (
-  gqlHeaders?: GQLHeaders
-): OutgoingHttpHeaders => {
+export const gqlHeadersToObject = (gqlHeaders?: GQLHeaders): JobHeaders => {
   if (typeof gqlHeaders === "undefined" || gqlHeaders === null) {
     return {};
   }
-  const all: OutgoingHttpHeaders = {};
+  const all: JobHeaders = {};
   for (const h of gqlHeaders) {
     all[h.name] = h.value;
   }

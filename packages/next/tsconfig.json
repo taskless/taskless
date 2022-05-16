@@ -3,12 +3,6 @@
   "include": ["**/*"],
   "exclude": ["node_modules", "dist"],
 
-  // point to dependent types
-  // "references": [
-  //   { "path": "../client/tsconfig.types.json" },
-  //   { "path": "../types/tsconfig.types.json" }
-  // ],
-
   "compilerOptions": {
     // package-specific options
     "composite": true,

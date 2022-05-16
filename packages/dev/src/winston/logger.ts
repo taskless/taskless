@@ -2,7 +2,7 @@ import { createLogger, format, transports } from "winston";
 import chalk from "chalk";
 import { DateTime } from "luxon";
 
-const { combine, timestamp, label, printf } = format;
+const { combine, timestamp, printf } = format;
 
 const getDebugLevel = () => {
   const level = process.env.TASKLESS_DEV_DEBUG ?? "info";

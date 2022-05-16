@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
+    "lib": ["es6"],
+    "target": "es6",
+    "moduleResolution": "node",
     "alwaysStrict": false,
     "declaration": true,
     "declarationMap": true,
     "downlevelIteration": true,
     "importHelpers": true,
     "inlineSources": true,
-    "lib": ["es6"],
-    // "module": "commonjs", // implied by "target"
-    "target": "es6",
-    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "noEmitHelpers": true,
     "noFallthroughCasesInSwitch": true,

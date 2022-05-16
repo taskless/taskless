@@ -25,6 +25,11 @@
       "require": "./dist/cjs/index.js"
     }
   },
+  "files": [
+    "package.json",
+    "README.md",
+    "dist"
+  ],
   "engines": {
     "node": "14 || 15 || 16 || 17"
   },
@@ -57,6 +62,7 @@
     "watch:codegen": "graphql-codegen --watch"
   },
   "dependencies": {
+    "@taskless/types": "2.0.0-next.4",
     "deepmerge": "^4.2.2",
     "luxon": "^2.3.1",
     "p-retry": "^5.0.0",
@@ -69,7 +75,6 @@
     "@graphql-codegen/typescript": "^2.4.5",
     "@graphql-codegen/typescript-generic-sdk": "^2.3.4",
     "@graphql-codegen/typescript-operations": "^2.3.2",
-    "@taskless/types": "workspace:*",
     "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",
     "npm-run-all": "^4.1.5",

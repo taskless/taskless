@@ -1,8 +1,9 @@
-import type { IncomingHttpHeaders, OutgoingHttpHeaders } from "node:http";
+import type { IncomingHttpHeaders } from "node:http";
 import { Promised } from "./common.js";
 import type {
   DefaultJobOptions,
   Job,
+  JobHeaders,
   JobIdentifier,
   JobMetadata,
   JobOptions,
@@ -126,6 +127,6 @@ export type SendJsonCallback = (json: unknown) => Promised<void>;
 /** An integration callback for sending JSON back to Taskless.io with a status code */
 export type SendErrorJsonCallback = (
   statusCode: number,
-  headers: OutgoingHttpHeaders,
+  headers: JobHeaders,
   json: unknown
 ) => Promised<void>;

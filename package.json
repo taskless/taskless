@@ -5,15 +5,18 @@
   "scripts": {
     "// util": "echo '----- Global Workspace Helpers -----'",
     "lint": "eslint .",
-    "build": "yarn workspaces foreach -p --interlaced --topological-dev --no-private run build",
+    "build": "yarn workspaces foreach -pitv --no-private run build",
     "husky": "husky",
     "postinstall": "husky install",
     "// ittr": "echo '----- Itteration Commands for development -----'",
-    "dev": "concurrently \"yarn:dev:*\"",
+    "dev": "run-p 'dev:**'",
     "dev:client": "yarn workspace @taskless/client dev",
     "dev:dev": "yarn workspace @taskless/dev dev",
     "dev:next": "yarn workspace taskless-example-next dev:next",
     "// release": "echo '----- Release Commands -----'",
+    "preview": "run-s preview:clean build preview:pack",
+    "preview:clean": "shx rm -rf dist",
+    "preview:pack": "yarn workspaces foreach -pitv --no-private pack --out ../../archive/%s-%v.tgz",
     "rev": "release-it --preRelease",
     "rel": "release-it"
   },
@@ -27,15 +30,16 @@
     "@commitlint/config-conventional": "^15.0.0",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
-    "concurrently": "^7.1.0",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.5.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.3",
     "madge": "^5.0.1",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "release-it": "*",
     "release-it-yarn-workspaces": "^2.0.1",
+    "shx": "^0.3.4",
     "typescript": "*"
   },
   "resolutions": {
@@ -46,6 +50,7 @@
     "@taskless/types": "workspace:*",
     "@types/react": "^17.0.40",
     "eslint-plugin-tsc": "^2.0.0",
+    "npm-run-all": "^4.1.5",
     "typescript": "^4.6.4"
   },
   "release-it": {
@@ -58,7 +63,7 @@
     },
     "hooks": {
       "before:init": [
-        "yarn workspace foreach -p --interlaced --topological-dev --no-private release:before:init || true"
+        "yarn workspace foreach -pitv --no-private release:before:init || true"
       ]
     }
   },
