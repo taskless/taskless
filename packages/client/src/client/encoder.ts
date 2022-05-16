@@ -1,6 +1,6 @@
 import crypto, { createHmac } from "node:crypto";
 
-import type { SupportedCiphers, Transport } from "@taskless/types";
+import type { SupportedCipher, Transport } from "@taskless/types";
 
 // //////////////////////////////////////////////////
 // Notes about encoding in this file
@@ -15,7 +15,7 @@ type EncodeResult = {
 };
 
 /** Convert a UTF-8 string into a valid hash key of the matching hash length */
-const strToKey = (str: string, cipher: SupportedCiphers): Buffer => {
+const strToKey = (str: string, cipher: SupportedCipher): Buffer => {
   const info = hashMap[cipher] ?? null;
   if (!info) {
     return Buffer.from("");
@@ -24,22 +24,24 @@ const strToKey = (str: string, cipher: SupportedCiphers): Buffer => {
   return crypto.createHash(info).update(Buffer.from(str)).digest();
 };
 
+type getCipherInfoResponse =
+  | {
+      mode: string;
+      name: string;
+      nid: number;
+      ivLength: number;
+      keyLength: number;
+    }
+  | undefined;
+
 /**
  * Get the cipher info given a supported cipher
  * @deprecated To be removed once Node 16 lts is lowest supported version
  * @param name A cipher name
  * @returns An object containing the cipher's info
  */
-const getCipherInfo = (name: SupportedCiphers) => {
-  const cipherInfo: {
-    [cipher in SupportedCiphers]?: {
-      mode: string;
-      name: string;
-      nid: number;
-      ivLength: number;
-      keyLength: number;
-    };
-  } = {
+const getCipherInfo = (name: SupportedCipher): getCipherInfoResponse => {
+  const cipherInfo: Record<SupportedCipher, getCipherInfoResponse> = {
     "aes-256-gcm": {
       mode: "gcm",
       name: "id-aes-256-gcm",
@@ -47,14 +49,19 @@ const getCipherInfo = (name: SupportedCiphers) => {
       ivLength: 12,
       keyLength: 32,
     },
+    none: undefined,
   };
 
-  return cipherInfo[name];
+  if (name === "aes-256-gcm") {
+    return cipherInfo["aes-256-gcm"];
+  }
+
+  return undefined;
 };
 
 /** For any given cipher we support, there is a hash that will generate a key of proper bit length from a string */
 const hashMap: {
-  [cipher in SupportedCiphers]: string;
+  [cipher in SupportedCipher]: string;
 } = {
   none: "",
   "aes-256-gcm": "sha256",

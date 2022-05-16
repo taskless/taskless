@@ -1,11 +1,12 @@
-import type { Cipher, SupportedCiphers } from "./ciphers.js";
+import type { CipherEnvelope, SupportedCipher } from "./ciphers.js";
 
 /** Describes the taskless Transport Metadata */
 export type Transport = {
   /** The envelope version used */
   ev: 1;
-  alg: SupportedCiphers;
-} & Cipher;
+  /** One of the supported ciphertypes */
+  alg: SupportedCipher;
+} & CipherEnvelope;
 
 /**
  * The taskless body definition (what is posted to & from the client)

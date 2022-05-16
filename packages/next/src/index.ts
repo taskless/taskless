@@ -1,4 +1,5 @@
 import { Queue } from "@taskless/client";
+
 import {
   Guards,
   JobHandler,
@@ -9,24 +10,30 @@ import {
 
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
-/**
- * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern
- * @template T Types the {@link TasklessNextApiHandler}
- */
-type NextMethods<T> = {
-  withQueue: (wrappedHandler: NextApiHandler) => TasklessNextApiHandler<T>;
-};
+// export core client
+export * from "@taskless/client";
 
 /**
  * A next.js compatible API Handler, with Taskless Queue support
  * @template T Used for typing the {@link CreateQueueMethods} and {@link NextMethods} objects
- * @param req The NextApiRequest which extends http#IncomingMessage
- * @param res The NextApiResponse which extends http#ServerResponse
+ * @param request The NextApiRequest which extends http#IncomingMessage
+ * @param response The NextApiResponse which extends http#ServerResponse
  */
-export interface TasklessNextApiHandler<T>
-  extends NextApiHandler,
-    CreateQueueMethods<T>,
-    NextMethods<T> {}
+export interface TasklessNextApiHandler<T> extends NextApiHandler {
+  // invocation of next api handler
+  (request: NextApiRequest, response: NextApiResponse): void | Promise<void>;
+  // queue methods
+  enqueue: CreateQueueMethods<T>["enqueue"];
+  update: CreateQueueMethods<T>["update"];
+  delete: CreateQueueMethods<T>["delete"];
+  get: CreateQueueMethods<T>["get"];
+  // custom
+  /**
+   * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern
+   * @template T Types the {@link TasklessNextApiHandler}
+   */
+  withQueue: (wrappedHandler: NextApiHandler) => TasklessNextApiHandler<T>;
+}
 
 /**
  * Creates a next.js compatible API Route that doubles as a Taskless Queue object
@@ -36,7 +43,7 @@ export interface TasklessNextApiHandler<T>
  * @param handler A {@link JobHandler} that supports a payload of type `T`
  * @param queueOptions The {@link QueueOptions} for this queue
  * @param defaultJobOptions A set of {@link DefaultJobOptions} to apply as defaults for every new job in the Queue
- * @returns {TasklessNextApiHandler}
+ * @returns {TasklessNextApiHandler<T>}
  */
 export function createQueue<T = undefined>(
   name: string,

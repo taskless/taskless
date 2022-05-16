@@ -1,15 +1,18 @@
 import type { CipherGCMTypes } from "node:crypto";
 
-/** Supported ciphers for end to end encryption */
-export type SupportedCiphers = Extract<CipherGCMTypes, "aes-256-gcm"> | "none";
+/** The aes-256-gcm cipher */
+type AES256GCM = Extract<CipherGCMTypes, "aes-256-gcm">;
+
+/** Supported cipher values for end to end encryption */
+export type SupportedCipher = AES256GCM | "none";
 
 /** Describes a cipher argument of type AES-256-GCM */
 export interface CipherAes256Gcm {
   /** The Cipher used */
-  alg: Extract<CipherGCMTypes, "aes-256-gcm">;
+  alg: AES256GCM;
   /** The length of the Auth Tag */
   atl: number;
-  /** The Auth Tag */
+  /** The Auth Tag value */
   at: string;
   /** The Cipher IV value */
   iv: string;
@@ -21,4 +24,4 @@ export interface CipherNone {
 }
 
 /** All Supported Cipher combinations */
-export type Cipher = CipherAes256Gcm | CipherNone;
+export type CipherEnvelope = CipherAes256Gcm | CipherNone;

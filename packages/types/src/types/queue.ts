@@ -1,9 +1,10 @@
 import type { IncomingHttpHeaders, OutgoingHttpHeaders } from "node:http";
+import { Promised } from "./common.js";
 import type {
   DefaultJobOptions,
   Job,
   JobIdentifier,
-  JobMeta,
+  JobMetadata,
   JobOptions,
 } from "./job.js";
 
@@ -105,25 +106,26 @@ export interface CreateQueueMethods<T> {
 }
 
 /** The Job Handler signature, taking a `payload` and `meta` */
-export type JobHandler<T> = (payload: T, meta: JobMeta) => Awaited<unknown>;
+export type JobHandler<T> = (
+  payload: T,
+  meta: JobMetadata
+) => Promised<unknown>;
 
 /** The result of the Job Handler callback */
-export type JobHandlerResult = Awaited<void> | Awaited<unknown>;
+export type JobHandlerResult = Promised<void | unknown>;
 
 /** An intgeration callback for getting the request body as a JSON object */
-export type GetBodyCallback<T> = () => Awaited<T>;
+export type GetBodyCallback<T> = () => Promised<T>;
 
 /** An integration callback for getting the headers as a JSON object */
-export type GetHeadersCallback = () =>
-  | IncomingHttpHeaders
-  | Promise<IncomingHttpHeaders>;
+export type GetHeadersCallback = () => Promised<IncomingHttpHeaders>;
 
 /** An integration callback for sending JSON back to Taskless.io with a success response */
-export type SendJsonCallback = (json: unknown) => void | Promise<void>;
+export type SendJsonCallback = (json: unknown) => Promised<void>;
 
 /** An integration callback for sending JSON back to Taskless.io with a status code */
 export type SendErrorJsonCallback = (
   statusCode: number,
   headers: OutgoingHttpHeaders,
   json: unknown
-) => void | Promise<void>;
+) => Promised<void>;

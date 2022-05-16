@@ -1,7 +1,7 @@
 import * as tg from "generic-type-guard";
 
 import type { TypeGuard } from "generic-type-guard";
-import type { Cipher, CipherAes256Gcm, CipherNone } from "./ciphers";
+import type { CipherEnvelope, CipherAes256Gcm, CipherNone } from "./ciphers";
 
 /** Typeguard for {@link CipherAes256Gcm} */
 const isCipherAes256Gcm: TypeGuard<CipherAes256Gcm> = new tg.IsInterface()
@@ -31,6 +31,8 @@ const isCipherNone: TypeGuard<CipherNone> = new tg.IsInterface()
   .get();
 
 /** Typeguard for {@link Cipher} */
-export const isCipher: TypeGuard<Cipher> = new tg.UnionOf(isCipherNone)
+export const isCipherEnvelope: TypeGuard<CipherEnvelope> = new tg.UnionOf(
+  isCipherNone
+)
   .with(isCipherAes256Gcm)
   .get();

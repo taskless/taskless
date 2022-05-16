@@ -1,5 +1,5 @@
 import * as tg from "generic-type-guard";
-import { isCipher } from "./ciphers.guard.js";
+import { isCipherEnvelope } from "./ciphers.guard.js";
 
 import type { TypeGuard } from "generic-type-guard";
 import type { TasklessBody, Transport } from "./tasklessBody.js";
@@ -9,7 +9,7 @@ export const isTransport: TypeGuard<Transport> = new tg.IsInterface()
   .withProperties({
     ev: tg.isSingletonNumber(1),
   })
-  .with(isCipher)
+  .with(isCipherEnvelope)
   .get();
 
 /** Typeguard for {@link TasklessBody} */

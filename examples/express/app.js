@@ -29,8 +29,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
-// queue must be mounted at app root
-app.use("/", sampleQueue.router);
+// you must tell the Queue where it was mounted if using sub-routers
+app.use("/", sampleQueue.router());
 app.use("/run-sample", runSample);
 
 // catch 404 and forward to error handler

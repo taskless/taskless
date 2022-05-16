@@ -1,10 +1,13 @@
 import * as tg from "generic-type-guard";
 
+import type { OutgoingHttpHeaders } from "node:http";
 import type { TypeGuard } from "generic-type-guard";
-import type { Job, JobHeaders } from "./job";
+import type { Job } from "./job";
 
 /** Typeguard for {@link JobHeaders} */
-const isJobHeaders: TypeGuard<JobHeaders> = (o: unknown): o is JobHeaders => {
+const isJobHeaders: TypeGuard<OutgoingHttpHeaders> = (
+  o: unknown
+): o is OutgoingHttpHeaders => {
   return tg.isObject(o);
 };
 

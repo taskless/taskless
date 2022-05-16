@@ -1,5 +1,5 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { createQueue } from "@taskless/client/next";
+import { createQueue } from "@taskless/next";
 
 // stubbed out to demonstrate sentry's wrapper of the next handler
 // where queue methods were hidden one layer deep by sentry's api handler
@@ -11,11 +11,18 @@ type SampleQueue = {
   message: string;
 };
 
+// an async function that emulates work being done
+const sleep = () =>
+  new Promise((resolve) => {
+    setTimeout(resolve, 100);
+  });
+
 const queue = createQueue<SampleQueue>(
   "Sentry Queue",
   "/api/queues/sentry",
-  async (job, meta) => {
+  async (job, taskless) => {
     console.log("Echoing recevied message: " + job.message);
+    await sleep();
     return {
       success: true,
       originalMessage: job.message,
@@ -25,8 +32,8 @@ const queue = createQueue<SampleQueue>(
   {
     baseUrl: process.env.TASKLESS_BASE_URL,
     credentials: {
-      appId: `${process.env.TASKLESS_APP_ID}`,
-      secret: `${process.env.TASKLESS_SECRET}`,
+      appId: `${process.env.TASKLESS_APP_ID ?? ""}`,
+      secret: `${process.env.TASKLESS_SECRET ?? ""}`,
     },
   }
 );

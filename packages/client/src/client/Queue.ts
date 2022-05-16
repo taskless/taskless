@@ -17,7 +17,6 @@ import type {
   Job,
   JobHandler,
   JobIdentifier,
-  JobMeta,
   JobOptions,
   QueueOptions,
   SendErrorJsonCallback,
@@ -103,8 +102,8 @@ const defaultJobOptions: JobOptions = {
 };
 
 /** Get either the first object of the array or the object if not an array */
-const firstOf = <T>(unk: T | T[]) => {
-  return (Array.isArray(unk) ? unk[0] : unk) as T;
+const firstOf = <T>(unk: T | T[]): T => {
+  return Array.isArray(unk) ? unk[0] : unk;
 };
 
 export class Queue<T> {
@@ -208,10 +207,14 @@ export class Queue<T> {
     const route =
       typeof this.route === "function" ? this.route() : this.route ?? "";
 
+    const baseUrl =
+      typeof this.queueOptions.baseUrl === "boolean"
+        ? ""
+        : this.queueOptions.baseUrl;
+
     return this.queueOptions.baseUrl === false
       ? route
-      : this.queueOptions.baseUrl +
-          (route.indexOf("/") === 0 ? route : "/" + route);
+      : `${baseUrl}${route.indexOf("/") === 0 ? route : "/" + route}`;
   }
 
   /** Gets an instance of the GraphQL client or a simplified dev client */
@@ -286,18 +289,16 @@ export class Queue<T> {
       return;
     }
 
-    const body = await getBody();
+    const body = await Promise.resolve(getBody());
     const payload = this.b2p(body);
     const h: Awaited<ReturnType<typeof getHeaders>> = await getHeaders();
 
-    const meta: JobMeta = {
-      applicationId: firstOf(h["x-taskless-application"]) ?? null,
-      organizationId: firstOf(h["x-taskless-organization"]) ?? null,
-      attempt: parseInt(firstOf(h["x-taskless-attempt"]) ?? "0", 10),
-    };
-
     try {
-      const result = await this.handler(payload, meta);
+      const result = await this.handler(payload, {
+        applicationId: firstOf(h["x-taskless-application"]) ?? null,
+        organizationId: firstOf(h["x-taskless-organization"]) ?? null,
+        attempt: parseInt(firstOf(h["x-taskless-attempt"]) ?? "0", 10),
+      });
       await send(JSON.parse(JSON.stringify(result)));
       return;
     } catch (e) {
@@ -349,12 +350,13 @@ export class Queue<T> {
     });
 
     // populate result
+    const resolvedBody = JSON.parse(job.replaceJob.body ?? "") as TasklessBody;
     return {
       name: job.replaceJob.name,
       endpoint: job.replaceJob.endpoint,
       enabled: job.replaceJob.enabled === false ? false : true,
       headers: opts.headers,
-      payload: this.b2p(JSON.parse(job.replaceJob.body ?? "")),
+      payload: this.b2p(resolvedBody),
       retries: job.replaceJob.retries,
       runAt: job.replaceJob.runAt,
     };
@@ -397,11 +399,13 @@ export class Queue<T> {
       },
     });
 
+    // result
+    const resolvedBody = JSON.parse(job.updateJob.body ?? "") as TasklessBody;
     return {
       name: job.updateJob.name,
       endpoint: job.updateJob.endpoint,
       enabled: job.updateJob.enabled === false ? false : true,
-      payload: this.b2p(JSON.parse(job.updateJob.body ?? "")),
+      payload: this.b2p(resolvedBody),
       retries: job.updateJob.retries,
       runAt: job.updateJob.runAt,
     };
@@ -424,11 +428,13 @@ export class Queue<T> {
       return null;
     }
 
+    // result
+    const resolvedBody = JSON.parse(job.deleteJob.body ?? "") as TasklessBody;
     return {
       name: job.deleteJob.name,
       endpoint: job.deleteJob.endpoint,
       enabled: job.deleteJob.enabled === false ? false : true,
-      payload: this.b2p(JSON.parse(job.deleteJob.body ?? "")),
+      payload: this.b2p(resolvedBody),
       retries: job.deleteJob.retries,
       runAt: job.deleteJob.runAt,
     };
@@ -446,11 +452,13 @@ export class Queue<T> {
       return null;
     }
 
+    // result
+    const resolvedBody = JSON.parse(result.job.body ?? "") as TasklessBody;
     return {
       name: result.job.name,
       endpoint: result.job.endpoint,
       enabled: result.job.enabled === false ? false : true,
-      payload: this.b2p(JSON.parse(result.job.body ?? "")),
+      payload: this.b2p(resolvedBody),
       retries: result.job.retries,
       runAt: result.job.runAt,
     };

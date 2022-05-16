@@ -7,9 +7,13 @@ const router = express.Router();
 router.get("/", function (req, res, next) {
   MyQueue.enqueue("sample-job", {
     message: "This is a sample express job",
-  });
-
-  res.status(200).send("ok");
+  })
+    .then(() => {
+      res.status(200).send("ok");
+    })
+    .catch((ex) => {
+      console.error(ex);
+    });
 });
 
 export default router;

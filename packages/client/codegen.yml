@@ -7,8 +7,10 @@ generates:
       dedupeFragments: true
       documentMode: string
       scalars:
-        timestamptz: string
-        uuid: string
+        DateTime: string
+        Duration: string
+        UUID: string
+        JSON: unknown
     plugins:
       - typescript
       - typescript-operations
