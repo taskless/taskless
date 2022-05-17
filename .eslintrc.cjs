@@ -27,9 +27,11 @@ module.exports = {
     // of type "any" and trigger these eslint errors.
     // https://github.com/typescript-eslint/typescript-eslint/issues/2728
     // https://github.com/typescript-eslint/typescript-eslint/issues/4912
-    "@typescript-eslint/no-unsafe-member-access": "off",
-    "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
   },
 };
