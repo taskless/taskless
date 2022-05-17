@@ -44,22 +44,22 @@
     "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
     "build:all": "run-p 'build:x:**'",
     "build:x:esm": "tsc -p tsconfig.esm.json",
-    "build:x:cjs": "shx mkdir -p dist/cjs && shx cp src/legacy.cjs dist/cjs/index.js",
+    "build:x:cjs": "tsc -p tsconfig.cjs.json",
     "build:x:types": "tsc -p tsconfig.types.json",
     "pjson:all": "run-p 'pjson:x:**'",
-    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
     "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
+    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
     "// watch": "echo '----- Watch Commands --------------------------------'",
-    "watch": "run-p 'watch:**' 'pkg:watch:**",
+    "watch": "run-p 'watch:**'",
     "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
+    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
     "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput",
     "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
     "release:before:init": "run-s clean build test",
-    "build:pre": "echo 'no pkg:build:pre tasks for @taskless/types'",
-    "build:post": "echo 'no pkg:build:post tasks for @taskless/types'"
+    "build:pre": "echo 'no build:pre tasks for @taskless/types'",
+    "build:post": "echo 'no build:post tasks for @taskless/types'"
   },
   "dependencies": {
-    "fix-esm": "^1.0.1",
     "generic-type-guard": "^3.7.0"
   },
   "devDependencies": {

@@ -41,19 +41,18 @@
     "clean": "shx rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 0",
     "// build": "echo '----- Build Commands --------------------------------'",
-    "build": "run-s 'build:pre' 'build:all' 'pjson:all' 'build:post'",
-    "build:pre": "run-s clean 'pkg:build:pre'",
+    "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
     "build:all": "run-p 'build:x:**'",
-    "build:post": "run-s 'pkg:build:post'",
     "build:x:esm": "tsc -p tsconfig.esm.json",
-    "build:x:cjs": "shx mkdir -p dist/cjs && shx cp src/legacy.cjs dist/cjs/index.js",
+    "build:x:cjs": "tsc -p tsconfig.cjs.json",
     "build:x:types": "tsc -p tsconfig.types.json",
     "pjson:all": "run-p 'pjson:x:**'",
-    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
     "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
+    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
     "// watch": "echo '----- Watch Commands --------------------------------'",
-    "watch": "run-p 'watch:**' 'pkg:watch:**",
+    "watch": "run-p 'watch:**'",
     "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
+    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
     "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput",
     "// utilities": "echo '----- Utility Commands --------------------------",
     "eslint": "eslint",
@@ -61,17 +60,12 @@
     "prettier": "prettier",
     "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
     "release:before:init": "run-s clean build test",
-    "pkg:build:pre": "echo 'no pkg:build:pre tasks for @taskless/express'",
-    "pkg:build:post": "echo 'no pkg:build:post tasks for @taskless/express'"
+    "build:pre": "echo 'no build:pre tasks for @taskless/express'",
+    "build:post": "echo 'no build:post tasks for @taskless/express'"
   },
-  "bundledDependencies": [
-    "@taskless/client",
-    "@taskless/types"
-  ],
   "dependencies": {
     "@taskless/client": "2.0.0-next.6",
-    "@taskless/types": "2.0.0-next.6",
-    "fix-esm": "^1.0.1"
+    "@taskless/types": "2.0.0-next.6"
   },
   "devDependencies": {
     "@types/eslint": "*",

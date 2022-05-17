@@ -2076,14 +2076,13 @@ __metadata:
     "@graphql-codegen/typescript": ^2.4.5
     "@graphql-codegen/typescript-generic-sdk": ^2.3.4
     "@graphql-codegen/typescript-operations": ^2.3.2
-    "@taskless/types": 2.0.0-next.5
+    "@taskless/types": 2.0.0-next.6
     deepmerge: ^4.2.2
-    fix-esm: ^1.0.1
     graphql: 16.5.0
     graphql-tag: ^2.12.6
     luxon: ^2.3.1
     npm-run-all: ^4.1.5
-    p-retry: ^5.0.0
+    p-retry: ^4.6.2
     phin: ^3.6.1
     shx: ^0.3.4
     typescript: "*"
@@ -2099,8 +2098,8 @@ __metadata:
     "@tailwindcss/aspect-ratio": ^0.4.0
     "@tailwindcss/forms": ^0.5.0
     "@tailwindcss/typography": ^0.5.2
-    "@taskless/client": 2.0.0-next.5
-    "@taskless/types": 2.0.0-next.5
+    "@taskless/client": 2.0.0-next.6
+    "@taskless/types": 2.0.0-next.6
     "@types/eslint": ^8
     "@types/luxon": ^2.3.0
     "@types/node": 17.0.21
@@ -2146,15 +2145,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@taskless/express@workspace:packages/express"
   dependencies:
-    "@taskless/client": 2.0.0-next.5
-    "@taskless/types": 2.0.0-next.5
+    "@taskless/client": 2.0.0-next.6
+    "@taskless/types": 2.0.0-next.6
     "@types/eslint": "*"
     "@types/express": ^4.17.13
     "@types/prettier": "*"
     "@typescript-eslint/eslint-plugin": "*"
     "@typescript-eslint/parser": "*"
     eslint: "*"
-    fix-esm: ^1.0.1
     madge: ^5.0.1
     npm-run-all: ^4.1.5
     prettier: "*"
@@ -2172,9 +2170,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@taskless/next@workspace:packages/next"
   dependencies:
-    "@taskless/client": 2.0.0-next.5
-    "@taskless/types": 2.0.0-next.5
-    fix-esm: ^1.0.1
+    "@taskless/client": 2.0.0-next.6
+    "@taskless/types": 2.0.0-next.6
     next: "*"
     npm-run-all: ^4.1.5
     react: "*"
@@ -2215,7 +2212,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@taskless/types@workspace:packages/types"
   dependencies:
-    fix-esm: ^1.0.1
     generic-type-guard: ^3.7.0
     npm-run-all: ^4.1.5
     prettier: ^2.6.0
@@ -2485,10 +2481,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/retry@npm:0.12.1":
-  version: 0.12.1
-  resolution: "@types/retry@npm:0.12.1"
-  checksum: 5f46b2556053655f78262bb33040dc58417c900457cc63ff37d6c35349814471453ef511af0cec76a540c601296cd2b22f64bab1ab649c0dacc0223765ba876c
+"@types/retry@npm:0.12.0":
+  version: 0.12.0
+  resolution: "@types/retry@npm:0.12.0"
+  checksum: 61a072c7639f6e8126588bf1eb1ce8835f2cb9c2aba795c4491cf6310e013267b0c8488039857c261c387e9728c1b43205099223f160bb6a76b4374f741b5603
   languageName: node
   linkType: hard
 
@@ -9309,13 +9305,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"p-retry@npm:^5.0.0":
-  version: 5.1.1
-  resolution: "p-retry@npm:5.1.1"
+"p-retry@npm:^4.6.2":
+  version: 4.6.2
+  resolution: "p-retry@npm:4.6.2"
   dependencies:
-    "@types/retry": 0.12.1
+    "@types/retry": 0.12.0
     retry: ^0.13.1
-  checksum: 59502d9f2cafbb8e9813be457342dc8c448f132c0a808690881423a66c019ccbfc580c1a8ba25eb868eeccb92363fa7ffa1cc633c35774bc73f54be086753350
+  checksum: 45c270bfddaffb4a895cea16cb760dcc72bdecb6cb45fef1971fa6ea2e91ddeafddefe01e444ac73e33b1b3d5d29fb0dd18a7effb294262437221ddc03ce0f2e
   languageName: node
   linkType: hard
 
@@ -11511,8 +11507,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express@workspace:examples/express"
   dependencies:
-    "@taskless/client": 2.0.0-next.5
-    "@taskless/dev": 2.0.0-next.5
+    "@taskless/client": 2.0.0-next.6
+    "@taskless/dev": 2.0.0-next.6
     concurrently: ^7.0.0
     cookie-parser: ~1.4.4
     debug: ~2.6.9
@@ -11528,8 +11524,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
   dependencies:
-    "@taskless/dev": 2.0.0-next.5
-    "@taskless/next": 2.0.0-next.5
+    "@taskless/dev": 2.0.0-next.6
+    "@taskless/next": 2.0.0-next.6
     "@types/eslint": ^8
     "@types/luxon": ^2.3.1
     "@types/node": 17.0.21
