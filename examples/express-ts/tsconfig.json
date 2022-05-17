@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "./",
+    "outDir": "build",
+    "target": "es5",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "lib": ["es2020", "dom"],
+    "types": ["express", "node"],
+    "allowJs": false,
+    "declaration": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "strict": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

@@ -60,7 +60,8 @@
     "build:post": "echo 'no build:post tasks for @taskless/types'"
   },
   "dependencies": {
-    "generic-type-guard": "^3.7.0"
+    "generic-type-guard": "^3.7.0",
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",

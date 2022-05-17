@@ -4,13 +4,8 @@
   "exclude": ["node_modules", "dist"],
 
   "compilerOptions": {
-    // package-specific options
-    "composite": true,
     "rootDir": "./src",
     "baseUrl": "./src",
-
-    // for next.js, we're skipping lib checks
-    // todo: in future, remove and solve
     "skipLibCheck": true
   }
 }

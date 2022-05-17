@@ -69,6 +69,7 @@
     "react": "*",
     "react-dom": "*",
     "shx": "^0.3.4",
+    "tslib": "^2.4.0",
     "typescript": "*"
   },
   "peerDependencies": {

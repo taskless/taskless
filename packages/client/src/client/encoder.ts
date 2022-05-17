@@ -1,4 +1,10 @@
-import crypto, { createHmac } from "node:crypto";
+import {
+  createHash,
+  createHmac,
+  randomBytes,
+  createCipheriv,
+  createDecipheriv,
+} from "node:crypto";
 
 import type { SupportedCipher, Transport } from "@taskless/types";
 
@@ -21,7 +27,7 @@ const strToKey = (str: string, cipher: SupportedCipher): Buffer => {
     return Buffer.from("");
   }
 
-  return crypto.createHash(info).update(Buffer.from(str)).digest();
+  return createHash(info).update(Buffer.from(str)).digest();
 };
 
 type getCipherInfoResponse =
@@ -118,10 +124,10 @@ export const encode = <T>(obj: T, secret?: string): EncodeResult => {
   }
 
   const key = strToKey(secret, algo);
-  const iv = crypto.randomBytes(info.ivLength);
+  const iv = randomBytes(info.ivLength);
   const authTagLength = 16;
 
-  const cipher = crypto.createCipheriv(algo, key, iv, {
+  const cipher = createCipheriv(algo, key, iv, {
     authTagLength,
   });
   const ciphered = Buffer.concat([cipher.update(str, "utf-8"), cipher.final()]);
@@ -151,7 +157,7 @@ const decodeOne = (
 
   const key = strToKey(secret ?? "", algo);
 
-  const decipher = crypto.createDecipheriv(
+  const decipher = createDecipheriv(
     algo,
     key,
     Buffer.from(transport.iv, "base64"),

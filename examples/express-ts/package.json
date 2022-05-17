@@ -1,28 +1,25 @@
 {
   "private": true,
-  "name": "taskless-example-express",
-  "description": "Taskless Express 4 example app",
+  "name": "taskless-example-express-ts",
+  "description": "Taskless Express 4 example app in Typescript",
   "version": "2.0.0-next.8",
-  "type": "module",
   "scripts": {
     "dev": "concurrently -n taskless,express \"yarn:dev:taskless\" \"yarn:dev:express\"",
     "dev:taskless": "taskless",
-    "dev:express": "node -r dotenv/config ./bin/www.js dotenv_config_path=./.env.development",
-    "start": "node ./bin/www.js",
+    "dev:express": "ts-node src/server.ts",
     "build": "echo 'no express build step required'"
   },
   "dependencies": {
     "@taskless/express": "2.0.0-next.8",
     "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
-    "morgan": "~1.9.1"
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "@taskless/dev": "2.0.0-next.8",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.34",
     "concurrently": "^7.0.0",
-    "dotenv": "^16.0.0"
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
   }
 }
