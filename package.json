@@ -63,7 +63,7 @@
     },
     "hooks": {
       "before:init": [
-        "yarn workspaces foreach -pitv --no-private release:before:init"
+        "yarn workspaces foreach -pitv --no-private run release:before:init"
       ]
     }
   },
