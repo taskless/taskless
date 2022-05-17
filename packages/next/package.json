@@ -17,6 +17,14 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "files": [
     "package.json",
     "README.md",
@@ -36,7 +44,7 @@
     "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
     "build:all": "run-p 'build:x:**'",
     "build:x:esm": "tsc -p tsconfig.esm.json",
-    "build:x:cjs": "tsc -p tsconfig.cjs.json",
+    "build:x:cjs": "shx mkdir -p dist/cjs && shx cp src/legacy.cjs dist/cjs/index.js",
     "build:x:types": "tsc -p tsconfig.types.json",
     "pjson:all": "run-p 'pjson:x:**'",
     "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
@@ -44,7 +52,6 @@
     "// watch": "echo '----- Watch Commands --------------------------------'",
     "watch": "run-p 'watch:**' 'pkg:watch:**",
     "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
-    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
     "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput",
     "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
     "release:before:init": "run-s clean build test",
@@ -53,7 +60,8 @@
   },
   "dependencies": {
     "@taskless/client": "2.0.0-next.5",
-    "@taskless/types": "2.0.0-next.5"
+    "@taskless/types": "2.0.0-next.5",
+    "fix-esm": "^1.0.1"
   },
   "devDependencies": {
     "next": "*",
