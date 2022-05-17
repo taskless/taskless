@@ -23,13 +23,13 @@ export type QueueOptions = {
      * The Application ID from Taskless
      * If unset, will default to process.env.TASKLESS_APP_ID
      */
-    appId: string;
+    appId?: string;
     /**
      * The secret for Application ID
      * If unset, will default to process.env.TASKLESS_APP_SECRET
      * A secret is required when running Taskless in production mode
      */
-    secret: string;
+    secret?: string;
     /**
      * A list of expired / rotated secrets to maintain compatibility
      * for unprocessed jobs. If unset, will default to a comma
@@ -57,6 +57,14 @@ export type QueueOptions = {
 
   /** A default set of job options to apply to every job created in this queue */
   jobOptions?: DefaultJobOptions;
+};
+
+/** A finalized set of Queue options, where previously optional values must be realied */
+export type FinalizedQueueOptions = QueueOptions & {
+  credentials: {
+    appId: string;
+    secret: string;
+  };
 };
 
 /**

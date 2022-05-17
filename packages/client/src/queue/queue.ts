@@ -1,5 +1,6 @@
 import type {
   DefaultJobOptions,
+  FinalizedQueueOptions,
   GetBodyCallback,
   GetHeadersCallback,
   Job,
@@ -22,7 +23,7 @@ import { create as createRpcClient } from "../net/rpcClient.js";
 import { encode, decode, sign, verify } from "./encoder.js";
 import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
-import { errorMissing, resolveOptions } from "../util.js";
+import { resolveOptions } from "./util.js";
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -56,15 +57,6 @@ export type TasklessQueueConfig<T> = {
   jobOptions?: DefaultJobOptions;
 };
 
-/** Queue options augmented with required values */
-type ResolvedQueueOptions = QueueOptions & {
-  baseUrl: string;
-  credentials: {
-    appId: string;
-    secret: string;
-  };
-};
-
 /** A set of default options for job objects */
 const defaultJobOptions: JobOptions = {
   enabled: true,
@@ -84,28 +76,14 @@ const firstOf = <T>(unk: T | T[]): T => {
 export class Queue<T> {
   private route: string | (() => string);
   private handler?: JobHandler<T>;
-  private queueOptions: ResolvedQueueOptions;
+  private queueOptions: FinalizedQueueOptions;
   private jobOptions: DefaultJobOptions;
 
   constructor(args: TasklessQueueConfig<T>) {
-    const options = resolveOptions();
-
-    if (typeof options.baseUrl === "undefined") {
-      throw new Error(errorMissing("baseUrl", "TASKLESS_BASE_URL"));
-    }
-    if (typeof options.credentials?.appId === "undefined") {
-      throw new Error(errorMissing("credentials.appId", "TASKLESS_APP_ID"));
-    }
-    if (typeof options.credentials?.secret === "undefined") {
-      throw new Error(
-        errorMissing("credentials.secret", "TASKLESS_APP_SECRET")
-      );
-    }
+    const options = resolveOptions(args.queueOptions);
 
     this.queueOptions = {
       ...options,
-      baseUrl: options.baseUrl,
-      credentials: options.credentials,
     };
 
     this.jobOptions = {
@@ -177,8 +155,7 @@ export class Queue<T> {
   protected resolveRoute() {
     const route =
       typeof this.route === "function" ? this.route() : this.route ?? "";
-
-    return `${this.queueOptions.baseUrl}${
+    return `${this.queueOptions.baseUrl ?? ""}${
       route.indexOf("/") === 0 ? route : "/" + route
     }`;
   }

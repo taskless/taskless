@@ -4,13 +4,13 @@ import type {
   GetJobByNameQuery,
   UpdateJobMutation,
 } from "../__generated__/schema.js";
-import type { GraphQLResponse, RequesterOptions } from "./types.js";
+import type { GraphQLResponse, RequesterOptions } from "./netTypes.js";
 
 import phin from "phin";
 import pRetry from "p-retry";
 
 import { create as createGraphql } from "./graphqlClient.js";
-import { RequestError } from "./types.js";
+import { RequestError } from "./netTypes.js";
 
 /**
  * Creates a lightweight RPC client mirroring GraphQL functions

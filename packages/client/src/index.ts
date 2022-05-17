@@ -1,4 +1,4 @@
-export { Queue } from "./client/Queue.js";
+export { Queue } from "./queue/queue.js";
 export { JobError } from "./error.js";
 
 // export types needed for dev server emulation

@@ -6,8 +6,6 @@ import { Job, JobHeaders } from "@taskless/types";
 
 type UpsertRPC = DEV["RPCMethods"]["Enqueue"]["Request"];
 
-const initAppId = "00000000-0000-0000-0000-000000000000";
-
 type ErrorResponse = {
   error: string;
 };
@@ -35,10 +33,10 @@ export default async function handler(
     name: variables.__meta?.queueName ?? "manual",
     route: variables.job.endpoint,
     queueOptions: {
-      baseUrl: false,
+      baseUrl: "",
       credentials: {
-        appId: variables.__meta?.appId ?? initAppId,
-        secret: variables.__meta?.secret ?? "",
+        appId: variables.__meta?.appId ?? undefined,
+        secret: variables.__meta?.secret ?? undefined,
       },
     },
   });

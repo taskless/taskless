@@ -1,16 +1,18 @@
-import type { QueueOptions } from "@taskless/types";
+import type { QueueOptions, FinalizedQueueOptions } from "@taskless/types";
 
 import merge from "deepmerge";
 
-import { IS_PRODUCTION } from "./constants.js";
+import { IS_PRODUCTION } from "../constants.js";
 
 /** Helper function for missing items in the environment */
 export const errorMissing = (optionName: string, envName: string): string => {
   return `options.${optionName} was not defined. You must either define it when creating a Queue or set the environment value process.env.${envName}`;
 };
 
-/** Resolve the options for the environment */
-export const resolveOptions = (): QueueOptions => {
+/** Resolve the options into finalized queue options, including runtime safety */
+export const resolveOptions = (
+  additionalOptions?: QueueOptions
+): FinalizedQueueOptions => {
   /** Base configuration for development-like environments */
   const developmentQueueOptions: QueueOptions = {
     baseUrl: "http://localhost:3000",
@@ -44,10 +46,25 @@ export const resolveOptions = (): QueueOptions => {
   };
 
   /** Combined set of development and optionally env-based queue option defaults */
-  const defaultQueueOptions: QueueOptions = merge.all([
+  const options: QueueOptions = merge.all([
     IS_PRODUCTION ? {} : developmentQueueOptions,
     productionQueueOptions,
+    typeof additionalOptions === "undefined" ? {} : additionalOptions,
   ]);
 
-  return defaultQueueOptions;
+  if (typeof options.credentials?.appId === "undefined") {
+    throw new Error(errorMissing("credentials.appId", "TASKLESS_APP_ID"));
+  }
+  if (typeof options.credentials?.secret === "undefined") {
+    throw new Error(errorMissing("credentials.secret", "TASKLESS_APP_SECRET"));
+  }
+
+  return {
+    ...options,
+    credentials: {
+      ...(options.credentials ?? {}),
+      appId: options.credentials.appId,
+      secret: options.credentials.secret,
+    },
+  };
 };
