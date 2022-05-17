@@ -1,9 +1,3 @@
-import phin from "phin";
-import pRetry from "p-retry";
-
-import { create as createGraphql } from "./graphqlClient.js";
-import { RequestError } from "./error.js";
-
 import type {
   DeleteJobMutation,
   EnqueueJobMutation,
@@ -11,6 +5,12 @@ import type {
   UpdateJobMutation,
 } from "../__generated__/schema.js";
 import type { GraphQLResponse, RequesterOptions } from "./types.js";
+
+import phin from "phin";
+import pRetry from "p-retry";
+
+import { create as createGraphql } from "./graphqlClient.js";
+import { RequestError } from "./types.js";
 
 /**
  * Creates a lightweight RPC client mirroring GraphQL functions

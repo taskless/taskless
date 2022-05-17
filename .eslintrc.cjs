@@ -14,4 +14,8 @@ module.exports = {
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier",
   ],
+  rules: {
+    // https://github.com/typescript-eslint/typescript-eslint/issues/2728
+    "@typescript-eslint/no-unsafe-member-access": "off",
+  },
 };

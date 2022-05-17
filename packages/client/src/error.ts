@@ -1,23 +1,14 @@
 import type { OutgoingHttpHeaders } from "node:http";
 
-/** A stand-in error object that works with Phin */
-export class RequestError extends Error {
-  raw: unknown;
-  constructor(err: string | undefined, raw: unknown) {
-    super(err);
-    this.raw = raw;
-  }
-}
+type JobErrorOptions = {
+  retryAfter?: string | number;
+};
 
-export class ResponseError extends Error {
+class ResponseError extends Error {
   statusCode?: number;
   statusMessage?: string;
   headers?: OutgoingHttpHeaders;
 }
-
-type JobErrorOptions = {
-  retryAfter?: string | number;
-};
 
 export class JobError extends ResponseError {
   statusCode: number;

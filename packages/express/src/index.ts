@@ -1,14 +1,16 @@
-import * as express from "express";
-
-import { Queue } from "@taskless/client";
-
-import {
-  Guards,
+import type {
   JobHandler,
   QueueOptions,
   DefaultJobOptions,
   CreateQueueMethods,
 } from "@taskless/types";
+
+import * as express from "express";
+import { Queue } from "@taskless/client";
+import { Guards } from "@taskless/types";
+
+// re-export core client
+export * from "@taskless/client";
 
 /**
  * An Express compatible API Handler, with Taskless Queue support
@@ -33,7 +35,7 @@ export interface TasklessExpressRouter<T> {
 }
 
 /**
- * Express Queue Options. {@link QueueOptions}
+ * Express Queue Options. See: {@link QueueOptions}
  */
 export type ExpressQueueOptions = QueueOptions;
 

@@ -1,7 +1,7 @@
 import * as tg from "generic-type-guard";
 
 import type { TypeGuard } from "generic-type-guard";
-import type { Job, JobHeaders } from "./job";
+import type { Job, JobHeaders } from "./job.js";
 
 /** Typeguard for {@link JobHeaders} */
 const isJobHeaders: TypeGuard<JobHeaders> = (o: unknown): o is JobHeaders => {

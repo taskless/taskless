@@ -1,16 +1,15 @@
-import { Queue } from "@taskless/client";
-
-import {
-  Guards,
+import type {
   JobHandler,
   QueueOptions,
   DefaultJobOptions,
   CreateQueueMethods,
 } from "@taskless/types";
+import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
-import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { Queue } from "@taskless/client";
+import { Guards } from "@taskless/types";
 
-// export core client
+// re-export core client
 export * from "@taskless/client";
 
 /**

@@ -32,8 +32,12 @@ function onListening() {
   console.log("Listening on " + bind);
 }
 
+const wait = (amount: number) =>
+  new Promise((resolve) => setTimeout(resolve, amount));
+
 const queue = createQueue("sample queue", "/sample", async (job, meta) => {
-  // todo
+  await wait(100);
+  console.log(job, meta);
 });
 
 const router = express.Router();

@@ -1,5 +1,5 @@
-import {
-  getSdk,
+import type {
+  Sdk,
   JobDataFragment,
   DeleteJobMutation,
   DeleteJobMutationVariables,
@@ -12,7 +12,7 @@ import {
 } from "./__generated__/schema.js";
 
 /** Helper type that defines a valid RPC method */
-type ValidRPCMethod = keyof ReturnType<typeof getSdk>;
+type ValidRPCMethod = keyof Sdk;
 
 /** Helper type to construct an RPC request */
 type DevelopmentRPC<T extends ValidRPCMethod, V> = {

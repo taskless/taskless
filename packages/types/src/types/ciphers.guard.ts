@@ -1,7 +1,7 @@
-import * as tg from "generic-type-guard";
-
 import type { TypeGuard } from "generic-type-guard";
-import type { CipherEnvelope, CipherAes256Gcm, CipherNone } from "./ciphers";
+import type { CipherEnvelope, CipherAes256Gcm, CipherNone } from "./ciphers.js";
+
+import * as tg from "generic-type-guard";
 
 /** Typeguard for {@link CipherAes256Gcm} */
 const isCipherAes256Gcm: TypeGuard<CipherAes256Gcm> = new tg.IsInterface()

@@ -1,14 +1,3 @@
-import merge from "deepmerge";
-import { DateTime } from "luxon";
-
-import { JobError } from "./error.js";
-import { JobMethodEnum } from "../__generated__/schema.js";
-import { create as createGraphqlClient } from "./graphqlClient.js";
-import { create as createRpcClient } from "./rpcClient.js";
-import { encode, decode, sign, verify } from "./encoder.js";
-import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
-import { headersToGql } from "../graphql-helpers/headers.js";
-
 import type {
   DefaultJobOptions,
   GetBodyCallback,
@@ -23,6 +12,18 @@ import type {
   TasklessBody,
 } from "@taskless/types";
 
+import merge from "deepmerge";
+import { DateTime } from "luxon";
+
+import { JobError } from "../error.js";
+import { JobMethodEnum } from "../__generated__/schema.js";
+import { create as createGraphqlClient } from "../net/graphqlClient.js";
+import { create as createRpcClient } from "../net/rpcClient.js";
+import { encode, decode, sign, verify } from "./encoder.js";
+import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
+import { headersToGql } from "../graphql-helpers/headers.js";
+import { errorMissing, resolveOptions } from "../util.js";
+
 /**
  * Constructor arguments for the Taskless Queue
  * @template T Describes the payload used in the {@link JobHandler}
@@ -36,7 +37,10 @@ export type TasklessQueueConfig<T> = {
    */
   name: string;
 
-  /** The route slug this Queue is managing. Can either be a string or a function that provides a string */
+  /**
+   * The route slug this Queue is managing. Can either be a string or a function
+   * that provides a string if being invoked at a later time
+   */
   route: string | (() => string);
 
   /**
@@ -52,41 +56,13 @@ export type TasklessQueueConfig<T> = {
   jobOptions?: DefaultJobOptions;
 };
 
-/** Queue options plus required values in order for the client to work properly */
+/** Queue options augmented with required values */
 type ResolvedQueueOptions = QueueOptions & {
-  baseUrl: string | boolean;
+  baseUrl: string;
   credentials: {
     appId: string;
     secret: string;
   };
-};
-
-/** Helper for missing items in the constructor */
-const errorMissing = (optionName: string, envName: string) => {
-  return `options.${optionName} was not defined. You must either define it when creating a Queue or set the environment value process.env.${envName}`;
-};
-
-/** A set of default options for queue objects, looking at ENV values first */
-const defaultQueueOptions: QueueOptions = {
-  baseUrl: process.env.TASKLESS_BASE_URL ?? undefined,
-  encryptionKey: process.env.TASKLESS_ENCRYPTION_KEY ?? undefined,
-  expiredEncryptionKeys: process.env.TASKLESS_PREVIOUS_ENCRYPTION_KEYS
-    ? `${process.env.TASKLESS_PREVIOUS_ENCRYPTION_KEYS}`
-        .split(",")
-        .map((s) => s.trim())
-    : [],
-  credentials:
-    process.env.TASKLESS_APP_ID && process.env.TASKLESS_APP_SECRET
-      ? {
-          appId: process.env.TASKLESS_APP_ID,
-          secret: process.env.TASKLESS_APP_SECRET,
-          expiredSecrets: process.env.TASKLESS_PREVIOUS_APP_SECRETS
-            ? `${process.env.TASKLESS_PREVIOUS_APP_SECRETS}`
-                .split(",")
-                .map((s) => s.trim())
-            : [],
-        }
-      : undefined,
 };
 
 /** A set of default options for job objects */
@@ -112,19 +88,15 @@ export class Queue<T> {
   private jobOptions: DefaultJobOptions;
 
   constructor(args: TasklessQueueConfig<T>) {
-    const options: QueueOptions = merge.all([
-      defaultQueueOptions,
-      args.queueOptions ?? {},
-    ]);
+    const options = resolveOptions();
 
     if (typeof options.baseUrl === "undefined") {
       throw new Error(errorMissing("baseUrl", "TASKLESS_BASE_URL"));
-    } else if (
-      typeof options.credentials === "undefined" ||
-      typeof options.credentials.appId === "undefined"
-    ) {
+    }
+    if (typeof options.credentials?.appId === "undefined") {
       throw new Error(errorMissing("credentials.appId", "TASKLESS_APP_ID"));
-    } else if (typeof options.credentials.secret === "undefined") {
+    }
+    if (typeof options.credentials?.secret === "undefined") {
       throw new Error(
         errorMissing("credentials.secret", "TASKLESS_APP_SECRET")
       );
@@ -206,14 +178,9 @@ export class Queue<T> {
     const route =
       typeof this.route === "function" ? this.route() : this.route ?? "";
 
-    const baseUrl =
-      typeof this.queueOptions.baseUrl === "boolean"
-        ? ""
-        : this.queueOptions.baseUrl;
-
-    return this.queueOptions.baseUrl === false
-      ? route
-      : `${baseUrl}${route.indexOf("/") === 0 ? route : "/" + route}`;
+    return `${this.queueOptions.baseUrl}${
+      route.indexOf("/") === 0 ? route : "/" + route
+    }`;
   }
 
   /** Gets an instance of the GraphQL client or a simplified dev client */

@@ -1,3 +1,5 @@
+import type { SupportedCipher, Transport } from "@taskless/types";
+
 import {
   createHash,
   createHmac,
@@ -5,8 +7,6 @@ import {
   createCipheriv,
   createDecipheriv,
 } from "node:crypto";
-
-import type { SupportedCipher, Transport } from "@taskless/types";
 
 // //////////////////////////////////////////////////
 // Notes about encoding in this file

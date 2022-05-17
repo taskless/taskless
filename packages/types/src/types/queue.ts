@@ -11,8 +11,8 @@ import type {
 
 /** A set of options for setting up a Taskless Queue */
 export type QueueOptions = {
-  /** The base url, defaults to process.env.TASKLESS_BASE_URL. Set to `false` to manage the full URL yourself */
-  baseUrl?: string | boolean;
+  /** The base url, defaults to process.env.TASKLESS_BASE_URL */
+  baseUrl?: string;
 
   /** A separator for compound keys (passed as arrays). Defaults to `-` */
   separator?: string;
@@ -27,6 +27,7 @@ export type QueueOptions = {
     /**
      * The secret for Application ID
      * If unset, will default to process.env.TASKLESS_APP_SECRET
+     * A secret is required when running Taskless in production mode
      */
     secret: string;
     /**
