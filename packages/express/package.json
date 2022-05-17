@@ -1,7 +1,7 @@
 {
   "name": "@taskless/express",
   "description": "Express JS Integration for Taskless.io",
-  "version": "2.0.0-next.10",
+  "version": "2.0.0-next.11",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -64,8 +64,8 @@
     "build:post": "echo 'no build:post tasks for @taskless/express'"
   },
   "dependencies": {
-    "@taskless/client": "2.0.0-next.10",
-    "@taskless/types": "2.0.0-next.10"
+    "@taskless/client": "2.0.0-next.11",
+    "@taskless/types": "2.0.0-next.11"
   },
   "devDependencies": {
     "@types/eslint": "*",

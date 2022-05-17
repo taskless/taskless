@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@taskless/root",
-  "version": "2.0.0-next.10",
+  "version": "2.0.0-next.11",
   "scripts": {
     "// util": "echo '----- Global Workspace Helpers -----'",
     "lint": "eslint .",
