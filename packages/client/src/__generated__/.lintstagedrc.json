@@ -1,0 +1,4 @@
+{
+  "*.(md|json)": "prettier --write",
+  "*.graphql": "prettier --write"
+}
