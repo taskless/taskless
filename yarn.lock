@@ -2154,6 +2154,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "*"
     "@typescript-eslint/parser": "*"
     eslint: "*"
+    fix-esm: ^1.0.1
     madge: ^5.0.1
     npm-run-all: ^4.1.5
     prettier: "*"
@@ -2173,6 +2174,7 @@ __metadata:
   dependencies:
     "@taskless/client": 2.0.0-next.5
     "@taskless/types": 2.0.0-next.5
+    fix-esm: ^1.0.1
     next: "*"
     npm-run-all: ^4.1.5
     react: "*"
@@ -2213,6 +2215,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@taskless/types@workspace:packages/types"
   dependencies:
+    fix-esm: ^1.0.1
     generic-type-guard: ^3.7.0
     npm-run-all: ^4.1.5
     prettier: ^2.6.0
