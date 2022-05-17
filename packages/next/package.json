@@ -1,7 +1,7 @@
 {
   "name": "@taskless/next",
   "description": "Next.JS Integration for Taskless.io",
-  "version": "2.0.0-next.5",
+  "version": "2.0.0-next.6",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -59,8 +59,8 @@
     "build:post": "echo 'no pkg:build:post tasks for @taskless/next'"
   },
   "dependencies": {
-    "@taskless/client": "2.0.0-next.5",
-    "@taskless/types": "2.0.0-next.5",
+    "@taskless/client": "2.0.0-next.6",
+    "@taskless/types": "2.0.0-next.6",
     "fix-esm": "^1.0.1"
   },
   "devDependencies": {
