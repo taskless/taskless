@@ -17,7 +17,7 @@ const argv = yargs(process.argv.slice(2))
   .describe("p", "The port to start the taskless server on")
   .default("p", 3001)
   .alias("d", "debug")
-  .describe("d", "Set the minimum debug level (info => warn => error)")
+  .describe("d", "Set the minimum debug level (debug => info => warn => error)")
   .default("d", "info")
   .help("h")
   .alias("h", "help").argv;
