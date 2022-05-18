@@ -14,7 +14,11 @@ export type QueueOptions = {
   /** The base url, defaults to process.env.TASKLESS_BASE_URL */
   baseUrl?: string;
 
-  /** A separator for compound keys (passed as arrays). Defaults to `-` */
+  /**
+   * A separator for compound keys (passed as arrays). Defaults to `/`,
+   * which is suitable for most situations but may also be overridden on
+   * a per-queue basis.
+   */
   separator?: string;
 
   /** Your Application's credential pair */

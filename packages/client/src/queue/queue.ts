@@ -96,7 +96,7 @@ export class Queue<T> {
 
   /** Packs a name into string format */
   packName(name: JobIdentifier): string {
-    const s = this.queueOptions.separator ?? "-";
+    const s = this.queueOptions.separator ?? "/";
     return Array.isArray(name) ? name.join(s) : `${name}`;
   }
 
@@ -242,7 +242,7 @@ export class Queue<T> {
         organizationId: firstOf(h["x-taskless-organization"]) ?? null,
         attempt: parseInt(firstOf(h["x-taskless-attempt"]) ?? "0", 10),
       });
-      await send(JSON.parse(JSON.stringify(result)));
+      await send(JSON.parse(JSON.stringify(result ?? {})));
       return;
     } catch (e) {
       console.error(e);
