@@ -59,8 +59,13 @@ export function createQueue<T = undefined>(
   let mountAt: string | undefined;
   let isMounted = false;
 
+  /** Create a clean route, combining the optional mount with the queue path */
   const cleanRoute = (pth: string, mnt?: string) => {
-    return (mnt ?? "") + (pth.indexOf("/") === 0 ? pth.substring(1) : pth);
+    const parts: string[] = [
+      ...(typeof mnt === "undefined" ? [] : mnt.split("/")),
+      ...pth.split("/"),
+    ].filter((v) => typeof v !== "undefined" && v !== "");
+    return "/" + parts.join("/");
   };
 
   const t = new Queue({
@@ -82,14 +87,17 @@ export function createQueue<T = undefined>(
    * Create a mount point for the express rotuer, returning a router capable
    * of receiving inbound requests
    * @param at specify an optional mount point in more complex applications with sub routers
-   * @returns {express.Router}
+   * @param options provide any additional {@link express.RouterOptions} values
+   * @returns An express router
    */
-  const mount = (at?: string) => {
+  const mount = (
+    at?: string,
+    options?: express.RouterOptions
+  ): express.Router => {
     if (isMounted) {
       throw new Error("TasklessExpressRouter should not be mounted twice");
     }
 
-    const router = express.Router();
     mountAt = at ?? "/";
     isMounted = true;
 
@@ -122,7 +130,12 @@ export function createQueue<T = undefined>(
       });
     };
 
-    router.post(cleanRoute(route, at), [express.json(), handle]);
+    const router = express.Router(options);
+    const cr = cleanRoute(route);
+    router.get(cr, (req, res) => {
+      res.status(400).end("Bad Request");
+    });
+    router.post(cleanRoute(route), [express.json(), handle]);
     return router;
   };
 
