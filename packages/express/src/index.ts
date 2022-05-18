@@ -132,7 +132,7 @@ export function createQueue<T = undefined>(
 
     const router = express.Router(options);
     const cr = cleanRoute(route);
-    router.get(cr, (req, res) => {
+    router.get(cr, (_req, res) => {
       res.status(400).end("Bad Request");
     });
     router.post(cleanRoute(route), [express.json(), handle]);
