@@ -46,6 +46,9 @@
         - title: Using Return Codes
           url: /docs/packages/client/return-codes
           file: /docs/packages/client/return-codes.md
+    - title: "@taskless/dev"
+      url: /docs/packages/dev
+      file: /docs/packages/dev.md
 - title: Support
   routes:
     - title: Help Forum
