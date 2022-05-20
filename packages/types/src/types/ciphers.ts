@@ -1,4 +1,4 @@
-import type { CipherGCMTypes } from "node:crypto";
+import { type CipherGCMTypes } from "node:crypto";
 
 /** The aes-256-gcm cipher */
 type AES256GCM = Extract<CipherGCMTypes, "aes-256-gcm">;

@@ -1,16 +1,16 @@
-import type { IncomingHttpHeaders } from "node:http";
-import { Promised } from "./common.js";
-import type {
-  DefaultJobOptions,
-  Job,
-  JobHeaders,
-  JobIdentifier,
-  JobMetadata,
-  JobOptions,
+import { type IncomingHttpHeaders, type OutgoingHttpHeaders } from "node:http";
+
+import { type Promised } from "./common.js";
+import {
+  type Job,
+  type JobIdentifier,
+  type JobMetadata,
+  type JobOptions,
 } from "./job.js";
+import { type TasklessBody } from "./tasklessBody.js";
 
 /** A set of options for setting up a Taskless Queue */
-export type QueueOptions = {
+export interface QueueOptions {
   /** The base url, defaults to process.env.TASKLESS_BASE_URL */
   baseUrl?: string;
 
@@ -60,16 +60,18 @@ export type QueueOptions = {
   expiredEncryptionKeys?: string[];
 
   /** A default set of job options to apply to every job created in this queue */
-  jobOptions?: DefaultJobOptions;
-};
+  defaultJobOptions?: JobOptions;
+}
 
 /** A finalized set of Queue options, where previously optional values must be realied */
-export type FinalizedQueueOptions = QueueOptions & {
+export interface FinalizedQueueOptions extends QueueOptions {
+  // redefines what finalized credentials look like
   credentials: {
     appId: string;
     secret: string;
+    expiredSecrets?: string[];
   };
-};
+}
 
 /**
  * Describes the set of Queue Methods available on a Taskless Integration
@@ -120,26 +122,21 @@ export interface CreateQueueMethods<T> {
 }
 
 /** The Job Handler signature, taking a `payload` and `meta` */
-export type JobHandler<T> = (
-  payload: T,
-  meta: JobMetadata
-) => Promised<unknown>;
+export interface JobHandler<T> {
+  (payload: T, meta: JobMetadata): Promised<unknown>;
+}
 
 /** The result of the Job Handler callback */
 export type JobHandlerResult = Promised<void | unknown>;
 
-/** An intgeration callback for getting the request body as a JSON object */
-export type GetBodyCallback<T> = () => Promised<T>;
-
-/** An integration callback for getting the headers as a JSON object */
-export type GetHeadersCallback = () => Promised<IncomingHttpHeaders>;
-
-/** An integration callback for sending JSON back to Taskless.io with a success response */
-export type SendJsonCallback = (json: unknown) => Promised<void>;
-
-/** An integration callback for sending JSON back to Taskless.io with a status code */
-export type SendErrorJsonCallback = (
-  statusCode: number,
-  headers: JobHeaders,
-  json: unknown
-) => Promised<void>;
+/** A set of callbacks used to integrate an external framework with the Taskless client */
+export interface ReceiveCallbacks {
+  getBody: () => Promised<TasklessBody>;
+  getHeaders: () => Promised<IncomingHttpHeaders>;
+  send: (json: unknown) => Promised<void>;
+  sendError: (
+    statusCode: number,
+    headers: OutgoingHttpHeaders,
+    json: unknown
+  ) => Promised<void>;
+}

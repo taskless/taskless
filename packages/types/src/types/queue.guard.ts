@@ -1,4 +1,4 @@
-import type { FinalizedQueueOptions, QueueOptions } from "./queue.js";
+import { type FinalizedQueueOptions, type QueueOptions } from "./queue.js";
 
 /** Typeguard for {@link FinalizedQueueOptions} */
 export const isFinalizedQueueOptions = (

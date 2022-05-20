@@ -1,17 +1,17 @@
-import type { CipherEnvelope, SupportedCipher } from "./ciphers.js";
+import { type CipherEnvelope, type SupportedCipher } from "./ciphers.js";
 
 /** Describes the taskless Transport Metadata */
-export type Transport = {
+export type Transport = CipherEnvelope & {
   /** The envelope version used */
   ev: 1;
   /** One of the supported ciphertypes */
   alg: SupportedCipher;
-} & CipherEnvelope;
+};
 
 /**
  * The taskless body definition (what is posted to & from the client)
  */
-export type TasklessBody = {
+export interface TasklessBody {
   /** The Taskless Body Version */
   v: number;
   /** The encoder transport */
@@ -20,4 +20,4 @@ export type TasklessBody = {
   text: string;
   /** Signature of text field */
   signature: string;
-};
+}

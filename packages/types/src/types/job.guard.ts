@@ -1,25 +1,35 @@
-import * as tg from "generic-type-guard";
+import {
+  IsInterface,
+  hasProperties,
+  isString,
+  isOptional,
+  isBoolean,
+  isUnknown,
+  isNumber,
+  isNullable,
+  isObject,
+  type TypeGuard,
+} from "generic-type-guard";
 
-import type { TypeGuard } from "generic-type-guard";
-import type { Job, JobHeaders } from "./job.js";
+import { type Job, type JobHeaders } from "./job.js";
 
 /** Typeguard for {@link JobHeaders} */
 const isJobHeaders: TypeGuard<JobHeaders> = (o: unknown): o is JobHeaders => {
-  return tg.isObject(o);
+  return isObject(o);
 };
 
 /** Typeguard for {@link Job} with an unknown payload */
-export const isJob: TypeGuard<Job<unknown>> = new tg.IsInterface()
+export const isJob: TypeGuard<Job<unknown>> = new IsInterface()
   .with(
-    tg.hasProperties({
-      name: tg.isString,
-      endpoint: tg.isString,
-      headers: tg.isOptional(isJobHeaders),
-      enabled: tg.isBoolean,
-      payload: tg.isUnknown,
-      retries: tg.isNumber,
-      runAt: tg.isString,
-      runEvery: tg.isOptional(tg.isString),
+    hasProperties({
+      name: isString,
+      endpoint: isString,
+      headers: isOptional(isJobHeaders),
+      enabled: isBoolean,
+      payload: isUnknown,
+      retries: isNumber,
+      runAt: isString,
+      runEvery: isNullable(isString),
     })
   )
   .get();

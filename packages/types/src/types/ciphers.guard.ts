@@ -1,37 +1,50 @@
-import type { TypeGuard } from "generic-type-guard";
-import type { CipherEnvelope, CipherAes256Gcm, CipherNone } from "./ciphers.js";
+import {
+  IsInterface,
+  combine,
+  isObject,
+  hasProperties,
+  isSingletonString,
+  isNumber,
+  isString,
+  UnionOf,
+  type TypeGuard,
+} from "generic-type-guard";
 
-import * as tg from "generic-type-guard";
+import {
+  type CipherEnvelope,
+  type CipherAes256Gcm,
+  type CipherNone,
+} from "./ciphers.js";
 
 /** Typeguard for {@link CipherAes256Gcm} */
-const isCipherAes256Gcm: TypeGuard<CipherAes256Gcm> = new tg.IsInterface()
+const isCipherAes256Gcm: TypeGuard<CipherAes256Gcm> = new IsInterface()
   .with(
-    tg.combine(
-      tg.isObject,
-      tg.hasProperties({
-        alg: tg.isSingletonString("aes-256-gcm"),
-        atl: tg.isNumber,
-        at: tg.isString,
-        iv: tg.isString,
+    combine(
+      isObject,
+      hasProperties({
+        alg: isSingletonString("aes-256-gcm"),
+        atl: isNumber,
+        at: isString,
+        iv: isString,
       })
     )
   )
   .get();
 
 /** Typeguard for {@link CipherNone} */
-const isCipherNone: TypeGuard<CipherNone> = new tg.IsInterface()
+const isCipherNone: TypeGuard<CipherNone> = new IsInterface()
   .with(
-    tg.combine(
-      tg.isObject,
-      tg.hasProperties({
-        alg: tg.isSingletonString("none"),
+    combine(
+      isObject,
+      hasProperties({
+        alg: isSingletonString("none"),
       })
     )
   )
   .get();
 
 /** Typeguard for {@link Cipher} */
-export const isCipherEnvelope: TypeGuard<CipherEnvelope> = new tg.UnionOf(
+export const isCipherEnvelope: TypeGuard<CipherEnvelope> = new UnionOf(
   isCipherNone
 )
   .with(isCipherAes256Gcm)

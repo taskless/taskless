@@ -1,27 +1,35 @@
-import * as tg from "generic-type-guard";
-import { isCipherEnvelope } from "./ciphers.guard.js";
+import {
+  IsInterface,
+  isSingletonNumber,
+  combine,
+  isObject,
+  hasProperties,
+  isNumber,
+  isString,
+  type TypeGuard,
+} from "generic-type-guard";
 
-import type { TypeGuard } from "generic-type-guard";
-import type { TasklessBody, Transport } from "./tasklessBody.js";
+import { isCipherEnvelope } from "./ciphers.guard.js";
+import { type TasklessBody, type Transport } from "./tasklessBody.js";
 
 /** Typeguard for {@link Transport} */
-export const isTransport: TypeGuard<Transport> = new tg.IsInterface()
+export const isTransport: TypeGuard<Transport> = new IsInterface()
   .withProperties({
-    ev: tg.isSingletonNumber(1),
+    ev: isSingletonNumber(1),
   })
   .with(isCipherEnvelope)
   .get();
 
 /** Typeguard for {@link TasklessBody} */
-export const isTasklessBody: TypeGuard<TasklessBody> = new tg.IsInterface()
+export const isTasklessBody: TypeGuard<TasklessBody> = new IsInterface()
   .with(
-    tg.combine(
-      tg.isObject,
-      tg.hasProperties({
-        v: tg.isNumber,
+    combine(
+      isObject,
+      hasProperties({
+        v: isNumber,
         transport: isTransport,
-        text: tg.isString,
-        signature: tg.isString,
+        text: isString,
+        signature: isString,
       })
     )
   )

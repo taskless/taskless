@@ -1,4 +1,4 @@
-import { OutgoingHttpHeaders } from "node:http";
+import { type OutgoingHttpHeaders } from "node:http";
 
 /**
  * The set of headers to pass with a request, matching the set of valid HTTP request headers
@@ -40,9 +40,6 @@ export type JobOptions = {
   runEvery?: string | null;
 };
 
-/** A partial set of job options */
-export type DefaultJobOptions = Partial<JobOptions>;
-
 /** Metadata regarding the currently running Job */
 export type JobMetadata = {
   /** The application ID that made the request */
@@ -69,6 +66,6 @@ export type Job<T> = {
   retries: number;
   /** An ISO-8601 timestamp of when this job will be ran */
   runAt: string;
-  /** An ISO-8601 duration for how often this job will repeat its run */
-  runEvery?: string;
+  /** An ISO-8601 duration for how often this job will repeat its run. A `null` value indicates no recurrence */
+  runEvery: string | null;
 };
