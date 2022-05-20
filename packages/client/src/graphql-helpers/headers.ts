@@ -1,5 +1,5 @@
-import type { JobHeaders } from "@taskless/types";
-import type { HeaderInputType } from "../__generated__/schema.js";
+import { type JobHeaders } from "@taskless/types";
+import { type HeaderInputType } from "../__generated__/schema.js";
 
 /** Convert optional headers into a GraphQL friendly header input */
 export const headersToGql = (h?: JobHeaders): HeaderInputType[] | undefined => {

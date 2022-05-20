@@ -1,7 +1,22 @@
-import type { QueueOptions, FinalizedQueueOptions } from "@taskless/types";
-import { Guards } from "@taskless/types";
+import {
+  Guards,
+  type QueueOptions,
+  type FinalizedQueueOptions,
+  type JobOptions,
+} from "@taskless/types";
 
 import { IS_PRODUCTION } from "../constants.js";
+
+/** A set of default options for job objects */
+const defaultJobOptions: JobOptions = {
+  enabled: true,
+  runAt: null,
+  headers: {
+    // actions are always json unless overridden
+    "content-type": "application/json",
+  },
+  retries: 5,
+};
 
 /** Base configuration for development-like environments */
 const developmentQueueOptions: QueueOptions = IS_PRODUCTION
@@ -71,9 +86,10 @@ export const resolveOptions = (
       ...(productionQueueOptions?.expiredEncryptionKeys ?? []),
       ...(developmentQueueOptions?.expiredEncryptionKeys ?? []),
     ],
-    jobOptions: {
-      ...additionalOptions?.jobOptions,
-    },
+    defaultJobOptions: resolveJobOptions(
+      defaultJobOptions,
+      additionalOptions?.defaultJobOptions
+    ),
   };
 
   // guard
@@ -84,4 +100,24 @@ export const resolveOptions = (
   }
 
   return options;
+};
+
+/** Merge sets of job options together, handling undefined sets of options */
+export const resolveJobOptions = (
+  ...opts: (JobOptions | undefined)[]
+): JobOptions => {
+  let result: JobOptions = {};
+  for (const opt of opts) {
+    if (typeof opt === "undefined" || opt === null) {
+      continue;
+    }
+    result = {
+      ...result,
+      headers: {
+        ...(result.headers ?? {}),
+        ...(opt.headers ?? {}),
+      },
+    };
+  }
+  return result;
 };

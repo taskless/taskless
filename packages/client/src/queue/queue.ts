@@ -1,19 +1,13 @@
-import type {
-  DefaultJobOptions,
-  FinalizedQueueOptions,
-  GetBodyCallback,
-  GetHeadersCallback,
-  Job,
-  JobHandler,
-  JobIdentifier,
-  JobOptions,
-  QueueOptions,
-  SendErrorJsonCallback,
-  SendJsonCallback,
-  TasklessBody,
+import {
+  type FinalizedQueueOptions,
+  type Job,
+  type JobHandler,
+  type JobIdentifier,
+  type JobOptions,
+  type QueueOptions,
+  type ReceiveCallbacks,
+  type TasklessBody,
 } from "@taskless/types";
-
-import merge from "deepmerge";
 import { DateTime } from "luxon";
 
 import { JobError } from "../error.js";
@@ -23,7 +17,7 @@ import { create as createRpcClient } from "../net/rpcClient.js";
 import { encode, decode, sign, verify } from "./encoder.js";
 import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
-import { resolveOptions } from "./util.js";
+import { resolveJobOptions, resolveOptions } from "./util.js";
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -52,20 +46,6 @@ export type TasklessQueueConfig<T> = {
 
   /** Options applied to the Queue globally such as custom credentials or a base URL */
   queueOptions?: QueueOptions;
-
-  /** Default options applied to newly enqueued jobs */
-  jobOptions?: DefaultJobOptions;
-};
-
-/** A set of default options for job objects */
-const defaultJobOptions: JobOptions = {
-  enabled: true,
-  runAt: null,
-  headers: {
-    // actions are always json unless overridden
-    "content-type": "application/json",
-  },
-  retries: 5,
 };
 
 /** Get either the first object of the array or the object if not an array */
@@ -77,7 +57,6 @@ export class Queue<T> {
   private route: string | (() => string);
   private handler?: JobHandler<T>;
   private queueOptions: FinalizedQueueOptions;
-  private jobOptions: DefaultJobOptions;
 
   constructor(args: TasklessQueueConfig<T>) {
     const options = resolveOptions(args.queueOptions);
@@ -86,10 +65,6 @@ export class Queue<T> {
       ...options,
     };
 
-    this.jobOptions = {
-      ...defaultJobOptions,
-      ...(args.jobOptions ?? {}),
-    };
     this.route = args.route;
     this.handler = args.handler;
   }
@@ -212,18 +187,9 @@ export class Queue<T> {
    * Recieve a message and execute the handler for it
    * errors are caught and converted to a 500 response, while
    * any success is returned as a 200
-   * @param functions A set of accessory functions for accessing the request and response
-   * @param functions.getBody Gets the body of the request as a JS object
-   * @param functions.getHeaders Gets the request headers as a JS object
-   * @param functions.send Sends a request via ServerResponse or framework equivalent
-   * @param functions.sendError Sends an error via ServerResponse or framework equivalent
+   * @param functions A set of accessory functions for accessing the request and dispatching a response
    */
-  async receive(functions: {
-    getBody: GetBodyCallback<TasklessBody>;
-    getHeaders: GetHeadersCallback;
-    send: SendJsonCallback;
-    sendError: SendErrorJsonCallback;
-  }) {
+  async receive(functions: ReceiveCallbacks) {
     const { getBody, getHeaders, send, sendError } = functions;
 
     // skip missing handler (enqueue-only)
@@ -265,8 +231,15 @@ export class Queue<T> {
    * @param options Additional job options overriding the queue's defaults
    * @returns a Promise containing the Job object enqueued
    */
-  async enqueue(name: JobIdentifier, payload: T, options?: JobOptions) {
-    const opts = merge.all<JobOptions>([this.jobOptions, options ?? {}]);
+  async enqueue(
+    name: JobIdentifier,
+    payload: T,
+    options?: JobOptions
+  ): Promise<Job<T>> {
+    const opts = resolveJobOptions(
+      this.queueOptions.defaultJobOptions,
+      options
+    );
     const client = this.getClient();
     const body = this.p2b(payload);
     const resolvedName = this.packName(name);
@@ -284,7 +257,7 @@ export class Queue<T> {
           opts.runAt === null
             ? DateTime.now().toISO()
             : opts.runAt ?? undefined,
-        runEvery: opts.runEvery ?? undefined,
+        runEvery: opts.runEvery === null ? null : opts.runEvery ?? undefined,
       },
     });
 
@@ -298,6 +271,7 @@ export class Queue<T> {
       payload: this.b2p(resolvedBody),
       retries: job.replaceJob.retries,
       runAt: job.replaceJob.runAt,
+      runEvery: job.replaceJob.runEvery ?? null,
     };
   }
 
@@ -313,7 +287,10 @@ export class Queue<T> {
     payload: T | undefined,
     options?: JobOptions
   ): Promise<Job<T>> {
-    const opts = merge.all<JobOptions>([this.jobOptions, options ?? {}]);
+    const opts = resolveJobOptions(
+      this.queueOptions.defaultJobOptions,
+      options
+    );
     const client = this.getClient();
     const body = typeof payload !== "undefined" ? this.p2b(payload) : undefined;
     const resolvedName = this.packName(name);
@@ -347,6 +324,7 @@ export class Queue<T> {
       payload: this.b2p(resolvedBody),
       retries: job.updateJob.retries,
       runAt: job.updateJob.runAt,
+      runEvery: job.updateJob.runEvery ?? null,
     };
   }
 
@@ -376,6 +354,7 @@ export class Queue<T> {
       payload: this.b2p(resolvedBody),
       retries: job.deleteJob.retries,
       runAt: job.deleteJob.runAt,
+      runEvery: job.deleteJob.runEvery ?? null,
     };
   }
 
@@ -400,6 +379,7 @@ export class Queue<T> {
       payload: this.b2p(resolvedBody),
       retries: result.job.retries,
       runAt: result.job.runAt,
+      runEvery: result.job.runEvery ?? null,
     };
   }
 }

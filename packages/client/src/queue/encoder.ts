@@ -1,5 +1,4 @@
-import type { SupportedCipher, Transport } from "@taskless/types";
-
+import { type SupportedCipher, type Transport } from "@taskless/types";
 import {
   createHash,
   createHmac,

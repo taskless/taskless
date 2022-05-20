@@ -1,4 +1,4 @@
-import type { OutgoingHttpHeaders } from "node:http";
+import { type OutgoingHttpHeaders } from "node:http";
 
 type JobErrorOptions = {
   retryAfter?: string | number;

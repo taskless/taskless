@@ -1,14 +1,14 @@
-import type {
-  Sdk,
-  JobDataFragment,
-  DeleteJobMutation,
-  DeleteJobMutationVariables,
-  EnqueueJobMutation,
-  EnqueueJobMutationVariables,
-  GetJobByNameQuery,
-  GetJobByNameQueryVariables,
-  UpdateJobMutation,
-  UpdateJobMutationVariables,
+import {
+  type Sdk,
+  type JobDataFragment,
+  type DeleteJobMutation,
+  type DeleteJobMutationVariables,
+  type EnqueueJobMutation,
+  type EnqueueJobMutationVariables,
+  type GetJobByNameQuery,
+  type GetJobByNameQueryVariables,
+  type UpdateJobMutation,
+  type UpdateJobMutationVariables,
 } from "./__generated__/schema.js";
 
 /** Helper type that defines a valid RPC method */
