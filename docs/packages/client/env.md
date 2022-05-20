@@ -1,6 +1,6 @@
 # Taskless Environment Variables
 
-Most Queue options in Taskless can be represented via [Environment Variables](https://en.wikipedia.org/wiki/Environment_variable) or colloquially "env" values. Env values are not committed to your repository and often contain senstive information such as secrets. Most deployment targets including Vercel, Heroku, and Netlify all allow you to specify env values as part of your app's configuration.
+Most options in Taskless can be represented via [Environment Variables](https://en.wikipedia.org/wiki/Environment_variable) or colloquially "env" values. Env values are not committed to your repository and often contain senstive information such as secrets. Most deployment targets including Vercel, Heroku, and Netlify all allow you to specify env values as part of your app's configuration.
 
 Taskless recommends storing the bulk of your configuration in env values.
 
@@ -13,5 +13,4 @@ Taskless recommends storing the bulk of your configuration in env values.
 
 **Development ENV Values** Additionally, the following env values may be useful in development.
 
-- `TASKLESS_DEV_ENABLED` (example: `1`) Used to force usage of the Taskless Dev Server when `process.env.NODE_ENV === "production"`
-- `TASKLESS_DEV_ENDPOINT` (example: `https://localhost:3001`) The host and port for the Taskless Dev Server if not at the default URL
+- `TASKLESS_ENV` (example: `development`) Used to override the NODE_ENV value, specifically for Taskless

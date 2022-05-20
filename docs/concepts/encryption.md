@@ -1,6 +1,6 @@
 # Encryption in Taskless
 
-When using `@taskless/client` with an encryption key, your payloads are encrypted end-to-end inside the client before their sent to Taskless. When viewing jobs on Taskless.io, you won't be able to decrypt the contents of your payload.
+When using any Taskless client with an encryption key, your payloads are encrypted end-to-end inside the client before they are sent to Taskless. As a result of this, you won't be able to decrypt and view the contents of your payload on Taskless.io.
 
 # What's Encrypted in a Job
 
@@ -30,6 +30,13 @@ In the clear, we pass `v` which tells us the version of the Taskless body, as we
 - `iv` is the [Initialization Vector](https://en.wikipedia.org/wiki/Initialization_vector) which makes it computationally impossible to reverse our encrypted text back into a key
 
 Finally, our `text` is encrypted, and we generate a `signature` using your `APP_SECRET` value.
+
+# Making Jobs Searchable
+
+Because Jobs on Taskless are encrypted, it can make finding data very difficult. However, there are a few fields unencrypted that you can use for searching and querying.
+
+- **Queue Name:** Queues in Taskless are a grouping mechanism, and are easier to remember and use than an endpoint URL
+- **Job Name:** Jobs are unique to the application, but Jobs can also contain any string or array of keys making it easy to namespace. For example, a "send notification" job for `Bob` and `Alice` might be keyed as `enqueue(["sendNotification", "Bob"])` and `enqueue(["sendNotification", "Alice"])` respectively. Avoid putting personally identifiable information into the keys and prefer opaque tokens such as a user id or a session id.
 
 # Rotating Encryption Secrets
 

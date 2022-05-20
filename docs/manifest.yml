@@ -21,30 +21,34 @@
     - title: E2E Encryption
       url: /docs/concepts/encryption
       file: /docs/concepts/encryption.md
-- title: Features
+- title: Packages
   routes:
-    - title: Dev Server
-      url: /docs/features/dev
-      file: /docs/features/dev-server.md
-- title: Advanced
+    - title: "@taskless/express"
+      url: /docs/packkages/express
+      file: /docs/packages/express.md
+    - title: "@taskless/next"
+      url: /docs/packkages/next
+      file: /docs/packages/next.md
+    - title: "@taskless/client"
+      routes:
+        - title: Overview
+          url: /docs/packkages/client
+          file: /docs/packages/client.md
+        - title: Environment Variables
+          url: /docs/packkages/client/env
+          file: /docs/packages/client/env.md
+        - title: Queue Options
+          url: /docs/packkages/client/queue-options
+          file: /docs/packages/client/queue-options.md
+        - title: Job Options
+          url: /docs/packkages/client/job-options
+          file: /docs/packages/client/job-options.md
+        - title: Using Return Codes
+          url: /docs/packkages/client/return-codes
+          file: /docs/packages/client/return-codes.md
+- title: Support
   routes:
-    - title: Custom Errors
-      url: /docs/advanced/return-codes
-      file: /docs/advanced/return-codes.md
-- title: API Reference
-  routes:
-    - title: Environment Variables
-      url: /docs/api/env
-      file: /docs/api/env.md
-    - title: Queue
-      url: /docs/api/queue
-      file: /docs/api/queue.md
-    - title: createQueue
-      url: /docs/api/integrations/create-queue
-      file: /docs/api/integrations/createQueue.md
-    - title: Next.js Reference
-      url: /docs/api/integrations/nextjs
-      file: /docs/api/integrations/nextjs.md
-    - title: Express Reference
-      url: /docs/api/integrations/express
-      file: /docs/api/integrations/express.md
+    - title: Help Forum
+      url: https://github.com/taskless/taskless/discussions/categories/q-a
+    - title: Open an Issue
+      url: https://github.com/taskless/taskless/issues/new

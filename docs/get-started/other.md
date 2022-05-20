@@ -1,10 +1,10 @@
-# Using the Queue Object Directly
+# Getting Started with the Base JS Client
 
-Creating a Taskless Queue directly lets you manage the integration with a framework entirely on your own. This class is also used by the Taskless framework integrations, making it an accessible low level solution with a stable API.
+Creating a Taskless Queue directly lets you manage the integration with a framework entirely on your own. This package is also used by the Taskless framework integrations, making it an accessible low level solution with a stable API.
 
 ## Creating a Taskless Queue
 
-To create a Taskless Queue, you'll pass it a set of options that describe its routable URL, a callback for handling jobs, a set of [queue options](/docs/api/queue.md#queue-options), and the default [job options](/docs/api/queue.md#job-options).
+To create a Taskless Queue, you'll pass it a set of options that describe its routable URL, a callback for handling jobs, a set of [queue options](/docs/packages/client/queue.md#queue-options), and the default [job options](/docs/packages/client/queue.md#job-options).
 
 ```ts
 import { Queue } from "@taskless/client";
@@ -21,8 +21,8 @@ const queue = new Queue<T>({
 
 - `route`: The URL path name this Queue will be reachable on
 - `handler`: A Promise-returning callback that recieves a Job of type `T` and associated metadata
-- `queueOptions`: The [`QueueOptions`](/docs/api/queue.md#queue-options) for this queue
-- `jobOptions`: The default [`JobOptions`](/docs/api/queue.md#job-options) for this queue
+- `queueOptions`: The [`QueueOptions`](/docs/packages/client/queue.md#queue-options) for this queue
+- `jobOptions`: The default [`JobOptions`](/docs/packages/client/queue.md#job-options) for this queue
 
 ## Exposing Taskless Queue Methods
 
@@ -30,7 +30,7 @@ The Taskless Queue includes `enqueue`, `update`, `delete`, and `get`. You may op
 
 ## Receiving Requests
 
-To get an inbound request, you will need to call `.receive()` on your Queue and pass it a collection of callbacks. These callbacks enable the Taskless Queue to be unconcerned with your framework implementation, asking for data instead of guessing at methods. Every function passed to `.receive()` should return a Promise.
+To get an inbound request, you will need to call `.receive()` on your Queue and pass it a collection of callbacks. These callbacks enable the Taskless Queue to be unconcerned with your framework implementation, asking for data via a pre-agreed-upon API. Every function passed to `.receive()` should return a Promise.
 
 ```ts
 queue.receive({
@@ -52,8 +52,16 @@ By default, returning from your job handler will be seen as a successful call, r
 
 ## Examples
 
-- [next.js](https://github.com/taskless/taskless/blob/main/packages/taskless/src/integrations/next.ts) is a full example of creating a custom intgeration that adhears to the Next.JS API signature while also providing the standard set of Taskless methods. Additionally, it exposes `withQueue`, a pattern that's used for Next.js middleware when wrapping handlers with new behavior.
+- [@taskless/next](https://github.com/taskless/taskless/blob/main/packages/next/src/index.ts) is a full example of creating a custom intgeration that adhears to the Next.JS API signature while also providing the standard set of Taskless methods. Additionally, it exposes `withQueue`, a pattern that's used for Next.js middleware when wrapping handlers with new behavior.
 
 ## Related
 
-- [Queue Documentation](/docs/api/queue.md)
+For more information on what to do next, we recommend the following sections:
+
+- **Details**
+  - [@taskless/client](/docs/packages/client.md) - View the full Taskless Client docs
+  - [Environment](/docs/packages/client/env.md) - Learn about the environment variables Taskless uses
+  - [@taskless/dev](/docs/packages/dev.md) - Learn about the Taskless Dev Server
+- **Concepts**
+  - [Jobs](/docs/concepts/jobs.md) - Learn the difference between Evented and Scheduled Jobs in Taskless
+  - [Encryption](/docs/concepts/encryption.md) - Learn how end-to-end encryption works with Taskless

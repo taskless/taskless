@@ -1,4 +1,4 @@
-# Advanced: Return Codes
+# Return Codes
 
 By default, Taskless operates using 2xx responses for successful job invocations and 5xx calls for failed invocations. Redirections (3xx) are followed as long as you haven't exceeded the maximum amount of time for a Taskless Job.
 
