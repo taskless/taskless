@@ -1,13 +1,11 @@
-import type {
-  JobHandler,
-  QueueOptions,
-  DefaultJobOptions,
-  CreateQueueMethods,
-} from "@taskless/types";
-
-import * as express from "express";
 import { Queue } from "@taskless/client";
-import { Guards } from "@taskless/types";
+import {
+  Guards,
+  type JobHandler,
+  type QueueOptions,
+  type CreateQueueMethods,
+} from "@taskless/types";
+import * as express from "express";
 
 // re-export core client
 export * from "@taskless/client";
@@ -35,26 +33,19 @@ export interface TasklessExpressRouter<T> {
 }
 
 /**
- * Express Queue Options. See: {@link QueueOptions}
- */
-export type ExpressQueueOptions = QueueOptions;
-
-/**
  * Creates an Express Router object augmented with Taskess Queue methods
  * @template T Describes the payload and is passed through to {@link JobHandler}
  * @param name A friendly Queue name for debugging and querying on Taskless.io
  * @param route The URL path to reach this route
  * @param handler A {@link JobHandler} that supports a payload of type `T`
  * @param queueOptions The {@link QueueOptions} for this queue
- * @param defaultJobOptions A set of {@link JobOptions} to apply as defaults for every new job in the Queue
  * @returns {TasklessNextApiHandler}
  */
 export function createQueue<T = undefined>(
   name: string,
   route: string,
   handler: JobHandler<T>,
-  queueOptions?: ExpressQueueOptions,
-  defaultJobOptions?: DefaultJobOptions
+  queueOptions?: QueueOptions
 ): TasklessExpressRouter<T> {
   let mountAt: string | undefined;
   let isMounted = false;
@@ -80,7 +71,6 @@ export function createQueue<T = undefined>(
     },
     handler,
     queueOptions: queueOptions ?? {},
-    jobOptions: defaultJobOptions ?? {},
   });
 
   /**

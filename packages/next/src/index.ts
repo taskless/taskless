@@ -1,13 +1,15 @@
-import type {
-  JobHandler,
-  QueueOptions,
-  DefaultJobOptions,
-  CreateQueueMethods,
-} from "@taskless/types";
-import type { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-
 import { Queue } from "@taskless/client";
-import { Guards } from "@taskless/types";
+import {
+  Guards,
+  type JobHandler,
+  type QueueOptions,
+  type CreateQueueMethods,
+} from "@taskless/types";
+import {
+  type NextApiHandler,
+  type NextApiRequest,
+  type NextApiResponse,
+} from "next";
 
 // re-export core client
 export * from "@taskless/client";
@@ -48,22 +50,20 @@ export function createQueue<T = undefined>(
   name: string,
   route: string,
   handler: JobHandler<T>,
-  queueOptions?: QueueOptions,
-  defaultJobOptions?: DefaultJobOptions
+  queueOptions?: QueueOptions
 ): TasklessNextApiHandler<T> {
   const t = new Queue({
     name,
     route,
     handler,
     queueOptions: queueOptions ?? {},
-    jobOptions: defaultJobOptions ?? {},
   });
 
   const handle: TasklessNextApiHandler<T> = async (
     req: NextApiRequest,
     res: NextApiResponse
   ) => {
-    return t.receive({
+    return await t.receive({
       getBody: () => {
         if (Guards.TasklessBody.isTasklessBody(req.body)) {
           return req.body;
