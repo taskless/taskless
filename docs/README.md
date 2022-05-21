@@ -8,7 +8,7 @@ The fastest way to get started with Taskless is to follow a guide for your JavaS
 
 - **Next.js** [Guide](/docs/get-started/nextjs.md) | [Example](https://github.com/taskless/taskless/tree/main/examples/next)
 - **Express** [Guide](/docs/get-started/express.md) | [Example](https://github.com/taskless/taskless/tree/main/examples/express)
-- **Taskless Queue** [Guide](/docs/get-started/raw-queue.md) (for integrations not covered above)
+- **Taskless Queue** [Guide](/docs/get-started/other.md) (for integrations not covered above)
 
 > ℹ **TypeScript Tip**
 > All examples are written in TypeScript, to provide additional hints about what is going on inside of Taskless. All of Taskless works with regular JS as well!
