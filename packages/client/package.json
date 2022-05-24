@@ -1,7 +1,7 @@
 {
   "name": "@taskless/client",
   "description": "Core JavaScript client for Taskless.io",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -62,7 +62,7 @@
     "watch:codegen": "graphql-codegen --watch"
   },
   "dependencies": {
-    "@taskless/types": "2.0.0",
+    "@taskless/types": "2.0.1",
     "deepmerge": "^4.2.2",
     "deepmerge-ts": "^4.0.3",
     "luxon": "^2.3.1",
