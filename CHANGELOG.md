@@ -1,5 +1,11 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
+# 2.0.1 - released May 24, 2022
+
+#### 🔧 Fixes
+
+- **@taskless/client** In some cases, the default header of `content-type = application/json` was not being set. This could result in situations where a JSON middleware such as `express.json()` was not correctly parsing the body
+
 # 2.0.0 - released May 20, 2022
 
 #### 💥 BREAKING CHANGES
