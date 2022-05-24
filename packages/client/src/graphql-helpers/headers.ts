@@ -9,7 +9,7 @@ export const headersToGql = (h?: JobHeaders): HeaderInputType[] | undefined => {
 
   const headers = Object.getOwnPropertyNames(h);
   return headers.map((header) => {
-    const value = headers[header as keyof typeof headers];
+    const value = h[header as keyof typeof h];
     const valueAsString =
       typeof value === "string"
         ? value
