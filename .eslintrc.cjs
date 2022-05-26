@@ -23,7 +23,7 @@ module.exports = {
     // optional chaining and nullish coalesce.
     // example: @ packages/client/queue/queue.ts
     // this.queueOptions.baseUrl is of type (string | undefined)
-    // Using it in any context causes typescript-eslint to believe it is
+    // Using it causes typescript-eslint to believe it is
     // of type "any" and trigger these eslint errors.
     // https://github.com/typescript-eslint/typescript-eslint/issues/2728
     // https://github.com/typescript-eslint/typescript-eslint/issues/4912
@@ -33,5 +33,13 @@ module.exports = {
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
+
+    // https://typescript-eslint.io/rules/no-unused-vars/
+    // https://eslint.org/docs/rules/no-unused-vars
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { ignoreRestSiblings: true },
+    ],
   },
 };

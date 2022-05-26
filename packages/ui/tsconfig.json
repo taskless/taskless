@@ -4,6 +4,7 @@
   "exclude": ["node_modules", "dist"],
 
   "compilerOptions": {
+    "types": ["node", "react"],
     "jsx": "react",
     "rootDir": "./src",
     "baseUrl": "./src"

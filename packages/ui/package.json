@@ -7,13 +7,45 @@
     "email": "oss@taskless.io",
     "url": "https://taskless.io"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/taskless/taskless.git",
-    "directory": "packages/taskless"
-  },
-  "homepage": "https://github.com/taskless/taskless/",
   "license": "MIT",
+  "homepage": "https://github.com/taskless/taskless/",
+  "repository": "taskless/taskless.git",
+  "scripts": {
+    "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
+    "build:all": "run-p 'build:x:**'",
+    "build:post": "echo 'no build:post tasks for @taskless/types'",
+    "build:pre": "echo 'no build:pre tasks for @taskless/types'",
+    "build:x:cjs": "tsc -p tsconfig.cjs.json",
+    "build:x:esm": "tsc -p tsconfig.esm.json",
+    "build:x:types": "tsc -p tsconfig.types.json",
+    "clean": "shx rm -rf dist",
+    "dev": "run-s watch",
+    "pjson:all": "run-p 'pjson:x:**'",
+    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
+    "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
+    "release:before:init": "run-s clean build test",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "watch": "run-p 'watch:**'",
+    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
+    "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
+    "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput"
+  },
+  "engines": {
+    "node": ">=14.19.0"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.6.3",
+    "classnames": "^2.3.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "tslib": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.40",
+    "npm-run-all": "^4.1.5",
+    "shx": "^0.3.4",
+    "typescript": "^4.6.4"
+  },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -30,46 +62,7 @@
     "README.md",
     "dist"
   ],
-  "engines": {
-    "node": "14 || 15 || 16 || 17"
-  },
   "publishConfig": {
     "access": "public"
-  },
-  "scripts": {
-    "dev": "run-s watch",
-    "clean": "shx rm -rf dist",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "// build": "echo '----- Build Commands --------------------------------'",
-    "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
-    "build:all": "run-p 'build:x:**'",
-    "build:x:esm": "tsc -p tsconfig.esm.json",
-    "build:x:cjs": "tsc -p tsconfig.cjs.json",
-    "build:x:types": "tsc -p tsconfig.types.json",
-    "pjson:all": "run-p 'pjson:x:**'",
-    "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
-    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
-    "// watch": "echo '----- Watch Commands --------------------------------'",
-    "watch": "run-p 'watch:**'",
-    "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
-    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
-    "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput",
-    "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
-    "release:before:init": "run-s clean build test",
-    "build:pre": "echo 'no build:pre tasks for @taskless/types'",
-    "build:post": "echo 'no build:post tasks for @taskless/types'"
-  },
-  "dependencies": {
-    "@headlessui/react": "^1.6.3",
-    "classnames": "^2.3.1",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
-    "tslib": "^2.4.0"
-  },
-  "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.6.0",
-    "shx": "^0.3.4",
-    "typescript": "*"
   }
 }

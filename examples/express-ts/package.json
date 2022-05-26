@@ -3,16 +3,21 @@
   "name": "taskless-example-express-ts",
   "description": "Taskless Express 4 example app in Typescript",
   "version": "2.0.1",
+  "repository": "taskless/taskless.git",
   "scripts": {
+    "build": "echo 'no express build step required'",
     "dev": "concurrently -n taskless,express \"yarn:dev:taskless\" \"yarn:dev:express\"",
-    "dev:taskless": "taskless",
     "dev:express": "ts-node src/server.ts",
-    "build": "echo 'no express build step required'"
+    "dev:taskless": "taskless"
+  },
+  "engines": {
+    "node": ">=14.19.0"
   },
   "dependencies": {
     "@taskless/express": "2.0.1",
     "cookie-parser": "~1.4.4",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "tslib": "^2.4.0"
   },
   "devDependencies": {
     "@taskless/dev": "2.0.1",
@@ -20,6 +25,6 @@
     "@types/node": "^17.0.34",
     "concurrently": "^7.0.0",
     "ts-node": "^10.7.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.4"
   }
 }

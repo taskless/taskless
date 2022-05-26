@@ -7,59 +7,33 @@
     "email": "oss@taskless.io",
     "url": "https://taskless.io"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/taskless/taskless.git",
-    "directory": "packages/client"
-  },
-  "homepage": "https://github.com/taskless/taskless/",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
-    }
-  },
-  "files": [
-    "package.json",
-    "README.md",
-    "dist"
-  ],
-  "engines": {
-    "node": "14 || 15 || 16 || 17"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
+  "homepage": "https://github.com/taskless/taskless/",
+  "repository": "taskless/taskless.git",
   "scripts": {
-    "dev": "run-s watch",
-    "clean": "shx rm -rf dist && shx mkdir dist",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "// build": "echo '----- Build Commands --------------------------------'",
     "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
     "build:all": "run-p 'build:x:**'",
-    "build:x:esm": "tsc -p tsconfig.esm.json",
-    "build:x:cjs": "tsc -p tsconfig.cjs.json",
-    "build:x:types": "tsc -p tsconfig.types.json",
-    "pjson:all": "run-p 'pjson:x:**'",
-    "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
-    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
-    "// watch": "echo '----- Watch Commands --------------------------------'",
-    "watch": "run-p 'watch:**'",
-    "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
-    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
-    "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput",
-    "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
-    "codegen": "graphql-codegen",
-    "release:before:init": "run-s clean build test",
-    "build:pre": "run-s codegen",
     "build:post": "echo 'no build:post tasks for @taskless/client'",
-    "watch:codegen": "graphql-codegen --watch"
+    "build:pre": "run-s codegen",
+    "build:x:cjs": "tsc -p tsconfig.cjs.json",
+    "build:x:esm": "tsc -p tsconfig.esm.json",
+    "build:x:types": "tsc -p tsconfig.types.json",
+    "clean": "shx rm -rf dist && shx mkdir dist",
+    "codegen": "graphql-codegen",
+    "dev": "run-s watch",
+    "pjson:all": "run-p 'pjson:x:**'",
+    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
+    "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
+    "release:before:init": "run-s clean build test",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "watch": "run-p 'watch:**'",
+    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
+    "watch:codegen": "graphql-codegen --watch",
+    "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
+    "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput"
+  },
+  "engines": {
+    "node": ">=14.19.0"
   },
   "dependencies": {
     "@taskless/types": "2.0.1",
@@ -77,10 +51,29 @@
     "@graphql-codegen/typescript": "^2.4.5",
     "@graphql-codegen/typescript-generic-sdk": "^2.3.4",
     "@graphql-codegen/typescript-operations": "^2.3.2",
-    "graphql": "16.5.0",
+    "graphql": "15.8.0",
     "graphql-tag": "^2.12.6",
     "npm-run-all": "^4.1.5",
     "shx": "^0.3.4",
-    "typescript": "*"
+    "typescript": "^4.6.4"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "package.json",
+    "README.md",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -7,13 +7,53 @@
     "email": "oss@taskless.io",
     "url": "https://taskless.io"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/taskless/taskless.git",
-    "directory": "packages/next"
-  },
-  "homepage": "https://github.com/taskless/taskless/",
   "license": "MIT",
+  "homepage": "https://github.com/taskless/taskless/",
+  "repository": "taskless/taskless.git",
+  "scripts": {
+    "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
+    "build:all": "run-p 'build:x:**'",
+    "build:post": "echo 'no build:post tasks for @taskless/next'",
+    "build:pre": "echo 'no build:pre tasks for @taskless/next'",
+    "build:x:cjs": "tsc -p tsconfig.cjs.json",
+    "build:x:esm": "tsc -p tsconfig.esm.json",
+    "build:x:types": "tsc -p tsconfig.types.json",
+    "clean": "shx rm -rf dist",
+    "dev": "run-s watch",
+    "pjson:all": "run-p 'pjson:x:**'",
+    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
+    "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
+    "release:before:init": "run-s clean build test",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "watch": "run-p 'watch:**'",
+    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
+    "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
+    "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput"
+  },
+  "engines": {
+    "node": ">=14.19.0"
+  },
+  "dependencies": {
+    "@taskless/client": "2.0.1",
+    "@taskless/types": "2.0.1"
+  },
+  "devDependencies": {
+    "next": "^12.1.0",
+    "npm-run-all": "^4.1.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "shx": "^0.3.4",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.4"
+  },
+  "peerDependencies": {
+    "next": ">=11.0"
+  },
+  "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    }
+  },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
@@ -30,54 +70,7 @@
     "README.md",
     "dist"
   ],
-  "engines": {
-    "node": "14 || 15 || 16 || 17"
-  },
   "publishConfig": {
     "access": "public"
-  },
-  "scripts": {
-    "dev": "run-s watch",
-    "clean": "shx rm -rf dist",
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "// build": "echo '----- Build Commands --------------------------------'",
-    "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
-    "build:all": "run-p 'build:x:**'",
-    "build:x:esm": "tsc -p tsconfig.esm.json",
-    "build:x:cjs": "tsc -p tsconfig.cjs.json",
-    "build:x:types": "tsc -p tsconfig.types.json",
-    "pjson:all": "run-p 'pjson:x:**'",
-    "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
-    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
-    "// watch": "echo '----- Watch Commands --------------------------------'",
-    "watch": "run-p 'watch:**'",
-    "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
-    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
-    "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput",
-    "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
-    "release:before:init": "run-s clean build test",
-    "build:pre": "echo 'no build:pre tasks for @taskless/next'",
-    "build:post": "echo 'no build:post tasks for @taskless/next'"
-  },
-  "dependencies": {
-    "@taskless/client": "2.0.1",
-    "@taskless/types": "2.0.1"
-  },
-  "devDependencies": {
-    "next": "*",
-    "npm-run-all": "^4.1.5",
-    "react": "*",
-    "react-dom": "*",
-    "shx": "^0.3.4",
-    "tslib": "^2.4.0",
-    "typescript": "*"
-  },
-  "peerDependencies": {
-    "next": ">=11.0"
-  },
-  "peerDependenciesMeta": {
-    "next": {
-      "optional": true
-    }
   }
 }
