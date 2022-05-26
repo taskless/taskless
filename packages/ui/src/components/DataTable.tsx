@@ -6,7 +6,7 @@ type OpenMap = {
 };
 
 type Data = {
-  [column: string]: any;
+  [column: string]: unknown;
 };
 
 interface DP<T> {

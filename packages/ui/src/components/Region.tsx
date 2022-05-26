@@ -13,7 +13,10 @@ export const Region: React.FC<PropsWithChildren<RegionProps>> = ({
   active,
   ...rest
 }) => (
-  <div className={cx(className, active ? activeClassName : undefined)}>
+  <div
+    className={cx(className, active ? activeClassName : undefined)}
+    {...rest}
+  >
     {children}
   </div>
 );

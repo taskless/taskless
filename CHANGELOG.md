@@ -1,5 +1,11 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
+# next (expected 2.0.2)
+
+#### 🎒 Misc
+
+- **@taskless/ui** Created a common module for UI components, ensuring a consistent experience between taskless.io and the Taskless Dev server (@taskless/dev) for some of the most common blocks such as `DataTable`, `Modal`, and form controls
+
 # 2.0.1 - released May 24, 2022
 
 #### 🔧 Fixes

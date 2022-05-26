@@ -30,6 +30,6 @@ export const TabButton: React.FC<TabButtonProps> = ({
     {...rest}
   >
     <Icon className={cx("h-4 w-4 md:mr-1", iconClassName)} />
-    <span className="inline-block">{label}</span>
+    <span className={cx("inline-block", labelClassName)}>{label}</span>
   </button>
 );

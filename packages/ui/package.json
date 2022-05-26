@@ -1,0 +1,75 @@
+{
+  "name": "@taskless/ui",
+  "description": "Common UI for Taskless.io and the Taskless Dev Client",
+  "version": "2.0.1",
+  "author": {
+    "name": "Taskless.io",
+    "email": "oss@taskless.io",
+    "url": "https://taskless.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taskless/taskless.git",
+    "directory": "packages/taskless"
+  },
+  "homepage": "https://github.com/taskless/taskless/",
+  "license": "MIT",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "files": [
+    "package.json",
+    "README.md",
+    "dist"
+  ],
+  "engines": {
+    "node": "14 || 15 || 16 || 17"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "run-s watch",
+    "clean": "shx rm -rf dist",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "// build": "echo '----- Build Commands --------------------------------'",
+    "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
+    "build:all": "run-p 'build:x:**'",
+    "build:x:esm": "tsc -p tsconfig.esm.json",
+    "build:x:cjs": "tsc -p tsconfig.cjs.json",
+    "build:x:types": "tsc -p tsconfig.types.json",
+    "pjson:all": "run-p 'pjson:x:**'",
+    "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
+    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
+    "// watch": "echo '----- Watch Commands --------------------------------'",
+    "watch": "run-p 'watch:**'",
+    "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
+    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
+    "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput",
+    "// hooks": "echo '----- Monorepo Hooks --------------------------------'",
+    "release:before:init": "run-s clean build test",
+    "build:pre": "echo 'no build:pre tasks for @taskless/types'",
+    "build:post": "echo 'no build:post tasks for @taskless/types'"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.6.3",
+    "classnames": "^2.3.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "tslib": "^2.4.0"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.6.0",
+    "shx": "^0.3.4",
+    "typescript": "*"
+  }
+}

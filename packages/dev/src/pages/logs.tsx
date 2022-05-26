@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { QueryFunction, useQuery } from "react-query";
 import { Layout } from "components/Layout";
-import { DataTable } from "components/shared/DataTable";
+import { DataTable } from "@taskless/ui";
 import { DateTime } from "luxon";
 import { XIcon } from "@heroicons/react/solid";
 import { GetLogsResponse } from "./api/rest/logs";

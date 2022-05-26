@@ -7,7 +7,7 @@ import {
   useQueryClient,
 } from "react-query";
 import { Layout } from "components/Layout";
-import { DataTable } from "components/shared/DataTable";
+import { DataTable } from "@taskless/ui";
 import { DateTime, Duration } from "luxon";
 import {
   FastForwardIcon,

@@ -47,6 +47,7 @@
     "@tailwindcss/typography": "^0.5.2",
     "@taskless/client": "2.0.1",
     "@taskless/types": "2.0.1",
+    "@taskless/ui": "2.0.1",
     "boolean-parser": "^0.0.2",
     "chalk": "^5.0.1",
     "classnames": "^2.3.1",

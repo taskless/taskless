@@ -3,7 +3,7 @@ import Link from "next/link";
 import React, { PropsWithChildren, useMemo } from "react";
 import { useRouter } from "next/router";
 import { Logo } from "./Logo";
-import { Slash } from "./shared/Slash";
+import { Slash } from "@taskless/ui";
 import cx from "classnames";
 
 const topNav = [

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { SVGProps } from "react";
 import cx from "classnames";
 
-interface SlashProps extends React.SVGAttributes<{}> {}
-
-export const Slash: React.FC<SlashProps> = ({ className, ...rest }) => {
+export const Slash: React.FC<SVGProps<SVGSVGElement>> = ({
+  className,
+  ...rest
+}) => {
   return (
     <svg
       viewBox="0 0 24 24"

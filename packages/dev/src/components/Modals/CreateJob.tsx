@@ -1,5 +1,4 @@
 import { Dialog } from "@headlessui/react";
-import { Modal } from "components/shared/Modal";
 import { Duration } from "luxon";
 import React, { useCallback, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -10,12 +9,15 @@ import {
   CalendarIcon,
   CodeIcon,
 } from "@heroicons/react/solid";
-import { TabButton } from "components/shared/TabButton";
-import { Region } from "components/shared/Region";
-import { TextInput } from "components/shared/TextInput";
-import { TextAreaInput } from "components/shared/TextAreaInput";
-import { SwitchInput } from "components/shared/SwitchInput";
-import { SelectInput } from "components/shared/SelectInput";
+import {
+  Modal,
+  TabButton,
+  Region,
+  TextInput,
+  TextAreaInput,
+  SwitchInput,
+  SelectInput,
+} from "@taskless/ui";
 
 export interface Fields {
   name: string;
