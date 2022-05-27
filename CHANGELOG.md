@@ -1,9 +1,12 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
-# next (expected 2.0.2)
+# 2.0.2 - released May 27, 2022
 
 #### 🎒 Misc
 
+- **@taskless/dev** Updated @headless/react to latest version, changed tailwind colors to use `-primary-` instead of `-brand-`. Now checks the UI module for additional rendering styles at build time
+- **@taskless/dev** Fixes mongoose typings to be more correct
+- **@taskless/root** Now using [syncpack](https://github.com/JamieMason/syncpack) to keep dependencies consistent between modules and additional formatting in package.json that prettier cannot handle such as ordering the keys
 - **@taskless/ui** Created a common module for UI components, ensuring a consistent experience between taskless.io and the Taskless Dev server (@taskless/dev) for some of the most common blocks such as `DataTable`, `Modal`, and form controls
 
 # 2.0.1 - released May 24, 2022
@@ -21,8 +24,8 @@ Packages in this repository are synchronized on release, with a single changelog
 #### 🎉Features
 
 - **@taskless/client**, **@taskless/next**, **@taskless/express** Added the ability to specify an array as a job identifier instead of just a string key, making namespacing identifiers require less cognitive overhead
-- **@taskless/express** Added a `mount` method for working with Taskless when it's attached to a sub-router.
 - **@taskless/dev** Added the ability to create jobs via the Taskless dev dashboard
+- **@taskless/express** Added a `mount` method for working with Taskless when it's attached to a sub-router.
 
 #### 🔧 Fixes
 
@@ -31,9 +34,9 @@ Packages in this repository are synchronized on release, with a single changelog
 
 #### 🎒 Misc
 
-- **@taskless/dev** Switched PouchDB for [mongo-memory-server](https://www.npmjs.com/package/mongodb-memory-server). While it adds a bit more overhead to start up a Mongo server in development, it makes it much easier to use Mango queries for querying task and job information.
 - **@taskless/client** Updated node specific modules to import from the `node:` namespace
 - **@taskless/client** Moved to home in `/packages` matching its package name to reduce confusion
+- **@taskless/dev** Switched PouchDB for [mongo-memory-server](https://www.npmjs.com/package/mongodb-memory-server). While it adds a bit more overhead to start up a Mongo server in development, it makes it much easier to use Mango queries for querying task and job information.
 - **@taskless/root** Added a `dev` script that gets every integration up and running in dev mode for fast debugging
 
 # 1.1.0 - released May 2, 2022
