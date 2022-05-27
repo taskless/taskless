@@ -191,18 +191,18 @@ const Home: NextPage = () => {
           columns={[
             {
               name: "Name",
-              renderValue: ({ data: row }) => {
+              renderValue: ({ record }) => {
                 return (
                   <div>
-                    <span className="truncate">{row.name}</span>
+                    <span className="truncate">{record.name}</span>
                   </div>
                 );
               },
             },
             {
               name: "Next Run",
-              renderValue: ({ data: row }) => {
-                const run = extractRunData(row);
+              renderValue: ({ record }) => {
+                const run = extractRunData(record);
                 return (
                   <div className="flex flex-row items-center">
                     <span title={run.next ? run.next.toISO() : undefined}>
@@ -212,7 +212,7 @@ const Home: NextPage = () => {
                       <button
                         title="Run now"
                         className="ml-2"
-                        onClick={() => promote({ id: row._id.toString() })}
+                        onClick={() => promote({ id: record._id.toString() })}
                       >
                         <FastForwardIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
@@ -223,8 +223,8 @@ const Home: NextPage = () => {
             },
             {
               name: "Last Run",
-              renderValue: ({ data: row }) => {
-                const run = extractRunData(row);
+              renderValue: ({ record }) => {
+                const run = extractRunData(record);
                 return (
                   <div className="flex flex-row items-center">
                     <span title={run.last ? run.last.toISO() : undefined}>
@@ -234,7 +234,7 @@ const Home: NextPage = () => {
                       <button
                         title="Replay Job"
                         className="ml-2"
-                        onClick={() => replay({ id: row._id.toString() })}
+                        onClick={() => replay({ id: record._id.toString() })}
                       >
                         <ReplyIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
@@ -245,14 +245,14 @@ const Home: NextPage = () => {
             },
             {
               name: "Last Status",
-              renderValue: ({ data: row }) => (
-                <>{row.logs?.[0]?.status ?? "-"}</>
+              renderValue: ({ record }) => (
+                <>{record.logs?.[0]?.status ?? "-"}</>
               ),
             },
           ]}
           hasDetailsColumn
           detailsButtonClassName="text-sm text-gray-500"
-          renderDetails={({ data: row, close }) => (
+          renderDetails={({ record, close }) => (
             <div className="ml-6 mb-3 px-3 pb-3 pt-2 bg-gray-100 flex flex-col rounded relative">
               <button
                 className="self-end text-gray-600 hover:text-gray-900 transition self-start absolute top-3"
@@ -266,14 +266,14 @@ const Home: NextPage = () => {
                   <div className="flex flex-col w-full md:w-1/3 lg:w-1/4">
                     <div className="font-semibold">Enabled</div>
                     <div className="text-xs overflow-hidden text-ellipsis">
-                      {row.enabled ? "TRUE" : "FALSE"}
+                      {record.enabled ? "TRUE" : "FALSE"}
                     </div>
                   </div>
 
                   <div className="flex flex-col w-full md:w-1/3 lg:w-1/4">
                     <div className="font-semibold">Endpoint</div>
                     <div className="text-xs overflow-hidden text-ellipsis">
-                      {row.endpoint}
+                      {record.endpoint}
                     </div>
                   </div>
 
@@ -281,14 +281,16 @@ const Home: NextPage = () => {
                     <div className="font-semibold">Next Run</div>
                     <div
                       className="text-xs overflow-hidden text-ellipsis flex flex-row items-center"
-                      title={extractRunData(row).next?.toUTC().toISO() ?? "-"}
+                      title={
+                        extractRunData(record).next?.toUTC().toISO() ?? "-"
+                      }
                     >
-                      {extractRunData(row).next?.toLocal().toISO() ?? "-"}
-                      {extractRunData(row).next ? (
+                      {extractRunData(record).next?.toLocal().toISO() ?? "-"}
+                      {extractRunData(record).next ? (
                         <button
                           title="Run now"
                           className="ml-2"
-                          onClick={() => promote({ id: row._id.toString() })}
+                          onClick={() => promote({ id: record._id.toString() })}
                         >
                           <FastForwardIcon className="h-3 w-3 fill-gray-800 hover:fill-primary-300 transition" />
                         </button>
@@ -301,13 +303,13 @@ const Home: NextPage = () => {
                     <div
                       className="text-xs overflow-hidden text-ellipsis"
                       title={
-                        row.runEvery
-                          ? Duration.fromISO(row.runEvery).toISO()
+                        record.runEvery
+                          ? Duration.fromISO(record.runEvery).toISO()
                           : "-"
                       }
                     >
-                      {row.runEvery
-                        ? Duration.fromISO(row.runEvery).toHuman()
+                      {record.runEvery
+                        ? Duration.fromISO(record.runEvery).toHuman()
                         : "-"}
                     </div>
                   </div>
@@ -319,7 +321,7 @@ const Home: NextPage = () => {
                   Headers
                 </span>
                 <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
-                  {JSON.stringify(row.headers ?? {}, null, 2)}
+                  {JSON.stringify(record.headers ?? {}, null, 2)}
                 </pre>
               </div>
 
@@ -328,9 +330,9 @@ const Home: NextPage = () => {
                   Body
                 </span>
                 <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
-                  {row.body
+                  {record.body
                     ? JSON.stringify(
-                        JSON.parse(row.body as string) ?? {},
+                        JSON.parse(record.body as string) ?? {},
                         null,
                         2
                       )
@@ -341,7 +343,7 @@ const Home: NextPage = () => {
               <div className="pt-6 text-sm">
                 <Link
                   href={`/logs?${new URLSearchParams({
-                    q: `jobId:${row.v5id}`,
+                    q: `jobId:${record.v5id}`,
                   }).toString()}`}
                 >
                   <a className="underline text-gray-700 decoration-gray-700 hover:text-primary-700 hover:decoration-primary-700 transition">

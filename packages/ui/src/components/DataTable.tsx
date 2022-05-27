@@ -6,7 +6,6 @@ type OpenMap = {
 };
 
 interface DP<T> {
-  data: T;
   record: T;
 }
 
@@ -23,6 +22,7 @@ interface DataTableProps<T> {
     headerClassName?: string;
     cellClassName?: string;
     renderValue: React.FC<DP<T>>;
+    renderSummary?: React.FC<DP<T>>;
     title?: (props: DP<T>) => string;
   }[];
   hasDetailsColumn?: boolean;
@@ -88,13 +88,12 @@ export const DataTable = <T extends Record<string | number | symbol, unknown>>({
                     <td
                       key={colkey}
                       className={cx(DEFAULT_CELL, c.cellClassName)}
-                      title={
-                        c.title
-                          ? c.title({ data: row, record: row })
-                          : undefined
-                      }
+                      title={c.title ? c.title({ record: row }) : undefined}
                     >
-                      <c.renderValue data={row} record={row} />
+                      <c.renderValue record={row} />
+                      {c.renderSummary ? (
+                        <c.renderSummary record={row} />
+                      ) : null}
                     </td>
                   );
                 })}
@@ -113,11 +112,7 @@ export const DataTable = <T extends Record<string | number | symbol, unknown>>({
               typeof Details === "undefined" ? null : (
                 <tr>
                   <td colSpan={columns.length + 1}>
-                    <Details
-                      data={row}
-                      record={row}
-                      close={() => toggleDetails(rowkey)}
-                    />
+                    <Details record={row} close={() => toggleDetails(rowkey)} />
                   </td>
                 </tr>
               )}
