@@ -31,7 +31,7 @@ class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#ffffff" />
           <meta name="theme-color" content="#ffffff" />
         </Head>
-        <body>
+        <body className="min-h-screen">
           <Main />
           <NextScript />
         </body>

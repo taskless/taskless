@@ -1,9 +1,14 @@
+const path = require("path");
 const defaultTheme = require("tailwindcss/defaultTheme");
+const colors = require("tailwindcss/colors");
+
+const tui = path.dirname(require.resolve("@taskless/ui"));
 
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
+    `${tui}/**/*.{js,ts,jsx,tsx}`,
   ],
   theme: {
     extend: {
@@ -13,7 +18,8 @@ module.exports = {
       colors: {
         transparent: "transparent",
         current: "currentColor",
-        brand: {
+        gray: colors.slate,
+        primary: {
           50: "#E5CCF6",
           100: "#CFA3EF",
           200: "#BA7AE9",

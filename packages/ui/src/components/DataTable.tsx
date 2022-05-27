@@ -5,10 +5,6 @@ type OpenMap = {
   [id: string]: boolean | undefined;
 };
 
-type Data = {
-  [column: string]: unknown;
-};
-
 interface DP<T> {
   data: T;
   record: T;
@@ -38,7 +34,7 @@ const DEFAULT_HEAD =
   "py-3.5 px-3 text-left text-sm font-semibold text-gray-900";
 const DEFAULT_CELL = "py-4 px-3 text-sm text-gray-500";
 
-export const DataTable = <T extends Data>({
+export const DataTable = <T extends Record<string | number | symbol, unknown>>({
   data,
   columns,
   className,

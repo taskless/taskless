@@ -19,10 +19,10 @@ if (!globalThis.mongod) {
     });
 }
 
-interface ScheduleDoc extends Document {
+export type ScheduleDoc = {
   attempt?: number;
   next: Date;
-}
+};
 
 const schedule = new Schema<ScheduleDoc>({
   attempt: {
@@ -32,7 +32,7 @@ const schedule = new Schema<ScheduleDoc>({
   next: Date,
 });
 
-export interface LogDoc extends Document {
+export type LogDoc = {
   createdAt?: Date;
   job?: JobDoc;
   jobId: string;
@@ -40,7 +40,7 @@ export interface LogDoc extends Document {
   status: string;
   statusCode: number;
   v4id: string;
-}
+};
 
 const logs = new Schema<LogDoc>({
   createdAt: {
@@ -61,7 +61,7 @@ const logs = new Schema<LogDoc>({
   },
 });
 
-export interface JobDoc extends Document {
+export type JobDoc = {
   id: Types.ObjectId;
   v5id: string;
   name: string;
@@ -78,7 +78,7 @@ export interface JobDoc extends Document {
   body?: string;
   schedule: ScheduleDoc;
   logs?: LogDoc[];
-}
+};
 
 const jobs = new Schema<JobDoc>({
   id: Schema.Types.ObjectId,

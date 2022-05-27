@@ -1,7 +1,7 @@
 import React from "react";
 import cx from "classnames";
 
-const DEFAULT_CLASSES = "fill-transparent stroke-brand-400 stroke-5";
+const DEFAULT_CLASSES = "fill-transparent stroke-primary-400 stroke-5";
 
 interface LogoProps {
   className: string;

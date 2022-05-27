@@ -24,7 +24,7 @@ export const TabButton: React.FC<TabButtonProps> = ({
     type={type ?? "button"}
     className={cx(
       "flex flex-row items-center rounded-md hover:bg-gray-100 px-3 py-2",
-      active ? "text-brand-500" : "text-gray-500",
+      active ? "text-primary-500" : "text-gray-500",
       className
     )}
     {...rest}

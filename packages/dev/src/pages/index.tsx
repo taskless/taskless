@@ -15,7 +15,6 @@ import {
   ReplyIcon,
   XIcon,
 } from "@heroicons/react/solid";
-import Link from "next/link";
 import React, { useCallback } from "react";
 import { useBoolean } from "usehooks-ts";
 import { GetJobsResponse } from "./api/rest/jobs";
@@ -23,6 +22,7 @@ import { PromoteJobResponse } from "./api/rest/job/[id]/promote";
 import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
 import { UpsertJobResponse, UpsertJobVariables } from "./api/rest/job/upsert";
 import { CreateJobModal, Fields } from "components/Modals/CreateJob";
+import Link from "next/link";
 
 const getJobs: QueryFunction<
   GetJobsResponse,
@@ -168,7 +168,7 @@ const Home: NextPage = () => {
       <div className="flex flex-row gap-3 pb-3">
         <div className="w-full relative flex flex-row">{/* Search */}</div>
         <button
-          className="flex-shrink-0 bg-brand-700 text-white px-3 py-2 rounded-md flex flex-row items-center gap-3 hover:bg-brand-500 transition"
+          className="flex-shrink-0 bg-primary-700 text-white px-3 py-2 rounded-md flex flex-row items-center gap-3 hover:bg-primary-500 transition"
           onClick={openCreateModal}
         >
           <PlusIcon className="h-5 w-5" />
@@ -212,9 +212,9 @@ const Home: NextPage = () => {
                       <button
                         title="Run now"
                         className="ml-2"
-                        onClick={() => promote({ id: row._id })}
+                        onClick={() => promote({ id: row.id.toString() })}
                       >
-                        <FastForwardIcon className="h-3 w-3 fill-gray-500 hover:fill-brand-300 transition" />
+                        <FastForwardIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
                     ) : null}
                   </div>
@@ -234,9 +234,9 @@ const Home: NextPage = () => {
                       <button
                         title="Replay Job"
                         className="ml-2"
-                        onClick={() => replay({ id: row._id })}
+                        onClick={() => replay({ id: row.id.toString() })}
                       >
-                        <ReplyIcon className="h-3 w-3 fill-gray-500 hover:fill-brand-300 transition" />
+                        <ReplyIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
                     ) : null}
                   </div>
@@ -288,9 +288,9 @@ const Home: NextPage = () => {
                         <button
                           title="Run now"
                           className="ml-2"
-                          onClick={() => promote({ id: row._id })}
+                          onClick={() => promote({ id: row.id.toString() })}
                         >
-                          <FastForwardIcon className="h-3 w-3 fill-gray-800 hover:fill-brand-300 transition" />
+                          <FastForwardIcon className="h-3 w-3 fill-gray-800 hover:fill-primary-300 transition" />
                         </button>
                       ) : null}
                     </div>
@@ -344,7 +344,7 @@ const Home: NextPage = () => {
                     q: `jobId:${row.v5id}`,
                   }).toString()}`}
                 >
-                  <a className="underline text-gray-700 decoration-gray-700 hover:text-brand-700 hover:decoration-brand-700 transition">
+                  <a className="underline text-gray-700 decoration-gray-700 hover:text-primary-700 hover:decoration-primary-700 transition">
                     View Logs
                   </a>
                 </Link>

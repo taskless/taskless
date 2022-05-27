@@ -51,10 +51,10 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
       <Head>
         <title>{title}</title>
       </Head>
-      <div className="min-h-full">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 w-full">
-            <div className="flex items-center w-full">
+      <div className="min-h-screen">
+        <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-row items-center justify-between h-16 w-full">
+            <div className="flex flex-row items-center w-full">
               <div className="flex-shrink-0 flex flex-row item-center flex-grow">
                 <Link href="/">
                   <a>
@@ -89,7 +89,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
                     <a
                       className={cx(
                         item.current
-                          ? "border-b-2 border-b-brand-400"
+                          ? "border-b-2 border-b-primary-400"
                           : "rounded-md hover:bg-gray-100",
                         "px-3 py-2 text-sm font-medium"
                       )}

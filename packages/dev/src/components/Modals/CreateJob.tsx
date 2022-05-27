@@ -163,28 +163,28 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
             <TabButton
               active={activeTab === "basic"}
               label="Basic Info"
-              labelClassName="sm:hidden"
+              labelClassName="hidden md:block"
               icon={AdjustmentsIcon}
               onClick={() => setActiveTab("basic")}
             />
             <TabButton
               active={activeTab === "schedule"}
               label="Scheduling"
-              labelClassName="sm:hidden"
+              labelClassName="hidden md:block"
               icon={CalendarIcon}
               onClick={() => setActiveTab("schedule")}
             />
             <TabButton
               active={activeTab === "data"}
               label="Data"
-              labelClassName="sm:hidden"
+              labelClassName="hidden md:block"
               icon={CodeIcon}
               onClick={() => setActiveTab("data")}
             />
             <TabButton
               active={activeTab === "advanced"}
               label="Advanced"
-              labelClassName="sm:hidden"
+              labelClassName="hidden md:block"
               icon={BeakerIcon}
               onClick={() => setActiveTab("advanced")}
             />
@@ -353,7 +353,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
             type="submit"
             className={cx(
               "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition",
-              "bg-brand-700 hover:bg-brand-500 text-white"
+              "bg-primary-700 hover:bg-primary-500 text-white"
             )}
           >
             Create
