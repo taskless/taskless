@@ -1,7 +1,7 @@
 {
   "name": "@taskless/dev",
   "description": "Development Server for Taskless.io",
-  "version": "2.0.2",
+  "version": "2.0.3-next.0",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -30,9 +30,9 @@
     "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tailwindcss/forms": "^0.5.0",
     "@tailwindcss/typography": "^0.5.2",
-    "@taskless/client": "2.0.2",
-    "@taskless/types": "2.0.2",
-    "@taskless/ui": "2.0.2",
+    "@taskless/client": "2.0.3-next.0",
+    "@taskless/types": "2.0.3-next.0",
+    "@taskless/ui": "2.0.3-next.0",
     "boolean-parser": "^0.0.2",
     "chalk": "^5.0.1",
     "classnames": "^2.3.1",

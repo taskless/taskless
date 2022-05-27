@@ -1,7 +1,7 @@
 {
   "name": "@taskless/types",
   "description": "Common type definitions for Taskless.io",
-  "version": "2.0.2",
+  "version": "2.0.3-next.0",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
