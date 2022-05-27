@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { bqToMango, logFacets } from "util/bqToMango";
 import bp from "boolean-parser";
-import { JobDoc, Log, LogDoc } from "mongo/db";
+import { JobDoc, Log, LogDoc, MongoResult } from "mongo/db";
 
-type LogWithResolvedFields = LogDoc & {
+type LogWithResolvedFields = MongoResult<LogDoc> & {
   job?: JobDoc;
 };
 

@@ -14,10 +14,16 @@ if (!globalThis.mongod) {
       mongoose.connect(mongod.getUri());
     })
     .catch(() => {
-      throw new Error("Could not start a mongo server in-memory");
+      console.error("Could not start a mongo server in-memory");
       process.exit(1);
     });
 }
+
+/** The result of a mongo query function, as mongoose doesn't reallyt surface this */
+export type MongoResult<T> =
+  | T & {
+      _id: Types.ObjectId;
+    };
 
 export type ScheduleDoc = {
   attempt?: number;

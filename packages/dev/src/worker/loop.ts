@@ -1,8 +1,9 @@
 import { DateTime, Duration } from "luxon";
 import { logger } from "winston/logger";
 import phin from "phin";
-import { Job, JobDoc, Log, Schedule } from "mongo/db";
+import { Job, JobDoc, Log, MongoResult, Schedule } from "mongo/db";
 import { findNextTime } from "./scheduler";
+import { Document, Types } from "mongoose";
 
 const WAIT_INTERVAL = 100;
 const MAX_JOB_CHUNK = 10;
@@ -11,8 +12,11 @@ const log = logger.child({
   label: "worker/loop.ts",
 });
 
+// reattach mongo methods for toJSON
+type MongoJob = Document<Types.ObjectId, any, JobDoc> & MongoResult<JobDoc>;
+
 /** Simple typeguard to discard null results */
-function isJobDoc(v: any): v is JobDoc {
+function isMongoJob(v: any): v is MongoJob {
   return v !== null;
 }
 
@@ -30,7 +34,7 @@ export const start = () => {
 
 /** Find all jobs that are ready to run and asynchronously handle them */
 const tick = async () => {
-  let jobs: JobDoc[] = [];
+  let jobs: MongoJob[] = [];
   while (jobs.length < MAX_JOB_CHUNK) {
     const next = await Job.findOneAndUpdate(
       {
@@ -63,13 +67,13 @@ const tick = async () => {
   log.debug(`Found ${jobs.length} item(s)`);
 
   await Promise.allSettled(
-    jobs.filter<JobDoc>(isJobDoc).map((job) => handle(job))
+    jobs.filter<MongoJob>(isMongoJob).map((job) => handle(job))
   );
   setTimeout(tick, WAIT_INTERVAL);
 };
 
 /** Handle a single instance of a job */
-const handle = async (job: JobDoc) => {
+const handle = async (job: MongoJob) => {
   if (job.enabled === false) {
     // disabled
     return;
@@ -135,7 +139,7 @@ const handle = async (job: JobDoc) => {
   if (!job.logs) {
     job.logs = [];
   }
-  job.logs.push(entry._id);
+  job.logs.push(entry);
 
   // save log
   await entry.save();

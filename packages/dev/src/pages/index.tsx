@@ -212,7 +212,7 @@ const Home: NextPage = () => {
                       <button
                         title="Run now"
                         className="ml-2"
-                        onClick={() => promote({ id: row.id.toString() })}
+                        onClick={() => promote({ id: row._id.toString() })}
                       >
                         <FastForwardIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
@@ -234,7 +234,7 @@ const Home: NextPage = () => {
                       <button
                         title="Replay Job"
                         className="ml-2"
-                        onClick={() => replay({ id: row.id.toString() })}
+                        onClick={() => replay({ id: row._id.toString() })}
                       >
                         <ReplyIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
@@ -288,7 +288,7 @@ const Home: NextPage = () => {
                         <button
                           title="Run now"
                           className="ml-2"
-                          onClick={() => promote({ id: row.id.toString() })}
+                          onClick={() => promote({ id: row._id.toString() })}
                         >
                           <FastForwardIcon className="h-3 w-3 fill-gray-800 hover:fill-primary-300 transition" />
                         </button>

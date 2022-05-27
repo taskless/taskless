@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Job, JobDoc } from "mongo/db";
+import { Job, JobDoc, MongoResult } from "mongo/db";
 
 type ErrorResponse = {
   error: string;
 };
 
 export type ReplayJobResponse = {
-  job: JobDoc;
+  job: MongoResult<JobDoc>;
 };
 
 export default async function handler(

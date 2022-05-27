@@ -1,14 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bp from "boolean-parser";
 import { bqToMango, jobFacets } from "util/bqToMango";
-import { Job, JobDoc } from "mongo/db";
+import { Job, JobDoc, MongoResult } from "mongo/db";
 
 type ErrorResponse = {
   error: string;
 };
 
 export type GetJobsResponse = {
-  jobs: JobDoc[];
+  jobs: MongoResult<JobDoc>[];
 };
 
 export default async function handler(
