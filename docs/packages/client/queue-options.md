@@ -12,6 +12,9 @@ interface QueueOptions {
   encryptionKey?: string;
   expiredEncryptionKeys?: string[];
   jobOptions?: JobOptions;
+  __dangerouslyAllowUnverifiedSignatures?: {
+    allowed: boolean;
+  };
 }
 ```
 
@@ -40,6 +43,9 @@ When creating a `Queue`, either through [@taskless/client](../client.md) or one 
 
 `jobOptions?: JobOptions`
 **Default see [JobOptions](./job-options.md)** Specify job options that will be applied to every job in the queue. Sensible defaults are included, but you may wish to change these (such as disabling retries or passing additional headers) with every request.
+
+`__dangerouslyAllowUnverifiedSignatures?: { allowed: boolean; };`
+**Default `undefined`** Allows you to explicitly allow unverified signatures. By default, the Taskless client checks the signatures of all incoming payloads against your `credentials.secret` and `expiredSecrets` values. If set, this option will disable those checks for the provided queue. When setting this flag, please be sure that you are confirming the payload's authenticity in another manner, either through request headers, IP origins, or your own signature checking system.
 
 ## Additional Reading
 

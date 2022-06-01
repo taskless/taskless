@@ -61,6 +61,19 @@ export interface QueueOptions {
 
   /** A default set of job options to apply to every job created in this queue */
   defaultJobOptions?: JobOptions;
+
+  /**
+   * Allow unverified payloads.
+   *
+   * In development, it's common to not need your taskless secret for verifying
+   * the signatures of payloads. In production, you should not enable unverified
+   * signatures unless you are confirming the payload in some other manner. Otherwise,
+   * your endpoints can be invoked by third parties without any confirmation of the
+   * request's origin.
+   */
+  __dangerouslyAllowUnverifiedSignatures?: {
+    allowed: boolean;
+  };
 }
 
 /** A finalized set of Queue options, where previously optional values must be realied */

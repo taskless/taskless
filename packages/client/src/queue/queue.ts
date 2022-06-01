@@ -90,7 +90,10 @@ export class Queue<T> {
   }
 
   /** Turn a Taskless Body into a payload */
-  b2p(body: TasklessBody): T {
+  b2p(
+    body: TasklessBody,
+    allowUnsigned: boolean
+  ): { payload: T; verified: boolean } {
     if (body.v !== 1) {
       throw new Error("Unsupported Taskless Envelope");
     }
@@ -104,12 +107,12 @@ export class Queue<T> {
       body.signature
     );
 
-    if (!ver) {
+    if (!ver && !allowUnsigned) {
       if (process.env.NODE_ENV !== "development") {
         throw new Error("Signature mismatch");
       } else {
         console.error(
-          "Signature mismatch. This can happen if you've enqueued a job with one secret, but dequeued the job with another. In production, this will generate an error."
+          "Signature mismatch. This can happen if you've enqueued a job with one secret, but dequeued the job with another. In production, this will throw an error."
         );
       }
     }
@@ -123,7 +126,7 @@ export class Queue<T> {
       ].filter((t) => t)
     );
 
-    return payload;
+    return { payload, verified: ver };
   }
 
   /** Resolves a route to a fully qualified URL */
@@ -199,7 +202,10 @@ export class Queue<T> {
     }
 
     const body = await Promise.resolve(getBody());
-    const payload = this.b2p(body);
+    const { payload, verified } = this.b2p(
+      body,
+      this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ?? false
+    );
     const h: Awaited<ReturnType<typeof getHeaders>> = await getHeaders();
 
     try {
@@ -207,6 +213,7 @@ export class Queue<T> {
         applicationId: firstOf(h["x-taskless-application"]) ?? null,
         organizationId: firstOf(h["x-taskless-organization"]) ?? null,
         attempt: parseInt(firstOf(h["x-taskless-attempt"]) ?? "0", 10),
+        verified,
       });
       await send(JSON.parse(JSON.stringify(result ?? {})));
       return;
@@ -268,7 +275,11 @@ export class Queue<T> {
       endpoint: job.replaceJob.endpoint,
       enabled: job.replaceJob.enabled === false ? false : true,
       headers: opts.headers,
-      payload: this.b2p(resolvedBody),
+      payload: this.b2p(
+        resolvedBody,
+        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
+          false
+      ).payload,
       retries: job.replaceJob.retries,
       runAt: job.replaceJob.runAt,
       runEvery: job.replaceJob.runEvery ?? null,
@@ -321,7 +332,11 @@ export class Queue<T> {
       name: job.updateJob.name,
       endpoint: job.updateJob.endpoint,
       enabled: job.updateJob.enabled === false ? false : true,
-      payload: this.b2p(resolvedBody),
+      payload: this.b2p(
+        resolvedBody,
+        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
+          false
+      ).payload,
       retries: job.updateJob.retries,
       runAt: job.updateJob.runAt,
       runEvery: job.updateJob.runEvery ?? null,
@@ -351,7 +366,11 @@ export class Queue<T> {
       name: job.deleteJob.name,
       endpoint: job.deleteJob.endpoint,
       enabled: job.deleteJob.enabled === false ? false : true,
-      payload: this.b2p(resolvedBody),
+      payload: this.b2p(
+        resolvedBody,
+        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
+          false
+      ).payload,
       retries: job.deleteJob.retries,
       runAt: job.deleteJob.runAt,
       runEvery: job.deleteJob.runEvery ?? null,
@@ -376,7 +395,11 @@ export class Queue<T> {
       name: result.job.name,
       endpoint: result.job.endpoint,
       enabled: result.job.enabled === false ? false : true,
-      payload: this.b2p(resolvedBody),
+      payload: this.b2p(
+        resolvedBody,
+        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
+          false
+      ).payload,
       retries: result.job.retries,
       runAt: result.job.runAt,
       runEvery: result.job.runEvery ?? null,

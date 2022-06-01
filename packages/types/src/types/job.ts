@@ -48,6 +48,8 @@ export type JobMetadata = {
   organizationId: string | null;
   /** A counter representing the number of attempts made */
   attempt: number;
+  /** Was the payload's signature verified? */
+  verified: boolean;
 };
 
 /** Describes a Taskless Job with a payload of type `T` */

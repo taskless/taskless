@@ -1,5 +1,11 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
+# next (tentative 2.1.0)
+
+#### 🎉Features
+
+- **@taskless/client** Now formally supports unverified signatures in production scenarios. There are some instances where you do not want to check signatures (for example via a webhook), or you might be checking the authenticity of the payload in some other manner. In these cases, you can explicitly override the signature checking behavior of the Taskless client on a per-queue basis. To enable this, add `{ __dangerouslyAllowUnverifiedSignatures: { allowed: true } }` to your `QueueOptions`. After looking at a variety of APIs, we felt the `__dangerously` is both easy to project search for and requires opting in via a manner that does not have ambiguity. In development, the behavior remains unchanged.
+
 # 2.0.2 - released May 27, 2022
 
 #### 🎒 Misc
