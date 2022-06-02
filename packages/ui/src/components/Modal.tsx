@@ -7,9 +7,15 @@ interface ModalProps {
   closeOnTapOutside?: boolean;
 }
 
-export const Modal: React.FC<PropsWithChildren<ModalProps>> & {
+interface ModalSubmodules {
   Actions: ActionsComponent;
-} = ({ children, show, onRequestClose, closeOnTapOutside }) => {
+  Title: typeof Dialog["Title"];
+  Panel: typeof Dialog["Panel"];
+  Description: typeof Dialog["Description"];
+}
+
+export const Modal: React.FC<PropsWithChildren<ModalProps>> &
+  ModalSubmodules = ({ children, show, onRequestClose, closeOnTapOutside }) => {
   const handleBgTap = useCallback(() => {
     if (closeOnTapOutside) {
       onRequestClose();
@@ -61,6 +67,10 @@ export const Modal: React.FC<PropsWithChildren<ModalProps>> & {
     </Transition.Root>
   );
 };
+
+Modal.Title = Dialog.Title;
+Modal.Panel = Dialog.Panel;
+Modal.Description = Dialog.Description;
 
 type ActionsComponent = React.FC<PropsWithChildren<Record<string, unknown>>>;
 const Actions: ActionsComponent = ({ children }) => (
