@@ -1,6 +1,6 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
-# next (tentative 2.1.0)
+# 2.1.0 - released June 2, 2022
 
 #### 🎉Features
 
