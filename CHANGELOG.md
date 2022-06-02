@@ -5,6 +5,7 @@ Packages in this repository are synchronized on release, with a single changelog
 #### 🎉Features
 
 - **@taskless/client** Now formally supports unverified signatures in production scenarios. There are some instances where you do not want to check signatures (for example via a webhook), or you might be checking the authenticity of the payload in some other manner. In these cases, you can explicitly override the signature checking behavior of the Taskless client on a per-queue basis. To enable this, add `{ __dangerouslyAllowUnverifiedSignatures: { allowed: true } }` to your `QueueOptions`. After looking at a variety of APIs, we felt the `__dangerously` is both easy to project search for and requires opting in via a manner that does not have ambiguity. In development, the behavior remains unchanged.
+- **@taskless/client** Added support for serialized error messages. Previously, only the error's `message` property was transmitted. We now serialize the whole error (as best we can) to improve the logging and debugging experience.
 
 # 2.0.2 - released May 27, 2022
 

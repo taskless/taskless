@@ -9,6 +9,7 @@ import {
   type TasklessBody,
 } from "@taskless/types";
 import { DateTime } from "luxon";
+import { serializeError } from "serialize-error";
 
 import { JobError } from "../error.js";
 import { JobMethodEnum } from "../__generated__/schema.js";
@@ -133,6 +134,12 @@ export class Queue<T> {
   protected resolveRoute() {
     const route =
       typeof this.route === "function" ? this.route() : this.route ?? "";
+
+    // if route starts with https?://, it's valid already
+    if (route.indexOf("http://") === 0 || route.indexOf("https://") === 0) {
+      return route;
+    }
+
     return `${this.queueOptions.baseUrl ?? ""}${
       route.indexOf("/") === 0 ? route : "/" + route
     }`;
@@ -219,14 +226,11 @@ export class Queue<T> {
       return;
     } catch (e) {
       console.error(e);
+      const ser = serializeError(e);
       if (e instanceof JobError) {
-        await sendError(e.statusCode, e.headers, e.message ?? e.statusMessage);
+        await sendError(e.statusCode, e.headers, ser);
       } else {
-        await sendError(
-          500,
-          {},
-          e instanceof Error ? e.message : "Internal Server Error"
-        );
+        await sendError(500, {}, ser);
       }
     }
   }

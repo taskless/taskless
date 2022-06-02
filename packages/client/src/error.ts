@@ -8,6 +8,11 @@ class ResponseError extends Error {
   statusCode?: number;
   statusMessage?: string;
   headers?: OutgoingHttpHeaders;
+  type: string;
+  constructor(message: string) {
+    super(message);
+    this.type = "ResponseError";
+  }
 }
 
 export class JobError extends ResponseError {
@@ -17,6 +22,7 @@ export class JobError extends ResponseError {
 
   constructor(message: string, options?: JobErrorOptions) {
     super(message);
+    this.type = "JobError";
     this.statusCode = 500;
     this.statusMessage = "Internal Server Error";
     this.headers = {};
