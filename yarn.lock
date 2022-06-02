@@ -1867,8 +1867,6 @@ __metadata:
     "@graphql-codegen/typescript-generic-sdk": ^2.3.4
     "@graphql-codegen/typescript-operations": ^2.3.2
     "@taskless/types": 2.0.3-next.0
-    deepmerge: ^4.2.2
-    deepmerge-ts: ^4.0.3
     graphql: 15.8.0
     graphql-tag: ^2.12.6
     luxon: ^2.3.1
@@ -1946,8 +1944,6 @@ __metadata:
     "@taskless/types": 2.0.3-next.0
     "@types/eslint": ^8
     "@types/express": ^4.17.13
-    "@typescript-eslint/eslint-plugin": ^5.23.0
-    "@typescript-eslint/parser": ^5.23.0
     eslint: ^8.10.0
     madge: ^5.0.1
     npm-run-all: ^4.1.5
@@ -4453,22 +4449,6 @@ __metadata:
   version: 0.1.4
   resolution: "deep-is@npm:0.1.4"
   checksum: edb65dd0d7d1b9c40b2f50219aef30e116cedd6fc79290e740972c132c09106d2e80aa0bc8826673dd5a00222d4179c84b36a790eef63a4c4bca75a37ef90804
-  languageName: node
-  linkType: hard
-
-"deepmerge-ts@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "deepmerge-ts@npm:4.0.3"
-  dependencies:
-    is-plain-object: ^5.0.0
-  checksum: 4973705394bcbf13f896942491366b16b9776a1484c60f827e56fd2fa2327dc1f9634d00a5ac321a17c8099427890dcfb406fa216ba406644107281ed79a1e86
-  languageName: node
-  linkType: hard
-
-"deepmerge@npm:^4.2.2":
-  version: 4.2.2
-  resolution: "deepmerge@npm:4.2.2"
-  checksum: a8c43a1ed8d6d1ed2b5bf569fa4c8eb9f0924034baf75d5d406e47e157a451075c4db353efea7b6bcc56ec48116a8ce72fccf867b6e078e7c561904b5897530b
   languageName: node
   linkType: hard
 

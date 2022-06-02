@@ -9,7 +9,14 @@ Packages in this repository are synchronized on release, with a single changelog
 
 #### 🔧 Fixes
 
-- **@taskless/dev** Previously, the mongod implementation required a hack to create a globally shared in-memory instance. There were corner cases that could arise where next.js' code splitting would create multiple mongos or multiple crons. To simplify the code, we're now using [runtime configuration](https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration) to create singleton instances of the mongod and cron tools. We now also use a [custom server.js](https://nextjs.org/docs/advanced-features/custom-server) to start our workers, removing the original workaround that required an incoming job to start the dev infrastructure.
+- **@taskless/dev** Previously, the mongod implementation required a hack to create a globally shared in-memory instance. There were corner cases that could arise where next.js could create multiple mongos or multiple crons. To simplify the code, we're now using [runtime configuration](https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration) to create singleton instances of the mongod and cron tools. We now also use a [custom server.js](https://nextjs.org/docs/advanced-features/custom-server) to start our workers, removing the original code that required an incoming job to start the job infrastructure in development.
+
+#### 🎒 Misc
+
+- **@taskless/client** Reduced dependencies needed by manually merging queue and job options
+- **@taskless/dev** Removed unused dependencies
+- **@taskless/express** Removed unused dependencies
+- **@taskless/root** Fixed missing optional dependency for cosmicconfig until [this fix](https://github.com/EndemolShineGroup/cosmiconfig-typescript-loader/issues/147) lands in an upstream dependency
 
 # 2.0.2 - released May 27, 2022
 

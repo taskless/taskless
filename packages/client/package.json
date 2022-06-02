@@ -37,8 +37,6 @@
   },
   "dependencies": {
     "@taskless/types": "2.0.3-next.0",
-    "deepmerge": "^4.2.2",
-    "deepmerge-ts": "^4.0.3",
     "luxon": "^2.3.1",
     "p-retry": "^4.6.2",
     "phin": "^3.6.1",

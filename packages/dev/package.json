@@ -27,9 +27,6 @@
   "dependencies": {
     "@headlessui/react": "^1.6.3",
     "@heroicons/react": "^1.0.6",
-    "@tailwindcss/aspect-ratio": "^0.4.0",
-    "@tailwindcss/forms": "^0.5.0",
-    "@tailwindcss/typography": "^0.5.2",
     "@taskless/client": "2.0.3-next.0",
     "@taskless/types": "2.0.3-next.0",
     "@taskless/ui": "2.0.3-next.0",
@@ -45,13 +42,11 @@
     "next": "^12.1.0",
     "node-cron": "^3.0.0",
     "phin": "^3.6.1",
-    "postcss": "^8.4.12",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.30.0",
     "react-query": "^3.34.19",
     "serialize-error": "^11.0.0",
-    "tailwindcss": "^3.0.23",
     "ts-dedent": "^2.2.0",
     "tslib": "^2.4.0",
     "usehooks-ts": "^2.5.2",
@@ -60,6 +55,9 @@
     "yargs": "^17.3.1"
   },
   "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.0",
+    "@tailwindcss/forms": "^0.5.0",
+    "@tailwindcss/typography": "^0.5.2",
     "@types/eslint": "^8",
     "@types/luxon": "^2.3.1",
     "@types/node": "^17.0.34",
@@ -72,7 +70,9 @@
     "eslint": "^8.10.0",
     "eslint-config-next": "^12.1.0",
     "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.12",
     "shx": "^0.3.4",
+    "tailwindcss": "^3.0.23",
     "typescript": "^4.6.4"
   },
   "files": [
