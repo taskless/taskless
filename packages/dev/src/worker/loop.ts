@@ -4,13 +4,54 @@ import phin from "phin";
 import { Job, JobDoc, Log, MongoResult, Schedule } from "mongo/db";
 import { findNextTime } from "./scheduler";
 import { Document, Types } from "mongoose";
+import { serializeError } from "serialize-error";
+import getConfig from "next/config";
 
-const WAIT_INTERVAL = 100;
+export const watch = () => {
+  const { serverRuntimeConfig } = getConfig();
+  serverRuntimeConfig.crond().register("worker", "* * * * * *", async () => {
+    try {
+      let jobs: MongoJob[] = [];
+      while (jobs.length < MAX_JOB_CHUNK) {
+        const next = await Job.findOneAndUpdate(
+          {
+            "schedule.next": {
+              $lt: new Date(),
+            },
+          },
+          {
+            $set: {
+              schedule: null,
+            },
+          },
+          {
+            new: true,
+          }
+        ).exec();
+
+        if (!next) {
+          break;
+        }
+        jobs.push(next);
+      }
+
+      if (jobs.length === 0) {
+        // nothing to do
+        return;
+      }
+
+      log.debug(`Found ${jobs.length} item(s)`);
+
+      await Promise.allSettled(
+        jobs.filter<MongoJob>(isMongoJob).map((job) => handle(job))
+      );
+    } catch (e) {
+      log.error(e);
+    }
+  });
+};
+
 const MAX_JOB_CHUNK = 10;
-
-const log = logger.child({
-  label: "worker/loop.ts",
-});
 
 // reattach mongo methods for toJSON
 type MongoJob = Document<Types.ObjectId, any, JobDoc> & MongoResult<JobDoc>;
@@ -20,60 +61,13 @@ function isMongoJob(v: any): v is MongoJob {
   return v !== null;
 }
 
-let started = false;
-/** Start the in-memory worker process. Protects itself against multiple instances */
-export const start = () => {
-  if (started) {
-    return;
-  }
-
-  started = true;
-  setTimeout(tick, WAIT_INTERVAL);
-  log.info("Started worker");
-};
-
-/** Find all jobs that are ready to run and asynchronously handle them */
-const tick = async () => {
-  let jobs: MongoJob[] = [];
-  while (jobs.length < MAX_JOB_CHUNK) {
-    const next = await Job.findOneAndUpdate(
-      {
-        "schedule.next": {
-          $lt: new Date(),
-        },
-      },
-      {
-        $set: {
-          schedule: null,
-        },
-      },
-      {
-        new: true,
-      }
-    ).exec();
-
-    if (!next) {
-      break;
-    }
-    jobs.push(next);
-  }
-
-  if (jobs.length === 0) {
-    // nothing to do
-    setTimeout(tick, WAIT_INTERVAL);
-    return;
-  }
-
-  log.debug(`Found ${jobs.length} item(s)`);
-
-  await Promise.allSettled(
-    jobs.filter<MongoJob>(isMongoJob).map((job) => handle(job))
-  );
-  setTimeout(tick, WAIT_INTERVAL);
-};
+const log = logger.child({
+  label: "worker/loop.ts",
+});
 
 /** Handle a single instance of a job */
 const handle = async (job: MongoJob) => {
+  log.info("Handling Jobs");
   if (job.enabled === false) {
     // disabled
     return;
@@ -86,6 +80,7 @@ const handle = async (job: MongoJob) => {
   let retry = false;
 
   const entry = new Log({
+    isNew: true,
     job: job._id,
     jobId: job.v5id,
   });
@@ -110,6 +105,7 @@ const handle = async (job: MongoJob) => {
   l.debug(`Phin Request: \n${JSON.stringify(request)}`);
 
   try {
+    l.info("Making Request");
     const resp = await phin({
       ...request,
       parse: "json",
@@ -124,24 +120,24 @@ const handle = async (job: MongoJob) => {
       retry = (job.schedule.attempt ?? 0) < (job.retries ?? 0) - 1;
     }
   } catch (e) {
+    const ser = serializeError(e);
     const msg =
       typeof e === "string" ? e : e instanceof Error ? e.message : `${e}`;
     l.error(`Error received: ${msg}`);
-    retry = (job.schedule.attempt ?? 0) < (job.retries ?? 0) - 1;
+    retry = (job.schedule?.attempt ?? 0) < (job.retries ?? 0) - 1;
     entry.status = "FAILED";
     entry.statusCode = 500;
     entry.output = JSON.stringify({
       "@taskless/dev": true,
-      error: msg,
+      error: ser,
     });
   }
 
+  log.info("Recording results");
   if (!job.logs) {
     job.logs = [];
   }
   job.logs.push(entry);
-
-  // save log
   await entry.save();
 
   // next scheduling

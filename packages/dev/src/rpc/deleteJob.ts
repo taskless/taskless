@@ -1,6 +1,5 @@
 import type { DEV } from "@taskless/client";
 import { Job, jobToJobFragment } from "mongo/db";
-import { start } from "worker/loop";
 
 // local types
 type RPCOperation = DEV["RPCOperation"];
@@ -15,7 +14,6 @@ export const deleteJob = async (
   variables: DeleteRPC["variables"],
   context: any
 ): Promise<DeleteResponse["data"]> => {
-  start();
   const id = context.v5(variables.name);
 
   const job = await Job.findOneAndDelete(

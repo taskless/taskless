@@ -1,4 +1,3 @@
-import { Dialog } from "@headlessui/react";
 import { Duration } from "luxon";
 import React, { useCallback, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -112,22 +111,24 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
   }, [watchRunEveryType, watchRunEveryTypeOther]);
 
   // convert react-hook-form into payload
-  const handleCreate = useCallback<SubmitHandler<FormValues>>(
-    (d) => {
-      onRequestConfirm({
-        name: d.name,
-        endpoint: d.endpoint,
-        enabled: d.enabled,
-        runAt: d.runAt,
-        runEvery: d.runEveryType === "once" ? "" : d["runEveryType-other"],
-        headers: d.headers,
-        body: d.body,
-        queueName: d.queueName,
-        appId: d.appId,
-        appSecret: d.appSecret,
-      });
-    },
-    [onRequestConfirm]
+  const handleCreate = handleSubmit(
+    useCallback(
+      (d) => {
+        onRequestConfirm({
+          name: d.name,
+          endpoint: d.endpoint,
+          enabled: d.enabled,
+          runAt: d.runAt,
+          runEvery: d.runEveryType === "once" ? "" : d["runEveryType-other"],
+          headers: d.headers,
+          body: d.body,
+          queueName: d.queueName,
+          appId: d.appId,
+          appSecret: d.appSecret,
+        });
+      },
+      [onRequestConfirm]
+    )
   );
 
   useEffect(() => {
@@ -157,7 +158,13 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
 
   return (
     <Modal show={show} closeOnTapOutside onRequestClose={onRequestClose}>
-      <form onSubmit={() => void handleSubmit(handleCreate)} autoComplete="off">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleCreate();
+        }}
+        autoComplete="off"
+      >
         <div className="flex flex-row gap-6">
           <div className="flex flex-col gap-4 text-sm pt-8 flex-shrink-0">
             <TabButton
@@ -190,7 +197,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
             />
           </div>
           <div className="flex flex-col w-full">
-            <Dialog.Title>Create a Job</Dialog.Title>
+            <Modal.Title>Create a Job</Modal.Title>
             <div className="flex flex-row">
               <Region
                 active={activeTab === "basic"}

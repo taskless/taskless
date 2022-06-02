@@ -41,22 +41,22 @@ export default async function handler(
   try {
     if (isEnqueueJob(req.body)) {
       const v = await enqueueJob(req.body.variables, context);
-      logger.info(`Enqueing Job: ${req.body.variables.name}`);
+      logger.info(`RPC Enqueue Job: ${req.body.variables.name}`);
       return success(v);
     }
     if (isUpdateJob(req.body)) {
       const v = await updateJob(req.body.variables, context);
-      logger.info(`Updating Job: ${req.body.variables.name}`);
+      logger.info(`RPC Update Job: ${req.body.variables.name}`);
       return success(v);
     }
     if (isDeleteJob(req.body)) {
       const v = await deleteJob(req.body.variables, context);
-      logger.info(`Deleting Job: ${req.body.variables.name}`);
+      logger.info(`RPC Delete Job: ${req.body.variables.name}`);
       return success(v);
     }
     if (isGetJobByName(req.body)) {
       const v = await getJobByName(req.body.variables, context);
-      logger.info(`Getting Job: ${req.body.variables.name}`);
+      logger.info(`RPC Get Job: ${req.body.variables.name}`);
       return success(v);
     }
   } catch (e) {

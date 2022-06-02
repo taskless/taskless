@@ -7,6 +7,10 @@ Packages in this repository are synchronized on release, with a single changelog
 - **@taskless/client** Now formally supports unverified signatures in production scenarios. There are some instances where you do not want to check signatures (for example via a webhook), or you might be checking the authenticity of the payload in some other manner. In these cases, you can explicitly override the signature checking behavior of the Taskless client on a per-queue basis. To enable this, add `{ __dangerouslyAllowUnverifiedSignatures: { allowed: true } }` to your `QueueOptions`. After looking at a variety of APIs, we felt the `__dangerously` is both easy to project search for and requires opting in via a manner that does not have ambiguity. In development, the behavior remains unchanged.
 - **@taskless/client** Added support for serialized error messages. Previously, only the error's `message` property was transmitted. We now serialize the whole error (as best we can) to improve the logging and debugging experience.
 
+#### 🔧 Fixes
+
+- **@taskless/dev** Previously, the mongod implementation required a hack to create a globally shared in-memory instance. There were corner cases that could arise where next.js' code splitting would create multiple mongos or multiple crons. To simplify the code, we're now using [runtime configuration](https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration) to create singleton instances of the mongod and cron tools. We now also use a [custom server.js](https://nextjs.org/docs/advanced-features/custom-server) to start our workers, removing the original workaround that required an incoming job to start the dev infrastructure.
+
 # 2.0.2 - released May 27, 2022
 
 #### 🎒 Misc

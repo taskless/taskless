@@ -1856,7 +1856,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@taskless/client@2.0.1, @taskless/client@workspace:packages/client":
+"@taskless/client@2.0.3-next.0, @taskless/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@taskless/client@workspace:packages/client"
   dependencies:
@@ -1866,7 +1866,7 @@ __metadata:
     "@graphql-codegen/typescript": ^2.4.5
     "@graphql-codegen/typescript-generic-sdk": ^2.3.4
     "@graphql-codegen/typescript-operations": ^2.3.2
-    "@taskless/types": 2.0.1
+    "@taskless/types": 2.0.3-next.0
     deepmerge: ^4.2.2
     deepmerge-ts: ^4.0.3
     graphql: 15.8.0
@@ -1875,13 +1875,14 @@ __metadata:
     npm-run-all: ^4.1.5
     p-retry: ^4.6.2
     phin: ^3.6.1
+    serialize-error: ^11.0.0
     shx: ^0.3.4
     tslib: ^2.4.0
     typescript: ^4.6.4
   languageName: unknown
   linkType: soft
 
-"@taskless/dev@2.0.1, @taskless/dev@workspace:packages/dev":
+"@taskless/dev@2.0.3-next.0, @taskless/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@taskless/dev@workspace:packages/dev"
   dependencies:
@@ -1890,12 +1891,13 @@ __metadata:
     "@tailwindcss/aspect-ratio": ^0.4.0
     "@tailwindcss/forms": ^0.5.0
     "@tailwindcss/typography": ^0.5.2
-    "@taskless/client": 2.0.1
-    "@taskless/types": 2.0.1
-    "@taskless/ui": 2.0.1
+    "@taskless/client": 2.0.3-next.0
+    "@taskless/types": 2.0.3-next.0
+    "@taskless/ui": 2.0.3-next.0
     "@types/eslint": ^8
     "@types/luxon": ^2.3.1
     "@types/node": ^17.0.34
+    "@types/node-cron": ^3
     "@types/react": ^17.0.40
     "@types/react-dom": ^17.0.0
     "@types/uuid": ^8.3.4
@@ -1913,6 +1915,7 @@ __metadata:
     mongodb-memory-server: ^8.5.2
     mongoose: ^6.3.3
     next: ^12.1.0
+    node-cron: ^3.0.0
     npm-run-all: ^4.1.5
     phin: ^3.6.1
     postcss: ^8.4.12
@@ -1920,6 +1923,7 @@ __metadata:
     react-dom: ^17.0.2
     react-hook-form: ^7.30.0
     react-query: ^3.34.19
+    serialize-error: ^11.0.0
     shx: ^0.3.4
     tailwindcss: ^3.0.23
     ts-dedent: ^2.2.0
@@ -1934,12 +1938,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/express@2.0.1, @taskless/express@workspace:packages/express":
+"@taskless/express@2.0.3-next.0, @taskless/express@workspace:packages/express":
   version: 0.0.0-use.local
   resolution: "@taskless/express@workspace:packages/express"
   dependencies:
-    "@taskless/client": 2.0.1
-    "@taskless/types": 2.0.1
+    "@taskless/client": 2.0.3-next.0
+    "@taskless/types": 2.0.3-next.0
     "@types/eslint": ^8
     "@types/express": ^4.17.13
     "@typescript-eslint/eslint-plugin": ^5.23.0
@@ -1958,12 +1962,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/next@2.0.1, @taskless/next@workspace:packages/next":
+"@taskless/next@2.0.3-next.0, @taskless/next@workspace:packages/next":
   version: 0.0.0-use.local
   resolution: "@taskless/next@workspace:packages/next"
   dependencies:
-    "@taskless/client": 2.0.1
-    "@taskless/types": 2.0.1
+    "@taskless/client": 2.0.3-next.0
+    "@taskless/types": 2.0.3-next.0
     next: ^12.1.0
     npm-run-all: ^4.1.5
     react: ^17.0.2
@@ -2003,7 +2007,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/types@2.0.1, @taskless/types@workspace:packages/types":
+"@taskless/types@2.0.3-next.0, @taskless/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@taskless/types@workspace:packages/types"
   dependencies:
@@ -2015,7 +2019,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/ui@2.0.1, @taskless/ui@workspace:packages/ui":
+"@taskless/ui@2.0.3-next.0, @taskless/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@taskless/ui@workspace:packages/ui"
   dependencies:
@@ -2222,6 +2226,13 @@ __metadata:
   version: 1.2.2
   resolution: "@types/minimist@npm:1.2.2"
   checksum: b8da83c66eb4aac0440e64674b19564d9d86c80ae273144db9681e5eeff66f238ade9515f5006ffbfa955ceff8b89ad2bd8ec577d7caee74ba101431fb07045d
+  languageName: node
+  linkType: hard
+
+"@types/node-cron@npm:^3":
+  version: 3.0.1
+  resolution: "@types/node-cron@npm:3.0.1"
+  checksum: c93887daef8064b92122c3baf5a3f058bafb70a600f432665dd2684ef8539f7796fd731b3b35b54daad7faef88f87b56fc3236b8e69ce021a364ba2e8f30e51e
   languageName: node
   linkType: hard
 
@@ -8510,7 +8521,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:~2.29.1":
+"moment-timezone@npm:^0.5.31":
+  version: 0.5.34
+  resolution: "moment-timezone@npm:0.5.34"
+  dependencies:
+    moment: ">= 2.9.0"
+  checksum: 12a1d3d52e4ba509cf1fa36bbda59d898a08fa80ab35f6c358747e93aec1f07e617cec647eaf2e8acf5f9132e581d4704d34a9edffa9a80c5cd04bf23b277595
+  languageName: node
+  linkType: hard
+
+"moment@npm:>= 2.9.0, moment@npm:~2.29.1":
   version: 2.29.3
   resolution: "moment@npm:2.29.3"
   checksum: 2e780e36d9a1823c08a1b6313cbb08bd01ecbb2a9062095820a34f42c878991ccba53abaa6abb103fd5c01e763724f295162a8c50b7e95b4f1c992ef0772d3f0
@@ -8778,6 +8798,15 @@ __metadata:
     lower-case: ^2.0.2
     tslib: ^2.0.3
   checksum: 0b2ebc113dfcf737d48dde49cfebf3ad2d82a8c3188e7100c6f375e30eafbef9e9124aadc3becef237b042fd5eb0aad2fd78669c20972d045bbe7fea8ba0be5c
+  languageName: node
+  linkType: hard
+
+"node-cron@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "node-cron@npm:3.0.0"
+  dependencies:
+    moment-timezone: ^0.5.31
+  checksum: acae07d835f74636ec2bf598ffadf6b89aa2eae036671bffad336371b28fb1eefb11870912c965bb351cd958d4b62f9fa9b28cf922b5f681459ea4878837ffcf
   languageName: node
   linkType: hard
 
@@ -10684,6 +10713,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"serialize-error@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "serialize-error@npm:11.0.0"
+  dependencies:
+    type-fest: ^2.12.2
+  checksum: 858113a142298f6d4be6cf6d3de4aae2601ba265de334fac984e9c625fcc72995cb86a075cb79e677d66dc3d70545f870747bb283906525b52571159dd7a991a
+  languageName: node
+  linkType: hard
+
 "serve-static@npm:1.15.0":
   version: 1.15.0
   resolution: "serve-static@npm:1.15.0"
@@ -11513,8 +11551,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express-ts@workspace:examples/express-ts"
   dependencies:
-    "@taskless/dev": 2.0.1
-    "@taskless/express": 2.0.1
+    "@taskless/dev": 2.0.3-next.0
+    "@taskless/express": 2.0.3-next.0
     "@types/express": ^4.17.13
     "@types/node": ^17.0.34
     concurrently: ^7.0.0
@@ -11530,8 +11568,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express@workspace:examples/express"
   dependencies:
-    "@taskless/dev": 2.0.1
-    "@taskless/express": 2.0.1
+    "@taskless/dev": 2.0.3-next.0
+    "@taskless/express": 2.0.3-next.0
     concurrently: ^7.0.0
     cookie-parser: ~1.4.4
     debug: ~2.6.9
@@ -11547,8 +11585,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
   dependencies:
-    "@taskless/dev": 2.0.1
-    "@taskless/next": 2.0.1
+    "@taskless/dev": 2.0.3-next.0
+    "@taskless/next": 2.0.3-next.0
     "@types/eslint": ^8
     "@types/luxon": ^2.3.1
     "@types/node": ^17.0.34
@@ -11877,6 +11915,13 @@ __metadata:
   version: 0.8.1
   resolution: "type-fest@npm:0.8.1"
   checksum: d61c4b2eba24009033ae4500d7d818a94fd6d1b481a8111612ee141400d5f1db46f199c014766b9fa9b31a6a7374d96fc748c6d688a78a3ce5a33123839becb7
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^2.12.2":
+  version: 2.13.0
+  resolution: "type-fest@npm:2.13.0"
+  checksum: 3492384f759fdeaec7eaa07e79f70e777bf825cf8892690642fa9350818df4a8c50fd697fd1239ae7026064af4dd94e4d5eca27e781e0952ff302af0708a2e69
   languageName: node
   linkType: hard
 

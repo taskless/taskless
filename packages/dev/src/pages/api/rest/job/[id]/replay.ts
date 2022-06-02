@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Job, JobDoc, MongoResult } from "mongo/db";
+import { Job, JobDoc, MongoResult, Schedule } from "mongo/db";
 
 type ErrorResponse = {
   error: string;
@@ -15,26 +15,28 @@ export default async function handler(
 ) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
 
+  const s = new Schedule({
+    next: new Date(),
+    attempt: 0,
+  });
+
   const job = await Job.findOneAndUpdate(
     {
       _id: { $eq: id },
     },
     {
       $set: {
-        schedule: {
-          next: new Date(),
-          attempt: 0,
-        },
+        schedule: s,
       },
     },
     {
       returnDocument: "after",
     }
-  );
+  ).exec();
 
   if (!job) {
     return res.status(500).json({
-      error: "No job to promote",
+      error: "No job to replay",
     });
   }
 

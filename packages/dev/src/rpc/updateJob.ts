@@ -1,5 +1,4 @@
 import type { DEV } from "@taskless/client";
-import { start } from "worker/loop";
 import { Job, JobDoc, jobToJobFragment, Schedule } from "mongo/db";
 import { gqlHeadersToObject } from "./common";
 import { DateTime } from "luxon";
@@ -17,7 +16,6 @@ export const updateJob = async (
   variables: UpdateRPC["variables"],
   context: any
 ): Promise<UpdateResponse["data"]> => {
-  start();
   const id = context.v5(variables.name);
 
   const next: Partial<JobDoc> = {};
@@ -76,8 +74,6 @@ export const updateJob = async (
   if (!job) {
     throw new Error("No job could be created or updated");
   }
-
-  // TODO: schedule next
 
   return {
     updateJob: {

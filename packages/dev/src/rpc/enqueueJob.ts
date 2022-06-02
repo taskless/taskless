@@ -2,7 +2,6 @@ import { DEV } from "@taskless/client";
 import { DateTime } from "luxon";
 import { Job as MJ, jobToJobFragment } from "mongo/db";
 import { Context } from "types";
-import { start } from "worker/loop";
 import { gqlHeadersToObject } from "./common";
 
 // local types
@@ -18,7 +17,6 @@ export const enqueueJob = async (
   variables: EnqueueRPC["variables"],
   context: Context
 ): Promise<EnqueueResponse["data"]> => {
-  start();
   const id = context.v5(variables.name);
   const runAt = variables.job.runAt ?? DateTime.now().toISO();
 

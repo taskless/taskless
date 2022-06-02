@@ -1,6 +1,5 @@
 import type { DEV } from "@taskless/client";
 import { Job, jobToJobFragment } from "mongo/db";
-import { start } from "worker/loop";
 
 // local types
 type RPCOperation = DEV["RPCOperation"];
@@ -15,7 +14,6 @@ export const getJobByName = async (
   variables: GetRPC["variables"],
   context: any
 ): Promise<GetResponse["data"]> => {
-  start();
   const id = context.v5(variables.name);
 
   const job = await Job.findOne({

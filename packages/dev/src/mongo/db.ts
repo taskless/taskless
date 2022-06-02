@@ -1,29 +1,42 @@
 import type { DEV } from "@taskless/client";
+import { DateTime } from "luxon";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose, { Schema, Types, Document } from "mongoose";
 import { v4 } from "uuid";
+import getConfig from "next/config";
 
 type JobDataFragment = DEV["JobDataFragment"];
 
-// used to ensure a single mongod instance in development, even when HMR is running
-if (!globalThis.mongod) {
-  globalThis.mongod = true;
-  MongoMemoryServer.create()
-    .then((mongod) => {
-      globalThis.mongod = mongod;
-      mongoose.connect(mongod.getUri());
-    })
-    .catch(() => {
-      console.error("Could not start a mongo server in-memory");
-      process.exit(1);
-    });
-}
+const { serverRuntimeConfig } = getConfig();
+serverRuntimeConfig.mongod().then((mongo: { getUri: () => string }) => {
+  mongoose.connect(mongo.getUri());
+});
 
 /** The result of a mongo query function, as mongoose doesn't reallyt surface this */
 export type MongoResult<T> =
   | T & {
       _id: Types.ObjectId;
     };
+
+export type LockDoc = {
+  name: string;
+  owner: string;
+  version: number;
+  expires: Date;
+};
+
+const lock = new Schema<LockDoc>({
+  name: {
+    type: String,
+    unique: true,
+  },
+  owner: String,
+  version: Number,
+  expires: {
+    type: Date,
+    default: () => DateTime.now().plus({ seconds: 5 }).toJSDate(),
+  },
+});
 
 export type ScheduleDoc = {
   attempt?: number;
@@ -115,8 +128,8 @@ const jobs = new Schema<JobDoc>({
   schedule: schedule,
   logs: [
     {
-      type: Types.ObjectId,
-      ref: () => Log,
+      type: Schema.Types.ObjectId,
+      ref: "Log",
     },
   ],
 });
@@ -127,6 +140,8 @@ export const Log: mongoose.Model<LogDoc, {}, {}, {}> =
   mongoose.models.Log || mongoose.model("Log", logs);
 export const Schedule: mongoose.Model<ScheduleDoc, {}, {}, {}> =
   mongoose.models.Schedule || mongoose.model("Schedule", schedule);
+export const Lock: mongoose.Model<LockDoc, {}, {}, {}> =
+  mongoose.models.Lock || mongoose.model("Lock", lock);
 
 export const jobToJobFragment = (
   name: string,

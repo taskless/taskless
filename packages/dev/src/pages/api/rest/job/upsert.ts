@@ -33,7 +33,6 @@ export default async function handler(
     name: variables.__meta?.queueName ?? "manual",
     route: variables.job.endpoint,
     queueOptions: {
-      baseUrl: "",
       credentials: {
         appId: variables.__meta?.appId ?? undefined,
         secret: variables.__meta?.secret ?? undefined,

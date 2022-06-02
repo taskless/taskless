@@ -30,10 +30,13 @@ if (argv.d !== "info") {
   );
 }
 
-execaCommand(`npx next start --hostname 0.0.0.0 -p ${argv.p}`, {
+execaCommand(`node server.js`, {
   cwd: __root,
   env: {
+    NODE_ENV: "production",
     TASKLESS_DEV_DEBUG: argv.d,
+    TASKLESS_DEV_HOSTNAME: "0.0.0.0",
+    TASKLESS_DEV_PORT: argv.p,
   },
   stdio: "inherit",
 }).catch((e) => {
