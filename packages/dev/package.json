@@ -81,6 +81,7 @@
     "server.js",
     ".next",
     "bin",
+    "server",
     "public"
   ],
   "publishConfig": {
