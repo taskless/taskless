@@ -78,6 +78,7 @@
   "files": [
     "package.json",
     "README.md",
+    "server.js",
     ".next",
     "bin",
     "public"
