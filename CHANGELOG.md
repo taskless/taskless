@@ -1,10 +1,23 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
+# 2.1.3 - released June 2, 2022
+
+#### 🔧 Fixes
+
+- **@taskless/dev** Moves mongod and cron initialization to code that runs outside of the next.js handler. Fixes `serverRuntimeConfig.mongod is not a function` errors
+- **@taskless/client** Improved detection of the development environment, checking `TASKLESS_ENV`, followed by `NODE_ENV`. This allows us to run production code from next.js in the Dev Server while also running @taskless/client in development mode for improved debugging and error messages
+
 # 2.1.2 - released June 2, 2022
 
 #### 🔧 Fixes
 
-- **@taskless/dev** Fixes issue where the custom `server.js` and `server` directories were not included in the new distribution package
+- **@taskless/dev** Fixes issue where the commonjs `server` directory was not included in the new distribution package
+
+# 2.1.1 - released June 2, 2022
+
+#### 🔧 Fixes
+
+- **@taskless/dev** Fixes issue where the custom `server.js` was not included in the new distribution package
 
 # 2.1.0 - released June 2, 2022
 

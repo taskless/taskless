@@ -10,7 +10,8 @@ Taskless recommends storing the bulk of your configuration in env values.
 - `TASKLESS_ENCRYPTION_KEY` (example: `alonguniquestring...`) Your encryption key for end-to-end encryption
 - `TASKLESS_PREVIOUS_APP_SECRETS` (example: `xgt1_abc,xgt1_def`) Previous application secrets, comma separated
 - `TASKLESS_PREVIOUS_ENCRYPTION_KEYS` (example: `key1,key2...`) Previous encryption keys, comma separated
+- `TASKLESS_ENV` (example: `development`) Used to override the NODE_ENV value, specifically for Taskless
 
 **Development ENV Values** Additionally, the following env values may be useful in development.
 
-- `TASKLESS_ENV` (example: `development`) Used to override the NODE_ENV value, specifically for Taskless
+- `TASKLESS_DEV_ENDPOINT` (example: `http://localhost:8080/api/rpc`) Changes the endpoint used for the Taskless dev server if the default port or path cannot be used
