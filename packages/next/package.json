@@ -1,7 +1,7 @@
 {
   "name": "@taskless/next",
   "description": "Next.JS Integration for Taskless.io",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -34,8 +34,8 @@
     "node": ">=14.19.0"
   },
   "dependencies": {
-    "@taskless/client": "2.1.1",
-    "@taskless/types": "2.1.1"
+    "@taskless/client": "2.1.2",
+    "@taskless/types": "2.1.2"
   },
   "devDependencies": {
     "next": "^12.1.0",
