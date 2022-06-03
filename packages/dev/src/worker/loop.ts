@@ -5,11 +5,10 @@ import { Job, JobDoc, Log, MongoResult, Schedule } from "mongo/db";
 import { findNextTime } from "./scheduler";
 import { Document, Types } from "mongoose";
 import { serializeError } from "serialize-error";
-import getConfig from "next/config";
 
 export const watch = () => {
-  const { serverRuntimeConfig } = getConfig();
-  serverRuntimeConfig.crond().register("worker", "* * * * * *", async () => {
+  const crond = global.cron();
+  crond.register("worker", "* * * * * *", async () => {
     try {
       let jobs: MongoJob[] = [];
       while (jobs.length < MAX_JOB_CHUNK) {

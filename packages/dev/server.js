@@ -7,6 +7,10 @@ const { parse } = require("url");
 const next = require("next");
 const phin = require("phin");
 
+// assign cron and mongo to the global scope
+global.cron = require("./server/cron");
+global.mongo = require("./server/mongo");
+
 const dev = process.env.NODE_ENV !== "production";
 const hostname = process.env.TASKLESS_DEV_HOSTNAME ?? "localhost";
 const port = process.env.TASKLESS_DEV_PORT

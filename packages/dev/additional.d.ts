@@ -5,6 +5,16 @@ declare module "boolean-parser" {
 
 // https://stackoverflow.com/questions/59459312/using-globalthis-in-typescript
 declare module globalThis {
+  interface CronAPI {
+    register(
+      name: string,
+      timing: string,
+      handler: () => unknown | Promise<unknown>
+    ): void;
+    destroy(name: string): void;
+  }
+  export function cron(): CronAPI;
+
   import { MongoMemoryServer } from "mongodb-memory-server";
-  var mongod: boolean | MongoMemoryServer;
+  export function mongo(): Promise<MongoMemoryServer>;
 }

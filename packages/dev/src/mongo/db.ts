@@ -1,14 +1,11 @@
 import type { DEV } from "@taskless/client";
 import { DateTime } from "luxon";
-import { MongoMemoryServer } from "mongodb-memory-server";
-import mongoose, { Schema, Types, Document } from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import { v4 } from "uuid";
-import getConfig from "next/config";
 
 type JobDataFragment = DEV["JobDataFragment"];
 
-const { serverRuntimeConfig } = getConfig();
-serverRuntimeConfig.mongod().then((mongo: { getUri: () => string }) => {
+global.mongo().then((mongo) => {
   mongoose.connect(mongo.getUri());
 });
 

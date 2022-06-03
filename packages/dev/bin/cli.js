@@ -33,7 +33,9 @@ if (argv.d !== "info") {
 execaCommand(`node server.js`, {
   cwd: __root,
   env: {
+    // next.js in production, taskless in dev
     NODE_ENV: "production",
+    TASKLESS_ENV: "development",
     TASKLESS_DEV_DEBUG: argv.d,
     TASKLESS_DEV_HOSTNAME: "0.0.0.0",
     TASKLESS_DEV_PORT: argv.p,
