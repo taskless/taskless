@@ -16,7 +16,12 @@ import { JobMethodEnum } from "../__generated__/schema.js";
 import { create as createGraphqlClient } from "../net/graphqlClient.js";
 import { create as createRpcClient } from "../net/rpcClient.js";
 import { encode, decode, sign, verify } from "./encoder.js";
-import { TASKLESS_DEV_ENDPOINT, TASKLESS_ENDPOINT } from "../constants.js";
+import {
+  IS_DEVELOPMENT,
+  IS_PRODUCTION,
+  TASKLESS_DEV_ENDPOINT,
+  TASKLESS_ENDPOINT,
+} from "../constants.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
 import { resolveJobOptions, resolveOptions } from "./util.js";
 
@@ -109,7 +114,7 @@ export class Queue<T> {
     );
 
     if (!ver && !allowUnsigned) {
-      if (process.env.NODE_ENV !== "development") {
+      if (!IS_DEVELOPMENT) {
         throw new Error("Signature mismatch");
       } else {
         console.error(
@@ -178,16 +183,10 @@ export class Queue<T> {
   }
 
   protected getClient() {
-    const isDevelopment = process.env.NODE_ENV !== "production";
-    const isForcedDev = process.env.TASKLESS_DEV_ENABLED === "1";
-    const isForcedProd = process.env.TASKLESS_DEV_ENABLED === "0";
-
-    if (isForcedDev) {
+    if (IS_DEVELOPMENT) {
       return this.getRPCClient();
-    } else if (isForcedProd) {
+    } else if (IS_PRODUCTION) {
       return this.getGraphQLClient();
-    } else if (isDevelopment) {
-      return this.getRPCClient();
     }
 
     return this.getGraphQLClient();

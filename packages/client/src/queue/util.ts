@@ -5,7 +5,7 @@ import {
   type JobOptions,
 } from "@taskless/types";
 
-import { IS_PRODUCTION } from "../constants.js";
+import { IS_DEVELOPMENT } from "../constants.js";
 
 /** A set of default options for job objects */
 const defaultJobOptions: JobOptions = {
@@ -19,15 +19,15 @@ const defaultJobOptions: JobOptions = {
 };
 
 /** Base configuration for development-like environments */
-const developmentQueueOptions: QueueOptions = IS_PRODUCTION
-  ? {}
-  : {
+const developmentQueueOptions: QueueOptions = IS_DEVELOPMENT
+  ? {
       baseUrl: "http://localhost:3000",
       credentials: {
         appId: "00000000-0000-0000-0000-000000000000",
         secret: "taskless.development",
       },
-    };
+    }
+  : {};
 
 /** A set of default options for queue objects, taken from process.env */
 const productionQueueOptions: QueueOptions = {

@@ -9,3 +9,9 @@ export const IS_PRODUCTION =
   typeof process.env.TASKLESS_ENV !== "undefined"
     ? process.env.TASKLESS_ENV === "production"
     : process.env.NODE_ENV === "production";
+
+/** A reusable flag that determines if we are running in a production environment */
+export const IS_DEVELOPMENT =
+  typeof process.env.TASKLESS_ENV !== "undefined"
+    ? process.env.TASKLESS_ENV === "development"
+    : process.env.NODE_ENV === "development";
