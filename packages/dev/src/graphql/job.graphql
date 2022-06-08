@@ -1,0 +1,35 @@
+fragment JobData on Job {
+  __typename
+  name
+  endpoint
+  headers
+  enabled
+  body
+  retries
+  runAt
+  runEvery
+}
+
+mutation enqueueJob($name: String!, $job: ReplaceJobInputType!) {
+  replaceJob(name: $name, job: $job) {
+    ...JobData
+  }
+}
+
+mutation updateJob($name: String!, $job: UpdateJobInputType!) {
+  updateJob(name: $name, job: $job) {
+    ...JobData
+  }
+}
+
+mutation deleteJob($name: String!) {
+  deleteJob(name: $name) {
+    ...JobData
+  }
+}
+
+query getJobByName($name: String!) {
+  job(name: $name) {
+    ...JobData
+  }
+}

@@ -20,9 +20,14 @@ import { useBoolean } from "usehooks-ts";
 import { GetJobsResponse } from "./api/rest/jobs";
 import { PromoteJobResponse } from "./api/rest/job/[id]/promote";
 import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
-import { UpsertJobResponse, UpsertJobVariables } from "./api/rest/job/upsert";
 import { CreateJobModal, Fields } from "components/Modals/CreateJob";
 import Link from "next/link";
+import {
+  EnqueueJobMutation,
+  EnqueueJobMutationVariables,
+} from "__generated__/schema";
+import { getClient } from "graphql/getClient";
+import type { OutgoingHttpHeaders } from "http";
 
 const getJobs: QueryFunction<
   GetJobsResponse,
@@ -67,18 +72,12 @@ const replayJob: MutationFunction<
 };
 
 const upsertJob: MutationFunction<
-  UpsertJobResponse,
-  UpsertJobVariables
+  EnqueueJobMutation,
+  { headers?: OutgoingHttpHeaders; variables: EnqueueJobMutationVariables }
 > = async (args) => {
-  const response = await fetch(`/api/rest/job/upsert`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(args),
-  });
-  const result = await response.json();
-  return result;
+  const client = getClient(args.headers);
+  const response = await client.enqueueJob(args.variables);
+  return response;
 };
 
 /** Get run data (next and last) from a record */
@@ -142,19 +141,21 @@ const Home: NextPage = () => {
       console.log(d);
 
       upsert({
-        name: d.name,
-        __meta: {
-          appId: d.appId ?? undefined,
-          queueName: d.queueName ?? undefined,
-          secret: d.appSecret ?? undefined,
+        headers: {
+          "x-taskless-app-id": d.appId ?? undefined,
+          "x-takless-app-secret": d.appSecret ?? undefined,
         },
-        job: {
-          endpoint: d.endpoint,
-          enabled: d.enabled,
-          runAt: d.runAt,
-          runEvery: d.runEvery,
-          headers,
-          body: d.body,
+        variables: {
+          name: d.name,
+          job: {
+            endpoint: d.endpoint,
+            enabled: d.enabled,
+            runAt: d.runAt,
+            runEvery: d.runEvery,
+            headers,
+            body: d.body,
+            queue: d.queueName,
+          },
         },
       });
 

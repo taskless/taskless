@@ -1055,6 +1055,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-codegen/typescript-graphql-request@npm:^4.4.9":
+  version: 4.4.9
+  resolution: "@graphql-codegen/typescript-graphql-request@npm:4.4.9"
+  dependencies:
+    "@graphql-codegen/plugin-helpers": ^2.4.0
+    "@graphql-codegen/visitor-plugin-common": 2.9.0
+    auto-bind: ~4.0.0
+    tslib: ~2.4.0
+  peerDependencies:
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    graphql-request: ^3.4.0 || ^4.0.0
+    graphql-tag: ^2.0.0
+  checksum: 8edddb287859c8ec9b71b724cdb79257ae49ebcdabdb801f2ef44334251a53fe6a3a6f2645cc9476d4666971085fd71de4ff5a6c0a873a9c9a4aab584c815fca
+  languageName: node
+  linkType: hard
+
 "@graphql-codegen/typescript-operations@npm:^2.3.2":
   version: 2.4.0
   resolution: "@graphql-codegen/typescript-operations@npm:2.4.0"
@@ -1102,6 +1118,26 @@ __metadata:
   peerDependencies:
     graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: 84f1e0b900d5df80537e5ec2dc2f8b245f572994308cef9119bc602d4042c5d91a45dcb298fc334431a82fb36b47b5772209c29f8db6d14506a7467366c3fe35
+  languageName: node
+  linkType: hard
+
+"@graphql-codegen/visitor-plugin-common@npm:2.9.0":
+  version: 2.9.0
+  resolution: "@graphql-codegen/visitor-plugin-common@npm:2.9.0"
+  dependencies:
+    "@graphql-codegen/plugin-helpers": ^2.4.0
+    "@graphql-tools/optimize": ^1.0.1
+    "@graphql-tools/relay-operation-optimizer": ^6.3.7
+    "@graphql-tools/utils": ^8.3.0
+    auto-bind: ~4.0.0
+    change-case-all: 1.0.14
+    dependency-graph: ^0.11.0
+    graphql-tag: ^2.11.0
+    parse-filepath: ^1.0.2
+    tslib: ~2.4.0
+  peerDependencies:
+    graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 20a5e9183e7d80761946dc2c88d3f367f056a5b5b3502da45c71689125ac0ea4be76c884ed1fe8ae9f68a824f35e03c293491ea40214ab600c8e7142af3c3b26
   languageName: node
   linkType: hard
 
@@ -1856,7 +1892,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@taskless/client@2.1.2, @taskless/client@workspace:packages/client":
+"@taskless/client@2.1.3, @taskless/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@taskless/client@workspace:packages/client"
   dependencies:
@@ -1866,7 +1902,8 @@ __metadata:
     "@graphql-codegen/typescript": ^2.4.5
     "@graphql-codegen/typescript-generic-sdk": ^2.3.4
     "@graphql-codegen/typescript-operations": ^2.3.2
-    "@taskless/types": 2.1.2
+    "@taskless/graphinql": 2.1.3
+    "@taskless/types": 2.1.3
     graphql: 15.8.0
     graphql-tag: ^2.12.6
     luxon: ^2.3.1
@@ -1876,22 +1913,29 @@ __metadata:
     serialize-error: ^11.0.0
     shx: ^0.3.4
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
   languageName: unknown
   linkType: soft
 
-"@taskless/dev@2.1.2, @taskless/dev@workspace:packages/dev":
+"@taskless/dev@2.1.3, @taskless/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@taskless/dev@workspace:packages/dev"
   dependencies:
+    "@graphql-codegen/cli": ^2.6.2
+    "@graphql-codegen/introspection": ^2.1.1
+    "@graphql-codegen/time": ^3.1.1
+    "@graphql-codegen/typescript": ^2.4.5
+    "@graphql-codegen/typescript-graphql-request": ^4.4.9
+    "@graphql-codegen/typescript-operations": ^2.3.2
     "@headlessui/react": ^1.6.3
     "@heroicons/react": ^1.0.6
     "@tailwindcss/aspect-ratio": ^0.4.0
     "@tailwindcss/forms": ^0.5.0
     "@tailwindcss/typography": ^0.5.2
-    "@taskless/client": 2.1.2
-    "@taskless/types": 2.1.2
-    "@taskless/ui": 2.1.2
+    "@taskless/client": 2.1.3
+    "@taskless/graphinql": 2.1.3
+    "@taskless/types": 2.1.3
+    "@taskless/ui": 2.1.3
     "@types/eslint": ^8
     "@types/luxon": ^2.3.1
     "@types/node": ^17.0.34
@@ -1908,11 +1952,16 @@ __metadata:
     eslint: ^8.10.0
     eslint-config-next: ^12.1.0
     execa: ^6.1.0
+    graphql: 15.8.0
+    graphql-helix: ^1.12.0
+    graphql-request: ^4.3.0
+    graphql-web-lite: ^16.1.1000
     luxon: ^2.3.1
     mongodb: ^4.5.0
     mongodb-memory-server: ^8.5.2
     mongoose: ^6.3.3
     next: ^12.1.0
+    nextjs-cors: ^2.1.1
     node-cron: ^3.0.0
     npm-run-all: ^4.1.5
     phin: ^3.6.1
@@ -1926,7 +1975,7 @@ __metadata:
     tailwindcss: ^3.0.23
     ts-dedent: ^2.2.0
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
     usehooks-ts: ^2.5.2
     uuid: ^8.3.2
     winston: ^3.6.0
@@ -1936,12 +1985,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/express@2.1.2, @taskless/express@workspace:packages/express":
+"@taskless/express@2.1.3, @taskless/express@workspace:packages/express":
   version: 0.0.0-use.local
   resolution: "@taskless/express@workspace:packages/express"
   dependencies:
-    "@taskless/client": 2.1.2
-    "@taskless/types": 2.1.2
+    "@taskless/client": 2.1.3
+    "@taskless/types": 2.1.3
     "@types/eslint": ^8
     "@types/express": ^4.17.13
     eslint: ^8.10.0
@@ -1949,7 +1998,7 @@ __metadata:
     npm-run-all: ^4.1.5
     shx: ^0.3.4
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
   peerDependencies:
     express: ">= 4.16.0"
   peerDependenciesMeta:
@@ -1958,19 +2007,32 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/next@2.1.2, @taskless/next@workspace:packages/next":
+"@taskless/graphinql@2.1.3, @taskless/graphinql@workspace:packages/graphinql":
+  version: 0.0.0-use.local
+  resolution: "@taskless/graphinql@workspace:packages/graphinql"
+  dependencies:
+    npm-run-all: ^4.1.5
+    p-retry: ^4.6.2
+    phin: ^3.6.1
+    shx: ^0.3.4
+    tslib: ^2.4.0
+    typescript: ^4.7.3
+  languageName: unknown
+  linkType: soft
+
+"@taskless/next@2.1.3, @taskless/next@workspace:packages/next":
   version: 0.0.0-use.local
   resolution: "@taskless/next@workspace:packages/next"
   dependencies:
-    "@taskless/client": 2.1.2
-    "@taskless/types": 2.1.2
+    "@taskless/client": 2.1.3
+    "@taskless/types": 2.1.3
     next: ^12.1.0
     npm-run-all: ^4.1.5
     react: ^17.0.2
     react-dom: ^17.0.2
     shx: ^0.3.4
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
   peerDependencies:
     next: ">=11.0"
   peerDependenciesMeta:
@@ -1989,6 +2051,9 @@ __metadata:
     "@typescript-eslint/parser": ^5.23.0
     eslint: ^8.10.0
     eslint-config-prettier: ^8.5.0
+    eslint-import-resolver-typescript: ^2.7.1
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-node: ^11.1.0
     husky: ^7.0.4
     lint-staged: ^12.1.3
     madge: ^5.0.1
@@ -1999,11 +2064,11 @@ __metadata:
     shx: ^0.3.4
     syncpack: ^7.2.1
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
   languageName: unknown
   linkType: soft
 
-"@taskless/types@2.1.2, @taskless/types@workspace:packages/types":
+"@taskless/types@2.1.3, @taskless/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@taskless/types@workspace:packages/types"
   dependencies:
@@ -2011,11 +2076,11 @@ __metadata:
     npm-run-all: ^4.1.5
     shx: ^0.3.4
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
   languageName: unknown
   linkType: soft
 
-"@taskless/ui@2.1.2, @taskless/ui@workspace:packages/ui":
+"@taskless/ui@2.1.3, @taskless/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@taskless/ui@workspace:packages/ui"
   dependencies:
@@ -2027,7 +2092,7 @@ __metadata:
     react-dom: ^17.0.2
     shx: ^0.3.4
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
   languageName: unknown
   linkType: soft
 
@@ -4179,6 +4244,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cors@npm:^2.8.5":
+  version: 2.8.5
+  resolution: "cors@npm:2.8.5"
+  dependencies:
+    object-assign: ^4
+    vary: ^1
+  checksum: ced838404ccd184f61ab4fdc5847035b681c90db7ac17e428f3d81d69e2989d2b680cc254da0e2554f5ed4f8a341820a1ce3d1c16b499f6e2f47a1b9b07b5006
+  languageName: node
+  linkType: hard
+
 "cosmiconfig-toml-loader@npm:1.0.0":
   version: 1.0.0
   resolution: "cosmiconfig-toml-loader@npm:1.0.0"
@@ -5127,6 +5202,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-es@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "eslint-plugin-es@npm:3.0.1"
+  dependencies:
+    eslint-utils: ^2.0.0
+    regexpp: ^3.0.0
+  peerDependencies:
+    eslint: ">=4.19.1"
+  checksum: e57592c52301ee8ddc296ae44216df007f3a870bcb3be8d1fbdb909a1d3a3efe3fa3785de02066f9eba1d6466b722d3eb3cc3f8b75b3cf6a1cbded31ac6298e4
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-import@npm:^2.26.0":
   version: 2.26.0
   resolution: "eslint-plugin-import@npm:2.26.0"
@@ -5169,6 +5256,22 @@ __metadata:
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
   checksum: 311ab993ed982d0cc7cb0ba02fbc4b36c4a94e9434f31e97f13c4d67e8ecb8aec36baecfd759ff70498846e7e11d7a197eb04c39ad64934baf3354712fd0bc9d
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-node@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "eslint-plugin-node@npm:11.1.0"
+  dependencies:
+    eslint-plugin-es: ^3.0.0
+    eslint-utils: ^2.0.0
+    ignore: ^5.1.1
+    minimatch: ^3.0.4
+    resolve: ^1.10.1
+    semver: ^6.1.0
+  peerDependencies:
+    eslint: ">=5.16.0"
+  checksum: 5804c4f8a6e721f183ef31d46fbe3b4e1265832f352810060e0502aeac7de034df83352fc88643b19641bb2163f2587f1bd4119aff0fd21e8d98c57c450e013b
   languageName: node
   linkType: hard
 
@@ -5225,6 +5328,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-utils@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "eslint-utils@npm:2.1.0"
+  dependencies:
+    eslint-visitor-keys: ^1.1.0
+  checksum: 27500938f348da42100d9e6ad03ae29b3de19ba757ae1a7f4a087bdcf83ac60949bbb54286492ca61fac1f5f3ac8692dd21537ce6214240bf95ad0122f24d71d
+  languageName: node
+  linkType: hard
+
 "eslint-utils@npm:^3.0.0":
   version: 3.0.0
   resolution: "eslint-utils@npm:3.0.0"
@@ -5233,6 +5345,13 @@ __metadata:
   peerDependencies:
     eslint: ">=5"
   checksum: 0668fe02f5adab2e5a367eee5089f4c39033af20499df88fe4e6aba2015c20720404d8c3d6349b6f716b08fdf91b9da4e5d5481f265049278099c4c836ccb619
+  languageName: node
+  linkType: hard
+
+"eslint-visitor-keys@npm:^1.1.0":
+  version: 1.3.0
+  resolution: "eslint-visitor-keys@npm:1.3.0"
+  checksum: 37a19b712f42f4c9027e8ba98c2b06031c17e0c0a4c696cd429bd9ee04eb43889c446f2cd545e1ff51bef9593fcec94ecd2c2ef89129fcbbf3adadbef520376a
   languageName: node
   linkType: hard
 
@@ -6291,6 +6410,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphql-helix@npm:^1.12.0":
+  version: 1.12.0
+  resolution: "graphql-helix@npm:1.12.0"
+  peerDependencies:
+    graphql: ^15.3.0 || ^16.0.0
+  checksum: eac17d3b231c46b5961ae99272d0b758dd0f77c86a088a65b9c3599a63cb1b3f835859e3d06cfa3f3bb6d689e604d742746055c5a680bff5b678eaaac94e5ef7
+  languageName: node
+  linkType: hard
+
 "graphql-request@npm:^4.0.0":
   version: 4.2.0
   resolution: "graphql-request@npm:4.2.0"
@@ -6304,6 +6432,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphql-request@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "graphql-request@npm:4.3.0"
+  dependencies:
+    cross-fetch: ^3.1.5
+    extract-files: ^9.0.0
+    form-data: ^3.0.0
+  peerDependencies:
+    graphql: 14 - 16
+  checksum: 3124afd01aee781cd5a2e9ac30063526b677a6754032566104fc36270b5f9be03f17a32e49f34c71ca968d533151550c37f7a0194d11c36ff59977bd73e2abc3
+  languageName: node
+  linkType: hard
+
 "graphql-tag@npm:^2.12.6":
   version: 2.12.6
   resolution: "graphql-tag@npm:2.12.6"
@@ -6312,6 +6453,13 @@ __metadata:
   peerDependencies:
     graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
   checksum: b15162a3d62f17b9b79302445b9ee330e041582f1c7faca74b9dec5daa74272c906ec1c34e1c50592bb6215e5c3eba80a309103f6ba9e4c1cddc350c46f010df
+  languageName: node
+  linkType: hard
+
+"graphql-web-lite@npm:^16.1.1000":
+  version: 16.1.1000
+  resolution: "graphql-web-lite@npm:16.1.1000"
+  checksum: ec4a47465c8be8555e402900af651e0ad48e5de89a448e2cf4ac1a09a82b20cd3fb27c358eb634ee1809232ecdb5a988839e4feeee3c7a01c2ee5cbe544b60da
   languageName: node
   linkType: hard
 
@@ -6613,7 +6761,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ignore@npm:^5.1.4, ignore@npm:^5.1.8, ignore@npm:^5.2.0":
+"ignore@npm:^5.1.1, ignore@npm:^5.1.4, ignore@npm:^5.1.8, ignore@npm:^5.2.0":
   version: 5.2.0
   resolution: "ignore@npm:5.2.0"
   checksum: 6b1f926792d614f64c6c83da3a1f9c83f6196c2839aa41e1e32dd7b8d174cef2e329d75caabb62cb61ce9dc432f75e67d07d122a037312db7caa73166a1bdb77
@@ -8764,6 +8912,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nextjs-cors@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "nextjs-cors@npm:2.1.1"
+  dependencies:
+    cors: ^2.8.5
+  peerDependencies:
+    next: ^8.1.1-canary.54 || ^9.0.0 || ^10.0.0-0 || ^11.0.0 || ^12.0.0
+  checksum: 3e4e91322314520e50ea94a5bfd026d2fbaf128e1fb978c4a4571fbd7ca1c6e18255598ff17077fb7b01ca90c773fec98fc7ba97e7e227856a4ea0c97239d9ef
+  languageName: node
+  linkType: hard
+
 "nice-try@npm:^1.0.4":
   version: 1.0.5
   resolution: "nice-try@npm:1.0.5"
@@ -8991,7 +9150,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
+"object-assign@npm:^4, object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: fcc6e4ea8c7fe48abfbb552578b1c53e0d194086e2e6bbbf59e0a536381a292f39943c6e9628af05b5528aa5e3318bb30d6b2e53cadaf5b8fe9e12c4b69af23f
@@ -10130,7 +10289,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regexpp@npm:^3.2.0":
+"regexpp@npm:^3.0.0, regexpp@npm:^3.2.0":
   version: 3.2.0
   resolution: "regexpp@npm:3.2.0"
   checksum: a78dc5c7158ad9ddcfe01aa9144f46e192ddbfa7b263895a70a5c6c73edd9ce85faf7c0430e59ac38839e1734e275b9c3de5c57ee3ab6edc0e0b1bdebefccef8
@@ -10372,7 +10531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.1.6, resolve@npm:^1.10.0, resolve@npm:^1.17.0, resolve@npm:^1.20.0, resolve@npm:^1.21.0, resolve@npm:^1.22.0":
+"resolve@npm:^1.1.6, resolve@npm:^1.10.0, resolve@npm:^1.10.1, resolve@npm:^1.17.0, resolve@npm:^1.20.0, resolve@npm:^1.21.0, resolve@npm:^1.22.0":
   version: 1.22.0
   resolution: "resolve@npm:1.22.0"
   dependencies:
@@ -10395,7 +10554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.21.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>":
+"resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.21.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>":
   version: 1.22.0
   resolution: "resolve@patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"
   dependencies:
@@ -10652,7 +10811,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^6.0.0, semver@npm:^6.2.0, semver@npm:^6.3.0":
+"semver@npm:^6.0.0, semver@npm:^6.1.0, semver@npm:^6.2.0, semver@npm:^6.3.0":
   version: 6.3.0
   resolution: "semver@npm:6.3.0"
   bin:
@@ -11531,8 +11690,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express-ts@workspace:examples/express-ts"
   dependencies:
-    "@taskless/dev": 2.1.2
-    "@taskless/express": 2.1.2
+    "@taskless/dev": 2.1.3
+    "@taskless/express": 2.1.3
     "@types/express": ^4.17.13
     "@types/node": ^17.0.34
     concurrently: ^7.0.0
@@ -11540,7 +11699,7 @@ __metadata:
     express: ^4.17.1
     ts-node: ^10.7.0
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
   languageName: unknown
   linkType: soft
 
@@ -11548,8 +11707,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express@workspace:examples/express"
   dependencies:
-    "@taskless/dev": 2.1.2
-    "@taskless/express": 2.1.2
+    "@taskless/dev": 2.1.3
+    "@taskless/express": 2.1.3
     concurrently: ^7.0.0
     cookie-parser: ~1.4.4
     debug: ~2.6.9
@@ -11565,8 +11724,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
   dependencies:
-    "@taskless/dev": 2.1.2
-    "@taskless/next": 2.1.2
+    "@taskless/dev": 2.1.3
+    "@taskless/next": 2.1.3
     "@types/eslint": ^8
     "@types/luxon": ^2.3.1
     "@types/node": ^17.0.34
@@ -11580,7 +11739,7 @@ __metadata:
     react: ^17.0.2
     react-dom: ^17.0.2
     tslib: ^2.4.0
-    typescript: ^4.6.4
+    typescript: ^4.7.3
   languageName: unknown
   linkType: soft
 
@@ -11924,23 +12083,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.6.4":
-  version: 4.6.4
-  resolution: "typescript@npm:4.6.4"
+"typescript@npm:^4.7.3":
+  version: 4.7.3
+  resolution: "typescript@npm:4.7.3"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: e7bfcc39cd4571a63a54e5ea21f16b8445268b9900bf55aee0e02ad981be576acc140eba24f1af5e3c1457767c96cea6d12861768fb386cf3ffb34013718631a
+  checksum: fd13a1ce53790a36bb8350e1f5e5e384b5f6cb9b0635114a6d01d49cb99916abdcfbc13c7521cdae2f2d3f6d8bc4a8ae7625edf645a04ee940588cd5e7597b2f
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^4.6.4#~builtin<compat/typescript>":
-  version: 4.6.4
-  resolution: "typescript@patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=bda367"
+"typescript@patch:typescript@npm%3A^4.7.3#~builtin<compat/typescript>":
+  version: 4.7.3
+  resolution: "typescript@patch:typescript@npm%3A4.7.3#~builtin<compat/typescript>::version=4.7.3&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 1cb434fbc637d347be90e3a0c6cd05e33c38f941713c8786d3031faf1842c2c148ba91d2fac01e7276b0ae3249b8633f1660e32686cc7a8c6a8fd5361dc52c66
+  checksum: 8257ce7ecbbf9416da60045a76a99d473698ca9e973fa0ddab7137cacb1587255431176cbbcc801a650938c4dc8109ab88355774829a714fabe56a53a2fe4524
   languageName: node
   linkType: hard
 
@@ -12243,7 +12402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vary@npm:~1.1.2":
+"vary@npm:^1, vary@npm:~1.1.2":
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: ae0123222c6df65b437669d63dfa8c36cee20a504101b2fcd97b8bf76f91259c17f9f2b4d70a1e3c6bbcee7f51b28392833adb6b2770b23b01abec84e369660b

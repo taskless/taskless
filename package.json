@@ -6,11 +6,12 @@
   "scripts": {
     "build": "yarn workspaces foreach -pitv --no-private run build",
     "dev": "echo 'You must specify a stack to develop on such as dev:next'",
-    "dev:core:client": "yarn workspace @taskless/client dev",
-    "dev:core:tds": "yarn workspace @taskless/dev dev",
-    "dev:core:ui": "yarn workspace @taskless/ui dev",
     "dev:example:next": "yarn workspace taskless-example-next dev:next",
-    "dev:next": "run-p -l 'dev:core:**' 'dev:example:next'",
+    "dev:next": "run-p -l 'dev:pkg:**' 'dev:example:next'",
+    "dev:pkg:client": "yarn workspace @taskless/client dev",
+    "dev:pkg:dev": "yarn workspace @taskless/dev dev",
+    "dev:pkg:graphinql": "yarn workspace @taskless/graphinql dev",
+    "dev:pkg:ui": "yarn workspace @taskless/ui dev",
     "husky": "husky",
     "lint": "eslint .",
     "postinstall": "husky install",
@@ -56,6 +57,9 @@
     "@typescript-eslint/parser": "^5.23.0",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.3",
     "madge": "^5.0.1",
@@ -65,7 +69,7 @@
     "release-it-yarn-workspaces": "^2.0.1",
     "shx": "^0.3.4",
     "syncpack": "^7.2.1",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.3"
   },
   "resolutions": {
     "@types/eslint": "^8",
@@ -76,7 +80,7 @@
     "graphql-tag": "^2.12.6",
     "npm-run-all": "^4.1.5",
     "tslib": "^2.4.0",
-    "typescript": "^4.6.4"
+    "typescript": "^4.7.3"
   },
   "volta": {
     "node": "14.19.0"

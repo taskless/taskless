@@ -11,7 +11,18 @@ module.exports = {
       "./packages/*/tsconfig.json",
     ],
   },
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "import", "node"],
+  settings: {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"],
+    },
+    "import/resolver": {
+      typescript: {
+        alwaysTryTypes: true,
+        project: ["packages/*/tsconfig.json"],
+      },
+    },
+  },
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -19,6 +30,14 @@ module.exports = {
     "prettier",
   ],
   rules: {
+    // enable import rules
+    "import/no-unresolved": "error",
+
+    // default node.js behaviors (which are also fine for browsers!)
+    "node/prefer-promises/fs": "error",
+    "node/prefer-global/url-search-params": ["error", "always"],
+    "node/prefer-global/url": ["error", "always"],
+
     // False positives. There be dragons here. Most common culprits are
     // optional chaining and nullish coalesce.
     // example: @ packages/client/queue/queue.ts

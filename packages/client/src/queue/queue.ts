@@ -13,8 +13,6 @@ import { serializeError } from "serialize-error";
 
 import { JobError } from "../error.js";
 import { JobMethodEnum } from "../__generated__/schema.js";
-import { create as createGraphqlClient } from "../net/graphqlClient.js";
-import { create as createRpcClient } from "../net/rpcClient.js";
 import { encode, decode, sign, verify } from "./encoder.js";
 import {
   IS_DEVELOPMENT,
@@ -24,6 +22,8 @@ import {
 } from "../constants.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
 import { resolveJobOptions, resolveOptions } from "./util.js";
+import { GraphQLClient } from "../net/graphql-client.js";
+import { addTypings } from "../net/addTypings.js";
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -150,46 +150,25 @@ export class Queue<T> {
     }`;
   }
 
-  /** Gets an instance of the GraphQL client or a simplified dev client */
-  protected getGraphQLClient() {
-    const endpoint = TASKLESS_ENDPOINT;
+  /**
+   * Get a graphql client for the appropriat environment
+   * Checks secrets and sets the correct endpoint
+   */
+  protected getClient() {
     const creds = this.queueOptions.credentials;
-
-    if (typeof creds?.appId === "undefined") {
-      throw new Error("credentials.appId or TASKLESS_APP_ID was not set");
+    let endpoint: string = TASKLESS_ENDPOINT;
+    if (IS_DEVELOPMENT) {
+      endpoint = process.env.TASKLESS_DEV_ENDPOINT ?? TASKLESS_DEV_ENDPOINT;
+    } else if (IS_PRODUCTION) {
+      endpoint = process.env.TASKLESS_ENDPOINT ?? TASKLESS_ENDPOINT;
     }
-    if (typeof creds?.secret === "undefined") {
-      throw new Error("credentials.secret or TASKLESS_APP_SECRET was not set");
-    }
 
-    const c = createGraphqlClient({
-      url: endpoint,
+    const client = new GraphQLClient(endpoint, {
       appId: creds.appId,
       secret: creds.secret,
     });
 
-    return c;
-  }
-
-  /** Get an RPC client that looks and acts like our GraphQL client for local development */
-  protected getRPCClient() {
-    const endpoint = process.env.TASKLESS_DEV_ENDPOINT ?? TASKLESS_DEV_ENDPOINT;
-    const c = createRpcClient({
-      url: endpoint,
-      appId: "", // avoid using appId/secret in development client
-      secret: "",
-    });
-    return c;
-  }
-
-  protected getClient() {
-    if (IS_DEVELOPMENT) {
-      return this.getRPCClient();
-    } else if (IS_PRODUCTION) {
-      return this.getGraphQLClient();
-    }
-
-    return this.getGraphQLClient();
+    return addTypings(client);
   }
 
   /**

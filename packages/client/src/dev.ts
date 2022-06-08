@@ -76,4 +76,26 @@ export type DEV = {
       Response: GetJobQueryRPCResponse;
     };
   };
+  GraphqlOperations: {
+    mutation: {
+      enqueueJob: {
+        variables: EnqueueJobMutationVariables;
+        response: EnqueueJobMutation;
+      };
+      updateJob: {
+        variables: UpdateJobMutationVariables;
+        response: UpdateJobMutation;
+      };
+      deleteJob: {
+        variables: DeleteJobMutationVariables;
+        response: DeleteJobMutation;
+      };
+    };
+    query: {
+      getJobByName: {
+        variables: GetJobByNameQueryVariables;
+        response: GetJobByNameQuery;
+      };
+    };
+  };
 };

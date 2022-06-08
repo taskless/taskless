@@ -1,4 +1,0 @@
-{
-  "*.(md|json)": "prettier --write",
-  "**/*.ts?(x)": ["eslint --fix", "madge --circular", "prettier --write"]
-}

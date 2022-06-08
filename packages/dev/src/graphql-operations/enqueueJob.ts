@@ -1,24 +1,24 @@
-import { DEV } from "@taskless/client";
 import { DateTime } from "luxon";
 import { Job as MJ, jobToJobFragment } from "mongo/db";
 import { Context } from "types";
+import {
+  EnqueueJobMutation,
+  EnqueueJobMutationVariables,
+} from "__generated__/schema";
 import { gqlHeadersToObject } from "./common";
 
-// local types
-type RPCOperation = DEV["RPCOperation"];
-type EnqueueRPC = DEV["RPCMethods"]["Enqueue"]["Request"];
-type EnqueueResponse = DEV["RPCMethods"]["Enqueue"]["Response"];
-
-export const isEnqueueJob = (v: RPCOperation): v is EnqueueRPC => {
-  return v.method === "enqueueJob";
-};
-
 export const enqueueJob = async (
-  variables: EnqueueRPC["variables"],
+  variables: EnqueueJobMutationVariables,
   context: Context
-): Promise<EnqueueResponse["data"]> => {
+): Promise<EnqueueJobMutation> => {
   const id = context.v5(variables.name);
-  const runAt = variables.job.runAt ?? DateTime.now().toISO();
+  let runAt = DateTime.now().toISO();
+  if (typeof variables.job.runAt === "string" && variables.job.runAt !== "") {
+    const dt = DateTime.fromISO(variables.job.runAt);
+    if (dt.isValid) {
+      runAt = dt.toISO();
+    }
+  }
 
   const job = await MJ.findOneAndUpdate(
     { v5id: { $eq: id } },

@@ -1,21 +1,15 @@
-import type { DEV } from "@taskless/client";
 import { Job, JobDoc, jobToJobFragment, Schedule } from "mongo/db";
 import { gqlHeadersToObject } from "./common";
 import { DateTime } from "luxon";
-
-// local types
-type RPCOperation = DEV["RPCOperation"];
-type UpdateRPC = DEV["RPCMethods"]["Update"]["Request"];
-type UpdateResponse = DEV["RPCMethods"]["Update"]["Response"];
-
-export const isUpdateJob = (v: RPCOperation): v is UpdateRPC => {
-  return v.method === "updateJob";
-};
+import {
+  UpdateJobMutation,
+  UpdateJobMutationVariables,
+} from "__generated__/schema";
 
 export const updateJob = async (
-  variables: UpdateRPC["variables"],
+  variables: UpdateJobMutationVariables,
   context: any
-): Promise<UpdateResponse["data"]> => {
+): Promise<UpdateJobMutation> => {
   const id = context.v5(variables.name);
 
   const next: Partial<JobDoc> = {};
@@ -47,11 +41,14 @@ export const updateJob = async (
   }
 
   if (variables.job.runAt) {
-    next.runAt = variables.job.runAt;
-    next.schedule = new Schedule({
-      next: DateTime.fromISO(variables.job.runAt).toJSDate(),
-      attempt: 0,
-    });
+    const dt = DateTime.fromISO(variables.job.runAt);
+    if (dt.isValid) {
+      next.runAt = variables.job.runAt;
+      next.schedule = new Schedule({
+        next: dt.toJSDate(),
+        attempt: 0,
+      });
+    }
   }
 
   if (variables.job.runEvery) {

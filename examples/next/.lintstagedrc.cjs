@@ -1,5 +1,6 @@
 // https://nextjs.org/docs/basic-features/eslint#lint-staged
 const path = require("path");
+const base = require("../../.lintstagedrc.cjs");
 
 const buildEslintCommand = (filenames) =>
   `next lint --fix --file ${filenames
@@ -7,6 +8,6 @@ const buildEslintCommand = (filenames) =>
     .join(" --file ")}`;
 
 module.exports = {
-  "*.(md|json)": "prettier --write",
+  ...base,
   "*.{js,jsx,ts,tsx}": [buildEslintCommand, "prettier --write"],
 };
