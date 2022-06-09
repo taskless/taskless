@@ -30,6 +30,8 @@ if (argv.d !== "info") {
   );
 }
 
+// by running this through execa, we can switch back to commonjs
+// since that is what next.js needs
 execaCommand(`node server.js`, {
   cwd: __root,
   env: {

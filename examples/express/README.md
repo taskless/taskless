@@ -1,4 +1,6 @@
-# Taskless & Express Using `@taskless/client/express`
+# Taskless & Express Using `@taskless/express`
+
+> This example is written in CommonJS for verification of Taskless' Dual-Exports (CJS/ESM)
 
 This is an example of using the Taskless.io client in an Express application. Please see [routes/queues/sample.ts](./routes/queues/sample.js) for how to set up the queue, and [routes/run-sample.js](./routes/run-sample.js) for an example of triggering a queue.
 

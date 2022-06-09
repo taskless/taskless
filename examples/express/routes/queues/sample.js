@@ -1,4 +1,4 @@
-import { createQueue } from "@taskless/express";
+const { createQueue } = require("@taskless/express");
 
 // an async function that emulates work being done
 const sleep = () =>
@@ -6,7 +6,7 @@ const sleep = () =>
     setTimeout(resolve, 100);
   });
 
-export default createQueue(
+module.exports = createQueue(
   "Sample Queue",
   "/queues/sample",
   async (job, meta) => {

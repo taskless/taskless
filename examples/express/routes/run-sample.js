@@ -1,5 +1,5 @@
-import express from "express";
-import MyQueue from "./queues/sample.js";
+const express = require("express");
+const MyQueue = require("./queues/sample");
 
 const router = express.Router();
 
@@ -16,4 +16,4 @@ router.get("/", function (req, res, next) {
     });
 });
 
-export default router;
+module.exports = router;

@@ -6,12 +6,14 @@
   "scripts": {
     "build": "yarn workspaces foreach -pitv --no-private run build",
     "dev": "echo 'You must specify a stack to develop on such as dev:next'",
-    "dev:example:next": "yarn workspace taskless-example-next dev:next",
-    "dev:next": "run-p -l 'dev:pkg:**' 'dev:example:next'",
+    "dev:express": "run-p -l 'dev:pkg:**' 'dev:x:express'",
+    "dev:next": "run-p -l 'dev:pkg:**' 'dev:x:next'",
     "dev:pkg:client": "yarn workspace @taskless/client dev",
     "dev:pkg:dev": "yarn workspace @taskless/dev dev",
     "dev:pkg:graphinql": "yarn workspace @taskless/graphinql dev",
     "dev:pkg:ui": "yarn workspace @taskless/ui dev",
+    "dev:x:express": "yarn workspace taskless-example-express dev:express",
+    "dev:x:next": "yarn workspace taskless-example-next dev:next",
     "husky": "husky",
     "lint": "eslint .",
     "postinstall": "husky install",
@@ -21,7 +23,8 @@
     "preview:pack": "yarn workspaces foreach -pitv --no-private pack --out ../../archive/%s-%v.tgz",
     "rel": "release-it",
     "rev": "release-it --preRelease",
-    "syncpack": "syncpack"
+    "syncpack": "syncpack",
+    "test": "FORCE_COLOR=1 yarn workspaces foreach -ptv --no-private run test"
   },
   "release-it": {
     "plugins": {
@@ -68,18 +71,19 @@
     "release-it": "*",
     "release-it-yarn-workspaces": "^2.0.1",
     "shx": "^0.3.4",
-    "syncpack": "^7.2.1",
-    "typescript": "^4.7.3"
+    "syncpack": "^7.2.1"
   },
   "resolutions": {
-    "@types/eslint": "^8",
+    "@types/eslint": "*",
+    "@types/node": "^17.0.41",
     "@types/react": "^17.0.40",
-    "eslint": "^8.10.0",
-    "eslint-plugin-tsc": "^2.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "graphql": "15.8.0",
     "graphql-tag": "^2.12.6",
     "npm-run-all": "^4.1.5",
     "tslib": "^2.4.0",
+    "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
   },
   "volta": {

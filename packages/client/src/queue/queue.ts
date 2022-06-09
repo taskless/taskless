@@ -9,7 +9,6 @@ import {
   type TasklessBody,
 } from "@taskless/types";
 import { DateTime } from "luxon";
-import { serializeError } from "serialize-error";
 
 import { JobError } from "../error.js";
 import { JobMethodEnum } from "../__generated__/schema.js";
@@ -178,6 +177,9 @@ export class Queue<T> {
    * @param functions A set of accessory functions for accessing the request and dispatching a response
    */
   async receive(functions: ReceiveCallbacks) {
+    const _serializeError = await import("serialize-error");
+    const serializeError = _serializeError.serializeError;
+
     const { getBody, getHeaders, send, sendError } = functions;
 
     // skip missing handler (enqueue-only)

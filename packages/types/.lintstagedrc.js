@@ -1,6 +1,6 @@
-const base = require("../../.lintstagedrc.cjs");
+import base from "../../.lintstagedrc.cjs";
 
-module.exports = {
+export default {
   ...base,
   "**/*.ts?(x)": ["eslint", "madge --circular", "prettier --write"],
 };

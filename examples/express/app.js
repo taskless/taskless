@@ -1,18 +1,13 @@
-import createError from "http-errors";
-import express from "express";
-import path from "node:path";
-import cookieParser from "cookie-parser";
-import logger from "morgan";
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 
-import indexRouter from "./routes/index.js";
-import usersRouter from "./routes/users.js";
-import sampleQueue from "./routes/queues/sample.js";
-import runSample from "./routes/run-sample.js";
-
-// es6 __dirname
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+const sampleQueue = require("./routes/queues/sample");
+const runSample = require("./routes/run-sample");
 
 const app = express();
 
@@ -49,4 +44,4 @@ app.use(function (err, req, res) {
   res.render("error");
 });
 
-export default app;
+module.exports = app;

@@ -1,0 +1,1 @@
+{"version":3,"file":"stub.spec.js","sourceRoot":"","sources":["stub.spec.ts"],"names":[],"mappings":"AAAA,OAAO,IAAI,MAAM,KAAK,CAAC;AAEvB,IAAI,CAAC,sCAAsC,EAAE,CAAC,CAAC,EAAE,EAAE;IACjD,CAAC,CAAC,IAAI,EAAE,CAAC;AACX,CAAC,CAAC,CAAC","sourcesContent":["import test from \"ava\";\n\ntest(\"This project is able to accept tests\", (t) => {\n  t.pass();\n});\n"]}
