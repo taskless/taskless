@@ -1,9 +1,9 @@
 import { Queue } from "@taskless/client";
 import {
   Guards,
+  type CreateQueueMethods,
   type JobHandler,
   type QueueOptions,
-  type CreateQueueMethods,
 } from "@taskless/types";
 import {
   type NextApiHandler,
@@ -21,16 +21,38 @@ export * from "@taskless/client";
  * @param response The NextApiResponse which extends http#ServerResponse
  */
 export interface TasklessNextApiHandler<T> extends NextApiHandler {
-  // invocation of next api handler
+  /**
+   * Next `API` route handler
+   */
   (request: NextApiRequest, response: NextApiResponse): void | Promise<void>;
-  // queue methods
+
+  /**
+   * Adds an item to the queue. If an item of the same name exists, it will be
+   * replaced with this new data. If a job was already scheduled with this
+   * `name` property, then its information will be updated to the
+   * new provided values. You should always call `enqueue()` as if you are
+   * calling it for the first time.
+   * ([docs](https://taskless.io/docs/packages/client#enqueue))
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
+   * @param payload The Job's payload to be delivered
+   * @param options Job options. These overwrite the default job options specified on the queue at creation time
+   * @throws Error when the job could not be created in the Taskless system
+   * @returns The `Job` object
+   */
   enqueue: CreateQueueMethods<T>["enqueue"];
-  update: CreateQueueMethods<T>["update"];
-  delete: CreateQueueMethods<T>["delete"];
-  get: CreateQueueMethods<T>["get"];
-  // custom
+  /**
+   * Cancels any scheduled work for this item in the queue. Any jobs in
+   * process are allowed to complete. If a job has recurrence, future jobs
+   * will be cancelled.
+   * ([docs](https://taskless.io/docs/packages/client#cancel))
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
+   * @throws Error if the job could not be cancelled
+   * @returns The cancelled `Job` object, or `null` if no job was found with `name`
+   */
+  cancel: CreateQueueMethods<T>["cancel"];
   /**
    * Re-wraps an export as a {@link TasklessNextApiHandler}, used if using the next.js withX() wrapping pattern
+   * ([docs](https://taskless.io/docs/packages/next#next-methods))
    * @template T Types the {@link TasklessNextApiHandler}
    */
   withQueue: (wrappedHandler: NextApiHandler) => TasklessNextApiHandler<T>;
@@ -43,8 +65,6 @@ export interface TasklessNextApiHandler<T> extends NextApiHandler {
  * @param route The URL path to reach this route
  * @param handler A {@link JobHandler} that supports a payload of type `T`
  * @param queueOptions The {@link QueueOptions} for this queue
- * @param defaultJobOptions A set of {@link DefaultJobOptions} to apply as defaults for every new job in the Queue
- * @returns {TasklessNextApiHandler<T>}
  */
 export function createQueue<T = undefined>(
   name: string,
@@ -85,18 +105,12 @@ export function createQueue<T = undefined>(
   handle.enqueue = (name, payload, options) =>
     t.enqueue(name, payload, options);
 
-  handle.update = (name, payload, options) => t.update(name, payload, options);
-
-  handle.delete = (name) => t.delete(name);
-
-  handle.get = (name) => t.get(name);
+  handle.cancel = (name) => t.cancel(name);
 
   handle.withQueue = (wrappedHandler) => {
     const q = wrappedHandler as TasklessNextApiHandler<T>;
     q.enqueue = handle.enqueue;
-    q.update = handle.update;
-    q.delete = handle.delete;
-    q.get = handle.get;
+    q.cancel = handle.cancel;
     return q;
   };
 

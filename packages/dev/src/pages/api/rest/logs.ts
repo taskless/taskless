@@ -1,18 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { bqToMango, logFacets } from "util/bqToMango";
 import bp from "boolean-parser";
-import { JobDoc, Log, LogDoc, MongoResult } from "mongo/db";
-
-type LogWithResolvedFields = MongoResult<LogDoc> & {
-  job?: JobDoc;
-};
+import { bqToMango, runFacets } from "util/bqToMango";
+import { getRunsCollection, RunDoc } from "mongo/collections";
 
 type ErrorResponse = {
   error: string;
 };
 
 export type GetLogsResponse = {
-  logs: LogWithResolvedFields[];
+  runs: RunDoc[];
 };
 
 export default async function handler(
@@ -20,16 +16,19 @@ export default async function handler(
   res: NextApiResponse<GetLogsResponse | ErrorResponse>
 ) {
   const q = Array.isArray(req.query.q) ? req.query.q[0] : req.query.q;
-  const m = q ? bqToMango(bp.parseBooleanQuery(q), logFacets) : null;
+  const m = q ? bqToMango(bp.parseBooleanQuery(q), runFacets) : null;
 
-  const logs = await Log.find({
-    ...(m ?? {}),
-  })
-    .sort({ createdAt: "desc" })
-    .populate("job")
-    .exec();
+  // console.log(JSON.stringify(m));
 
-  return res.status(200).json({
-    logs,
+  const runs = await getRunsCollection();
+  const r = await runs
+    .find({
+      ...(m ?? {}),
+    })
+    .sort({ ts: -1 })
+    .toArray();
+
+  res.status(200).json({
+    runs: r,
   });
 }

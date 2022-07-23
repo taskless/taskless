@@ -7,7 +7,7 @@ export const getClient = (headers?: OutgoingHttpHeaders) => {
     typeof window === "undefined"
       ? "http://localhost:3000"
       : window.location.href;
-  const url = new URL("/api/mockql", rel);
+  const url = new URL("/api/graphql", rel);
   const c = new GraphQLClient(url.toString(), {
     headers: headers as HeadersInit,
   });

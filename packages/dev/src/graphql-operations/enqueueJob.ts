@@ -1,56 +1,103 @@
 import { DateTime } from "luxon";
-import { Job as MJ, jobToJobFragment } from "mongo/db";
+import { getJobsCollection, JobDoc } from "mongo/collections";
+import { getQueue } from "mongo/mq";
 import { Context } from "types";
 import {
   EnqueueJobMutation,
   EnqueueJobMutationVariables,
 } from "__generated__/schema";
-import { gqlHeadersToObject } from "./common";
 
 export const enqueueJob = async (
   variables: EnqueueJobMutationVariables,
   context: Context
 ): Promise<EnqueueJobMutation> => {
   const id = context.v5(variables.name);
-  let runAt = DateTime.now().toISO();
+  let runAt = DateTime.now();
+
   if (typeof variables.job.runAt === "string" && variables.job.runAt !== "") {
     const dt = DateTime.fromISO(variables.job.runAt);
     if (dt.isValid) {
-      runAt = dt.toISO();
+      runAt = dt;
     }
   }
+  const retries = variables.job.retries ?? 5;
+  const headers = !Array.isArray(variables.job.headers)
+    ? {}
+    : variables.job.headers.reduce<{ [key: string]: any }>((h, next) => {
+        h[next.name] = next.value;
+        return h;
+      }, {});
 
-  const job = await MJ.findOneAndUpdate(
-    { v5id: { $eq: id } },
-    {
-      $set: {
-        body: variables.job.body ?? undefined,
-        endpoint: variables.job.endpoint,
-        headers: gqlHeadersToObject(variables.job.headers),
+  const queue = await getQueue();
+  const col = await getJobsCollection();
+
+  let doc: JobDoc | undefined;
+
+  await queue.transaction(async (q) => {
+    // job
+    await q.enqueue({
+      ref: id,
+      payload: {
+        applicationId: context.applicationId,
+        organizationId: context.organizationId,
+        jobId: id,
         name: variables.name,
-        retries: variables.job.retries === 0 ? 0 : variables.job.retries ?? 5,
-        runAt,
-        runEvery: variables.job.runEvery ?? undefined,
-        updatedAt: new Date(),
+        endpoint: variables.job.endpoint,
+        headers: JSON.stringify(headers),
+        body: variables.job.body ?? null,
+        method: variables.job.method ?? "POST",
+      },
+      runAt: runAt.toJSDate(),
+      runEvery: variables.job.runEvery ?? undefined,
+    });
+
+    // query / lookups
+    const result = await col.findOneAndUpdate(
+      {
         v5id: id,
-        schedule: {
-          next: DateTime.fromISO(runAt).toJSDate(),
+      },
+      {
+        $set: {
+          v5id: id,
+          name: variables.name,
+          endpoint: variables.job.endpoint,
+          enabled: true,
+          headers: JSON.stringify(headers),
+          method: variables.job.method ?? "POST",
+          body: variables.job.body ?? null,
+          retries,
+          runAt: runAt.toJSDate(),
+          runEvery: variables.job.runEvery ?? undefined,
         },
       },
-    },
-    {
-      returnDocument: "after",
-      upsert: true,
-    }
-  ).exec();
+      {
+        upsert: true,
+        returnDocument: "after",
+      }
+    );
 
-  if (!job) {
-    throw new Error("No job could be created or updated");
+    if (!result.value) {
+      throw new Error("Unable to update job in local DB");
+    }
+
+    doc = result.value;
+  });
+
+  if (typeof doc === "undefined") {
+    throw new Error("No doc");
   }
 
   return {
-    replaceJob: {
-      ...jobToJobFragment(variables.name, job),
+    enqueueJob: {
+      __typename: "Job",
+      name: doc.name,
+      endpoint: doc.endpoint,
+      enabled: true,
+      retries,
+      runAt: runAt.toISO(),
+      runEvery: doc.runEvery,
+      headers: variables.job.headers,
+      body: variables.job.body,
     },
   };
 };

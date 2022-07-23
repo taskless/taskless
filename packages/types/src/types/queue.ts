@@ -106,32 +106,12 @@ export interface CreateQueueMethods<T> {
   ) => Promise<Job<T>>;
 
   /**
-   * Update an existing item in the queue
+   * Cancel any scheduled instances of a job by its identifier
    * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
-   * @param payload The Job's new payload of type T. If not provded, the existing payload will be used
-   * @param options The Job Options. These are merged on top of the default Job Options specified on the queue at creation time
-   * @throws Error when there is no existing item to update
-   * @returns The `Job` object
+   * @throws Error if the job could not be cancelled
+   * @returns The cancelled `Job` object, or `null` if no job was cancelled
    */
-  update: (
-    name: JobIdentifier,
-    payload?: T,
-    options?: JobOptions
-  ) => Promise<Job<T>>;
-
-  /**
-   * Delete an item from the queue
-   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
-   * @throws Error if the job could not be deleted
-   * @returns The deleted `Job` object, or `null` if no job was deleted
-   */
-  delete: (name: JobIdentifier) => Promise<Job<T> | null>;
-  /**
-   * Retrieve an item from the Taskless queue
-   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
-   * @returns The `Job` object or `null` if no job was deleted
-   */
-  get: (name: JobIdentifier) => Promise<Job<T> | null>;
+  cancel: (name: JobIdentifier) => Promise<Job<T> | null>;
 }
 
 /** The Job Handler signature, taking a `payload` and `meta` */

@@ -26,7 +26,7 @@ const queue = new Queue<T>({
 
 ## Exposing Taskless Queue Methods
 
-The Taskless Queue includes `enqueue`, `update`, `delete`, and `get`. You may optionally implement wrappers around any of these depending on your needs. Most intgerations attach identically named methods to their API Handler, passing the values directly through to the Taskless Queue.
+The Taskless Queue includes `enqueue` and `remove`. You may optionally implement wrappers around any of these depending on your needs. Most intgerations attach identically named methods to their API Handler, passing the values directly through to the Taskless Queue.
 
 ## Receiving Requests
 

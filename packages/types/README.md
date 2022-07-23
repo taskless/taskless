@@ -17,4 +17,4 @@
 
 Type definitions for Taskless modules.
 
-Most of the time, you won't need these modules explicitly, but if you do want to build something that is type-specific, they're here for you. 🎉
+Most of the time, you won't need these modules explicitly, but if you do want to build something that is type-specific, they're here for you. Includes all types that are shared across 1+ Taskless modules. 🎉

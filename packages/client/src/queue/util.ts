@@ -113,6 +113,7 @@ export const resolveJobOptions = (
     }
     result = {
       ...result,
+      ...opt,
       headers: {
         ...(result.headers ?? {}),
         ...(opt.headers ?? {}),

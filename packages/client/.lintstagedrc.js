@@ -1,6 +1,4 @@
-import base from "../../.lintstagedrc.cjs";
-
 export default {
-  ...base,
+  "*.(md|json)": "prettier --write",
   "**/*.ts?(x)": ["eslint", "madge --circular", "prettier --write"],
 };

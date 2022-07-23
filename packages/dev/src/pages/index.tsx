@@ -26,7 +26,7 @@ import {
   EnqueueJobMutation,
   EnqueueJobMutationVariables,
 } from "__generated__/schema";
-import { getClient } from "graphql/getClient";
+import { getClient } from "graphql/client";
 import type { OutgoingHttpHeaders } from "http";
 
 const getJobs: QueryFunction<
@@ -83,14 +83,11 @@ const upsertJob: MutationFunction<
 /** Get run data (next and last) from a record */
 const extractRunData = (row: GetJobsResponse["jobs"][0]) => {
   const now = DateTime.now();
-  const lastRunner = row.logs?.[0] ?? null;
-
-  const runAt = row.schedule?.next
-    ? DateTime.fromJSDate(new Date(row.schedule.next))
-    : null;
-  const nextRun = runAt && runAt > now ? runAt.toLocal() : undefined;
-  const lastRun = lastRunner?.createdAt
-    ? DateTime.fromJSDate(new Date(lastRunner.createdAt)).toLocal()
+  const runAt = DateTime.fromJSDate(new Date(row.runAt));
+  const nextRun = runAt > now ? runAt.toLocal() : undefined;
+  const lastRunAt = row.summary?.lastRun ?? null;
+  const lastRun = lastRunAt
+    ? DateTime.fromJSDate(new Date(lastRunAt)).toLocal()
     : undefined;
 
   return {
@@ -149,7 +146,6 @@ const Home: NextPage = () => {
           name: d.name,
           job: {
             endpoint: d.endpoint,
-            enabled: d.enabled,
             runAt: d.runAt,
             runEvery: d.runEvery,
             headers,
@@ -213,7 +209,7 @@ const Home: NextPage = () => {
                       <button
                         title="Run now"
                         className="ml-2"
-                        onClick={() => promote({ id: record._id.toString() })}
+                        onClick={() => promote({ id: record.v5id })}
                       >
                         <FastForwardIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
@@ -235,7 +231,7 @@ const Home: NextPage = () => {
                       <button
                         title="Replay Job"
                         className="ml-2"
-                        onClick={() => replay({ id: record._id.toString() })}
+                        onClick={() => replay({ id: record.v5id })}
                       >
                         <ReplyIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
@@ -247,7 +243,13 @@ const Home: NextPage = () => {
             {
               name: "Last Status",
               renderValue: ({ record }) => (
-                <>{record.logs?.[0]?.status ?? "-"}</>
+                <>
+                  {typeof record.summary?.lastStatus === "undefined"
+                    ? "-"
+                    : record.summary?.lastStatus
+                    ? "COMPLETED"
+                    : "FAILED"}
+                </>
               ),
             },
           ]}
@@ -291,7 +293,7 @@ const Home: NextPage = () => {
                         <button
                           title="Run now"
                           className="ml-2"
-                          onClick={() => promote({ id: record._id.toString() })}
+                          onClick={() => promote({ id: record.v5id })}
                         >
                           <FastForwardIcon className="h-3 w-3 fill-gray-800 hover:fill-primary-300 transition" />
                         </button>

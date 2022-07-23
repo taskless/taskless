@@ -2,7 +2,8 @@
 export const TASKLESS_ENDPOINT = "https://for.taskless.io/api/graphql" as const;
 
 /** The default Taskless Development Server endpoint */
-export const TASKLESS_DEV_ENDPOINT = "http://localhost:3001/api/rpc" as const;
+export const TASKLESS_DEV_ENDPOINT =
+  "http://localhost:3001/api/graphql" as const;
 
 /** A reusable flag that determines if we are running in a production environment */
 export const IS_PRODUCTION =

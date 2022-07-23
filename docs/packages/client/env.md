@@ -14,4 +14,4 @@ Taskless recommends storing the bulk of your configuration in env values.
 
 **Development ENV Values** Additionally, the following env values may be useful in development.
 
-- `TASKLESS_DEV_ENDPOINT` (example: `http://localhost:8080/api/rpc`) Changes the endpoint used for the Taskless dev server if the default port or path cannot be used
+- `TASKLESS_DEV_ENDPOINT` (example: `http://localhost:8080/api/graphql`) Changes the GraphQL endpoint used for the Taskless dev server if the default port or path cannot be used

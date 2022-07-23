@@ -1,12 +1,13 @@
+import { getJobsCollection, JobDoc } from "mongo/collections";
+import { getQueue } from "mongo/mq";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Job, JobDoc, MongoResult, Schedule } from "mongo/db";
 
 type ErrorResponse = {
   error: string;
 };
 
 export type PromoteJobResponse = {
-  job: MongoResult<JobDoc>;
+  job: JobDoc | null;
 };
 
 export default async function handler(
@@ -14,31 +15,11 @@ export default async function handler(
   res: NextApiResponse<PromoteJobResponse | ErrorResponse>
 ) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
+  const jc = await getJobsCollection();
+  const queue = await getQueue();
 
-  const s = new Schedule({
-    next: new Date(),
-    attempt: 0,
-  });
-
-  const job = await Job.findOneAndUpdate(
-    {
-      _id: { $eq: id },
-    },
-    {
-      $set: {
-        schedule: s,
-      },
-    },
-    {
-      returnDocument: "after",
-    }
-  ).exec();
-
-  if (!job) {
-    return res.status(500).json({
-      error: "No job to promote",
-    });
-  }
+  await queue.promote(id);
+  const job = await jc.findOne({ v5id: id });
 
   res.status(200).json({
     job,

@@ -1,9 +1,9 @@
 import { Queue } from "@taskless/client";
 import {
   Guards,
+  type CreateQueueMethods,
   type JobHandler,
   type QueueOptions,
-  type CreateQueueMethods,
 } from "@taskless/types";
 import * as express from "express";
 
@@ -15,19 +15,38 @@ export * from "@taskless/client";
  * @template T Used for typing the {@link CreateQueueMethods}
  */
 export interface TasklessExpressRouter<T> {
-  // express does not have a default handler
-  // queue methods
+  /**
+   * Adds an item to the queue. If an item of the same name exists, it will be
+   * replaced with this new data. If a job was already scheduled with this
+   * `name` property, then its information will be updated to the
+   * new provided values. You should always call `enqueue()` as if you are
+   * calling it for the first time.
+   * ([docs](https://taskless.io/docs/packages/client#enqueue))
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
+   * @param payload The Job's payload to be delivered
+   * @param options Job options. These overwrite the default job options specified on the queue at creation time
+   * @throws Error when the job could not be created in the Taskless system
+   * @returns The `Job` object
+   */
   enqueue: CreateQueueMethods<T>["enqueue"];
-  update: CreateQueueMethods<T>["update"];
-  delete: CreateQueueMethods<T>["delete"];
-  get: CreateQueueMethods<T>["get"];
-  // custom
+  /**
+   * Cancels any scheduled work for this item in the queue. Any jobs in
+   * process are allowed to complete. If a job has recurrence, future jobs
+   * will be cancelled.
+   * ([docs](https://taskless.io/docs/packages/client#cancel))
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
+   * @throws Error if the job could not be cancelled
+   * @returns The cancelled `Job` object, or `null` if no job was found with `name`
+   */
+  cancel: CreateQueueMethods<T>["cancel"];
   /**
    * Generate an express Router object, optionally with mount information.
    * Unfortunately, express does not provide a way for a router to retrieve its `mountpath`,
    * making it impossible to determine the full routing URL at runtime. Because of this
    * limitation, the router must be created on-demand.
+   * ([docs](https://taskless.io/docs/packages/express#express-methods))
    * @param mount Specify an optional mount path for this express router
+   * @returns An express Router object
    */
   router: (mount?: string) => express.Router;
 }
@@ -39,7 +58,6 @@ export interface TasklessExpressRouter<T> {
  * @param route The URL path to reach this route
  * @param handler A {@link JobHandler} that supports a payload of type `T`
  * @param queueOptions The {@link QueueOptions} for this queue
- * @returns {TasklessNextApiHandler}
  */
 export function createQueue<T = undefined>(
   name: string,
@@ -132,9 +150,7 @@ export function createQueue<T = undefined>(
   // return the express rotuer API
   const queueApi: TasklessExpressRouter<T> = {
     enqueue: (name, payload, options) => t.enqueue(name, payload, options),
-    update: (name, payload, options) => t.update(name, payload, options),
-    delete: (name) => t.delete(name),
-    get: (name) => t.get(name),
+    cancel: (name) => t.cancel(name),
     router: (at?: string) => mount(at),
   };
 

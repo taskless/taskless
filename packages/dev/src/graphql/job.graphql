@@ -10,26 +10,14 @@ fragment JobData on Job {
   runEvery
 }
 
-mutation enqueueJob($name: String!, $job: ReplaceJobInputType!) {
-  replaceJob(name: $name, job: $job) {
+mutation enqueueJob($name: String!, $job: EnqueueJobInputType!) {
+  enqueueJob(name: $name, job: $job) {
     ...JobData
   }
 }
 
-mutation updateJob($name: String!, $job: UpdateJobInputType!) {
-  updateJob(name: $name, job: $job) {
-    ...JobData
-  }
-}
-
-mutation deleteJob($name: String!) {
-  deleteJob(name: $name) {
-    ...JobData
-  }
-}
-
-query getJobByName($name: String!) {
-  job(name: $name) {
+mutation cancelJob($name: String!) {
+  cancelJob(name: $name) {
     ...JobData
   }
 }

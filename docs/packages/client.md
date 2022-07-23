@@ -5,9 +5,7 @@ class Queue<T> {
   constructor(args: TasklessQueueConfig<T>): Queue<T>;
   receive(functions: ReceiveCallbacks): Promise<void>;
   enqueue(name: string, payload: T, jobOptions?: JobOptions): Promise<Job<T>>;
-  update(name: string, payload: T, jobOptions?: JobOptions): Promise<Job<T>>;
-  delete(name: string): Promise<Job<T> | null>;
-  get(name: string): Promise<Job<T> | null>;
+  cancel(name: string): Promise<Job<T> | null>;
 }
 
 interface TasklessQueueConfig<T> {
@@ -33,7 +31,7 @@ interface ReceiveCallbacks {
 }
 ```
 
-Taskless Queues are stateless classes that only need to persist for the lifecycle of their request. Values set in the constructor are used during `receive` in order to handle an incoming request, or used by the core methods (enqueue, update, delete, get). The ultimate goal of the client is to translate developer friendly JavaScript APIs into GraphQL calls to the Taskless.io API in production and emulated RPC calls to the [Taskless Dev Server](./dev.md) in development.
+Taskless Queues are stateless classes that only need to persist for the lifecycle of their request. Values set in the constructor are used during `receive` in order to handle an incoming request, or used by the core methods (enqueue & remove). The ultimate goal of the client is to translate developer friendly JavaScript APIs into GraphQL calls to the Taskless.io API in production and emulated RPC calls to the [Taskless Dev Server](./dev.md) in development.
 
 ## Constructing a Queue
 
@@ -41,24 +39,20 @@ While the `createQueue` interface is a more natural API, the `TasklessQueueConfi
 
 - `name: string` Describes the name of the queue
 - `route: string | (() => string)` Describes the route this queue is reachable on. If `typeof route === "function"`, then the route will be evaluated as lazily as possible. This allows for integrations such as [express](./express.md) to handle a late-binding of the route parameter in situations where the Taskless queue is not yet mounted to the routing structure
-- `handler?: JobHandler<T>` The handler for the job of payload type `<T>`. If undefined, the `Queue` may still be used in order to enqueue, delete, update, and get Jobs. However, without `handler` defined, attempts to receive a job via `Queue.receive` will throw an error
+- `handler?: JobHandler<T>` The handler for the job of payload type `<T>`. If undefined, the `Queue` may still be used in order to enqueue and remove Jobs. However, without `handler` defined, attempts to receive a job via `Queue.receive` will throw an error
 - `queueOptions?: QueueOptions` The options for the queue. These allow you to override items for this specific Queue such as the application ID or encryption keys. [See the full list of QueueOptions](./client/queue-options.md), including how to set default job options for all jobs created in this queue
 
 ## Core Methods
 
-Once created, the Taskless Queue exposes the set of **core methods** for enqueueing, updating, deleted, and getting items.
+### enqueue
 
 `enqueue(name: string, payload: T, jobOptions?: JobOptions): Promise<Job<T>>`
 Add a job to the queue named `name` with `payload`. Returns the `Job` instance created. If a job already exists with the specified `name`, it will be updated and return the updated `Job` values
 
-`update(name: string, payload: T, jobOptions?: JobOptions): Promise<Job<T>>`
-Similar to `enqueue` but will throw an error if a `Job` with the specified `name` already exists
+### cancel
 
-`delete(name: string): Promise<Job<T> | null>`
-Delete a job by the specified `name`, and return the `Job` or `null` if no deletion occured
-
-`get(name: string): Promise<Job<T> | null>`
-Retrieve a `Job` from Taskless named `name`, or `null` if no matches found
+`cancel(name: string): Promise<Job<T> | null>`
+Cancel a job, removing it from the active queue by the specified `name`. Returns `null` if there is no matching job with the specified `name`. Can be ran multiple times safely.
 
 ## Receiving Jobs
 

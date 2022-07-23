@@ -10,19 +10,19 @@ import {
 } from "@taskless/types";
 import { DateTime } from "luxon";
 
-import { JobError } from "../error.js";
-import { JobMethodEnum } from "../__generated__/schema.js";
-import { encode, decode, sign, verify } from "./encoder.js";
 import {
   IS_DEVELOPMENT,
   IS_PRODUCTION,
   TASKLESS_DEV_ENDPOINT,
   TASKLESS_ENDPOINT,
 } from "../constants.js";
+import { JobError } from "../error.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
-import { resolveJobOptions, resolveOptions } from "./util.js";
-import { GraphQLClient } from "../net/graphql-client.js";
 import { addTypings } from "../net/addTypings.js";
+import { GraphQLClient } from "../net/graphql-client.js";
+import { JobMethodEnum } from "../__generated__/schema.js";
+import { decode, encode, sign, verify } from "./encoder.js";
+import { resolveJobOptions, resolveOptions } from "./util.js";
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -74,14 +74,14 @@ export class Queue<T> {
     this.handler = args.handler;
   }
 
-  /** Packs a name into string format */
-  packName(name: JobIdentifier): string {
+  /** Packs a name into string format. Used to serialize array keys */
+  protected packName(name: JobIdentifier): string {
     const s = this.queueOptions.separator ?? "/";
     return Array.isArray(name) ? name.join(s) : `${name}`;
   }
 
   /** Turn a payload into a Taskless Body */
-  p2b(payload: T): TasklessBody {
+  protected wrapPayload(payload: T): TasklessBody {
     const { transport, text } = encode(
       payload,
       this.queueOptions.encryptionKey ?? undefined
@@ -95,7 +95,7 @@ export class Queue<T> {
   }
 
   /** Turn a Taskless Body into a payload */
-  b2p(
+  protected unwrapPayload(
     body: TasklessBody,
     allowUnsigned: boolean
   ): { payload: T; verified: boolean } {
@@ -189,7 +189,7 @@ export class Queue<T> {
     }
 
     const body = await Promise.resolve(getBody());
-    const { payload, verified } = this.b2p(
+    const { payload, verified } = this.unwrapPayload(
       body,
       this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ?? false
     );
@@ -216,11 +216,17 @@ export class Queue<T> {
   }
 
   /**
-   * Adds a job to the queue for processing
-   * @param name The name of the job
-   * @param payload The job's payload
-   * @param options Additional job options overriding the queue's defaults
-   * @returns a Promise containing the Job object enqueued
+   * Adds an item to the queue. If an item of the same name exists, it will be
+   * replaced with this new data. If a job was already scheduled with this
+   * `name` property, then its information will be updated to the
+   * new provided values. You should always call `enqueue()` as if you are
+   * calling it for the first time.
+   * ([docs](https://taskless.io/docs/packages/client#enqueue))
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
+   * @param payload The Job's payload to be delivered
+   * @param options Job options. These overwrite the default job options specified on the queue at creation time
+   * @throws Error when the job could not be created in the Taskless system
+   * @returns The `Job` object
    */
   async enqueue(
     name: JobIdentifier,
@@ -232,7 +238,7 @@ export class Queue<T> {
       options
     );
     const client = this.getClient();
-    const body = this.p2b(payload);
+    const body = this.wrapPayload(payload);
     const resolvedName = this.packName(name);
 
     const job = await client.enqueueJob({
@@ -241,7 +247,6 @@ export class Queue<T> {
         endpoint: this.resolveRoute(),
         method: JobMethodEnum.Post,
         headers: headersToGql(opts.headers),
-        enabled: opts.enabled === false ? false : true,
         body: JSON.stringify(body),
         retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
         runAt:
@@ -253,140 +258,58 @@ export class Queue<T> {
     });
 
     // populate result
-    const resolvedBody = JSON.parse(job.replaceJob.body ?? "") as TasklessBody;
+    const resolvedBody = JSON.parse(job.enqueueJob.body ?? "") as TasklessBody;
     return {
-      name: job.replaceJob.name,
-      endpoint: job.replaceJob.endpoint,
-      enabled: job.replaceJob.enabled === false ? false : true,
+      name: job.enqueueJob.name,
+      endpoint: job.enqueueJob.endpoint,
+      enabled: job.enqueueJob.enabled === false ? false : true,
       headers: opts.headers,
-      payload: this.b2p(
+      payload: this.unwrapPayload(
         resolvedBody,
         this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
           false
       ).payload,
-      retries: job.replaceJob.retries,
-      runAt: job.replaceJob.runAt,
-      runEvery: job.replaceJob.runEvery ?? null,
+      retries: job.enqueueJob.retries,
+      runAt: job.enqueueJob.runAt,
+      runEvery: job.enqueueJob.runEvery ?? null,
     };
   }
 
   /**
-   * Updates a job in the queue
-   * @param name The name of the job
-   * @param payload The job's payload. A value of `undefined` will reuse the existing payload
-   * @param options Additional job options overriding the queue's defaults
-   * @returns a Promise containing the updated Job object
+   * Cancels any scheduled work for this item in the queue. Any jobs in
+   * process are allowed to complete. If a job has recurrence, future jobs
+   * will be cancelled.
+   * ([docs](https://taskless.io/docs/packages/client#cancel))
+   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
+   * @throws Error if the job could not be cancelled
+   * @returns The cancelled `Job` object, or `null` if no job was found with `name`
    */
-  async update(
-    name: JobIdentifier,
-    payload: T | undefined,
-    options?: JobOptions
-  ): Promise<Job<T>> {
-    const opts = resolveJobOptions(
-      this.queueOptions.defaultJobOptions,
-      options
-    );
-    const client = this.getClient();
-    const body = typeof payload !== "undefined" ? this.p2b(payload) : undefined;
-    const resolvedName = this.packName(name);
-
-    const job = await client.updateJob({
-      name: resolvedName,
-      job: {
-        endpoint: this.resolveRoute(),
-        method: JobMethodEnum.Post,
-        headers:
-          typeof opts.headers !== "undefined"
-            ? headersToGql(opts.headers)
-            : undefined,
-        enabled: opts.enabled === false ? false : opts.enabled,
-        body: typeof body !== "undefined" ? JSON.stringify(body) : undefined,
-        retries: opts.retries === 0 ? 0 : opts.retries,
-        runAt:
-          opts.runAt === null
-            ? DateTime.now().toISO()
-            : opts.runAt ?? undefined,
-        runEvery: opts.runEvery,
-      },
-    });
-
-    // result
-    const resolvedBody = JSON.parse(job.updateJob.body ?? "") as TasklessBody;
-    return {
-      name: job.updateJob.name,
-      endpoint: job.updateJob.endpoint,
-      enabled: job.updateJob.enabled === false ? false : true,
-      payload: this.b2p(
-        resolvedBody,
-        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
-          false
-      ).payload,
-      retries: job.updateJob.retries,
-      runAt: job.updateJob.runAt,
-      runEvery: job.updateJob.runEvery ?? null,
-    };
-  }
-
-  /**
-   * Removes a job from the queue
-   * @param name The name of the job
-   * @returns a Promise containing the Job object that was removed
-   */
-  async delete(name: JobIdentifier): Promise<Job<T> | null> {
+  async cancel(name: JobIdentifier): Promise<Job<T> | null> {
     const client = this.getClient();
     const resolvedName = this.packName(name);
 
-    const job = await client.deleteJob({
+    const job = await client.cancelJob({
       name: resolvedName,
     });
 
-    if (!job.deleteJob) {
+    if (!job.cancelJob) {
       return null;
     }
 
     // result
-    const resolvedBody = JSON.parse(job.deleteJob.body ?? "") as TasklessBody;
+    const resolvedBody = JSON.parse(job.cancelJob.body ?? "") as TasklessBody;
     return {
-      name: job.deleteJob.name,
-      endpoint: job.deleteJob.endpoint,
-      enabled: job.deleteJob.enabled === false ? false : true,
-      payload: this.b2p(
+      name: job.cancelJob.name,
+      endpoint: job.cancelJob.endpoint,
+      enabled: job.cancelJob.enabled === false ? false : true,
+      payload: this.unwrapPayload(
         resolvedBody,
         this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
           false
       ).payload,
-      retries: job.deleteJob.retries,
-      runAt: job.deleteJob.runAt,
-      runEvery: job.deleteJob.runEvery ?? null,
-    };
-  }
-
-  async get(name: JobIdentifier): Promise<Job<T> | null> {
-    const client = this.getClient();
-    const resolvedName = this.packName(name);
-
-    const result = await client.getJobByName({
-      name: resolvedName,
-    });
-
-    if (!result.job) {
-      return null;
-    }
-
-    // result
-    const resolvedBody = JSON.parse(result.job.body ?? "") as TasklessBody;
-    return {
-      name: result.job.name,
-      endpoint: result.job.endpoint,
-      enabled: result.job.enabled === false ? false : true,
-      payload: this.b2p(
-        resolvedBody,
-        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
-          false
-      ).payload,
-      retries: result.job.retries,
-      runAt: result.job.runAt,
-      runEvery: result.job.runEvery ?? null,
+      retries: job.cancelJob.retries,
+      runAt: job.cancelJob.runAt,
+      runEvery: job.cancelJob.runEvery ?? null,
     };
   }
 }

@@ -3,18 +3,15 @@ declare module "boolean-parser" {
   declare function parseBooleanQuery(query: string): Term[][];
 }
 
-// https://stackoverflow.com/questions/59459312/using-globalthis-in-typescript
+// ref: https://stackoverflow.com/questions/59459312/using-globalthis-in-typescript
 declare module globalThis {
-  interface CronAPI {
-    register(
-      name: string,
-      timing: string,
-      handler: () => unknown | Promise<unknown>
-    ): void;
-    destroy(name: string): void;
-  }
-  export function cron(): CronAPI;
+  import { MongoClient } from "mongodb";
+  import { MongoMemoryReplSet } from "mongodb-memory-server"
+  function mongoMemoryReplSet(): Promise<MongoMemoryReplSet>;
+  var mongoClientCache: Record<string, Promise<MongoClient>>;
+}
 
-  import { MongoMemoryServer } from "mongodb-memory-server";
-  export function mongo(): Promise<MongoMemoryServer>;
+declare module "./server/mongo.js" {
+  import { MongoMemoryReplSet } from "mongodb-memory-server"
+  export = Promise<MongoMemoryReplSet>
 }

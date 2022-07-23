@@ -1,5 +1,29 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
+# 3.0.0 - next
+
+#### 💥 BREAKING CHANGES
+
+- **@taskless/client** the operations tied to legacy CRUD APIs are no longer available with 3.x. If you were using these, you can often replace `queue.update` with `queue.enqueue` and `queue.delete` with `queue.removeJob`. The `get` method did not offer a rich API experience, and it makes more sense for those calls to be made against the `for.taskless.io` API directly which is a full GraphQL service.
+- **@taskless/express** no longer exposes `queue.update`, `queue.delete`, and `queue.get`. See the change for `@taskless/client` for alternatives.
+- **@taskless/next** no longer exposes `queue.update`, `queue.delete`, and `queue.get`. See the change for `@taskless/client` for alternatives.
+
+#### 🎉Features
+
+- **@taskless/client** uses simpler endpoints for enqueing and removing jobs from Taskless.io. The legacy CRUD endpoints managed both the job queue and the primary job database, while the new `enqueueJob` and `removeJob` operate solely on the primary job database.
+- **@taskless/dev** Uses [docmq](https://github.com/jakobo/docmq) under the hood with a local Mongo Driver for job scheduling. DocMQ supports multiple drivers, but it made sense to use the built-in mongo driver given the success of [mongo-memory-server](https://www.npmjs.com/package/mongodb-memory-server)
+
+#### 🔧 Fixes
+
+- **@taskless/dev** Removes the need for cron job dispatching in development
+- **@taskless/ui** Fixes `Record` typing issue with `DataTable`
+
+#### 🎒 Misc
+
+- **@taskless/client** Pulls GraphQL schema directly from `for.taskless.io` instead of requiring a local copy
+- **@taskless/dev** Pulls GraphQL schema directly from `for.taskless.io` instead of requiring a local copy
+- **docs/** Updated to reflect breaking changes
+
 # 2.1.3 - released June 2, 2022
 
 #### 🔧 Fixes

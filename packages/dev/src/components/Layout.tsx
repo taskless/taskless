@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { Logo } from "./Logo";
 import { Slash } from "@taskless/ui";
 import cx from "classnames";
-import { useInterval, useIsMounted } from "usehooks-ts";
 
 const topNav = [
   {
@@ -34,16 +33,6 @@ const useNavigationLinks = () => {
   return links;
 };
 
-const useHeartbeat = () => {
-  const isMounted = useIsMounted();
-  useInterval(() => {
-    if (!isMounted()) {
-      return;
-    }
-    fetch("/api/worker");
-  }, 10000);
-};
-
 interface LayoutProps {
   title: string;
   header?: JSX.Element;
@@ -56,7 +45,6 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = ({
   headerClassName,
   children,
 }) => {
-  useHeartbeat();
   const links = useNavigationLinks();
   return (
     <>

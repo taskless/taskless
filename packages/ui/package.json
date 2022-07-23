@@ -11,10 +11,10 @@
   "homepage": "https://github.com/taskless/taskless/",
   "repository": "taskless/taskless.git",
   "scripts": {
-    "build": "run-s clean 'build:pre' 'build:all' 'pjson:all' 'build:post'",
+    "build": "run-s clean 'build:pre' 'build:all' 'build:post'",
     "build:all": "run-p 'build:x:**'",
-    "build:post": "echo 'no build:post tasks for @taskless/types'",
-    "build:pre": "echo 'no build:pre tasks for @taskless/types'",
+    "build:post": "run-s 'pjson:all'",
+    "build:pre": "echo 'no build:pre tasks for @taskless/ui'",
     "build:x:cjs": "tsc -p tsconfig.cjs.json",
     "build:x:esm": "tsc -p tsconfig.esm.json",
     "build:x:types": "tsc -p tsconfig.types.json",

@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { Job, JobDoc, MongoResult, Schedule } from "mongo/db";
+import { getJobsCollection, JobDoc } from "mongo/collections";
+import { getQueue } from "mongo/mq";
 
 type ErrorResponse = {
   error: string;
 };
 
 export type ReplayJobResponse = {
-  job: MongoResult<JobDoc>;
+  job: JobDoc | null;
 };
 
 export default async function handler(
@@ -15,30 +16,19 @@ export default async function handler(
 ) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
 
-  const s = new Schedule({
-    next: new Date(),
-    attempt: 0,
-  });
+  const jc = await getJobsCollection();
+  const queue = await getQueue();
 
-  const job = await Job.findOneAndUpdate(
+  await queue.replay(id);
+
+  const job = await jc.findOne(
+    { v5id: id },
     {
-      _id: { $eq: id },
-    },
-    {
-      $set: {
-        schedule: s,
+      sort: {
+        visible: -1,
       },
-    },
-    {
-      returnDocument: "after",
     }
-  ).exec();
-
-  if (!job) {
-    return res.status(500).json({
-      error: "No job to replay",
-    });
-  }
+  );
 
   res.status(200).json({
     job,

@@ -19,10 +19,10 @@ export const jobFacets: Facets = {
   },
 };
 
-export const logFacets: Facets = {
+export const runFacets: Facets = {
   jobId: {
     mango: (v) => ({
-      jobId: {
+      "metadata.v5id": {
         $eq: v,
       },
     }),

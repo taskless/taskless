@@ -33,6 +33,39 @@ export type Scalars = {
    * ,/. is valid for decimal places and +/- is a valid prefix
    */
   Duration: string;
+  /**
+   * Represents one of the following:
+   *
+   * (1) A string representing a duration conforming to the ISO8601 standard,
+   * such as: P1W1DT13H23M34S
+   * P is the duration designator (for period) placed at the start of the duration representation.
+   * Y is the year designator that follows the value for the number of years.
+   * M is the month designator that follows the value for the number of months.
+   * W is the week designator that follows the value for the number of weeks.
+   * D is the day designator that follows the value for the number of days.
+   * T is the time designator that precedes the time components of the representation.
+   * H is the hour designator that follows the value for the number of hours.
+   * M is the minute designator that follows the value for the number of minutes.
+   * S is the second designator that follows the value for the number of seconds.
+   *
+   * Note the time designator, T, that precedes the time value.
+   *
+   * Matches moment.js, Luxon and DateFns implementations
+   * ,/. is valid for decimal places and +/- is a valid prefix
+   *
+   * (2) A 6-value cron interval in the format of ss mm hh d M W
+   * such as: 0 0 * * 1L
+   * ss is the seconds designator for the crontab entry 0-59
+   * mm is the minutes designator for the crontab entry 0-59
+   * hh is the hours designator for the crontab entry 0-24
+   * d is the day-of-month designator for the crontab entry 0-31
+   * M is the month designator for the crontab entry 0-12
+   * W is the weekday designator for the crontab entry 0-7 with Sunday being either 0 or 7
+   *
+   * Supports both "/" syntax such as "* *\/2 * * * *" for every 2 minutes and
+   * "L" syntax such as "0 0 * * * 1L" for the last Monday of the month at midnight.
+   */
+  Interval: string;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: unknown;
   /** A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier. */
@@ -44,7 +77,7 @@ export type Application = Node & Stamped & {
   /** The date & time this was created */
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
-  /** A list of Jobs for this Application */
+  /** A list of jobs for this application */
   jobs?: Maybe<Array<Maybe<Job>>>;
   /** The common name for the Application */
   name: Scalars['String'];
@@ -61,8 +94,6 @@ export type ApplicationJobsArgs = {
 export type CreateJobInputType = {
   /** The body to send to the specified endpoint */
   body?: InputMaybe<Scalars['String']>;
-  /** Identifies if the job is currently enabled, defaults to TRUE */
-  enabled?: InputMaybe<Scalars['Boolean']>;
   /** The URL to request */
   endpoint: Scalars['String'];
   /** Optional headers to include with the request */
@@ -77,6 +108,25 @@ export type CreateJobInputType = {
   runAt?: InputMaybe<Scalars['DateTime']>;
   /** Converts the Job to a recurring Job. Subsequent runs will occur this `duration` after every execution */
   runEvery?: InputMaybe<Scalars['Duration']>;
+};
+
+export type EnqueueJobInputType = {
+  /** The body to send to the specified endpoint */
+  body?: InputMaybe<Scalars['String']>;
+  /** The URL to request */
+  endpoint: Scalars['String'];
+  /** Optional headers to include with the request */
+  headers?: InputMaybe<Array<HeaderInputType>>;
+  /** The HTTP method to use when calling the endpoint */
+  method?: InputMaybe<JobMethodEnum>;
+  /** Specify a cosmetic name for the queue to help with searching and debugging */
+  queue?: InputMaybe<Scalars['String']>;
+  /** If the job fails, how many times should it be retried? Defaults to 5. */
+  retries?: InputMaybe<Scalars['Int']>;
+  /** A time in the future when this job should be run. If ommitted, defaults to immediately on receipt. */
+  runAt?: InputMaybe<Scalars['DateTime']>;
+  /** Converts the Job to a recurring Job. Subsequent runs after the first `runAt` will occur this `duration` after every execution */
+  runEvery?: InputMaybe<Scalars['Interval']>;
 };
 
 /** A header key/value pair */
@@ -102,7 +152,7 @@ export type Job = Node & Stamped & {
   body?: Maybe<Scalars['String']>;
   /** The date & time this was created */
   createdAt: Scalars['DateTime'];
-  /** Specifies if the job is currently enabled */
+  /** Describes if the job is currently enabled */
   enabled: Scalars['Boolean'];
   /** The URL to call when this Job runs */
   endpoint: Scalars['String'];
@@ -121,24 +171,9 @@ export type Job = Node & Stamped & {
    * Make the Job recurring by waiting this amount of time between
    * invocations. Time is defined as a standard ISO-8601 duration
    */
-  runEvery?: Maybe<Scalars['Duration']>;
-  /** Any Runners associated with the Job */
-  runners?: Maybe<Array<Maybe<Runner>>>;
+  runEvery?: Maybe<Scalars['Interval']>;
   /** The date & time this was last updated */
   updatedAt: Scalars['DateTime'];
-};
-
-
-/**
- * Describes a Taskless Job. Job names are unique to the application and
- * specify both the requested time for their first inovcation and timestamps
- * for subsequent runs. In addition to a name, Jobs are given a unique ID
- * that is a UUID v5 identifier of the Job's name, with the UUID of the
- * Application as the namespace.
- */
-export type JobRunnersArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
 };
 
 /** Valid HTTP methods for Taskless Jobs */
@@ -150,26 +185,49 @@ export enum JobMethodEnum {
 export type Mutation = {
   __typename?: 'Mutation';
   /**
+   * Cancels any upcoming runs of the requested job, returning either the
+   * modified job or `null` if no job was found with the requested name.
+   */
+  cancelJob?: Maybe<Job>;
+  /**
    * Create a new Job, which will call the specified endpoint at the
    * requested time. Options can be orovided for run frequency, as well
    * as headers and postable body. Will error if a Job already exists
    * with the requested name. If you would like to upsert the result,
    * instead use CreateOrUpdateJob.
+   * @deprecated Please use enqueueJob() instead
    */
   createJob: Job;
-  /** Delete a job by its specified name. Returns null if no matching job was deleted. */
+  /**
+   * Delete a job by its specified name. Returns null if no matching job was deleted.
+   * @deprecated Please use removeJob() instead
+   */
   deleteJob?: Maybe<Job>;
+  /**
+   * Create a new job, or replace an existing job. Taskless jobs call
+   * the provided endpoint at the requested time. Options can be
+   * provided for run frequency, as well as headers and the postable
+   * http body.
+   */
+  enqueueJob: Job;
   /**
    * Creates a job with the included unique name for the Application. If a
    * Job already exists with the requested name, this operation will instead
    * update the existing Job with the new values.
+   * @deprecated Please use enqueueJob() instead
    */
   replaceJob: Job;
   /**
    * Updates a Job by the specified name. Will error if a job does not
    * exist inside of the Application with the requested name.
+   * @deprecated Please use enqueueJob() instead
    */
   updateJob: Job;
+};
+
+
+export type MutationCancelJobArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -180,6 +238,12 @@ export type MutationCreateJobArgs = {
 
 
 export type MutationDeleteJobArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationEnqueueJobArgs = {
+  job: EnqueueJobInputType;
   name: Scalars['String'];
 };
 
@@ -203,15 +267,28 @@ export type Node = {
   id: Scalars['ID'];
 };
 
+/** The ordering operation for this column */
+export enum OrderByEnum {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
 export type Query = {
   __typename?: 'Query';
+  /**
+   * Retrieve the application information. With no arguments, retrieves
+   * the current application's details
+   */
   application?: Maybe<Application>;
-  /** Retrieve a Job by its common name */
+  /** Retrieve a Job by its common name. */
   job?: Maybe<Job>;
   /** Return a list of jobs */
   jobs?: Maybe<Array<Maybe<Job>>>;
-  /** Returns a list of Runners */
-  runners?: Maybe<Array<Maybe<Runner>>>;
+};
+
+
+export type QueryApplicationArgs = {
+  id?: InputMaybe<Scalars['UUID']>;
 };
 
 
@@ -225,17 +302,9 @@ export type QueryJobsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
 };
 
-
-export type QueryRunnersArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
 export type ReplaceJobInputType = {
   /** The body to send to the specified endpoint */
   body?: InputMaybe<Scalars['String']>;
-  /** Identifies if the job is currently enabled, defaults to TRUE */
-  enabled?: InputMaybe<Scalars['Boolean']>;
   /** The URL to request */
   endpoint: Scalars['String'];
   /** Optional headers to include with the request */
@@ -252,34 +321,6 @@ export type ReplaceJobInputType = {
   runEvery?: InputMaybe<Scalars['Duration']>;
 };
 
-export type Runner = Node & Stamped & {
-  __typename?: 'Runner';
-  /** The date & time this was created */
-  createdAt: Scalars['DateTime'];
-  /** Any non-output errors captured during execution of the Job */
-  errors?: Maybe<Scalars['String']>;
-  id: Scalars['ID'];
-  /** The Job that owns this Runner */
-  job: Job;
-  /** The status of the Job Runner */
-  status: RunnerStatusEnum;
-  /** If a runner has executed, this contains the HTTP status code encountered */
-  statusCode?: Maybe<Scalars['Int']>;
-  /** The truncated output from the page, capped to the first 1,000 characters */
-  text?: Maybe<Scalars['String']>;
-  /** The date & time this was last updated */
-  updatedAt: Scalars['DateTime'];
-};
-
-/** The Job Runner's status */
-export enum RunnerStatusEnum {
-  Aborted = 'ABORTED',
-  Completed = 'COMPLETED',
-  Failed = 'FAILED',
-  Running = 'RUNNING',
-  Scheduled = 'SCHEDULED'
-}
-
 /**
  * Describes an object that contains timestamp records for both
  * its creation and most recently updated values.
@@ -294,8 +335,6 @@ export type Stamped = {
 export type UpdateJobInputType = {
   /** The body to send to the specified endpoint */
   body?: InputMaybe<Scalars['String']>;
-  /** Identifies if the job is currently enabled, defaults to TRUE */
-  enabled?: InputMaybe<Scalars['Boolean']>;
   /** The URL to request */
   endpoint?: InputMaybe<Scalars['String']>;
   /** Optional headers to include with the request */
@@ -316,33 +355,18 @@ export type JobDataFragment = { __typename: 'Job', name: string, endpoint: strin
 
 export type EnqueueJobMutationVariables = Exact<{
   name: Scalars['String'];
-  job: ReplaceJobInputType;
+  job: EnqueueJobInputType;
 }>;
 
 
-export type EnqueueJobMutation = { __typename?: 'Mutation', replaceJob: { __typename: 'Job', name: string, endpoint: string, headers?: unknown | null, enabled: boolean, body?: string | null, retries: number, runAt: string, runEvery?: string | null } };
+export type EnqueueJobMutation = { __typename?: 'Mutation', enqueueJob: { __typename: 'Job', name: string, endpoint: string, headers?: unknown | null, enabled: boolean, body?: string | null, retries: number, runAt: string, runEvery?: string | null } };
 
-export type UpdateJobMutationVariables = Exact<{
-  name: Scalars['String'];
-  job: UpdateJobInputType;
-}>;
-
-
-export type UpdateJobMutation = { __typename?: 'Mutation', updateJob: { __typename: 'Job', name: string, endpoint: string, headers?: unknown | null, enabled: boolean, body?: string | null, retries: number, runAt: string, runEvery?: string | null } };
-
-export type DeleteJobMutationVariables = Exact<{
+export type CancelJobMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
-export type DeleteJobMutation = { __typename?: 'Mutation', deleteJob?: { __typename: 'Job', name: string, endpoint: string, headers?: unknown | null, enabled: boolean, body?: string | null, retries: number, runAt: string, runEvery?: string | null } | null };
-
-export type GetJobByNameQueryVariables = Exact<{
-  name: Scalars['String'];
-}>;
-
-
-export type GetJobByNameQuery = { __typename?: 'Query', job?: { __typename: 'Job', name: string, endpoint: string, headers?: unknown | null, enabled: boolean, body?: string | null, retries: number, runAt: string, runEvery?: string | null } | null };
+export type CancelJobMutation = { __typename?: 'Mutation', cancelJob?: { __typename: 'Job', name: string, endpoint: string, headers?: unknown | null, enabled: boolean, body?: string | null, retries: number, runAt: string, runEvery?: string | null } | null };
 
 export const JobDataFragmentDoc = `
     fragment JobData on Job {
@@ -358,29 +382,15 @@ export const JobDataFragmentDoc = `
 }
     `;
 export const EnqueueJobDocument = `
-    mutation enqueueJob($name: String!, $job: ReplaceJobInputType!) {
-  replaceJob(name: $name, job: $job) {
+    mutation enqueueJob($name: String!, $job: EnqueueJobInputType!) {
+  enqueueJob(name: $name, job: $job) {
     ...JobData
   }
 }
     ${JobDataFragmentDoc}`;
-export const UpdateJobDocument = `
-    mutation updateJob($name: String!, $job: UpdateJobInputType!) {
-  updateJob(name: $name, job: $job) {
-    ...JobData
-  }
-}
-    ${JobDataFragmentDoc}`;
-export const DeleteJobDocument = `
-    mutation deleteJob($name: String!) {
-  deleteJob(name: $name) {
-    ...JobData
-  }
-}
-    ${JobDataFragmentDoc}`;
-export const GetJobByNameDocument = `
-    query getJobByName($name: String!) {
-  job(name: $name) {
+export const CancelJobDocument = `
+    mutation cancelJob($name: String!) {
+  cancelJob(name: $name) {
     ...JobData
   }
 }
@@ -391,14 +401,8 @@ export function getSdk<C>(requester: Requester<C>) {
     enqueueJob(variables: EnqueueJobMutationVariables, options?: C): Promise<EnqueueJobMutation> {
       return requester<EnqueueJobMutation, EnqueueJobMutationVariables>(EnqueueJobDocument, variables, options);
     },
-    updateJob(variables: UpdateJobMutationVariables, options?: C): Promise<UpdateJobMutation> {
-      return requester<UpdateJobMutation, UpdateJobMutationVariables>(UpdateJobDocument, variables, options);
-    },
-    deleteJob(variables: DeleteJobMutationVariables, options?: C): Promise<DeleteJobMutation> {
-      return requester<DeleteJobMutation, DeleteJobMutationVariables>(DeleteJobDocument, variables, options);
-    },
-    getJobByName(variables: GetJobByNameQueryVariables, options?: C): Promise<GetJobByNameQuery> {
-      return requester<GetJobByNameQuery, GetJobByNameQueryVariables>(GetJobByNameDocument, variables, options);
+    cancelJob(variables: CancelJobMutationVariables, options?: C): Promise<CancelJobMutation> {
+      return requester<CancelJobMutation, CancelJobMutationVariables>(CancelJobDocument, variables, options);
     }
   };
 }

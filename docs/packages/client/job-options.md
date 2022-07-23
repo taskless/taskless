@@ -19,7 +19,7 @@ interface JobHeaders extends OutgoingHttpHeaders {
 `JobOptions` control the behavior of a job and are managed separate from the Job's payload. Unless set, all values have a sensible default. When updating a job via `enqueue()` or `update()`, you may optionally set some values to `null` to clear a field entirely.
 
 `enabled?: boolean`
-**Default: `true`** Determines if the job is enabled. When a job is scheduled to run, the `enabled` flag is checked and if `FALSE`, the job will be skipped. A disabled job won't count as an invocation on Taskless.io.
+**Default: `true`** Determines if the job is enabled.
 
 `headers?: JobHeaders`
 **Default: `{ "content-type": "application/json" }`**

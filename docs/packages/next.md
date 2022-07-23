@@ -17,9 +17,7 @@ interface JobHandler<T> {
 interface TasklessNextApiHandler<T> extends NextApiHandler {
   (request: NextApiRequest, response: NextApiResponse): void | Promise<void>;
   enqueue: CreateQueueMethods<T>["enqueue"];
-  update: CreateQueueMethods<T>["update"];
-  delete: CreateQueueMethods<T>["delete"];
-  get: CreateQueueMethods<T>["get"];
+  cancel: CreateQueueMethods<T>["cancel"];
   withQueue: (wrappedHandler: NextApiHandler) => TasklessNextApiHandler<T>;
 }
 ```
@@ -33,16 +31,10 @@ These core methods are available on any Taskless integration.
 `enqueue(name: string, payload: T, jobOptions?: JobOptions): Promise<Job<T>>`
 Add a job to the queue named `name` with `payload`. Returns the `Job` instance created. If a job already exists with the specified `name`, it will be updated and return the updated `Job` values
 
-`update(name: string, payload: T, jobOptions?: JobOptions): Promise<Job<T>>`
-Similar to `enqueue` but will throw an error if a `Job` with the specified `name` already exists
+`cancel(name: string): Promise<Job<T> | null>`
+Cancel a job, removing it from the active queue by the specified `name`. Returns `null` if there is no matching job with the specified `name`. Can be ran multiple times safely.
 
-`delete(name: string): Promise<Job<T> | null>`
-Delete a job by the specified `name`, and return the `Job` or `null` if no deletion occured
-
-`get(name: string): Promise<Job<T> | null>`
-Retrieve a `Job` from Taskless named `name`, or `null` if no matches found
-
-### Next.js Methods
+### Next Methods
 
 `withQueue(wrappedHandler: NextApiHandler): TasklessNextApiHandler`
 When using integrations such as [sentry for next.js](https://docs.sentry.io/platforms/javascript/guides/nextjs/#configure), your next.js handler is wraped in a manner that obscures the Taskless methods. When this happens, calls to the core methods such as `enqueue` will result in an error trying to call an undefined value. To work around this limitation, the Next.js intergation exposes `withQueue` method, which will reattach the core methods to the provided `NextApiHandler`.

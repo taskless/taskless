@@ -1,15 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { CRON_JOB_NAME } from "./cron";
 import SampleQueue from "./queues/sample";
+
+const DELAYED_JOB_NAME = "delayed";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const job = await SampleQueue.cancel(CRON_JOB_NAME);
+  const job = await SampleQueue.cancel(DELAYED_JOB_NAME);
 
   res.status(200).json({
-    message: "Successfully removed job",
+    message: "Successfully cancelled delayed job",
     job,
   });
 }

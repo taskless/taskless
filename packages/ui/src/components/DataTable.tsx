@@ -30,11 +30,13 @@ interface DataTableProps<T> {
   renderDetails?: React.FC<DetailsRenderer<T>>;
 }
 
+type TableValue = Record<string | number | symbol, unknown>;
+
 const DEFAULT_HEAD =
   "py-3.5 px-3 text-left text-sm font-semibold text-gray-900";
 const DEFAULT_CELL = "py-4 px-3 text-sm text-gray-500";
 
-export const DataTable = <T extends Record<string | number | symbol, unknown>>({
+export const DataTable = <T = TableValue,>({
   data,
   columns,
   className,
