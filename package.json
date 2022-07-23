@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "@taskless/root",
-  "version": "3.0.0-next.1",
+  "version": "3.0.0-next.2",
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "run-s codegen build:all",
