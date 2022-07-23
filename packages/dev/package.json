@@ -17,7 +17,7 @@
     "build:pre": "echo 'no build:pre tasks for @taskless/dev'",
     "clean": "shx rm -rf ./.next",
     "dev": "node server/start.js",
-    "release:before:init": "run-s codegen build",
+    "release:before:init": "run-s test build",
     "start": "./bin/cli.js",
     "taskless": "./bin/cli.js",
     "test": "ava"
