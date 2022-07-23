@@ -1,7 +1,7 @@
 {
   "name": "@taskless/graphinql",
   "description": "A minimalist GraphQL client based on phin",
-  "version": "3.0.0-next.0",
+  "version": "3.0.0-next.1",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
