@@ -1,0 +1,16 @@
+{
+  "plugins": {
+    "@release-it-plugins/workspaces": true
+  },
+  "npm": false,
+  "git": {
+    "commitMessage": "chore: Releases version v${version}"
+  },
+  "hooks": {
+    "before:init": [
+      "syncpack list-mismatches",
+      "syncpack format",
+      "yarn workspaces foreach -pitv --no-private run release:before:init"
+    ]
+  }
+}

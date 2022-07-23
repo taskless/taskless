@@ -32,22 +32,6 @@
     "syncpack": "syncpack",
     "test": "FORCE_COLOR=1 yarn workspaces foreach -ptv --no-private run test"
   },
-  "release-it": {
-    "plugins": {
-      "release-it-yarn-workspaces": true
-    },
-    "npm": false,
-    "git": {
-      "commitMessage": "chore: Releases version v${version}"
-    },
-    "hooks": {
-      "before:init": [
-        "syncpack list-mismatches",
-        "syncpack format",
-        "yarn workspaces foreach -pitv --no-private run release:before:init"
-      ]
-    }
-  },
   "workspaces": [
     "examples/*",
     "packages/*"
@@ -68,6 +52,7 @@
     "@graphql-codegen/typescript": "^2.7.2",
     "@graphql-codegen/typescript-generic-sdk": "^2.4.2",
     "@graphql-codegen/typescript-operations": "^2.5.2",
+    "@release-it-plugins/workspaces": "^3.1.0",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
     "eslint": "^8.10.0",
@@ -83,7 +68,6 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.0",
     "release-it": "*",
-    "release-it-yarn-workspaces": "^2.0.1",
     "shx": "^0.3.4",
     "syncpack": "^7.2.1"
   },
@@ -91,7 +75,7 @@
     "@types/eslint": "*",
     "@types/node": "^17.0.41",
     "@types/react": "^17.0.40",
-    "docmq": "^0.1.5",
+    "docmq": "^0.1.6",
     "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",
     "luxon": "2.4.0",

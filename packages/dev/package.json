@@ -36,7 +36,7 @@
     "chalk": "^5.0.1",
     "classnames": "^2.3.1",
     "cron-parser": "^4.4.0",
-    "docmq": "^0.1.5",
+    "docmq": "^0.1.6",
     "execa": "^6.1.0",
     "graphql": "^16.5.0",
     "luxon": "2.4.0",
