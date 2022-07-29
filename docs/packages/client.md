@@ -35,7 +35,7 @@ Taskless Queues are stateless classes that only need to persist for the lifecycl
 
 ## Constructing a Queue
 
-While the `createQueue` interface is a more natural API, the `TasklessQueueConfig` provides all of the same arguments in an object literal. This allows us to add new features and options to the Queue, without forcing possibly breaking changes on the intergations.
+While the `createQueue` interface is a more natural API, the `TasklessQueueConfig` provides all of the same arguments in an object literal. This allows us to add new features and options to the Queue, without forcing possibly breaking changes on the integrations.
 
 - `name: string` Describes the name of the queue
 - `route: string | (() => string)` Describes the route this queue is reachable on. If `typeof route === "function"`, then the route will be evaluated as lazily as possible. This allows for integrations such as [express](./express.md) to handle a late-binding of the route parameter in situations where the Taskless queue is not yet mounted to the routing structure

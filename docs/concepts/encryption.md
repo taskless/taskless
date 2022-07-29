@@ -24,7 +24,7 @@ Internally, a Taskless job looks like this (actual sample taken from Taskless' o
 In the clear, we pass `v` which tells us the version of the Taskless body, as well as the `transport` key. `transport` tells us about the envelope we used to encrypt the contents of `text`.
 
 - `ev` tells us the envelope version in case we need to make backwards incompatible changes
-- `alg` tells us the encryption algorythm used. By default, Taskless uses [AES-256](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard), the same standard used by Google, NIST, and others to secure sensitive data
+- `alg` tells us the encryption algorithm used. By default, Taskless uses [AES-256](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard), the same standard used by Google, NIST, and others to secure sensitive data
 - `atl` tells us the AuthTag length and simplifies validating the length of the `at` property
 - `at` is the AuthTag itself, which helps us confirm the message was not altered
 - `iv` is the [Initialization Vector](https://en.wikipedia.org/wiki/Initialization_vector) which makes it computationally impossible to reverse our encrypted text back into a key

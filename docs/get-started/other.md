@@ -20,13 +20,13 @@ const queue = new Queue<T>({
 ```
 
 - `route`: The URL path name this Queue will be reachable on
-- `handler`: A Promise-returning callback that recieves a Job of type `T` and associated metadata
+- `handler`: A Promise-returning callback that receives a Job of type `T` and associated metadata
 - `queueOptions`: The [`QueueOptions`](/docs/packages/client/queue.md#queue-options) for this queue
 - `jobOptions`: The default [`JobOptions`](/docs/packages/client/queue.md#job-options) for this queue
 
 ## Exposing Taskless Queue Methods
 
-The Taskless Queue includes `enqueue` and `remove`. You may optionally implement wrappers around any of these depending on your needs. Most intgerations attach identically named methods to their API Handler, passing the values directly through to the Taskless Queue.
+The Taskless Queue includes `enqueue` and `remove`. You may optionally implement wrappers around any of these depending on your needs. Most integrations attach identically named methods to their API Handler, passing the values directly through to the Taskless Queue.
 
 ## Receiving Requests
 
@@ -52,7 +52,7 @@ By default, returning from your job handler will be seen as a successful call, r
 
 ## Examples
 
-- [@taskless/next](https://github.com/taskless/taskless/blob/main/packages/next/src/index.ts) is a full example of creating a custom intgeration that adhears to the Next.JS API signature while also providing the standard set of Taskless methods. Additionally, it exposes `withQueue`, a pattern that's used for Next.js middleware when wrapping handlers with new behavior.
+- [@taskless/next](https://github.com/taskless/taskless/blob/main/packages/next/src/index.ts) is a full example of creating a custom integration that adheres to the Next.JS API signature while also providing the standard set of Taskless methods. Additionally, it exposes `withQueue`, a pattern that's used for Next.js middleware when wrapping handlers with new behavior.
 
 ## Related
 

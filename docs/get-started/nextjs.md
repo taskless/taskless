@@ -93,7 +93,7 @@ const job = await EchoQueue.enqueue("job-name", {
 });
 ```
 
-Enqueing a new Job takes two required arguments, plus one optional:
+Enqueuing a new Job takes two required arguments, plus one optional:
 
 1. The `job name`, which uniquely identifies the job. It's a good idea to provide a recognizable name for debugging purposes. When a Job is enqueued with an identical name, it will be update the existing job while preserving its run history.
 2. The `payload` you want to pass to your Job's handler callback (from `createQueue` above)
