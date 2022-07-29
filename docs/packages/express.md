@@ -40,7 +40,7 @@ Create an [Express Router](https://expressjs.com/en/4x/api.html#router), optiona
 
 ## Exported from @taskless/client
 
-In addition to the above, the following items are rexported from `@taskless/client` as a convienence.
+In addition to the above, the following items are reexported from `@taskless/client` as a convenience.
 
 - [JobError](./client/job-error.md) An error object capable of handling advanced [return codes](./client/return-codes.md)
 - [Queue](./client/queue.md) The Taskless Queue object for advanced integrations

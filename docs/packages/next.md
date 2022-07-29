@@ -37,11 +37,11 @@ Cancel a job, removing it from the active queue by the specified `name`. Returns
 ### Next Methods
 
 `withQueue(wrappedHandler: NextApiHandler): TasklessNextApiHandler`
-When using integrations such as [sentry for next.js](https://docs.sentry.io/platforms/javascript/guides/nextjs/#configure), your next.js handler is wraped in a manner that obscures the Taskless methods. When this happens, calls to the core methods such as `enqueue` will result in an error trying to call an undefined value. To work around this limitation, the Next.js intergation exposes `withQueue` method, which will reattach the core methods to the provided `NextApiHandler`.
+When using integrations such as [sentry for next.js](https://docs.sentry.io/platforms/javascript/guides/nextjs/#configure), your next.js handler is wrapped in a manner that obscures the Taskless methods. When this happens, calls to the core methods such as `enqueue` will result in an error trying to call an undefined value. To work around this limitation, the Next.js integration exposes `withQueue` method, which will reattach the core methods to the provided `NextApiHandler`.
 
 ## Exported from @taskless/client
 
-In addition to the above, the following items are rexported from `@taskless/client` as a convienence.
+In addition to the above, the following items are reexported from `@taskless/client` as a convenience.
 
 - [JobError](./client/job-error.md) An error object capable of handling advanced [return codes](./client/return-codes.md)
 - [Queue](./client/queue.md) The Taskless Queue object for advanced integrations

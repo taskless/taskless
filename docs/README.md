@@ -1,6 +1,6 @@
 # Introduction to Taskless
 
-Welcome to Taskless! Taskless is designed to take the infrastructure pain out of setting up and maintaing a Job Queueing system, and excels in a serverless or edge-function environment. It can be used anywhere you've got publicly reachable URLs and wish to call them on a schedule or in response to a user action.
+Welcome to Taskless! Taskless is designed to take the infrastructure pain out of setting up and maintaining a Job Queueing system, and excels in a serverless or edge-function environment. It can be used anywhere you've got publicly reachable URLs and wish to call them on a schedule or in response to a user action.
 
 Questions? We're happy to help. Join the [Taskless Community](https://github.com/taskless/taskless/discussions/categories/q-a) on Github.
 
