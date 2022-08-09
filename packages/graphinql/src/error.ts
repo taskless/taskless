@@ -1,6 +1,8 @@
 import { GraphQLRequestContext, GraphQLResponse } from "./graphql-types.js";
 
-export class RequestError extends Error {}
+export class RequestError extends Error {
+  original?: Error;
+}
 
 export class ClientError extends Error {
   response: GraphQLResponse;

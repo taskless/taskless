@@ -9,7 +9,7 @@ import phin from "phin";
 import { RequestOptions } from "./types.js";
 
 export async function request<TData, V extends Variables>(
-  endpoint: string,
+  endpoint: string | URL,
   query: string,
   variables?: V,
   options?: RequestOptions
@@ -42,7 +42,9 @@ export async function request<TData, V extends Variables>(
     );
   } catch (e) {
     // the network request itself failed
-    throw new RequestError("Unable to make the request");
+    const err = new RequestError("Unable to make the request");
+    err.original = e as Error;
+    throw err;
   }
 
   if (typeof result === "undefined") {
@@ -64,10 +66,10 @@ export async function request<TData, V extends Variables>(
 }
 
 export class GraphQLClient {
-  private endpoint: string;
+  private endpoint: string | URL;
   private options: RequestOptions;
 
-  constructor(endpoint: string, options?: RequestOptions) {
+  constructor(endpoint: string | URL, options?: RequestOptions) {
     this.endpoint = endpoint;
     this.options = {
       retries: typeof options?.retries === "number" ? options.retries : 5,
