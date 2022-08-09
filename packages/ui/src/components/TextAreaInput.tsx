@@ -31,7 +31,7 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
             error ? "text-orange-500" : "text-gray-500"
           )}
         >
-          {error ?? description ?? null}
+          {error ?? null}
         </em>
       </label>
       <div className="mt-1">
@@ -45,6 +45,11 @@ export const TextAreaInput: React.FC<TextAreaInputProps> = ({
           {...inputProps}
         />
       </div>
+      {description ? (
+        <em className={cx("text-xs", "text-gray-500")}>
+          {description ?? null}
+        </em>
+      ) : null}
     </fieldset>
   );
 };

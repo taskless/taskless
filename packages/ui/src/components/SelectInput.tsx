@@ -39,7 +39,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
             error ? "text-orange-500" : "text-gray-500"
           )}
         >
-          {error ?? description ?? null}
+          {error ?? null}
         </em>
       </label>
       <div className="mt-1">
@@ -58,6 +58,11 @@ export const SelectInput: React.FC<SelectInputProps> = ({
           ))}
         </select>
       </div>
+      {description ? (
+        <em className={cx("text-xs", "text-gray-500")}>
+          {description ?? null}
+        </em>
+      ) : null}
     </fieldset>
   );
 };

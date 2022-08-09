@@ -21,10 +21,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   return (
     <fieldset>
       {label ? (
-        <label
-          htmlFor={id}
-          className="block text-sm font-medium text-gray-700 whitespace-nowrap"
-        >
+        <label htmlFor={id} className="block text-sm font-medium text-gray-700">
           {label ?? null}
           <em
             className={cx(
@@ -32,7 +29,7 @@ export const TextInput: React.FC<TextInputProps> = ({
               error ? "text-orange-500" : "text-gray-500"
             )}
           >
-            {error ?? description ?? null}
+            {error ?? null}
           </em>
         </label>
       ) : null}
@@ -47,6 +44,11 @@ export const TextInput: React.FC<TextInputProps> = ({
           {...inputProps}
         />
       </div>
+      {description ? (
+        <em className={cx("text-xs", "text-gray-500")}>
+          {description ?? null}
+        </em>
+      ) : null}
     </fieldset>
   );
 };
