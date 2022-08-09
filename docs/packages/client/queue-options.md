@@ -26,14 +26,14 @@ When creating a `Queue`, either through [@taskless/client](../client.md) or one 
 `separator?: string`
 **Default `/`** When using arrays as a [Job Identifier](../../concepts/jobs.md#job-identifiers), this character is used to separate the namespacing of keys. **NOTE: Changing the separator when there are jobs in the queue can result in `enqueue()` creating duplicate jobs as the ID of a job will change.** In most cases, `/` should be good enough.
 
-`credentials.appId?: string`
-**Default `process.env.TASKLESS_APP_ID` falls back to `undefined` in production, `0000...` in development** Identifies the application to Taskless or the development server. Combined with an application secret, this ensures that only you are sending and receiving traffic for your application. It's recommended to take this values from an environment variable, so that it is not committed to your codebase.
+`credentials.projectId?: string`
+**Default `process.env.TASKLESS_ID` falls back to `undefined` in production, `0000...` in development** Identifies the project to Taskless or the development server. Combined with your secret, this ensures that only you are sending and receiving traffic for your application. It's recommended to take this values from an environment variable, so that it is not committed to your codebase.
 
 `credentials.secret?: string`
-**Default `process.env.TASKLESS_APP_SECRET` falls back to `undefined` in production, `taskless.development` in development** Your application secret is used both to send requests to Taskless.io and to verify the signature of incoming webhooks. In production and when talking to taskless.io, an application secret must be set. In development, a default secret is used for local testing that ensures your payloads are still signed and verified.
+**Default `process.env.TASKLESS_SECRET` falls back to `undefined` in production, `taskless.development` in development** Your application secret is used both to send requests to Taskless.io and to verify the signature of incoming webhooks. In production and when talking to taskless.io, an application secret must be set. In development, a default secret is used for local testing that ensures your payloads are still signed and verified.
 
 `credentials.expiredSecrets?: string[]`
-**Default `process.env.TASKLESS_PREVIOUS_APP_SECRETS.split(",") ?? []`** It is possible that your app secret may have gotten out, been committed, or caught up in a data breach. Taskless makes it straightforward to rotate your secret. Expired secrets are used to check the signing data of any incoming webhooks, but are not used to send any data back to Taskless. If defined in `process.env`, you can set `TASKLESS_PREVIOUS_APP_SECRETS` to a comma separated set of strings and let Taskless take care of the rest.
+**Default `process.env.TASKLESS_PREVIOUS_SECRETS.split(",") ?? []`** It is possible that your app secret may have gotten out, been committed, or caught up in a data breach. Taskless makes it straightforward to rotate your secret. Expired secrets are used to check the signing data of any incoming webhooks, but are not used to send any data back to Taskless. If defined in `process.env`, you can set `TASKLESS_PREVIOUS_SECRETS` to a comma separated set of strings and let Taskless take care of the rest.
 
 `encryptionKey?: string`
 **Default `process.env.TASKLESS_ENCRYPTION_KEY ?? ""`** To enable end-to-end encryption, you should set the `encryptionKey` to a sufficiently long and protected secret value. Internally, this value will be packed down and used as the key for AES-256-GCM encryption. In the future, we may emit warnings if running in a production environment without an encryption key set.

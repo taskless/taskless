@@ -62,6 +62,7 @@ export class Queue<T> {
   private route: string | (() => string);
   private handler?: JobHandler<T>;
   private queueOptions: FinalizedQueueOptions;
+  private queueName: string;
 
   constructor(args: TasklessQueueConfig<T>) {
     const options = resolveOptions(args.queueOptions);
@@ -70,6 +71,7 @@ export class Queue<T> {
       ...options,
     };
 
+    this.queueName = args.name;
     this.route = args.route;
     this.handler = args.handler;
   }
@@ -164,6 +166,8 @@ export class Queue<T> {
 
     const client = new GraphQLClient(endpoint, {
       appId: creds.appId,
+      projectId: creds.projectId,
+      queueName: this.queueName,
       secret: creds.secret,
     });
 

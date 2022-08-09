@@ -6,6 +6,8 @@ import { IS_PRODUCTION } from "../constants.js";
 
 interface TasklessRequestOptions extends RequestOptions {
   appId?: string;
+  projectId?: string;
+  queueName?: string;
   secret?: string;
 }
 
@@ -14,11 +16,24 @@ interface TasklessRequestOptions extends RequestOptions {
  */
 export class GraphQLClient extends CoreGraphQLClient {
   constructor(endpoint: string, options: TasklessRequestOptions) {
-    const { appId, secret, ...rest } = options;
+    const { appId, secret, projectId, queueName, ...rest } = options;
 
-    if (IS_PRODUCTION && (!appId || !secret)) {
+    const credentials: Record<string, string> = {};
+
+    if (projectId && queueName && secret) {
+      credentials["x-taskless-id"] = projectId;
+      credentials["x-taskless-queue"] = queueName;
+      credentials["x-taskless-secret"] = secret;
+    } else if (appId && secret) {
+      credentials["x-taskless-app-id"] = appId;
+      credentials["x-taskless-secret"] = secret;
+    } else if (IS_PRODUCTION) {
       throw new Error(
-        "Missing an application ID (options.appId) or secret (options.secret)"
+        "Missing credentials: either TASKLESS_ID/TASKLESS_SECRET or TASKLESS_APP_ID/TASKLESS_SECRET"
+      );
+    } else {
+      console.warn(
+        "Missing credentials: either TASKLESS_ID/TASKLESS_SECRET or TASKLESS_APP_ID/TASKLESS_SECRET"
       );
     }
 
@@ -26,8 +41,7 @@ export class GraphQLClient extends CoreGraphQLClient {
       ...rest,
       headers: {
         ...(rest.headers ?? {}),
-        "x-taskless-app-id": appId ?? "",
-        "x-taskless-secret": secret ?? "",
+        ...credentials,
       },
     });
   }

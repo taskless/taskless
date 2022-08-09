@@ -5,12 +5,13 @@ import { getSdk } from "__generated__/schema";
 export const getClient = (headers?: OutgoingHttpHeaders) => {
   const rel =
     typeof window === "undefined"
-      ? "http://localhost:3000"
+      ? "http://localhost:3001"
       : window.location.href;
   const url = new URL("/api/graphql", rel);
-  const c = new GraphQLClient(url.toString(), {
+  const c = new GraphQLClient(url, {
     headers: headers as HeadersInit,
   });
+
   const client = getSdk<RequestOptions>(async (doc, vars) => {
     return await c.request(doc, vars);
   });

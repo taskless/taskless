@@ -72,25 +72,6 @@ export type Scalars = {
   UUID: string;
 };
 
-export type Application = Node & Stamped & {
-  __typename?: 'Application';
-  /** The date & time this was created */
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  /** A list of jobs for this application */
-  jobs?: Maybe<Array<Maybe<Job>>>;
-  /** The common name for the Application */
-  name: Scalars['String'];
-  /** The date & time this was last updated */
-  updatedAt: Scalars['DateTime'];
-};
-
-
-export type ApplicationJobsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-};
-
 export type CreateJobInputType = {
   /** The body to send to the specified endpoint */
   body?: InputMaybe<Scalars['String']>;
@@ -119,8 +100,6 @@ export type EnqueueJobInputType = {
   headers?: InputMaybe<Array<HeaderInputType>>;
   /** The HTTP method to use when calling the endpoint */
   method?: InputMaybe<JobMethodEnum>;
-  /** Specify a cosmetic name for the queue to help with searching and debugging */
-  queue?: InputMaybe<Scalars['String']>;
   /** If the job fails, how many times should it be retried? Defaults to 5. */
   retries?: InputMaybe<Scalars['Int']>;
   /** A time in the future when this job should be run. If ommitted, defaults to immediately on receipt. */
@@ -146,8 +125,6 @@ export type HeaderInputType = {
  */
 export type Job = Node & Stamped & {
   __typename?: 'Job';
-  /** The Application that owns this Job */
-  application?: Maybe<Application>;
   /** Optional body content to include with the request */
   body?: Maybe<Scalars['String']>;
   /** The date & time this was created */
@@ -163,6 +140,8 @@ export type Job = Node & Stamped & {
   method: JobMethodEnum;
   /** The common name for the Job, unique to the application */
   name: Scalars['String'];
+  /** The Queue that owns this Job */
+  queue?: Maybe<Queue>;
   /** The number of attempts that will be made before the job run is marked as FAILED */
   retries: Scalars['Int'];
   /** When in the future this Job should first be run */
@@ -275,20 +254,15 @@ export enum OrderByEnum {
 
 export type Query = {
   __typename?: 'Query';
-  /**
-   * Retrieve the application information. With no arguments, retrieves
-   * the current application's details
-   */
-  application?: Maybe<Application>;
   /** Retrieve a Job by its common name. */
   job?: Maybe<Job>;
   /** Return a list of jobs */
   jobs?: Maybe<Array<Maybe<Job>>>;
-};
-
-
-export type QueryApplicationArgs = {
-  id?: InputMaybe<Scalars['UUID']>;
+  /**
+   * Retrieve the queue information. With no arguments, retrieves
+   * the current queue's details
+   */
+  queue?: Maybe<Queue>;
 };
 
 
@@ -298,6 +272,30 @@ export type QueryJobArgs = {
 
 
 export type QueryJobsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type QueryQueueArgs = {
+  id?: InputMaybe<Scalars['UUID']>;
+};
+
+export type Queue = Node & Stamped & {
+  __typename?: 'Queue';
+  /** The date & time this was created */
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  /** A list of jobs for this queue */
+  jobs?: Maybe<Array<Maybe<Job>>>;
+  /** The common name for the Queue */
+  name: Scalars['String'];
+  /** The date & time this was last updated */
+  updatedAt: Scalars['DateTime'];
+};
+
+
+export type QueueJobsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 };

@@ -135,22 +135,26 @@ const Home: NextPage = () => {
         value: `${h?.[hd as keyof typeof h]}`,
       }));
 
-      console.log(d);
+      const undefString = (s: unknown): string | undefined => {
+        if (typeof s === "string" && s.length > 0) {
+          return s;
+        }
+        return undefined;
+      };
 
       upsert({
         headers: {
-          "x-taskless-app-id": d.appId ?? undefined,
-          "x-takless-app-secret": d.appSecret ?? undefined,
+          "x-taskless-queue": d.queueName ?? undefined,
+          "x-takless-secret": d.secret ?? undefined,
         },
         variables: {
           name: d.name,
           job: {
             endpoint: d.endpoint,
-            runAt: d.runAt,
-            runEvery: d.runEvery,
+            runAt: undefString(d.runAt),
+            runEvery: undefString(d.runEvery),
             headers,
-            body: d.body,
-            queue: d.queueName,
+            body: undefString(d.body),
           },
         },
       });

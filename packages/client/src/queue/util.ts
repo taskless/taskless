@@ -24,10 +24,18 @@ const developmentQueueOptions: QueueOptions = IS_DEVELOPMENT
       baseUrl: "http://localhost:3000",
       credentials: {
         appId: "00000000-0000-0000-0000-000000000000",
+        projectId: "00000000-0000-0000-0000-000000000000",
         secret: "taskless.development",
       },
     }
   : {};
+
+const CURRENT_SECRET =
+  process.env.TASKLESS_SECRET ?? process.env.TASKLESS_APP_SECRET;
+
+const PREVIOUS_SECRETS =
+  process.env.TASKLESS_PREVIOUS_SECRETS ??
+  process.env.TASKLESS_PREVIOUS_APP_SECRETS;
 
 /** A set of default options for queue objects, taken from process.env */
 const productionQueueOptions: QueueOptions = {
@@ -42,11 +50,10 @@ const productionQueueOptions: QueueOptions = {
     process.env.TASKLESS_APP_ID && process.env.TASKLESS_APP_SECRET
       ? {
           appId: process.env.TASKLESS_APP_ID,
-          secret: process.env.TASKLESS_APP_SECRET,
-          expiredSecrets: process.env.TASKLESS_PREVIOUS_APP_SECRETS
-            ? `${process.env.TASKLESS_PREVIOUS_APP_SECRETS}`
-                .split(",")
-                .map((s) => s.trim())
+          projectId: process.env.TASKLESS_ID,
+          secret: CURRENT_SECRET,
+          expiredSecrets: PREVIOUS_SECRETS
+            ? `${PREVIOUS_SECRETS}`.split(",").map((s) => s.trim())
             : [],
         }
       : undefined,
@@ -67,6 +74,10 @@ export const resolveOptions = (
         additionalOptions?.credentials?.appId ??
         productionQueueOptions?.credentials?.appId ??
         developmentQueueOptions?.credentials?.appId,
+      projectId:
+        additionalOptions?.credentials?.projectId ??
+        productionQueueOptions?.credentials?.projectId ??
+        developmentQueueOptions?.credentials?.projectId,
       secret:
         additionalOptions?.credentials?.secret ??
         productionQueueOptions?.credentials?.secret ??

@@ -26,9 +26,8 @@ export interface Fields {
   runEvery: string | null;
   headers: string | null;
   body: string | null;
-  queueName: string;
-  appId: string | null;
-  appSecret: string | null;
+  queueName: string | null;
+  secret: string | null;
 }
 
 interface FormValues {
@@ -41,8 +40,7 @@ interface FormValues {
   headers: string;
   body: string;
   queueName: string;
-  appId: string;
-  appSecret: string;
+  secret: string;
 }
 
 interface CreateJobModalProps {
@@ -89,8 +87,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
         body: "",
         // advanced
         queueName: "",
-        appId: "",
-        appSecret: "",
+        secret: "",
       },
     });
 
@@ -123,8 +120,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
           headers: d.headers,
           body: d.body,
           queueName: d.queueName,
-          appId: d.appId,
-          appSecret: d.appSecret,
+          secret: d.secret,
         });
       },
       [onRequestConfirm]
@@ -250,7 +246,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                 <TextInput
                   id="runAt"
                   label="Run at"
-                  description="When should this Job be executed?"
+                  description="When should this Job be executed? Leave blank to run immediately"
                   error={formState.errors.runAt?.message}
                   props={register("runAt")}
                 />
@@ -327,29 +323,29 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               >
                 <TextInput
                   id="queueName"
-                  label="Alternate Queue Name"
-                  description="Select a queue name other than the default for grouping and searching"
-                  props={register("queueName")}
+                  label="Queue Name"
+                  description={
+                    "The queue name you wish to target with this job"
+                  }
+                  props={{
+                    ...register("queueName"),
+                    placeholder: "default",
+                  }}
                 />
                 <TextInput
-                  id="search-appId"
-                  label="Application ID"
-                  description="Your application ID, or blank to use the development default"
-                  props={register("appId")}
-                />
-                <TextInput
-                  id="search-appSecret"
-                  label="Application Secret"
+                  id="secret"
+                  label="Project Secret"
                   description={
                     <>
-                      Your application secret, should match{" "}
+                      To sign your requests in development, provide the value
+                      matching your endpoint&apos;s{" "}
                       <code className="not-italic font-mono">
-                        TASKLESS_APP_SECRET
+                        TASKLESS_SECRET
                       </code>{" "}
-                      for signing
+                      value.
                     </>
                   }
-                  props={register("appSecret")}
+                  props={register("secret")}
                 />
               </Region>
             </div>

@@ -1,6 +1,6 @@
 /** The context for a Mock GraphQL request */
 export type Context = {
-  applicationId: string;
-  organizationId: string;
+  projectId: string;
+  queueName: string;
   v5: (str: string) => string;
 };

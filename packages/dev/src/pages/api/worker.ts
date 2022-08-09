@@ -26,6 +26,8 @@ export default async function handler(
       ...(j.headers ? JSON.parse(j.headers) : {}),
       "user-agent": "Taskless DevServer Worker",
       "content-type": "application/json",
+      "x-taskless-queue": job.queueName,
+      "x-taskless-id": job.projectId,
     };
 
     const request: phin.IOptions = {
@@ -163,11 +165,11 @@ export default async function handler(
     );
   });
 
-  q.events.on("stats", async (stats) => {
-    logger.info(
-      `STATS docmq/${stats.queue}: in:${stats.enqueued} / out:${stats.processed} | ok:${stats.outcomes.success} / fail:${stats.outcomes.failure}`
-    );
+  q.events.on("error", (err) => {
+    console.error(err);
   });
+
+  logger.info("Worker Started");
 
   return res.status(200).json({
     watch: true,

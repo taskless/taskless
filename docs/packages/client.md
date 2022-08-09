@@ -37,7 +37,7 @@ Taskless Queues are stateless classes that only need to persist for the lifecycl
 
 While the `createQueue` interface is a more natural API, the `TasklessQueueConfig` provides all of the same arguments in an object literal. This allows us to add new features and options to the Queue, without forcing possibly breaking changes on the integrations.
 
-- `name: string` Describes the name of the queue
+- `name: string` Describes the name of the queue, already defined on taskless.io
 - `route: string | (() => string)` Describes the route this queue is reachable on. If `typeof route === "function"`, then the route will be evaluated as lazily as possible. This allows for integrations such as [express](./express.md) to handle a late-binding of the route parameter in situations where the Taskless queue is not yet mounted to the routing structure
 - `handler?: JobHandler<T>` The handler for the job of payload type `<T>`. If undefined, the `Queue` may still be used in order to enqueue and remove Jobs. However, without `handler` defined, attempts to receive a job via `Queue.receive` will throw an error
 - `queueOptions?: QueueOptions` The options for the queue. These allow you to override items for this specific Queue such as the application ID or encryption keys. [See the full list of QueueOptions](./client/queue-options.md), including how to set default job options for all jobs created in this queue

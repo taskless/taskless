@@ -2,8 +2,8 @@ import { Queue, MongoDriver } from "docmq";
 import { getClient } from "./client";
 
 export interface TaskData {
-  applicationId: string;
-  organizationId: string;
+  projectId: string;
+  queueName: string;
   jobId: string;
   name: string;
   endpoint: string;

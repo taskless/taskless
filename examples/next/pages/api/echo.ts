@@ -9,5 +9,6 @@ export default function handler(
 ) {
   console.log("ECHO ENDPOINT");
   console.log(req.body);
+  console.log(req.headers);
   res.status(200).json({});
 }

@@ -4,6 +4,7 @@ import { cancelJob } from "graphql-operations/cancelJob";
 import { enqueueJob } from "graphql-operations/enqueueJob";
 import { type NextApiRequest, type NextApiResponse } from "next";
 import cors from "nextjs-cors";
+import { Context } from "types";
 import { v5 } from "uuid";
 import {
   type CancelJobMutationVariables,
@@ -48,18 +49,22 @@ export default async function MockGraphqlServer(
     [name: string]: any;
   } = req.body?.variables ?? {};
 
-  const headerAppId = Array.isArray(req.headers["x-taskless-app-id"])
-    ? req.headers["x-taskless-app-id"][0]
-    : req.headers["x-taskless-app-id"];
-  const headerOrgId = Array.isArray(req.headers["x-taskless-organization-id"])
-    ? req.headers["x-taskless-organization-id"][0]
-    : req.headers["x-taskless-organization-id"];
-  const appId = headerAppId ? headerAppId : nilId;
-  const orgId = headerOrgId ? headerOrgId : nilId;
-  const context = {
-    applicationId: appId,
-    organizationId: orgId,
-    v5: (value: string) => v5(value, appId),
+  const projectId = Array.isArray(req.headers["x-taskless-id"])
+    ? req.headers["x-taskless-id"][0]
+    : req.headers["x-taskless-id"];
+
+  const queueName = Array.isArray(req.headers["x-taskless-queue"])
+    ? req.headers["x-taskless-queue"][0]
+    : req.headers["x-taskless-queue"];
+
+  const context: Context = {
+    projectId:
+      typeof projectId === "string" && projectId.length > 0 ? projectId : nilId,
+    queueName:
+      typeof queueName === "string" && queueName.length > 0
+        ? queueName
+        : "default",
+    v5: (value: string) => v5(value, projectId ?? nilId),
   };
 
   const ast = parse(query ?? "");

@@ -2065,12 +2065,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@taskless/client@3.0.0-next.0, @taskless/client@workspace:packages/client":
+"@taskless/client@3.0.0-next.2, @taskless/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@taskless/client@workspace:packages/client"
   dependencies:
-    "@taskless/graphinql": 3.0.0-next.0
-    "@taskless/types": 3.0.0-next.0
+    "@taskless/graphinql": 3.0.0-next.2
+    "@taskless/types": 3.0.0-next.2
     "@types/node": ^17.0.41
     ava: ^4.3.0
     graphql: ^16.5.0
@@ -2087,7 +2087,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/dev@3.0.0-next.0, @taskless/dev@workspace:packages/dev":
+"@taskless/dev@3.0.0-next.2, @taskless/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@taskless/dev@workspace:packages/dev"
   dependencies:
@@ -2096,10 +2096,10 @@ __metadata:
     "@tailwindcss/aspect-ratio": ^0.4.0
     "@tailwindcss/forms": ^0.5.0
     "@tailwindcss/typography": ^0.5.2
-    "@taskless/client": 3.0.0-next.0
-    "@taskless/graphinql": 3.0.0-next.0
-    "@taskless/types": 3.0.0-next.0
-    "@taskless/ui": 3.0.0-next.0
+    "@taskless/client": 3.0.0-next.2
+    "@taskless/graphinql": 3.0.0-next.2
+    "@taskless/types": 3.0.0-next.2
+    "@taskless/ui": 3.0.0-next.2
     "@types/eslint": ""
     "@types/luxon": ^2.3.1
     "@types/node": ^17.0.41
@@ -2114,7 +2114,7 @@ __metadata:
     chalk: ^5.0.1
     classnames: ^2.3.1
     cron-parser: ^4.4.0
-    docmq: ^0.1.6
+    docmq: ^0.2.1
     eslint: ^8.10.0
     eslint-config-next: ^12.1.0
     execa: ^6.1.0
@@ -2150,12 +2150,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/express@3.0.0-next.0, @taskless/express@workspace:packages/express":
+"@taskless/express@3.0.0-next.2, @taskless/express@workspace:packages/express":
   version: 0.0.0-use.local
   resolution: "@taskless/express@workspace:packages/express"
   dependencies:
-    "@taskless/client": 3.0.0-next.0
-    "@taskless/types": 3.0.0-next.0
+    "@taskless/client": 3.0.0-next.2
+    "@taskless/types": 3.0.0-next.2
     "@types/express": ^4.17.13
     "@types/node": ^17.0.41
     ava: ^4.3.0
@@ -2172,7 +2172,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/graphinql@3.0.0-next.0, @taskless/graphinql@workspace:packages/graphinql":
+"@taskless/graphinql@3.0.0-next.2, @taskless/graphinql@workspace:packages/graphinql":
   version: 0.0.0-use.local
   resolution: "@taskless/graphinql@workspace:packages/graphinql"
   dependencies:
@@ -2188,12 +2188,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/next@3.0.0-next.0, @taskless/next@workspace:packages/next":
+"@taskless/next@3.0.0-next.2, @taskless/next@workspace:packages/next":
   version: 0.0.0-use.local
   resolution: "@taskless/next@workspace:packages/next"
   dependencies:
-    "@taskless/client": 3.0.0-next.0
-    "@taskless/types": 3.0.0-next.0
+    "@taskless/client": 3.0.0-next.2
+    "@taskless/types": 3.0.0-next.2
     "@types/node": ^17.0.41
     ava: ^4.3.0
     next: ^12.1.0
@@ -2246,7 +2246,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/types@3.0.0-next.0, @taskless/types@workspace:packages/types":
+"@taskless/types@3.0.0-next.2, @taskless/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@taskless/types@workspace:packages/types"
   dependencies:
@@ -2261,7 +2261,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/ui@3.0.0-next.0, @taskless/ui@workspace:packages/ui":
+"@taskless/ui@3.0.0-next.2, @taskless/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@taskless/ui@workspace:packages/ui"
   dependencies:
@@ -5275,9 +5275,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docmq@npm:^0.1.6":
-  version: 0.1.6
-  resolution: "docmq@npm:0.1.6"
+"docmq@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "docmq@npm:0.2.1"
   dependencies:
     abort-controller: ^3.0.0
     cron-parser: ^4.4.0
@@ -5291,7 +5291,7 @@ __metadata:
   peerDependenciesMeta:
     mongodb:
       optional: true
-  checksum: 422d3de601254fcfa7cf5d377cd98fc6384ac9efaed63521fbda7013138dd20196bb73ba1a9452fa65e45b346e9a5fedba9839f637126bfa2bbc5f0a2f67875f
+  checksum: 22f5f7276ae88d39a76765fa5ef2cbd84d997325e41b84cb8ff8bd5acc8d945c9e100ba0a8b02c550e10eda0de5eda3d50898ee6a220c80cb923a72c8ed9ae4f
   languageName: node
   linkType: hard
 
@@ -12461,8 +12461,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express-ts@workspace:examples/express-ts"
   dependencies:
-    "@taskless/dev": 3.0.0-next.0
-    "@taskless/express": 3.0.0-next.0
+    "@taskless/dev": 3.0.0-next.2
+    "@taskless/express": 3.0.0-next.2
     "@types/express": ^4.17.13
     "@types/node": ^17.0.41
     concurrently: ^7.0.0
@@ -12478,8 +12478,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express@workspace:examples/express"
   dependencies:
-    "@taskless/dev": 3.0.0-next.0
-    "@taskless/express": 3.0.0-next.0
+    "@taskless/dev": 3.0.0-next.2
+    "@taskless/express": 3.0.0-next.2
     concurrently: ^7.0.0
     cookie-parser: ~1.4.4
     debug: ~2.6.9
@@ -12495,8 +12495,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
   dependencies:
-    "@taskless/dev": 3.0.0-next.0
-    "@taskless/next": 3.0.0-next.0
+    "@taskless/dev": 3.0.0-next.2
+    "@taskless/next": 3.0.0-next.2
     "@types/eslint": ""
     "@types/luxon": ^2.3.1
     "@types/node": ^17.0.41

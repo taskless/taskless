@@ -38,8 +38,8 @@ export const enqueueJob = async (
     await q.enqueue({
       ref: id,
       payload: {
-        applicationId: context.applicationId,
-        organizationId: context.organizationId,
+        queueName: context.queueName,
+        projectId: context.projectId,
         jobId: id,
         name: variables.name,
         endpoint: variables.job.endpoint,
@@ -59,6 +59,8 @@ export const enqueueJob = async (
       {
         $set: {
           v5id: id,
+          queueName: context.queueName,
+          projectId: context.projectId,
           name: variables.name,
           endpoint: variables.job.endpoint,
           enabled: true,

@@ -26,20 +26,27 @@ export interface QueueOptions {
     /**
      * The Application ID from Taskless
      * If unset, will default to process.env.TASKLESS_APP_ID
+     * @deprecated Prefer projectId, as individual application auth will be removed 2022Q4
      */
     appId?: string;
     /**
-     * The secret for Application ID
-     * If unset, will default to process.env.TASKLESS_APP_SECRET
+     * The Project ID from Taskless
+     * If unset, will default to process.env.TASKLESS_ID
+     */
+    projectId?: string;
+    /**
+     * The secret token from taskless.io
+     * If unset, will default to process.env.TASKLESS_SECRET and then
+     * the legacy process.env.TASKLESS_APP_SECRET
      * A secret is required when running Taskless in production mode
      */
     secret?: string;
     /**
      * A list of expired / rotated secrets to maintain compatibility
      * for unprocessed jobs. If unset, will default to a comma
-     * separated string in process.env.TASKLESS_PREVIOUS_APP_SECRETS
-     * and will be automatically split into an array by the Taskless
-     * client.
+     * separated string in eiter process.env.TASKLESS_PREVIOUS_SECRETS
+     * or process.env.TASKLESS_PREVIOUS_APP_SECRETS and will be
+     * automatically split into an array by the Taskless client.
      */
     expiredSecrets?: string[];
   };
@@ -80,7 +87,8 @@ export interface QueueOptions {
 export interface FinalizedQueueOptions extends QueueOptions {
   // redefines what finalized credentials look like
   credentials: {
-    appId: string;
+    appId?: string;
+    projectId?: string;
     secret: string;
     expiredSecrets?: string[];
   };
