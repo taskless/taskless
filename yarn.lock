@@ -1696,6 +1696,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@next/eslint-plugin-next@npm:^12.2.4":
+  version: 12.2.4
+  resolution: "@next/eslint-plugin-next@npm:12.2.4"
+  dependencies:
+    glob: 7.1.7
+  checksum: c8320cb62dd22070679996f8df9c34fd76fd76fbb2215f26df51c498b73a0cb9e1aeb55abb1cf9afcffcf3571115a0ac351dcce7d6636d4abd1be96516eb2cbb
+  languageName: node
+  linkType: hard
+
 "@next/swc-android-arm-eabi@npm:12.1.6":
   version: 12.1.6
   resolution: "@next/swc-android-arm-eabi@npm:12.1.6"
@@ -2115,8 +2124,6 @@ __metadata:
     classnames: ^2.3.1
     cron-parser: ^4.4.0
     docmq: ^0.2.1
-    eslint: ^8.10.0
-    eslint-config-next: ^12.1.0
     execa: ^6.1.0
     graphql: ^16.5.0
     graphql-tag: ^2.12.6
@@ -2224,6 +2231,7 @@ __metadata:
     "@graphql-codegen/typescript": ^2.7.2
     "@graphql-codegen/typescript-generic-sdk": ^2.4.2
     "@graphql-codegen/typescript-operations": ^2.5.2
+    "@next/eslint-plugin-next": ^12.2.4
     "@release-it-plugins/workspaces": ^3.1.0
     "@typescript-eslint/eslint-plugin": ^5.23.0
     "@typescript-eslint/parser": ^5.23.0

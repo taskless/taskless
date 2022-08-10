@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import { getJobsCollection, JobDoc } from "mongo/collections";
 import { getQueue } from "mongo/mq";
+import { Context } from "types";
 import {
   CancelJobMutation,
   CancelJobMutationVariables,
@@ -8,7 +9,7 @@ import {
 
 export const cancelJob = async (
   variables: CancelJobMutationVariables,
-  context: any
+  context: Context
 ): Promise<CancelJobMutation> => {
   const id = context.v5(variables.name);
 

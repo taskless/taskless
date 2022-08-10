@@ -62,7 +62,7 @@ export default async function handler(
       return api.fail("Unknown error from phin");
     }
 
-    api.ack({
+    return api.ack({
       statusCode: statusCode ?? 200,
       body: responseBody ?? "",
     });

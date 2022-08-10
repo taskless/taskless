@@ -10,7 +10,7 @@ export const getMongoUri = async (): Promise<string> => {
 
 export const getClient = async (): Promise<MongoClient> => {
   const uri = await getMongoUri();
-  if (!cache[uri]) {
+  if (typeof cache[uri] === "undefined") {
     const c = new MongoClient(uri, { autoEncryption: undefined });
     cache[uri] = c.connect();
   }

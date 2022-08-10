@@ -4,6 +4,7 @@ type BQ = string[][];
 type Facets = {
   [name: string]: {
     __default?: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mango: (v: string) => any;
   };
 };
@@ -46,6 +47,7 @@ export const bqToMango = (q: BQ, facets: Facets) => {
           } else if (defaultFacet) {
             return defaultFacet.mango([f, ...rest].join(":"));
           }
+          return null;
         }),
       };
     }),

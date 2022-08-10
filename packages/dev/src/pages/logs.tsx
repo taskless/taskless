@@ -12,7 +12,7 @@ export const getLogs: QueryFunction<
   GetLogsResponse,
   ["logs", { search: string }]
 > = async ({ queryKey }) => {
-  const [_key, { search }] = queryKey;
+  const [, { search }] = queryKey;
   const wl =
     typeof window === "undefined"
       ? "http://localhost:3001"
@@ -84,7 +84,9 @@ const Logs: NextPage = () => {
             let payload: TaskData | undefined;
             try {
               payload = JSON.parse(record.payload);
-            } catch {}
+            } catch {
+              // do nothing
+            }
             return (
               <div className="ml-6 mb-3 px-3 pb-3 pt-2 bg-gray-100 flex flex-col rounded relative">
                 <button

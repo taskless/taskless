@@ -33,7 +33,7 @@ const getJobs: QueryFunction<
   GetJobsResponse,
   ["jobs", { search: string }]
 > = async ({ queryKey }) => {
-  const [_key, { search }] = queryKey;
+  const [, { search }] = queryKey;
   const wl =
     typeof window === "undefined"
       ? "http://localhost:3001"
@@ -339,7 +339,7 @@ const Home: NextPage = () => {
                 <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
                   {record.body
                     ? JSON.stringify(
-                        JSON.parse(record.body as string) ?? {},
+                        JSON.parse(`${record.body}`) ?? {},
                         null,
                         2
                       )

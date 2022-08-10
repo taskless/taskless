@@ -23,7 +23,7 @@ export const enqueueJob = async (
   const retries = variables.job.retries ?? 5;
   const headers = !Array.isArray(variables.job.headers)
     ? {}
-    : variables.job.headers.reduce<{ [key: string]: any }>((h, next) => {
+    : variables.job.headers.reduce<{ [key: string]: string }>((h, next) => {
         h[next.name] = next.value;
         return h;
       }, {});

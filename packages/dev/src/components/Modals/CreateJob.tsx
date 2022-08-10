@@ -1,6 +1,6 @@
 import { Duration } from "luxon";
 import React, { useCallback, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import cx from "classnames";
 import {
   AdjustmentsIcon,
@@ -157,7 +157,9 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleCreate();
+          handleCreate().catch((err) => {
+            console.error(err);
+          });
         }}
         autoComplete="off"
       >

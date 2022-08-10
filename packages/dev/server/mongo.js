@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 // this file is imported via server.js as a global on the server
 // it creates a single mongo instance, accessible across the app
 // the exported function returns the promise. As a global, it will

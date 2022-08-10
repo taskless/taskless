@@ -46,7 +46,7 @@ export default async function MockGraphqlServer(
   // const operationName: string = req.body?.operationName ?? "";
   const query: string = (req.body?.query ?? "").trim();
   const variables: {
-    [name: string]: any;
+    [name: string]: unknown;
   } = req.body?.variables ?? {};
 
   const projectId = Array.isArray(req.headers["x-taskless-id"])
