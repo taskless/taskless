@@ -1,6 +1,6 @@
 module.exports = {
   "*.(md|json|graphql)": "prettier --write",
-  "package.json": [
+  "./package.json": [
     () => "syncpack list-mismatches",
     () => "syncpack format",
     "prettier --write",
