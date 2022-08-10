@@ -12,6 +12,8 @@ Taskless recommends storing the bulk of your configuration in env values.
 - `TASKLESS_PREVIOUS_ENCRYPTION_KEYS` (example: `key1,key2...`) Previous encryption keys, comma separated
 - `TASKLESS_ENV` (example: `development`) Used to override the NODE_ENV value, specifically for Taskless
 
+> Note: In Taskless@2.x.x, the environment variables `TASKLESS_APP_SECRET` and `TASKLESS_PREVIOUS_APP_SECRETS` were used to refer to the per-queue secret. This was removed in v3 in favor of a project-level ID & Secret.
+
 **Development ENV Values** Additionally, the following env values may be useful in development.
 
 - `TASKLESS_DEV_ENDPOINT` (example: `http://localhost:8080/api/graphql`) Changes the GraphQL endpoint used for the Taskless dev server if the default port or path cannot be used

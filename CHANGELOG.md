@@ -4,6 +4,8 @@ Packages in this repository are synchronized on release, with a single changelog
 
 #### 💥 BREAKING CHANGES
 
+Version 3 of the Taskless Client makes use of the new project level secrets. Queue based secrets will continue to work with the v2 client, but going forward, you should migrate to the per-project secrets. In preparation for this change, docs are updated to reflect the new values.
+
 - **@taskless/client** the operations tied to legacy CRUD APIs are no longer available with 3.x. If you were using these, you can often replace `queue.update` with `queue.enqueue` and `queue.delete` with `queue.removeJob`. The `get` method did not offer a rich API experience, and it makes more sense for those calls to be made against the `for.taskless.io` API directly which is a full GraphQL service.
 - **@taskless/express** no longer exposes `queue.update`, `queue.delete`, and `queue.get`. See the change for `@taskless/client` for alternatives.
 - **@taskless/next** no longer exposes `queue.update`, `queue.delete`, and `queue.get`. See the change for `@taskless/client` for alternatives.

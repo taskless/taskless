@@ -5,7 +5,9 @@ interface QueueOptions {
   baseUrl?: string;
   separator?: string;
   credentials?: {
+    /** @deprecated */
     appId?: string;
+    projectId?: string;
     secret?: string;
     expiredSecrets?: string[];
   };
