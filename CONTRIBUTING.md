@@ -24,10 +24,14 @@ In the root of the repository, we have a few common files that affect nearly eve
 > 💽 The development environment for this repository does not support Windows. To contribute from Windows you must use WSL.
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device. (`git remote add upstream git@github.com:taskless/taskless.git` 😉). You can use `git clone --depth 1 --single-branch --branch main git@github.com:taskless/taskless.git`, discarding most of branches and history to clone it faster.
-2. Ensure [Node 14](https://nodejs.org/) is installed on your computer. (Check version with `node -v`). We have [Volta](https://volta.sh) defined on the root package.json to help out.
+2. Ensure at least [Node 14](https://nodejs.org/) is installed on your computer. (Check version with `node -v`). We have [Volta](https://volta.sh) defined on the root package.json to help out.
 3. Install the dependencies using yarn with `yarn install`
 
 > If this didn't work for you as described, please [open an issue.](https://github.com/taskless/taskless/issues/new/choose)
+
+This project uses Yarn workspaces, making it easy to build dependent pacakges outside of the package you're currently working on. The following command builds all dependencies of `@taskless/client` enabling you to then run `yarn dev` and make your changes. The command can be easily adapted to any package or example you're working on.
+
+`$PACKAGE=@taskless/client yarn workspaces foreach --from $PACKAGE -Rptiv run build`
 
 ## 📚 Updating Documentation
 
@@ -43,7 +47,8 @@ For consistency, this repository uses [Conventional Commits](https://www.convent
 
 To help land your contribution, please make sure of the following:
 
-- Remember to be concise in your Conventional Commit. These will enventually be automatically rolled up into an auto-generated CHANGELOG file
+- Remember to be concise in your Conventional Commit
+- If your change is a `fix`, `feat`, or breaking change, you must update the `CHANGELOG.md` file. We curate this manually for now.
 - If you modified anything in `packages/`:
   - You verified the transpiled TypeScript with `yarn build` in the directory of whichever package you modified.
   - Run `yarn test` to ensure all existing tests pass for that package, along with any new tests you would've written.
