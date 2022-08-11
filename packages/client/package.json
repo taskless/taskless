@@ -27,9 +27,9 @@
     "release:before:init": "run-s clean build test",
     "test": "ava",
     "watch": "run-p 'watch:**'",
-    "watch:cjs": "tsc -p tsconfig.cjs.json -w --preserveWatchOutput",
-    "watch:esm": "tsc -p tsconfig.esm.json -w --preserveWatchOutput",
-    "watch:types": "tsc -p tsconfig.types.json -w --preserveWatchOutput"
+    "watch:cjs": "yarn build:x:cjs -w --preserveWatchOutput",
+    "watch:esm": "yarn build:x:esm -w --preserveWatchOutput",
+    "watch:types": "yarn build:x:types -w --preserveWatchOutput"
   },
   "engines": {
     "node": ">=14.19.0"
