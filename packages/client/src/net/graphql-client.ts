@@ -21,9 +21,11 @@ export class GraphQLClient extends CoreGraphQLClient {
     const credentials: Record<string, string> = {};
 
     if (projectId && queueName && secret) {
+      // use new project level auth
+      credentials["x-taskless-auth-type"] = "project";
       credentials["x-taskless-id"] = projectId;
-      credentials["x-taskless-queue"] = queueName;
       credentials["x-taskless-secret"] = secret;
+      credentials["x-taskless-role"] = `queue/name:${queueName}`;
     } else if (appId && secret) {
       credentials["x-taskless-app-id"] = appId;
       credentials["x-taskless-secret"] = secret;

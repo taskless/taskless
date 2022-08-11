@@ -42,12 +42,10 @@ export type JobOptions = {
 
 /** Metadata regarding the currently running Job */
 export type JobMetadata = {
-  /** The application ID that made the request */
-  applicationId: string | null;
-  /** The organization ID that made the request */
-  organizationId: string | null;
-  /** A counter representing the number of attempts made */
-  attempt: number;
+  /** The name of the queue that made the request */
+  queue: string | null;
+  /** The project ID associated with the queue */
+  projectId: string | null;
   /** Was the payload's signature verified? */
   verified: boolean;
 };

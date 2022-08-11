@@ -30,12 +30,9 @@ const developmentQueueOptions: QueueOptions = IS_DEVELOPMENT
     }
   : {};
 
-const CURRENT_SECRET =
-  process.env.TASKLESS_SECRET ?? process.env.TASKLESS_APP_SECRET;
+const CURRENT_SECRET = process.env.TASKLESS_SECRET;
 
-const PREVIOUS_SECRETS =
-  process.env.TASKLESS_PREVIOUS_SECRETS ??
-  process.env.TASKLESS_PREVIOUS_APP_SECRETS;
+const PREVIOUS_SECRETS = process.env.TASKLESS_PREVIOUS_SECRETS;
 
 /** A set of default options for queue objects, taken from process.env */
 const productionQueueOptions: QueueOptions = {
@@ -46,17 +43,15 @@ const productionQueueOptions: QueueOptions = {
         .split(",")
         .map((s) => s.trim())
     : [],
-  credentials:
-    process.env.TASKLESS_APP_ID && process.env.TASKLESS_APP_SECRET
-      ? {
-          appId: process.env.TASKLESS_APP_ID,
-          projectId: process.env.TASKLESS_ID,
-          secret: CURRENT_SECRET,
-          expiredSecrets: PREVIOUS_SECRETS
-            ? `${PREVIOUS_SECRETS}`.split(",").map((s) => s.trim())
-            : [],
-        }
-      : undefined,
+  credentials: process.env.TASKLESS_ID
+    ? {
+        projectId: process.env.TASKLESS_ID,
+        secret: CURRENT_SECRET,
+        expiredSecrets: PREVIOUS_SECRETS
+          ? `${PREVIOUS_SECRETS}`.split(",").map((s) => s.trim())
+          : [],
+      }
+    : undefined,
 };
 
 /** Resolve the options into finalized queue options, including runtime safety */
@@ -70,10 +65,6 @@ export const resolveOptions = (
       productionQueueOptions?.baseUrl ??
       developmentQueueOptions?.baseUrl,
     credentials: {
-      appId:
-        additionalOptions?.credentials?.appId ??
-        productionQueueOptions?.credentials?.appId ??
-        developmentQueueOptions?.credentials?.appId,
       projectId:
         additionalOptions?.credentials?.projectId ??
         productionQueueOptions?.credentials?.projectId ??
@@ -105,8 +96,9 @@ export const resolveOptions = (
 
   // guard
   if (!Guards.Queue.isFinalizedQueueOptions(options)) {
+    console.error(options);
     throw new Error(
-      "You must either set TASKLESS_APP_ID and TASKLESS_APP_SECRET in process.env or pass these values in your queue options."
+      "You must either set TASKLESS_ID and TASKLESS_SECRET in process.env or pass these values in your queue options."
     );
   }
 

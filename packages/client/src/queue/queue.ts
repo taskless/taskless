@@ -201,9 +201,8 @@ export class Queue<T> {
 
     try {
       const result = await this.handler(payload, {
-        applicationId: firstOf(h["x-taskless-application"]) ?? null,
-        organizationId: firstOf(h["x-taskless-organization"]) ?? null,
-        attempt: parseInt(firstOf(h["x-taskless-attempt"]) ?? "0", 10),
+        queue: firstOf(h["x-taskless-queue"]) ?? null,
+        projectId: firstOf(h["x-taskless-id"]) ?? null,
         verified,
       });
       await send(JSON.parse(JSON.stringify(result ?? {})));
