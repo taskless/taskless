@@ -52,3 +52,10 @@ To help land your contribution, please make sure of the following:
 - If you modified anything in `packages/`:
   - You verified the transpiled TypeScript with `yarn build` in the directory of whichever package you modified.
   - Run `yarn test` to ensure all existing tests pass for that package, along with any new tests you would've written.
+
+## Additional Notes: Testing Against Production
+
+> This is more for the Taskless team, though you're welcome to bypass the Taskless Dev Server too!
+
+1. Create a `.env.local` in `examples/next` with `TASKLESS_ENV=production`, `TASKLESS_BASE_URL=https://webhook.site/<your-url>`, `TASKLESS_ID=<taskless-id>`, and `TASKLESS_SECRET=<your-secret>`.
+2. Start the next example app. You'll be able to queue a message from `http://localhost:3000/api/production`, and receive it by performing an XHR forward from webhook.site.
