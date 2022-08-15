@@ -1,7 +1,7 @@
 {
   "name": "@taskless/client",
   "description": "Core JavaScript client for Taskless.io",
-  "version": "3.0.0-next.3",
+  "version": "3.0.0-next.4",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -35,8 +35,8 @@
     "node": ">=14.19.0"
   },
   "dependencies": {
-    "@taskless/graphinql": "3.0.0-next.3",
-    "@taskless/types": "3.0.0-next.3",
+    "@taskless/graphinql": "3.0.0-next.4",
+    "@taskless/types": "3.0.0-next.4",
     "luxon": "2.4.0",
     "p-retry": "^4.6.2",
     "phin": "^3.6.1",
