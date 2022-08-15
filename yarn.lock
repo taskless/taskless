@@ -2002,9 +2002,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@release-it-plugins/workspaces@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@release-it-plugins/workspaces@npm:3.1.0"
+"@release-it-plugins/workspaces@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@release-it-plugins/workspaces@npm:3.2.0"
   dependencies:
     detect-indent: ^6.0.0
     detect-newline: ^3.1.0
@@ -2012,9 +2012,10 @@ __metadata:
     url-join: ^4.0.1
     validate-peer-dependencies: ^1.0.0
     walk-sync: ^2.0.2
+    yaml: ^2.1.1
   peerDependencies:
-    release-it: ^14.0.0 || ^15.1.3
-  checksum: 649f6efb178e62c16b47654e972ab432d3f924ab1fb8e57f9f624f1619fe997f2e9cfc50715ac0da53fddd5819bfa0db2f1080a0964c0be3d962cff4795c9446
+    release-it: ^14.0.0 || ^15.2.0
+  checksum: 24806c7cfc196f12b6083bffbf01d3111f4086dac0f3109b8395e121a1b08797db2d0ec899a26aa6cc650c6a8878048d519c6cf314eb8613ea1736993c8b06c6
   languageName: node
   linkType: hard
 
@@ -2029,6 +2030,13 @@ __metadata:
   version: 4.6.0
   resolution: "@sindresorhus/is@npm:4.6.0"
   checksum: 83839f13da2c29d55c97abc3bc2c55b250d33a0447554997a85c539e058e57b8da092da396e252b11ec24a0279a0bed1f537fa26302209327060643e327f81d2
+  languageName: node
+  linkType: hard
+
+"@sindresorhus/is@npm:^5.2.0":
+  version: 5.3.0
+  resolution: "@sindresorhus/is@npm:5.3.0"
+  checksum: b31cebabcdece3d5322de2a4dbc8c0f004e04147a00f2606787bcaf5655ad4b1954f6727fc6914c524009b2b9a2cc01c42835b55f651ce69fd2a0083b60bb852
   languageName: node
   linkType: hard
 
@@ -2074,12 +2082,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@taskless/client@3.0.0-next.2, @taskless/client@workspace:packages/client":
+"@taskless/client@3.0.0-next.3, @taskless/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@taskless/client@workspace:packages/client"
   dependencies:
-    "@taskless/graphinql": 3.0.0-next.2
-    "@taskless/types": 3.0.0-next.2
+    "@taskless/graphinql": 3.0.0-next.3
+    "@taskless/types": 3.0.0-next.3
     "@types/node": ^17.0.41
     ava: ^4.3.0
     graphql: ^16.5.0
@@ -2096,7 +2104,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/dev@3.0.0-next.2, @taskless/dev@workspace:packages/dev":
+"@taskless/dev@3.0.0-next.3, @taskless/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@taskless/dev@workspace:packages/dev"
   dependencies:
@@ -2105,10 +2113,10 @@ __metadata:
     "@tailwindcss/aspect-ratio": ^0.4.0
     "@tailwindcss/forms": ^0.5.0
     "@tailwindcss/typography": ^0.5.2
-    "@taskless/client": 3.0.0-next.2
-    "@taskless/graphinql": 3.0.0-next.2
-    "@taskless/types": 3.0.0-next.2
-    "@taskless/ui": 3.0.0-next.2
+    "@taskless/client": 3.0.0-next.3
+    "@taskless/graphinql": 3.0.0-next.3
+    "@taskless/types": 3.0.0-next.3
+    "@taskless/ui": 3.0.0-next.3
     "@types/eslint": ""
     "@types/luxon": ^2.3.1
     "@types/node": ^17.0.41
@@ -2157,12 +2165,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/express@3.0.0-next.2, @taskless/express@workspace:packages/express":
+"@taskless/express@3.0.0-next.3, @taskless/express@workspace:packages/express":
   version: 0.0.0-use.local
   resolution: "@taskless/express@workspace:packages/express"
   dependencies:
-    "@taskless/client": 3.0.0-next.2
-    "@taskless/types": 3.0.0-next.2
+    "@taskless/client": 3.0.0-next.3
+    "@taskless/types": 3.0.0-next.3
     "@types/express": ^4.17.13
     "@types/node": ^17.0.41
     ava: ^4.3.0
@@ -2179,7 +2187,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/graphinql@3.0.0-next.2, @taskless/graphinql@workspace:packages/graphinql":
+"@taskless/graphinql@3.0.0-next.3, @taskless/graphinql@workspace:packages/graphinql":
   version: 0.0.0-use.local
   resolution: "@taskless/graphinql@workspace:packages/graphinql"
   dependencies:
@@ -2195,12 +2203,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/next@3.0.0-next.2, @taskless/next@workspace:packages/next":
+"@taskless/next@3.0.0-next.3, @taskless/next@workspace:packages/next":
   version: 0.0.0-use.local
   resolution: "@taskless/next@workspace:packages/next"
   dependencies:
-    "@taskless/client": 3.0.0-next.2
-    "@taskless/types": 3.0.0-next.2
+    "@taskless/client": 3.0.0-next.3
+    "@taskless/types": 3.0.0-next.3
     "@types/node": ^17.0.41
     ava: ^4.3.0
     next: ^12.1.0
@@ -2232,7 +2240,7 @@ __metadata:
     "@graphql-codegen/typescript-generic-sdk": ^2.4.2
     "@graphql-codegen/typescript-operations": ^2.5.2
     "@next/eslint-plugin-next": ^12.2.4
-    "@release-it-plugins/workspaces": ^3.1.0
+    "@release-it-plugins/workspaces": ^3.2.0
     "@typescript-eslint/eslint-plugin": ^5.23.0
     "@typescript-eslint/parser": ^5.23.0
     eslint: ^8.10.0
@@ -2247,7 +2255,7 @@ __metadata:
     madge: ^5.0.1
     npm-run-all: ^4.1.5
     prettier: ^2.6.0
-    release-it: ^15.1.3
+    release-it: ^15.3.0
     shx: ^0.3.4
     syncpack: ^7.2.1
     tslib: ^2.4.0
@@ -2255,7 +2263,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/types@3.0.0-next.2, @taskless/types@workspace:packages/types":
+"@taskless/types@3.0.0-next.3, @taskless/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@taskless/types@workspace:packages/types"
   dependencies:
@@ -2270,7 +2278,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/ui@3.0.0-next.2, @taskless/ui@workspace:packages/ui":
+"@taskless/ui@3.0.0-next.3, @taskless/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@taskless/ui@workspace:packages/ui"
   dependencies:
@@ -4936,13 +4944,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decode-uri-component@npm:^0.2.0":
-  version: 0.2.0
-  resolution: "decode-uri-component@npm:0.2.0"
-  checksum: f3749344ab9305ffcfe4bfe300e2dbb61fc6359e2b736812100a3b1b6db0a5668cba31a05e4b45d4d63dbf1a18dfa354cd3ca5bb3ededddabb8cd293f4404f94
-  languageName: node
-  linkType: hard
-
 "decompress-response@npm:^6.0.0":
   version: 6.0.0
   resolution: "decompress-response@npm:6.0.0"
@@ -6311,13 +6312,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"filter-obj@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "filter-obj@npm:1.1.0"
-  checksum: cf2104a7c45ff48e7f505b78a3991c8f7f30f28bd8106ef582721f321f1c6277f7751aacd5d83026cb079d9d5091082f588d14a72e7c5d720ece79118fa61e10
-  languageName: node
-  linkType: hard
-
 "finalhandler@npm:1.2.0":
   version: 1.2.0
   resolution: "finalhandler@npm:1.2.0"
@@ -6425,6 +6419,13 @@ __metadata:
   version: 1.7.2
   resolution: "form-data-encoder@npm:1.7.2"
   checksum: aeebd87a1cb009e13cbb5e4e4008e6202ed5f6551eb6d9582ba8a062005178907b90f4887899d3c993de879159b6c0c940af8196725b428b4248cec5af3acf5f
+  languageName: node
+  linkType: hard
+
+"form-data-encoder@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "form-data-encoder@npm:2.0.1"
+  checksum: 66a8dd84d7fcbab5fdaec9382f29e26a12b625d491ddfd267c7c7b0bf5b41b142c51826d4b89155fa975c09ea32b67000b6d01074410d57d6a7adee7405754c0
   languageName: node
   linkType: hard
 
@@ -6743,22 +6744,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"git-up@npm:^4.0.0":
-  version: 4.0.5
-  resolution: "git-up@npm:4.0.5"
+"git-up@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "git-up@npm:6.0.0"
   dependencies:
-    is-ssh: ^1.3.0
-    parse-url: ^6.0.0
-  checksum: dd8f39a115ec0523b7da369cd4c6dc94a9b11fcc652e6fc9d011a93c287e27cc34e1d1c89cff8864f9ab11a1b2bea49786951d8eb3f1e5babd351afcc63f6135
+    is-ssh: ^1.4.0
+    parse-url: ^7.0.2
+  checksum: 145a1f546d7a078cdfc2616556e518e634d134e34a31c6bf2ed89e44158659cb525dbd451c338121f7107f55cef066d0b37a7bbf178555befc9304b3940b435e
   languageName: node
   linkType: hard
 
-"git-url-parse@npm:11.6.0":
-  version: 11.6.0
-  resolution: "git-url-parse@npm:11.6.0"
+"git-url-parse@npm:12.0.0":
+  version: 12.0.0
+  resolution: "git-url-parse@npm:12.0.0"
   dependencies:
-    git-up: ^4.0.0
-  checksum: 18a7d0bbac76c55fe8a501d4bd4c6b5f5528883a4dadcfce1152b4902e3e5831df8e97f36ea3f564de633e9ab44d9ab09bb2f319e41af1b6e4f627af139d35d5
+    git-up: ^6.0.0
+  checksum: b4c8530b816202ecf9d4dabf755f785a314a096b56145018385b3d7171e862f9d0d9b38cce620c0af354b269750fe7b2d9aa95815c7150922090a11dac4ab1e6
   languageName: node
   linkType: hard
 
@@ -6935,7 +6936,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"got@npm:12.1.0, got@npm:^12.1.0":
+"got@npm:12.3.1":
+  version: 12.3.1
+  resolution: "got@npm:12.3.1"
+  dependencies:
+    "@sindresorhus/is": ^5.2.0
+    "@szmarczak/http-timer": ^5.0.1
+    "@types/cacheable-request": ^6.0.2
+    "@types/responselike": ^1.0.0
+    cacheable-lookup: ^6.0.4
+    cacheable-request: ^7.0.2
+    decompress-response: ^6.0.0
+    form-data-encoder: ^2.0.1
+    get-stream: ^6.0.1
+    http2-wrapper: ^2.1.10
+    lowercase-keys: ^3.0.0
+    p-cancelable: ^3.0.0
+    responselike: ^2.0.0
+  checksum: 156bc4dd7300b5945a2648b18d03610a674d9d3ae54c557f85cf5026f3f6362801b561413898d5e86f554791de88841685ca48674b1fc4d462621de8d2186300
+  languageName: node
+  linkType: hard
+
+"got@npm:^12.1.0":
   version: 12.1.0
   resolution: "got@npm:12.1.0"
   dependencies:
@@ -7431,9 +7453,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inquirer@npm:9.0.2":
-  version: 9.0.2
-  resolution: "inquirer@npm:9.0.2"
+"inquirer@npm:9.1.0":
+  version: 9.1.0
+  resolution: "inquirer@npm:9.1.0"
   dependencies:
     ansi-escapes: ^5.0.0
     chalk: ^5.0.1
@@ -7450,7 +7472,7 @@ __metadata:
     strip-ansi: ^7.0.1
     through: ^2.3.6
     wrap-ansi: ^8.0.1
-  checksum: 59dceecd4560374e9b8a8ca766320e6a60379f256fc66636ad0bf14ffb22391719ed3dec0bca066e11ba077ba29e899426aef5caa19e406161006a3700ab269a
+  checksum: dec2a062c0710396e14712bff6e08c0f150ab1021754ab9f66d600dd828abea4263b49ddbf8d100173843cb14cbe790abb8d5d5b2ae9e11b222324638c9674f2
   languageName: node
   linkType: hard
 
@@ -7879,12 +7901,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-ssh@npm:^1.3.0":
-  version: 1.3.3
-  resolution: "is-ssh@npm:1.3.3"
+"is-ssh@npm:^1.4.0":
+  version: 1.4.0
+  resolution: "is-ssh@npm:1.4.0"
   dependencies:
-    protocols: ^1.1.0
-  checksum: 7a751facad3c61abf080eefe4f5df488d37f690ac2b130a8012001ecee4d7991306561bcb25896894d19268ea0512b20497f243e74d21c5901187a8f55f1c08c
+    protocols: ^2.0.1
+  checksum: 75eaa17b538bee24b661fbeb0f140226ac77e904a6039f787bea418431e2162f1f9c4c4ccad3bd169e036cd701cc631406e8c505d9fa7e20164e74b47f86f40f
   languageName: node
   linkType: hard
 
@@ -9625,14 +9647,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:3.2.9":
-  version: 3.2.9
-  resolution: "node-fetch@npm:3.2.9"
+"node-fetch@npm:3.2.10":
+  version: 3.2.10
+  resolution: "node-fetch@npm:3.2.10"
   dependencies:
     data-uri-to-buffer: ^4.0.0
     fetch-blob: ^3.1.4
     formdata-polyfill: ^4.0.10
-  checksum: ba421350b2dbab67d8068f9d24f30ef8b9a37a3f83388d2efaf79628de754c85df81829c009579ea5562a2b11d9f07ecd21d27b5b8bed0cb393b92abe4817a75
+  checksum: e65322431f4897ded04197aa5923eaec63a8d53e00432de4e70a4f7006625c8dc32629c5c35f4fe8ee719a4825544d07bf53f6e146a7265914262f493e8deac1
   languageName: node
   linkType: hard
 
@@ -10309,27 +10331,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse-path@npm:^4.0.0":
-  version: 4.0.3
-  resolution: "parse-path@npm:4.0.3"
+"parse-path@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "parse-path@npm:5.0.0"
   dependencies:
-    is-ssh: ^1.3.0
-    protocols: ^1.4.0
-    qs: ^6.9.4
-    query-string: ^6.13.8
-  checksum: d1704c0027489b64838c608c3f075fe3599c18a7413fa92e7074a0157e5bcc1a4ef73e7ae9bd9dbf5fad1809137437310cc69a57e5f5130ea17226165f3e942a
+    protocols: ^2.0.0
+  checksum: e9f670559cd8e535f39f548bf5d41ad96a220190ea98df33d0babd9dfaa7c3c70ee2e55394078517d5e7e93c6a39c8eac1261ed3f9e68033656614fc954262e8
   languageName: node
   linkType: hard
 
-"parse-url@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "parse-url@npm:6.0.0"
+"parse-url@npm:^7.0.2":
+  version: 7.0.2
+  resolution: "parse-url@npm:7.0.2"
   dependencies:
-    is-ssh: ^1.3.0
+    is-ssh: ^1.4.0
     normalize-url: ^6.1.0
-    parse-path: ^4.0.0
-    protocols: ^1.4.0
-  checksum: 6b680d1fdfba15fc54106c1130540bf61a415bc3085351b8609a213b2fdf551c53ec8d32703d8ea9b6c5fbf2da92ee1593c99f682032512b15ce87f9013d2a39
+    parse-path: ^5.0.0
+    protocols: ^2.0.1
+  checksum: 3e26852706bebe9fac409909316716dee52883d2fb5c82d65577effba1507abb7bc42bb59ce0ba6c8659168fb99acf89000bd8fe096ed3ad7124fa85227436d7
   languageName: node
   linkType: hard
 
@@ -10778,10 +10797,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"protocols@npm:^1.1.0, protocols@npm:^1.4.0":
-  version: 1.4.8
-  resolution: "protocols@npm:1.4.8"
-  checksum: 2d555c013df0b05402970f67f7207c9955a92b1d13ffa503c814b5fe2f6dde7ac6a03320e0975c1f5832b0113327865e0b3b28bfcad023c25ddb54b53fab8684
+"protocols@npm:^2.0.0, protocols@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "protocols@npm:2.0.1"
+  checksum: 4a9bef6aa0449a0245ded319ac3cbfd032c3e76ebb562777037a3a832c99253d0e8bc2847f7be350236df620a11f7d4fe683ea7f59a2cc14c69f746b6259eda4
   languageName: node
   linkType: hard
 
@@ -10851,24 +10870,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:6.10.3, qs@npm:^6.9.4":
+"qs@npm:6.10.3":
   version: 6.10.3
   resolution: "qs@npm:6.10.3"
   dependencies:
     side-channel: ^1.0.4
   checksum: 0fac5e6c7191d0295a96d0e83c851aeb015df7e990e4d3b093897d3ac6c94e555dbd0a599739c84d7fa46d7fee282d94ba76943983935cf33bba6769539b8019
-  languageName: node
-  linkType: hard
-
-"query-string@npm:^6.13.8":
-  version: 6.14.1
-  resolution: "query-string@npm:6.14.1"
-  dependencies:
-    decode-uri-component: ^0.2.0
-    filter-obj: ^1.1.0
-    split-on-first: ^1.0.0
-    strict-uri-encode: ^2.0.0
-  checksum: f2c7347578fa0f3fd4eaace506470cb4e9dc52d409a7ddbd613f614b9a594d750877e193b5d5e843c7477b3b295b857ec328903c943957adc41a3efb6c929449
   languageName: node
   linkType: hard
 
@@ -11139,9 +11146,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"release-it@npm:^15.1.3":
-  version: 15.1.3
-  resolution: "release-it@npm:15.1.3"
+"release-it@npm:^15.3.0":
+  version: 15.3.0
+  resolution: "release-it@npm:15.3.0"
   dependencies:
     "@iarna/toml": 2.2.5
     "@octokit/rest": 19.0.3
@@ -11150,15 +11157,15 @@ __metadata:
     cosmiconfig: 7.0.1
     execa: 6.1.0
     form-data: 4.0.0
-    git-url-parse: 11.6.0
+    git-url-parse: 12.0.0
     globby: 13.1.2
-    got: 12.1.0
-    inquirer: 9.0.2
+    got: 12.3.1
+    inquirer: 9.1.0
     is-ci: 3.0.1
     lodash: 4.17.21
     mime-types: 2.1.35
     new-github-release-url: 2.0.0
-    node-fetch: 3.2.9
+    node-fetch: 3.2.10
     open: 8.4.0
     ora: 6.1.2
     os-name: 5.0.1
@@ -11169,10 +11176,10 @@ __metadata:
     update-notifier: 6.0.2
     url-join: 5.0.0
     wildcard-match: 5.1.2
-    yargs-parser: 21.0.1
+    yargs-parser: 21.1.1
   bin:
     release-it: bin/release-it.js
-  checksum: dce1ff291944cf3519c73bd2108be9fd71e80fd0bbcc86bc9a4ed9cfbe1027fda9d09e12cfa8b0321b0bb74e5c4d3b21d66171cda1f3669f1563fd409df0ca8f
+  checksum: f66dbfc0ec89420c65dfd90abd51d13ddab7b3234f5e077438482ade87f4b234dd0a70bd6591a4548c28f806fd06f3a41830b55840ea9b46d004b52ff180855e
   languageName: node
   linkType: hard
 
@@ -11977,13 +11984,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"split-on-first@npm:^1.0.0":
-  version: 1.1.0
-  resolution: "split-on-first@npm:1.1.0"
-  checksum: 16ff85b54ddcf17f9147210a4022529b343edbcbea4ce977c8f30e38408b8d6e0f25f92cd35b86a524d4797f455e29ab89eb8db787f3c10708e0b47ebf528d30
-  languageName: node
-  linkType: hard
-
 "split2@npm:^3.0.0":
   version: 3.2.2
   resolution: "split2@npm:3.2.2"
@@ -12052,13 +12052,6 @@ __metadata:
   version: 1.1.0
   resolution: "streamsearch@npm:1.1.0"
   checksum: 1cce16cea8405d7a233d32ca5e00a00169cc0e19fbc02aa839959985f267335d435c07f96e5e0edd0eadc6d39c98d5435fb5bbbdefc62c41834eadc5622ad942
-  languageName: node
-  linkType: hard
-
-"strict-uri-encode@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "strict-uri-encode@npm:2.0.0"
-  checksum: eaac4cf978b6fbd480f1092cab8b233c9b949bcabfc9b598dd79a758f7243c28765ef7639c876fa72940dac687181b35486ea01ff7df3e65ce3848c64822c581
   languageName: node
   linkType: hard
 
@@ -12470,8 +12463,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express-ts@workspace:examples/express-ts"
   dependencies:
-    "@taskless/dev": 3.0.0-next.2
-    "@taskless/express": 3.0.0-next.2
+    "@taskless/dev": 3.0.0-next.3
+    "@taskless/express": 3.0.0-next.3
     "@types/express": ^4.17.13
     "@types/node": ^17.0.41
     concurrently: ^7.0.0
@@ -12487,8 +12480,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-express@workspace:examples/express"
   dependencies:
-    "@taskless/dev": 3.0.0-next.2
-    "@taskless/express": 3.0.0-next.2
+    "@taskless/dev": 3.0.0-next.3
+    "@taskless/express": 3.0.0-next.3
     concurrently: ^7.0.0
     cookie-parser: ~1.4.4
     debug: ~2.6.9
@@ -12504,8 +12497,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "taskless-example-next@workspace:examples/next"
   dependencies:
-    "@taskless/dev": 3.0.0-next.2
-    "@taskless/next": 3.0.0-next.2
+    "@taskless/dev": 3.0.0-next.3
+    "@taskless/next": 3.0.0-next.3
     "@types/eslint": ""
     "@types/luxon": ^2.3.1
     "@types/node": ^17.0.41
@@ -13599,10 +13592,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs-parser@npm:21.0.1, yargs-parser@npm:^21.0.0":
-  version: 21.0.1
-  resolution: "yargs-parser@npm:21.0.1"
-  checksum: c3ea2ed12cad0377ce3096b3f138df8267edf7b1aa7d710cd502fe16af417bafe4443dd71b28158c22fcd1be5dfd0e86319597e47badf42ff83815485887323a
+"yaml@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "yaml@npm:2.1.1"
+  checksum: f48bb209918aa57cfaf78ef6448d1a1f8187f45c746f933268b7023dc59e5456004611879126c9bb5ea55b0a2b1c2b392dfde436931ece0c703a3d754562bb96
+  languageName: node
+  linkType: hard
+
+"yargs-parser@npm:21.1.1":
+  version: 21.1.1
+  resolution: "yargs-parser@npm:21.1.1"
+  checksum: ed2d96a616a9e3e1cc7d204c62ecc61f7aaab633dcbfab2c6df50f7f87b393993fe6640d017759fe112d0cb1e0119f2b4150a87305cc873fd90831c6a58ccf1c
   languageName: node
   linkType: hard
 
@@ -13620,6 +13620,13 @@ __metadata:
   version: 20.2.9
   resolution: "yargs-parser@npm:20.2.9"
   checksum: 8bb69015f2b0ff9e17b2c8e6bfe224ab463dd00ca211eece72a4cd8a906224d2703fb8a326d36fdd0e68701e201b2a60ed7cf81ce0fd9b3799f9fe7745977ae3
+  languageName: node
+  linkType: hard
+
+"yargs-parser@npm:^21.0.0":
+  version: 21.0.1
+  resolution: "yargs-parser@npm:21.0.1"
+  checksum: c3ea2ed12cad0377ce3096b3f138df8267edf7b1aa7d710cd502fe16af417bafe4443dd71b28158c22fcd1be5dfd0e86319597e47badf42ff83815485887323a
   languageName: node
   linkType: hard
 
