@@ -2,7 +2,7 @@ import {
   GraphQLClient as CoreGraphQLClient,
   RequestOptions,
 } from "@taskless/graphinql";
-import { IS_PRODUCTION } from "../constants.js";
+import { IS_DEVELOPMENT } from "../constants.js";
 
 interface TasklessRequestOptions extends RequestOptions {
   appId?: string;
@@ -29,12 +29,12 @@ export class GraphQLClient extends CoreGraphQLClient {
     } else if (appId && secret) {
       credentials["x-taskless-app-id"] = appId;
       credentials["x-taskless-secret"] = secret;
-    } else if (IS_PRODUCTION) {
-      throw new Error(
+    } else if (IS_DEVELOPMENT) {
+      console.warn(
         "Missing credentials: either TASKLESS_ID/TASKLESS_SECRET or TASKLESS_APP_ID/TASKLESS_SECRET"
       );
     } else {
-      console.warn(
+      throw new Error(
         "Missing credentials: either TASKLESS_ID/TASKLESS_SECRET or TASKLESS_APP_ID/TASKLESS_SECRET"
       );
     }
