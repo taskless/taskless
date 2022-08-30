@@ -159,7 +159,10 @@ export class Queue<T> {
     const creds = this.queueOptions.credentials;
     let endpoint: string = TASKLESS_ENDPOINT;
     if (IS_DEVELOPMENT) {
-      endpoint = process.env.TASKLESS_DEV_ENDPOINT ?? TASKLESS_DEV_ENDPOINT;
+      endpoint =
+        process.env.TASKLESS_ENDPOINT ??
+        process.env.TASKLESS_DEV_ENDPOINT ??
+        TASKLESS_DEV_ENDPOINT;
     } else if (IS_PRODUCTION) {
       endpoint = process.env.TASKLESS_ENDPOINT ?? TASKLESS_ENDPOINT;
     }
