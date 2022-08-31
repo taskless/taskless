@@ -1,6 +1,12 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
-# 3.0.0 - next
+# 3.0.1 - released August 30, 2022
+
+#### 🔧 Fixes
+
+- **@taskless/client** Respects `process.env.TASKLESS_ENDPOINT` when running in development mode
+
+# 3.0.0 - released August 23, 2022
 
 #### 💥 BREAKING CHANGES
 
