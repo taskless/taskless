@@ -37,7 +37,7 @@
   "dependencies": {
     "@taskless/graphinql": "3.0.1",
     "@taskless/types": "3.0.1",
-    "luxon": "2.4.0",
+    "luxon": "^3.0.3",
     "serialize-error": "^11.0.0",
     "tslib": "^2.4.0",
     "zod": "^3.19.1"
