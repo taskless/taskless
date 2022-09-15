@@ -19,7 +19,6 @@ export class GraphQLClient extends CoreGraphQLClient {
     const { appId, secret, projectId, queueName, ...rest } = options;
 
     const credentials: Record<string, string> = {};
-
     if (projectId && queueName && secret) {
       // use new project level auth
       credentials["x-taskless-auth-type"] = "project";

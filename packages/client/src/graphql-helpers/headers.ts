@@ -1,8 +1,12 @@
-import { type HeaderInputType } from "../__generated__/schema.js";
-import { type JobHeaders } from "@taskless/types";
+import {
+  type JobHeaders,
+  type EnqueueJobInputHeadersType,
+} from "@taskless/types";
 
 /** Convert optional headers into a GraphQL friendly header input */
-export const headersToGql = (h?: JobHeaders): HeaderInputType[] | undefined => {
+export const headersToGql = (
+  h?: JobHeaders
+): EnqueueJobInputHeadersType | undefined => {
   if (!h || typeof h === "undefined") {
     return undefined;
   }
@@ -24,7 +28,9 @@ export const headersToGql = (h?: JobHeaders): HeaderInputType[] | undefined => {
 };
 
 /** Convert a GraphQL header payload into request-friendly JSON structure */
-export const gqlToHeaders = (h?: HeaderInputType[] | null): JobHeaders => {
+export const gqlToHeaders = (
+  h?: EnqueueJobInputHeadersType | null
+): JobHeaders => {
   if (!h) return {};
 
   return h.reduce<JobHeaders>((all, curr) => {

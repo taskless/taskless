@@ -24,10 +24,10 @@ import { CreateJobModal, Fields } from "components/Modals/CreateJob";
 import Link from "next/link";
 import {
   EnqueueJobMutation,
-  EnqueueJobMutationVariables,
-} from "__generated__/schema";
+  EnqueueJobMutationArguments,
+  graphql,
+} from "@taskless/types";
 import { getClient } from "graphql/client";
-import type { OutgoingHttpHeaders } from "http";
 
 const getJobs: QueryFunction<
   GetJobsResponse,
@@ -73,10 +73,13 @@ const replayJob: MutationFunction<
 
 const upsertJob: MutationFunction<
   EnqueueJobMutation,
-  { headers?: OutgoingHttpHeaders; variables: EnqueueJobMutationVariables }
-> = async (args) => {
-  const client = getClient(args.headers);
-  const response = await client.enqueueJob(args.variables);
+  EnqueueJobMutationArguments
+> = async (variables) => {
+  const client = getClient();
+  const response = await client.request<
+    EnqueueJobMutation,
+    EnqueueJobMutationArguments
+  >(graphql.enqueueJobMutationDocument, variables);
   return response;
 };
 
@@ -143,19 +146,13 @@ const Home: NextPage = () => {
       };
 
       upsert({
-        headers: {
-          "x-taskless-queue": d.queueName ?? undefined,
-          "x-takless-secret": d.secret ?? undefined,
-        },
-        variables: {
-          name: d.name,
-          job: {
-            endpoint: d.endpoint,
-            runAt: undefString(d.runAt),
-            runEvery: undefString(d.runEvery),
-            headers,
-            body: undefString(d.body),
-          },
+        name: d.name,
+        job: {
+          endpoint: d.endpoint,
+          runAt: undefString(d.runAt),
+          runEvery: undefString(d.runEvery),
+          headers,
+          body: undefString(d.body),
         },
       });
 

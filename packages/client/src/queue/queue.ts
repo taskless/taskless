@@ -1,5 +1,10 @@
 import {
-  type FinalizedQueueOptions,
+  parsers,
+  graphql,
+  type CancelJobMutation,
+  type CancelJobMutationArguments,
+  type EnqueueJobMutation,
+  type EnqueueJobMutationArguments,
   type Job,
   type JobHandler,
   type JobIdentifier,
@@ -9,7 +14,6 @@ import {
   type TasklessBody,
 } from "@taskless/types";
 import { DateTime } from "luxon";
-
 import {
   IS_DEVELOPMENT,
   IS_PRODUCTION,
@@ -18,11 +22,9 @@ import {
 } from "../constants.js";
 import { JobError } from "../error.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
-import { addTypings } from "../net/addTypings.js";
 import { GraphQLClient } from "../net/graphql-client.js";
-import { JobMethodEnum } from "../__generated__/schema.js";
 import { decode, encode, sign, verify } from "./encoder.js";
-import { resolveJobOptions, resolveOptions } from "./util.js";
+import { resolveJobOptions } from "./util.js";
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -61,16 +63,11 @@ const firstOf = <T>(unk: T | T[]): T => {
 export class Queue<T> {
   private route: string | (() => string);
   private handler?: JobHandler<T>;
-  private queueOptions: FinalizedQueueOptions;
+  private queueOptions: QueueOptions;
   private queueName: string;
 
   constructor(args: TasklessQueueConfig<T>) {
-    const options = resolveOptions(args.queueOptions);
-
-    this.queueOptions = {
-      ...options,
-    };
-
+    this.queueOptions = parsers.queueOptions.parse(args.queueOptions ?? {});
     this.queueName = args.name;
     this.route = args.route;
     this.handler = args.handler;
@@ -92,7 +89,7 @@ export class Queue<T> {
       v: 1,
       transport,
       text,
-      signature: sign(text, this.queueOptions.credentials.secret),
+      signature: sign(text, this.queueOptions.credentials.secret ?? ""),
     };
   }
 
@@ -105,33 +102,53 @@ export class Queue<T> {
       throw new Error("Unsupported Taskless Envelope");
     }
 
-    const ver = verify(
-      body.text,
-      [
-        this.queueOptions.credentials.secret,
-        ...(this.queueOptions.credentials.expiredSecrets ?? []),
-      ],
-      body.signature
-    );
+    let checked = false;
+    let ver = false;
+    let payload: T | undefined;
+
+    // verify and decode text in the body
+    if ("text" in body) {
+      ver = verify(
+        body.text,
+        [
+          this.queueOptions.credentials.secret,
+          ...(this.queueOptions.credentials.expiredSecrets ?? []),
+        ],
+        body.signature
+      );
+
+      payload = decode<T>(
+        body.text,
+        body.transport,
+        [
+          this.queueOptions.encryptionKey,
+          ...(this.queueOptions.expiredEncryptionKeys ?? []),
+        ].filter((t) => t)
+      );
+
+      checked = true;
+    }
+
+    // decode json from the body as unverified data text > json
+    if (!checked && "json" in body) {
+      payload = body.json as unknown as T;
+      ver = false;
+      checked = true;
+    }
+
+    if (!checked || typeof payload === "undefined") {
+      throw new TypeError("Unrecognized payload body");
+    }
 
     if (!ver && !allowUnsigned) {
       if (!IS_DEVELOPMENT) {
         throw new Error("Signature mismatch");
       } else {
         console.error(
-          "Signature mismatch. This can happen if you've enqueued a job with one secret, but dequeued the job with another. In production, this will throw an error."
+          "Signature mismatch or no signature available. This can happen if you've enqueued a job with one secret, but dequeued the job with another. In production, this will throw an error."
         );
       }
     }
-
-    const payload = decode<T>(
-      body.text,
-      body.transport,
-      [
-        this.queueOptions.encryptionKey,
-        ...(this.queueOptions.expiredEncryptionKeys ?? []),
-      ].filter((t) => t)
-    );
 
     return { payload, verified: ver };
   }
@@ -167,14 +184,27 @@ export class Queue<T> {
       endpoint = process.env.TASKLESS_ENDPOINT ?? TASKLESS_ENDPOINT;
     }
 
-    const client = new GraphQLClient(endpoint, {
-      appId: creds.appId,
-      projectId: creds.projectId,
-      queueName: this.queueName,
-      secret: creds.secret,
-    });
+    if ("projectId" in creds) {
+      return new GraphQLClient(endpoint, {
+        projectId: creds.projectId ?? undefined,
+        queueName: this.queueName,
+        secret: creds.secret ?? undefined,
+      });
+    }
 
-    return addTypings(client);
+    if ("appId" in creds) {
+      return new GraphQLClient(endpoint, {
+        appId: creds.appId ?? undefined,
+        queueName: this.queueName,
+        secret: creds.secret ?? undefined,
+      });
+    }
+
+    return new GraphQLClient(endpoint, {
+      projectId: undefined,
+      queueName: this.queueName,
+      secret: undefined,
+    });
   }
 
   /**
@@ -240,6 +270,12 @@ export class Queue<T> {
     options?: JobOptions
   ): Promise<Job<T>> {
     const opts = resolveJobOptions(
+      {
+        headers: {
+          // actions are always json unless overridden
+          "content-type": "application/json",
+        },
+      },
       this.queueOptions.defaultJobOptions,
       options
     );
@@ -247,18 +283,27 @@ export class Queue<T> {
     const body = this.wrapPayload(payload);
     const resolvedName = this.packName(name);
 
-    const job = await client.enqueueJob({
+    let runAt: string | undefined = DateTime.now().toISO();
+    if (opts.runAt instanceof Date) {
+      runAt = DateTime.fromJSDate(opts.runAt).toISO();
+    } else if (typeof opts.runAt === "string") {
+      runAt = opts.runAt;
+    } else if (typeof opts.runAt === "undefined") {
+      runAt = undefined;
+    }
+
+    const job = await client.request<
+      EnqueueJobMutation,
+      EnqueueJobMutationArguments
+    >(graphql.enqueueJobMutationDocument, {
       name: resolvedName,
       job: {
         endpoint: this.resolveRoute(),
-        method: JobMethodEnum.Post,
+        method: "POST",
         headers: headersToGql(opts.headers),
         body: JSON.stringify(body),
         retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
-        runAt:
-          opts.runAt === null
-            ? DateTime.now().toISO()
-            : opts.runAt ?? undefined,
+        runAt,
         runEvery: opts.runEvery === null ? null : opts.runEvery ?? undefined,
       },
     });
@@ -294,7 +339,10 @@ export class Queue<T> {
     const client = this.getClient();
     const resolvedName = this.packName(name);
 
-    const job = await client.cancelJob({
+    const job = await client.request<
+      CancelJobMutation,
+      CancelJobMutationArguments
+    >(graphql.cancelJobMutationDocument, {
       name: resolvedName,
     });
 

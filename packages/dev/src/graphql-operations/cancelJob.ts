@@ -1,14 +1,14 @@
+import {
+  type CancelJobMutation,
+  type CancelJobMutationArguments,
+} from "@taskless/types";
 import { DateTime } from "luxon";
 import { getJobsCollection, JobDoc } from "mongo/collections";
 import { getQueue } from "mongo/mq";
 import { Context } from "types";
-import {
-  CancelJobMutation,
-  CancelJobMutationVariables,
-} from "__generated__/schema";
 
 export const cancelJob = async (
-  variables: CancelJobMutationVariables,
+  variables: CancelJobMutationArguments,
   context: Context
 ): Promise<CancelJobMutation> => {
   const id = context.v5(variables.name);
@@ -37,26 +37,26 @@ export const cancelJob = async (
       }
     );
 
-    if (!result.value) {
-      throw new Error("TODO");
-    }
-    doc = result.value;
+    doc = result.value ?? undefined;
   });
 
   if (typeof doc === "undefined") {
-    throw new Error("TODO");
+    // nothing to remove, null cancelJob
+    return {
+      cancelJob: null,
+    };
   }
 
   return {
     cancelJob: {
-      __typename: "Job",
+      id: doc.v5id,
       name: doc.name,
       endpoint: doc.endpoint,
       enabled: true,
       retries: doc.retries,
       runAt: DateTime.fromJSDate(doc.runAt).toISO(),
       runEvery: doc.runEvery,
-      headers: doc.headers,
+      headers: doc.headers ? JSON.parse(doc.headers) : null,
       body: doc.body,
     },
   };

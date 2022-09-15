@@ -38,16 +38,13 @@
     "@taskless/graphinql": "3.0.1",
     "@taskless/types": "3.0.1",
     "luxon": "2.4.0",
-    "p-retry": "^4.6.2",
-    "phin": "^3.6.1",
     "serialize-error": "^11.0.0",
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.0",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@types/node": "^17.0.41",
     "ava": "^4.3.0",
-    "graphql": "^16.5.0",
-    "graphql-tag": "^2.12.6",
     "npm-run-all": "^4.1.5",
     "shx": "^0.3.4",
     "ts-node": "^10.8.1",

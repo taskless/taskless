@@ -80,8 +80,8 @@ export const sign = (input: string, secret: string): string => {
 /** Verify a string against a set of secret tokens */
 export const verify = (
   input: string,
-  secrets: string[],
-  signature: string
+  secrets: (string | null)[],
+  signature?: string
 ): boolean => {
   for (const s of secrets) {
     if (!s) continue;
@@ -183,9 +183,10 @@ const decodeOne = (
 export const decode = <T>(
   text: string,
   transport: Transport,
-  secrets: (string | undefined)[]
+  secrets: (string | null | undefined)[]
 ): T => {
   for (const secret of secrets.concat(undefined)) {
+    if (secret === null) continue;
     try {
       // break on success
       const result = decodeOne(text, transport, secret);

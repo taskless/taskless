@@ -1,25 +1,95 @@
-import { isCipherEnvelope } from "./types/ciphers.guard.js";
-import { isJob } from "./types/job.guard.js";
-import { isFinalizedQueueOptions } from "./types/queue.guard.js";
-import { isTasklessBody, isTransport } from "./types/tasklessBody.guard.js";
+import {
+  type CipherEnvelope,
+  cipherEnvelope,
+  type SupportedCipher,
+} from "./ciphers.js";
+import {
+  job,
+  jobOptions,
+  type Job,
+  type JobHeaders,
+  type JobIdentifier,
+  type JobOptions,
+} from "./job.js";
+import {
+  queueOptions,
+  type QueueOptions,
+  type ReceiveCallbacks,
+  type JobHandler,
+  type CreateQueueMethods,
+} from "./queue.js";
+import {
+  type TasklessBody,
+  tasklessBody,
+  transport,
+  type Transport,
+} from "./tasklessBody.js";
+import { json, type Json } from "./json.js";
+import {
+  cancelJobMutationArguments,
+  cancelJobMutationDocument,
+  cancelJobMutationResult,
+  enqueueJobMutationArguments,
+  enqueueJobMutationDocument,
+  enqueueJobMutationResult,
+  type CancelJobMutation,
+  type CancelJobMutationArguments,
+  type EnqueueJobMutation,
+  type EnqueueJobMutationArguments,
+  type EnqueueJobInputHeadersType,
+} from "./graphql.js";
 
-export * from "./types/ciphers.js";
-export * from "./types/job.js";
-export * from "./types/queue.js";
-export * from "./types/tasklessBody.js";
+export type {
+  // externally used
+  JobHeaders,
+  Job,
+  JobHandler,
+  JobIdentifier,
+  JobOptions,
+  QueueOptions,
+  TasklessBody,
+  // usually internal
+  CreateQueueMethods,
+  Json,
+  ReceiveCallbacks,
+  SupportedCipher,
+  Transport,
+  // almost definitely internal
+  CancelJobMutation,
+  CancelJobMutationArguments,
+  EnqueueJobMutation,
+  EnqueueJobMutationArguments,
+  EnqueueJobInputHeadersType,
+};
 
-export const Guards = {
-  Cipher: {
-    isCipherEnvelope,
+export const parsers = {
+  json,
+  job,
+  jobOptions,
+  queueOptions,
+  tasklessBody,
+};
+
+export const graphql = {
+  cancelJobMutationArguments,
+  cancelJobMutationDocument,
+  cancelJobMutationResult,
+  enqueueJobMutationArguments,
+  enqueueJobMutationDocument,
+  enqueueJobMutationResult,
+};
+
+export const guards = {
+  isCipherEnvelope: (v: unknown): v is CipherEnvelope => {
+    return cipherEnvelope.safeParse(v).success;
   },
-  Job: {
-    isJob,
+  isJob: (v: unknown): v is Job<unknown> => {
+    return job.safeParse(v).success;
   },
-  Queue: {
-    isFinalizedQueueOptions,
+  isTasklessBody: (v: unknown): v is TasklessBody => {
+    return tasklessBody.safeParse(v).success;
   },
-  TasklessBody: {
-    isTasklessBody,
-    isTransport,
+  isTransport: (v: unknown): v is Transport => {
+    return transport.safeParse(v).success;
   },
-} as const;
+};

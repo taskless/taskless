@@ -1,6 +1,6 @@
 import { Queue } from "@taskless/client";
 import {
-  Guards,
+  guards,
   type CreateQueueMethods,
   type JobHandler,
   type QueueOptions,
@@ -76,7 +76,7 @@ export function createQueue<T = undefined>(
     name,
     route,
     handler,
-    queueOptions: queueOptions ?? {},
+    queueOptions,
   });
 
   const handle: TasklessNextApiHandler<T> = async (
@@ -85,7 +85,7 @@ export function createQueue<T = undefined>(
   ) => {
     return await t.receive({
       getBody: () => {
-        if (Guards.TasklessBody.isTasklessBody(req.body)) {
+        if (guards.isTasklessBody(req.body)) {
           return req.body;
         }
         throw new Error("req.body does not match a Taskless payload");

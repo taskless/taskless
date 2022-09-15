@@ -1,19 +1,16 @@
-import { GraphQLClient, RequestOptions } from "@taskless/graphinql";
-import type { OutgoingHttpHeaders } from "http";
-import { getSdk } from "__generated__/schema";
+import { GraphQLClient as CoreGraphQLClient } from "@taskless/graphinql";
 
-export const getClient = (headers?: OutgoingHttpHeaders) => {
-  const rel =
-    typeof window === "undefined"
-      ? "http://localhost:3001"
-      : window.location.href;
-  const url = new URL("/api/graphql", rel);
-  const c = new GraphQLClient(url, {
-    headers: headers as HeadersInit,
-  });
+/**
+ * Extends the GraphinQL client to explicitly check for an app ID and secret
+ */
+export class GraphQLClient extends CoreGraphQLClient {
+  constructor() {
+    if (typeof window !== "undefined") {
+      super(window.location.origin + "/api/graphql");
+    } else {
+      throw new Error("Cannot use client in non-browser");
+    }
+  }
+}
 
-  const client = getSdk<RequestOptions>(async (doc, vars) => {
-    return await c.request(doc, vars);
-  });
-  return client;
-};
+export const getClient = () => new GraphQLClient();

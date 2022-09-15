@@ -1,6 +1,6 @@
 import { Queue } from "@taskless/client";
 import {
-  Guards,
+  guards,
   type CreateQueueMethods,
   type JobHandler,
   type QueueOptions,
@@ -88,7 +88,7 @@ export function createQueue<T = undefined>(
       return cleanRoute(route, mountAt);
     },
     handler,
-    queueOptions: queueOptions ?? {},
+    queueOptions,
   });
 
   /**
@@ -115,10 +115,10 @@ export function createQueue<T = undefined>(
         await t.receive({
           getBody: () => {
             // https://expressjs.com/en/4x/api.html#express.json
-            if (Guards.TasklessBody.isTasklessBody(request.body)) {
+            if (guards.isTasklessBody(request.body)) {
               return request.body;
             }
-            throw new Error("request.body does not match a Taskless payload");
+            throw new Error("req.body does not match a Taskless payload");
           },
           getHeaders: () => request.headers,
           send: (json) => {

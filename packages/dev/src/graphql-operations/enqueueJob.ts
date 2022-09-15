@@ -1,14 +1,14 @@
+import {
+  EnqueueJobMutation,
+  EnqueueJobMutationArguments,
+} from "@taskless/types";
 import { DateTime } from "luxon";
 import { getJobsCollection, JobDoc } from "mongo/collections";
 import { getQueue } from "mongo/mq";
 import { Context } from "types";
-import {
-  EnqueueJobMutation,
-  EnqueueJobMutationVariables,
-} from "__generated__/schema";
 
 export const enqueueJob = async (
-  variables: EnqueueJobMutationVariables,
+  variables: EnqueueJobMutationArguments,
   context: Context
 ): Promise<EnqueueJobMutation> => {
   const id = context.v5(variables.name);
@@ -91,7 +91,7 @@ export const enqueueJob = async (
 
   return {
     enqueueJob: {
-      __typename: "Job",
+      id: doc.v5id,
       name: doc.name,
       endpoint: doc.endpoint,
       enabled: true,
