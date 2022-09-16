@@ -90,24 +90,26 @@ export const queueOptions = z.object({
    */
   separator: z.string().optional().default("/"),
   /** Your Application's credential pair */
-  credentials: z.preprocess((val) => {
-    const isModern = typeof process.env.TASKLESS_ID !== "undefined";
-    if (isModern) {
-      // console.log("parse modern");
-      return credentialsByProjectId.parse({
-        projectId:
-          process.env.TASKLESS_ID ?? "00000000-0000-0000-0000-000000000000",
-        ...(typeof val === "object" ? val ?? {} : {}),
-      });
-    } else {
-      // console.log("parse legacy");
-      return credentialsByAppId.parse({
-        appId:
-          process.env.TASKLESS_APP_ID ?? "00000000-0000-0000-0000-000000000000",
-        ...(typeof val === "object" ? val ?? {} : {}),
-      });
-    }
-  }, z.union([credentialsByProjectId, credentialsByAppId])),
+  credentials: z
+    .union([credentialsByAppId, credentialsByProjectId])
+    .optional()
+    .default(() => {
+      const isModern = typeof process.env.TASKLESS_ID !== "undefined";
+      if (isModern) {
+        // console.log("parse modern");
+        return credentialsByProjectId.parse({
+          projectId:
+            process.env.TASKLESS_ID ?? "00000000-0000-0000-0000-000000000000",
+        });
+      } else {
+        // console.log("parse legacy");
+        return credentialsByAppId.parse({
+          appId:
+            process.env.TASKLESS_APP_ID ??
+            "00000000-0000-0000-0000-000000000000",
+        });
+      }
+    }),
 
   /**
    * An optional encryption key for e2e encryption of job data.
@@ -156,7 +158,7 @@ export const queueOptions = z.object({
 });
 
 /** A set of options for setting up a Taskless Queue */
-export type QueueOptions = z.infer<typeof queueOptions>;
+export type QueueOptions = z.input<typeof queueOptions>;
 
 /**
  * Describes the set of Queue Methods available on a Taskless Integration

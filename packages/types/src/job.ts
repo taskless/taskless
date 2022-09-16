@@ -1,6 +1,6 @@
 import { type OutgoingHttpHeaders } from "node:http";
 import { z } from "zod";
-import { DateTime, Duration } from "luxon";
+import { parse } from "tinyduration";
 
 /** zod for {@link JobHeaders} */
 export const jobHeaders = z.object({
@@ -13,7 +13,7 @@ export const jobHeaders = z.object({
  * The set of headers to pass with a request, matching the set of valid HTTP request headers
  * extends the core {@see OutgoingHttpHeaders}
  */
-export type JobHeaders = z.infer<typeof jobHeaders> & OutgoingHttpHeaders;
+export type JobHeaders = z.input<typeof jobHeaders> & OutgoingHttpHeaders;
 
 const jobIdentifierPrimitive = z.union([z.string(), z.number()]);
 
@@ -31,51 +31,59 @@ export const jobIdentifier = z.union([
 export type JobIdentifier = z.infer<typeof jobIdentifier>;
 
 // datetime as either Date or string
-export const dateOrIsoDate = z.preprocess((arg: unknown) => {
-  if (arg instanceof Date) {
-    return arg;
-  }
-  if (typeof arg === "string") {
-    const d = DateTime.fromISO(arg);
-    if (d.isValid) {
-      return d.toJSDate();
+export const dateOrIsoDate = z
+  .union([z.date(), z.string()])
+  .transform((arg: unknown) => {
+    if (arg instanceof Date) {
+      return arg;
     }
-  }
-  return undefined;
-}, z.union([z.date(), z.string()]));
+    if (typeof arg === "string") {
+      const d = new Date(arg);
+      if (!isNaN(d.getTime())) {
+        return d;
+      }
+    }
+    return undefined;
+  });
 
 // duration as string
-export const duration = z.preprocess((arg: unknown) => {
+export const duration = z.string().transform((arg: unknown, ctx) => {
   if (typeof arg === "string") {
-    const d = Duration.fromISO(arg);
-    if (d.isValid) {
-      return d.toISO();
+    try {
+      parse(arg);
+      return arg;
+    } catch {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `"${arg}" is not a valid ISO-8601 Duration`,
+      });
+      return z.NEVER;
     }
   }
   return undefined;
-}, z.string());
+});
 
 /** zod for {@link JobOptions} */
 export const jobOptions = z.object({
   /** Is the job enabled. Defaults to true. */
   enabled: z.boolean().default(true),
   /** A key/value object to recieve as headers when your job is called. Defaults to an empty object */
-  headers: jobHeaders.passthrough().default({}),
+  headers: jobHeaders.passthrough().optional(),
   /** The number of retries to attempt before the job is failed. Defaults to 5 */
-  retries: z.number().default(5),
+  retries: z.number().optional().default(5),
   /**
    * A future JS date or ISO-8601 formatted timestamp in the future that, when set,
    * delays the execution of the job until the first opportunity after the specified
    * time. On job creation, a null or undefined value is treated as now().
    */
-  runAt: dateOrIsoDate.nullish(),
+  runAt: dateOrIsoDate.nullable().optional(),
   /** An optional ISO-8601 Duration that enables repeated running of a job, or `null` to clear recurrence */
-  runEvery: duration.nullish(),
+  runEvery: duration.nullable().optional(),
 });
 
 /** A set of options on a per-job level */
-export type JobOptions = z.infer<typeof jobOptions> & {
-  headers: JobHeaders;
+export type JobOptions = z.input<typeof jobOptions> & {
+  headers?: JobHeaders; // add standard headers as allowed
 };
 
 export const jobMetadata = z.object({

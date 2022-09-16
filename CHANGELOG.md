@@ -1,12 +1,39 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
+# 3.1.1 - released September 16, 2022
+
+3.1.1 is a maintenance release, focused on reducing the total weight of the package while continuing to offer strong type safety. Because Taskless is often used in serverless environments, we want to continue making every effort to keep the client libraries lean and reserve the lambda space for your userland code. As a baseline, `@taskless/client` went from 100.5kb (luxon) to 133.6kb (luxon + zod). With the removal of luxon, the library is expected to drop to ~61kb as reported by bundlephobia.
+
+#### 🔧 Fixes
+
+- **@taskless/types** Updates `zod` typings to better support defaults during the parse/transform step. Now correctly uses `z.infer` for output types and `z.input` for input types.
+- **@taskless/types** Improves `ENV` secret detection when resolving defaults inside of a zod `parse` operation
+
+#### 🎒 Misc
+
+- **@taskless/client** Removes `luxon` dependency, pushing time zone management to the calling userland code
+- **@taskless/types** Removes `luxon` dependency, pushing time zone management to the calling userland code
+- **@taskless/types** Adds `tinyduration` for a mimimal yet sane way to verify `Duration` values without the larger luxon dependency (from 71.5kb to 1.4kb)
+
+# 3.1.0 - released September 14, 2022
+
+3.1 is a feature release, introducing `zod` to replace `generic-type-guard`. The type safety from gtg was not sufficient for JS users, warranting a more robust solution that still provides proper types out of the box for TS.
+
+#### 🎒 Misc
+
+- **@taskless/types** Changed to `zod` for better type validation for non-typescript users. The type changes, while backwards compatible, expose additional helper guards and parsers in the package
+
 # 3.0.1 - released August 30, 2022
+
+3.0.1 is a patch release that ensures `TASKLESS_ENDPOINT` is being checked in both development and production mode.
 
 #### 🔧 Fixes
 
 - **@taskless/client** Respects `process.env.TASKLESS_ENDPOINT` when running in development mode
 
 # 3.0.0 - released August 23, 2022
+
+3.0 is a breaking change release that adds support for project level secrets. Legacy application secrets will be accepted until 4.0. Additionally, the deprecated CRUD interfaces are removed in favor of the simpler enqueue/cancel methods.
 
 #### 💥 BREAKING CHANGES
 

@@ -13,7 +13,6 @@ import {
   type ReceiveCallbacks,
   type TasklessBody,
 } from "@taskless/types";
-import { DateTime } from "luxon";
 import {
   IS_DEVELOPMENT,
   IS_PRODUCTION,
@@ -89,7 +88,7 @@ export class Queue<T> {
       v: 1,
       transport,
       text,
-      signature: sign(text, this.queueOptions.credentials.secret ?? ""),
+      signature: sign(text, this.queueOptions?.credentials?.secret ?? ""),
     };
   }
 
@@ -111,8 +110,8 @@ export class Queue<T> {
       ver = verify(
         body.text,
         [
-          this.queueOptions.credentials.secret,
-          ...(this.queueOptions.credentials.expiredSecrets ?? []),
+          this.queueOptions?.credentials?.secret,
+          ...(this.queueOptions?.credentials?.expiredSecrets ?? []),
         ],
         body.signature
       );
@@ -184,7 +183,7 @@ export class Queue<T> {
       endpoint = process.env.TASKLESS_ENDPOINT ?? TASKLESS_ENDPOINT;
     }
 
-    if ("projectId" in creds) {
+    if (typeof creds !== "undefined" && "projectId" in creds) {
       return new GraphQLClient(endpoint, {
         projectId: creds.projectId ?? undefined,
         queueName: this.queueName,
@@ -192,7 +191,7 @@ export class Queue<T> {
       });
     }
 
-    if ("appId" in creds) {
+    if (typeof creds !== "undefined" && "appId" in creds) {
       return new GraphQLClient(endpoint, {
         appId: creds.appId ?? undefined,
         queueName: this.queueName,
@@ -283,9 +282,9 @@ export class Queue<T> {
     const body = this.wrapPayload(payload);
     const resolvedName = this.packName(name);
 
-    let runAt: string | undefined = DateTime.now().toISO();
+    let runAt: string | undefined = new Date().toISOString();
     if (opts.runAt instanceof Date) {
-      runAt = DateTime.fromJSDate(opts.runAt).toISO();
+      runAt = opts.runAt.toISOString();
     } else if (typeof opts.runAt === "string") {
       runAt = opts.runAt;
     } else if (typeof opts.runAt === "undefined") {
@@ -321,7 +320,7 @@ export class Queue<T> {
           false
       ).payload,
       retries: job.enqueueJob.retries,
-      runAt: job.enqueueJob.runAt,
+      runAt: job.enqueueJob.runAt ? new Date(job.enqueueJob.runAt) : undefined,
       runEvery: job.enqueueJob.runEvery ?? null,
     };
   }
@@ -362,7 +361,7 @@ export class Queue<T> {
           false
       ).payload,
       retries: job.cancelJob.retries,
-      runAt: job.cancelJob.runAt,
+      runAt: job.cancelJob.runAt ? new Date(job.cancelJob.runAt) : undefined,
       runEvery: job.cancelJob.runEvery ?? null,
     };
   }

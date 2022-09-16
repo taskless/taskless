@@ -80,7 +80,7 @@ export const sign = (input: string, secret: string): string => {
 /** Verify a string against a set of secret tokens */
 export const verify = (
   input: string,
-  secrets: (string | null)[],
+  secrets: (string | null | undefined)[],
   signature?: string
 ): boolean => {
   for (const s of secrets) {
