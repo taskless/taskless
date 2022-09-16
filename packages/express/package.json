@@ -1,7 +1,7 @@
 {
   "name": "@taskless/express",
   "description": "Express JS Integration for Taskless.io",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -34,8 +34,8 @@
     "node": ">=14.19.0"
   },
   "dependencies": {
-    "@taskless/client": "3.1.0",
-    "@taskless/types": "3.1.0",
+    "@taskless/client": "3.1.1",
+    "@taskless/types": "3.1.1",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
