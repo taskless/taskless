@@ -1,6 +1,6 @@
 <!-- Banner -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
   <a href="https://taskless.io">
@@ -71,6 +71,7 @@ Curious about who makes Taskless? Here are our [team members](https://taskless.i
   <tbody>
     <tr>
       <td align="center"><a href="https://codedrift.com"><img src="https://avatars.githubusercontent.com/u/1795?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jakob Heuser</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Code">💻</a> <a href="#infra-jakobo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Documentation">📖</a></td>
+      <td align="center"><a href="https://github.com/TAKANOME-DEV"><img src="https://avatars.githubusercontent.com/u/79809121?v=4?s=100" width="100px;" alt=""/><br /><sub><b>takanome_dev</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
