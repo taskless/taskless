@@ -1,4 +1,7 @@
 <!-- Banner -->
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
   <a href="https://taskless.io">
     <img alt="taskless logo" height="128" src="./.github/resources/taskless.png">
@@ -64,6 +67,13 @@ Curious about who makes Taskless? Here are our [team members](https://taskless.i
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://codedrift.com"><img src="https://avatars.githubusercontent.com/u/1795?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jakob Heuser</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Code">💻</a> <a href="#infra-jakobo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
@@ -73,3 +83,16 @@ Curious about who makes Taskless? Here are our [team members](https://taskless.i
 ## License
 
 The Taskless source code in this repository is made available under the [MIT license](LICENSE). Some of the dependencies are licensed differently, with the BSD license, for example.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
