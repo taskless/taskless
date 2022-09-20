@@ -62,7 +62,7 @@ If you still have questions you can ask them on our [forums](#) and get support 
 
 ## ❣️ Contributors
 
-Curious about who makes Taskless? Here are our [team members](https://taskless.io/about)! Additionally, Taskless is made possible by the following members of the community who've contributed code, docs, bugs, and more.
+Curious about who makes Taskless? Here are our [team members](https://taskless.io/about)! Additionally, Taskless is made possible by the following members of the community who've contributed code, docs, bugs, and more. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -84,16 +84,3 @@ Curious about who makes Taskless? Here are our [team members](https://taskless.i
 ## License
 
 The Taskless source code in this repository is made available under the [MIT license](LICENSE). Some of the dependencies are licensed differently, with the BSD license, for example.
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
