@@ -26,7 +26,7 @@
 - [🗺 Project Layout](#-project-layout)
 - [👏 Contributing](#-contributing)
 - [❓ FAQ](#-faq)
-- [💙 The Team](#-the-team)
+- [❣️ Contributors](#-contributors)
 - [License](#license)
 
 Taskless makes it effortless to reuse your existing Jamstack for asynchronous job queues. It includes a set of client libraries that make it incredibly easy to queue and respond to tasks and a rich management console for everything from alerting to monitoring.
@@ -57,9 +57,18 @@ If you have questions about Taskless and want answers, then check out our [Frequ
 
 If you still have questions you can ask them on our [forums](#) and get support from other community members and the Taskless team.
 
-## 💙 The Team
+## ❣️ Contributors
 
-Curious about who makes Taskless? Here are our [team members](https://taskless.io/about)!
+Curious about who makes Taskless? Here are our [team members](https://taskless.io/about)! Additionally, Taskless is made possible by the following members of the community who've contributed code, docs, bugs, and more.
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
 
