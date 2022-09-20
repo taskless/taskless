@@ -26,7 +26,7 @@
 - [🗺 Project Layout](#-project-layout)
 - [👏 Contributing](#-contributing)
 - [❓ FAQ](#-faq)
-- [❣️ Contributors](#-contributors)
+- [❣️ Contributors](#%EF%B8%8F-contributors)
 - [License](#license)
 
 Taskless makes it effortless to reuse your existing Jamstack for asynchronous job queues. It includes a set of client libraries that make it incredibly easy to queue and respond to tasks and a rich management console for everything from alerting to monitoring.
