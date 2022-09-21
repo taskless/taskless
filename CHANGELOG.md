@@ -1,5 +1,13 @@
 Packages in this repository are synchronized on release, with a single changelog across all pacakges. This changelog is specifically limited to items in the `packages/` folder.
 
+# 3.1.2 - released September 20, 2022
+
+3.1.2 is a maintenance release, and pins the next.js version for the Taskless Dev Server to work around a startup issue caused by the new edge function support.
+
+#### 🔧 Fixes
+
+- **@taskless/dev** Pins the version of next.js in use
+
 # 3.1.1 - released September 16, 2022
 
 3.1.1 is a maintenance release, focused on reducing the total weight of the package while continuing to offer strong type safety. Because Taskless is often used in serverless environments, we want to continue making every effort to keep the client libraries lean and reserve the lambda space for your userland code. As a baseline, `@taskless/client` went from 100.5kb (luxon) to 133.6kb (luxon + zod). With the removal of luxon, the library is expected to drop to ~61kb as reported by bundlephobia.
