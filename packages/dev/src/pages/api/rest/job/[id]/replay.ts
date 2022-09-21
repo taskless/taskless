@@ -15,9 +15,14 @@ export default async function handler(
   res: NextApiResponse<ReplayJobResponse | ErrorResponse>
 ) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-
   const jc = await getJobsCollection();
   const queue = await getQueue();
+
+  if (!id) {
+    return res.status(500).json({
+      error: "No ID",
+    });
+  }
 
   await queue.replay(id);
 

@@ -18,6 +18,12 @@ export default async function handler(
   const jc = await getJobsCollection();
   const queue = await getQueue();
 
+  if (!id) {
+    return res.status(500).json({
+      error: "No ID",
+    });
+  }
+
   await queue.promote(id);
   const job = await jc.findOne({ v5id: id });
 
