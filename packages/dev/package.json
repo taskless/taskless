@@ -42,7 +42,7 @@
     "mongodb": "^4.7.0",
     "mongodb-memory-server": "^8.5.2",
     "mongoose": "^6.3.3",
-    "next": "^12.1.0",
+    "next": "12.1.0",
     "nextjs-cors": "^2.1.1",
     "node-cron": "^3.0.0",
     "phin": "^3.6.1",
