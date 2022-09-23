@@ -24,6 +24,7 @@ const job = z.object({
   retries: z.number(),
   runAt: z.string(),
   runEvery: z.string().nullish(),
+  timezone: z.string().nullish(),
 });
 
 /** GraphQL string for making the request */
@@ -39,6 +40,7 @@ export const enqueueJobMutationDocument = /* GraphQL */ `
       retries
       runAt
       runEvery
+      timezone
     }
   }
 `;
@@ -54,6 +56,7 @@ export const enqueueJobMutationArguments = z.object({
     retries: z.number().optional(),
     runAt: z.string().optional(),
     runEvery: z.string().nullish(),
+    timezone: z.string().nullish(),
   }),
 });
 
@@ -83,6 +86,7 @@ export const cancelJobMutationDocument = /* GraphQL */ `
       retries
       runAt
       runEvery
+      timezone
     }
   }
 `;

@@ -1,4 +1,4 @@
-import { Duration } from "luxon";
+import { DateTime, Duration } from "luxon";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import cx from "classnames";
@@ -26,7 +26,7 @@ export interface Fields {
   runEvery: string | null;
   headers: string | null;
   body: string | null;
-  queueName: string | null;
+  timezone: string | null;
   secret: string | null;
 }
 
@@ -39,8 +39,8 @@ interface FormValues {
   "runEveryType-other": string;
   headers: string;
   body: string;
-  queueName: string;
   secret: string;
+  timezone: string;
 }
 
 interface CreateJobModalProps {
@@ -86,7 +86,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
         headers: "",
         body: "",
         // advanced
-        queueName: "",
+        timezone: DateTime.local().toFormat("z"),
         secret: "",
       },
     });
@@ -119,7 +119,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
           runEvery: d.runEveryType === "once" ? "" : d["runEveryType-other"],
           headers: d.headers,
           body: d.body,
-          queueName: d.queueName,
+          timezone: d.timezone,
           secret: d.secret,
         });
       },
@@ -324,14 +324,14 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                 activeClassName="!w-full !opacity-100"
               >
                 <TextInput
-                  id="queueName"
-                  label="Queue Name"
+                  id="tz"
+                  label="Timezone"
                   description={
-                    "The queue name you wish to target with this job"
+                    "Specify a timezone used in runEvery calculations"
                   }
                   props={{
-                    ...register("queueName"),
-                    placeholder: "default",
+                    ...register("timezone"),
+                    placeholder: DateTime.local().toFormat("z"),
                   }}
                 />
                 <TextInput
@@ -340,7 +340,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                   description={
                     <>
                       To sign your requests in development, provide the value
-                      matching your endpoint&apos;s{" "}
+                      matching your project&apos;s{" "}
                       <code className="not-italic font-mono">
                         TASKLESS_SECRET
                       </code>{" "}

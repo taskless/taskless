@@ -49,6 +49,7 @@ export const enqueueJob = async (
       },
       runAt: runAt.toJSDate(),
       runEvery: variables.job.runEvery ?? undefined,
+      timezone: variables.job.timezone ?? undefined,
     });
 
     // query / lookups
@@ -70,6 +71,7 @@ export const enqueueJob = async (
           retries,
           runAt: runAt.toJSDate(),
           runEvery: variables.job.runEvery ?? undefined,
+          timezone: variables.job.timezone ?? undefined,
         },
       },
       {
@@ -100,6 +102,7 @@ export const enqueueJob = async (
       runEvery: doc.runEvery,
       headers: variables.job.headers,
       body: variables.job.body,
+      timezone: variables.job.timezone,
     },
   };
 };
