@@ -304,6 +304,7 @@ export class Queue<T> {
         retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
         runAt,
         runEvery: opts.runEvery === null ? null : opts.runEvery ?? undefined,
+        timezone: opts.timezone === null ? null : opts.timezone ?? undefined,
       },
     });
 
@@ -322,6 +323,7 @@ export class Queue<T> {
       retries: job.enqueueJob.retries,
       runAt: job.enqueueJob.runAt ? new Date(job.enqueueJob.runAt) : undefined,
       runEvery: job.enqueueJob.runEvery ?? null,
+      timezone: job.enqueueJob.timezone ?? null,
     };
   }
 
