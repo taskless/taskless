@@ -2,7 +2,7 @@
   "private": true,
   "name": "taskless-example-next",
   "description": "Taskless next.js example app",
-  "version": "3.1.2",
+  "version": "3.2.0",
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "next build",
@@ -16,7 +16,7 @@
     "node": ">=14.19.0"
   },
   "dependencies": {
-    "@taskless/next": "3.1.2",
+    "@taskless/next": "3.2.0",
     "luxon": "^3.0.3",
     "next": "^12.1.0",
     "nextjs-cors": "^2.1.1",
@@ -25,7 +25,7 @@
     "tslib": "^2.4.0"
   },
   "devDependencies": {
-    "@taskless/dev": "3.1.2",
+    "@taskless/dev": "3.2.0",
     "@types/eslint": "",
     "@types/luxon": "^3.0.1",
     "@types/node": "^17.0.41",
