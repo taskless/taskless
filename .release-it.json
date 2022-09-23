@@ -6,6 +6,10 @@
   "git": {
     "commitMessage": "chore: Releases version v${version}"
   },
+  "github": {
+    "release": true,
+    "web": true
+  },
   "hooks": {
     "before:init": [
       "syncpack list-mismatches",
