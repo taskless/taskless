@@ -297,6 +297,7 @@ export class Queue<T> {
     >(graphql.enqueueJobMutationDocument, {
       name: resolvedName,
       job: {
+        enabled: opts.enabled !== false ? true : false,
         endpoint: this.resolveRoute(),
         method: "POST",
         headers: headersToGql(opts.headers),

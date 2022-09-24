@@ -49,6 +49,7 @@ export const enqueueJobMutationDocument = /* GraphQL */ `
 export const enqueueJobMutationArguments = z.object({
   name: z.string(),
   job: z.object({
+    enabled: z.boolean().nullish(),
     endpoint: z.string(),
     body: z.string().nullish(),
     headers: headers.nullish(),
