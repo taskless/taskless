@@ -1,10 +1,6 @@
 import {
   parsers,
   graphql,
-  type CancelJobMutation,
-  type CancelJobMutationArguments,
-  type EnqueueJobMutation,
-  type EnqueueJobMutationArguments,
   type Job,
   type JobHandler,
   type JobIdentifier,
@@ -292,14 +288,13 @@ export class Queue<T> {
     }
 
     const job = await client.request<
-      EnqueueJobMutation,
-      EnqueueJobMutationArguments
-    >(graphql.enqueueJobMutationDocument, {
+      graphql.EnqueueJobMutation,
+      graphql.EnqueueJobMutationVariables
+    >(graphql.EnqueueJob, {
       name: resolvedName,
       job: {
-        enabled: opts.enabled !== false ? true : false,
         endpoint: this.resolveRoute(),
-        method: "POST",
+        method: graphql.JobMethodEnum.Post,
         headers: headersToGql(opts.headers),
         body: JSON.stringify(body),
         retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
@@ -342,9 +337,9 @@ export class Queue<T> {
     const resolvedName = this.packName(name);
 
     const job = await client.request<
-      CancelJobMutation,
-      CancelJobMutationArguments
-    >(graphql.cancelJobMutationDocument, {
+      graphql.CancelJobMutation,
+      graphql.CancelJobMutationVariables
+    >(graphql.CancelJob, {
       name: resolvedName,
     });
 

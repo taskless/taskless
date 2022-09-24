@@ -25,19 +25,6 @@ import {
   type Transport,
 } from "./tasklessBody.js";
 import { json, type Json } from "./json.js";
-import {
-  cancelJobMutationArguments,
-  cancelJobMutationDocument,
-  cancelJobMutationResult,
-  enqueueJobMutationArguments,
-  enqueueJobMutationDocument,
-  enqueueJobMutationResult,
-  type CancelJobMutation,
-  type CancelJobMutationArguments,
-  type EnqueueJobMutation,
-  type EnqueueJobMutationArguments,
-  type EnqueueJobInputHeadersType,
-} from "./graphql.js";
 
 export type {
   // externally used
@@ -54,12 +41,6 @@ export type {
   ReceiveCallbacks,
   SupportedCipher,
   Transport,
-  // almost definitely internal
-  CancelJobMutation,
-  CancelJobMutationArguments,
-  EnqueueJobMutation,
-  EnqueueJobMutationArguments,
-  EnqueueJobInputHeadersType,
 };
 
 export const parsers = {
@@ -70,14 +51,7 @@ export const parsers = {
   tasklessBody,
 };
 
-export const graphql = {
-  cancelJobMutationArguments,
-  cancelJobMutationDocument,
-  cancelJobMutationResult,
-  enqueueJobMutationArguments,
-  enqueueJobMutationDocument,
-  enqueueJobMutationResult,
-};
+export * as graphql from "./__generated__/schema.js";
 
 export const guards = {
   isCipherEnvelope: (v: unknown): v is CipherEnvelope => {

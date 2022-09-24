@@ -1,16 +1,13 @@
-import {
-  type CancelJobMutation,
-  type CancelJobMutationArguments,
-} from "@taskless/types";
+import { graphql } from "@taskless/types";
 import { DateTime } from "luxon";
 import { getJobsCollection, JobDoc } from "mongo/collections";
 import { getQueue } from "mongo/mq";
 import { Context } from "types";
 
 export const cancelJob = async (
-  variables: CancelJobMutationArguments,
+  variables: graphql.CancelJobMutationVariables,
   context: Context
-): Promise<CancelJobMutation> => {
+): Promise<graphql.CancelJobMutation> => {
   const id = context.v5(variables.name);
 
   const queue = await getQueue();

@@ -22,11 +22,7 @@ import { PromoteJobResponse } from "./api/rest/job/[id]/promote";
 import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
 import { CreateJobModal, Fields } from "components/Modals/CreateJob";
 import Link from "next/link";
-import {
-  EnqueueJobMutation,
-  EnqueueJobMutationArguments,
-  graphql,
-} from "@taskless/types";
+import { graphql } from "@taskless/types";
 import { getClient } from "graphql/client";
 
 const getJobs: QueryFunction<
@@ -72,14 +68,14 @@ const replayJob: MutationFunction<
 };
 
 const upsertJob: MutationFunction<
-  EnqueueJobMutation,
-  EnqueueJobMutationArguments
+  graphql.EnqueueJobMutation,
+  graphql.EnqueueJobMutationVariables
 > = async (variables) => {
   const client = getClient();
   const response = await client.request<
-    EnqueueJobMutation,
-    EnqueueJobMutationArguments
-  >(graphql.enqueueJobMutationDocument, variables);
+    graphql.EnqueueJobMutation,
+    graphql.EnqueueJobMutationVariables
+  >(graphql.EnqueueJob, variables);
   return response;
 };
 

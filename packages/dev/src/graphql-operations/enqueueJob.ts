@@ -1,16 +1,13 @@
-import {
-  EnqueueJobMutation,
-  EnqueueJobMutationArguments,
-} from "@taskless/types";
+import { graphql } from "@taskless/types";
 import { DateTime } from "luxon";
 import { getJobsCollection, JobDoc } from "mongo/collections";
 import { getQueue } from "mongo/mq";
 import { Context } from "types";
 
 export const enqueueJob = async (
-  variables: EnqueueJobMutationArguments,
+  variables: graphql.EnqueueJobMutationVariables,
   context: Context
-): Promise<EnqueueJobMutation> => {
+): Promise<graphql.EnqueueJobMutation> => {
   const id = context.v5(variables.name);
   let runAt = DateTime.now();
 

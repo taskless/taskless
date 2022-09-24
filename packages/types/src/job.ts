@@ -65,8 +65,6 @@ export const duration = z.string().transform((arg: unknown, ctx) => {
 
 /** zod for {@link JobOptions} */
 export const jobOptions = z.object({
-  /** Is the job enabled. Defaults to true. */
-  enabled: z.boolean().default(true),
   /** A key/value object to recieve as headers when your job is called. Defaults to an empty object */
   headers: jobHeaders.passthrough().optional(),
   /** The number of retries to attempt before the job is failed. Defaults to 5 */
