@@ -209,8 +209,8 @@ export class Queue<T> {
    * @param functions A set of accessory functions for accessing the request and dispatching a response
    */
   async receive(functions: ReceiveCallbacks) {
-    const _serializeError = await import("serialize-error");
-    const serializeError = _serializeError.serializeError;
+    // async import for CJS compatibility
+    const serializeError = (await import("serialize-error")).serializeError;
 
     const { getBody, getHeaders, send, sendError } = functions;
 
