@@ -25,11 +25,12 @@ export default function handler(
     .find({
       ...(m ?? {}),
     })
-    .sort(
-      (a, b) =>
-        (a.summary?.lastRun?.getTime() ?? 0) -
-        (b.summary?.lastRun?.getTime() ?? 0)
-    )
+    .sort((a, b) => {
+      return (
+        new Date(b.summary?.lastRun ?? 0).getTime() -
+        new Date(a.summary?.lastRun ?? 0).getTime()
+      );
+    })
     .data();
 
   res.status(200).json({

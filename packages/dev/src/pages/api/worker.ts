@@ -1,5 +1,6 @@
 import { getCollection, JobDoc, RunDoc } from "db/loki";
 import { getQueue, WorkerRequestError } from "db/mq";
+import { DateTime } from "luxon";
 import type { NextApiRequest, NextApiResponse } from "next";
 import phin from "phin";
 import { logger } from "winston/logger";
@@ -71,9 +72,9 @@ export default async function handler(
   // informational sync on next, fail, and dead
   q.events.on("ack", (info) => {
     logger.info(`ACK of ${info.ref}`);
-    const now = new Date();
+    const now = DateTime.now();
     runs.insertOne({
-      ts: now,
+      ts: now.toISO(),
       metadata: {
         id: info.ref,
         name: info.payload.name,
@@ -90,11 +91,13 @@ export default async function handler(
       })
       .update((doc) => {
         if (info.next) {
-          doc.runAt = info.next;
+          doc.runAt = DateTime.fromJSDate(info.next).toISO();
         }
         doc.summary = {
-          nextRun: info.next,
-          lastRun: now,
+          nextRun: info.next
+            ? DateTime.fromJSDate(info.next).toISO()
+            : undefined,
+          lastRun: now.toISO(),
           lastStatus: true,
         };
       })
@@ -105,7 +108,7 @@ export default async function handler(
   q.events.on("fail", (info) => {
     logger.info(`FAIL of ${info.ref}`);
     logger.error(info.error);
-    const now = new Date();
+    const now = DateTime.now();
 
     const code =
       info.error instanceof WorkerRequestError
@@ -118,7 +121,7 @@ export default async function handler(
     const name = info.payload?.name ?? info.ref;
 
     runs.insertOne({
-      ts: now,
+      ts: now.toISO(),
       metadata: {
         id: info.ref,
         name,
@@ -135,12 +138,14 @@ export default async function handler(
       })
       .update((doc) => {
         if (info.next) {
-          doc.runAt = info.next;
+          doc.runAt = DateTime.fromJSDate(info.next).toISO();
         }
         doc.summary = {
-          nextRun: info.next,
-          lastRun: now,
-          lastStatus: false,
+          nextRun: info.next
+            ? DateTime.fromJSDate(info.next).toISO()
+            : undefined,
+          lastRun: now.toISO(),
+          lastStatus: true,
         };
       })
       .data();
@@ -156,7 +161,7 @@ export default async function handler(
         if (!info.next) {
           return;
         }
-        doc.runAt = info.next;
+        doc.runAt = DateTime.fromJSDate(info.next).toISO();
       })
       .data();
   });

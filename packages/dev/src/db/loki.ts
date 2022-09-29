@@ -11,18 +11,22 @@ export interface JobDoc {
   method: string;
   body: string | null;
   retries: number;
-  runAt: Date;
+  /** Date value stored as ISO-8601 string */
+  runAt: string;
   runEvery?: string;
   summary?: {
-    nextRun?: Date;
-    lastRun?: Date;
+    /** Date value stored as ISO-8601 string */
+    nextRun?: string;
+    /** Date value stored as ISO-8601 string */
+    lastRun?: string;
     lastStatus?: boolean;
   };
   timezone?: string;
 }
 
 export interface RunDoc {
-  ts: Date;
+  /** Date value stored as ISO-8601 string */
+  ts: string;
   metadata: {
     id: string;
     name: string;

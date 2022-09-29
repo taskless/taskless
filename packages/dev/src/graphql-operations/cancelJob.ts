@@ -1,5 +1,4 @@
 import { graphql } from "@taskless/types";
-import { DateTime } from "luxon";
 import { getQueue } from "db/mq";
 import { Context } from "types";
 import { getCollection, JobDoc } from "db/loki";
@@ -45,7 +44,7 @@ export const cancelJob = async (
       endpoint: doc.endpoint,
       enabled: true,
       retries: doc.retries,
-      runAt: DateTime.fromJSDate(doc.runAt).toISO(),
+      runAt: doc.runAt,
       runEvery: doc.runEvery,
       headers: doc.headers ? JSON.parse(doc.headers) : null,
       body: doc.body,

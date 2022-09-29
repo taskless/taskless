@@ -29,7 +29,7 @@ export default async function handler(
   const job = jc
     .chain()
     .find({ id })
-    .sort((a, b) => a.runAt.getTime() - b.runAt.getTime())
+    .sort((a, b) => new Date(b.runAt).getTime() - new Date(a.runAt).getTime())
     .data()?.[0];
 
   res.status(200).json({

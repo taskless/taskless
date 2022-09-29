@@ -26,7 +26,7 @@ export default function handler(
     .find({
       ...(m ?? {}),
     })
-    .sort((a, b) => a.ts.getTime() - b.ts.getTime())
+    .sort((a, b) => new Date(b.ts).getTime() - new Date(a.ts).getTime())
     .data();
 
   res.status(200).json({

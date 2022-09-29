@@ -60,7 +60,7 @@ export const enqueueJob = async (
       method: variables.job.method ?? "POST",
       body: variables.job.body ?? null,
       retries,
-      runAt: runAt.toJSDate(),
+      runAt: runAt.toISO(),
       runEvery: variables.job.runEvery ?? undefined,
       timezone: variables.job.timezone ?? undefined,
     };
