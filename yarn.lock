@@ -2163,7 +2163,7 @@ __metadata:
     chalk: ^5.0.1
     classnames: ^2.3.1
     cron-parser: ^4.4.0
-    docmq: ^0.4.0
+    docmq: ^0.4.1
     execa: ^6.1.0
     globalthis: ^1.0.3
     lokijs: ^1.5.12
@@ -5379,9 +5379,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docmq@npm:^0.4.0":
-  version: 0.4.0
-  resolution: "docmq@npm:0.4.0"
+"docmq@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "docmq@npm:0.4.1"
   dependencies:
     abort-controller: ^3.0.0
     cron-parser: ^4.4.0
@@ -5399,7 +5399,7 @@ __metadata:
       optional: true
     pg:
       optional: true
-  checksum: c01bf4be681fd4cb716f62356f74a079aada7ba1d219669a8d39b8407dc5dda654b0cd9ad2c1d13bc74e90427d7238b9fca86c7de195ee4744110da1cef01dca
+  checksum: 38cfa8a56eeac43e7d6b01293e920355250ed7e889f3cd398efe6a0d8ec66843466196dfbe0f32dd606b6173615026fd270aaa6020af3db60effacbbe206fb20
   languageName: node
   linkType: hard
 
