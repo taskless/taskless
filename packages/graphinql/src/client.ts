@@ -4,9 +4,8 @@ import {
   GraphQLResponse,
   Variables,
 } from "./graphql-types.js";
-import pRetry from "p-retry";
 import phin from "phin";
-import { RequestOptions } from "./types.js";
+import { RequestOptions } from "./request-types.js";
 
 export async function request<TData, V extends Variables>(
   endpoint: string | URL,
@@ -22,6 +21,10 @@ export async function request<TData, V extends Variables>(
   };
 
   let result: phin.IJSONResponse<GraphQLResponse<TData>> | undefined;
+
+  // legacy CJS dynamic import
+  const pRetry =
+    (await import("p-retry"))?.default ?? (await import("p-retry"));
 
   try {
     result = await pRetry(
@@ -77,7 +80,7 @@ export class GraphQLClient {
     };
   }
 
-  request<TData = unknown, V = Variables>(
+  request<TData = unknown, V extends Variables = Variables>(
     query: string,
     variables?: V,
     options?: RequestOptions

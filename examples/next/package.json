@@ -1,17 +1,16 @@
 {
   "private": true,
-  "name": "taskless-example-next",
+  "name": "@taskless/examples-next",
   "description": "Taskless next.js example app",
   "version": "3.2.1",
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "next build",
-    "dev": "concurrently -n taskless,next taskless 'next dev'",
-    "dev:deps": "yarn workspaces foreach -piR --from taskless-example-next run dev",
-    "dev:next": "next dev",
+    "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
   },
+  "type": "module",
   "engines": {
     "node": ">=14.19.0"
   },
@@ -34,7 +33,6 @@
     "concurrently": "^7.0.0",
     "eslint": "^8.10.0",
     "eslint-config-next": "^12.1.0",
-    "typescript": "^4.7.3"
-  },
-  "type": "module"
+    "typescript": "^4.8.3"
+  }
 }

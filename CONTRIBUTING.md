@@ -29,9 +29,7 @@ In the root of the repository, we have a few common files that affect nearly eve
 
 > If this didn't work for you as described, please [open an issue.](https://github.com/taskless/taskless/issues/new/choose)
 
-This project uses Yarn workspaces, making it easy to build dependent pacakges outside of the package you're currently working on. The following command builds all dependencies of `@taskless/client` enabling you to then run `yarn dev` and make your changes. The command can be easily adapted to any package or example you're working on.
-
-`$PACKAGE=@taskless/client yarn workspaces foreach --from $PACKAGE -Rptiv run build`
+This project makes use of `unbuild` and `jiti` to remove the pain associated with CommonJS/ESM imports. Running `yarn dev` in the root will automatically shim all libraries. You can then start the Taskless Dev server with `yarn dev:next`, or `yarn dev:express` which will both take care of starting the Taskless Dev Server (and respective example app) for you.
 
 ## 📚 Updating Documentation
 

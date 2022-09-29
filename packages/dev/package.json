@@ -11,17 +11,25 @@
   "homepage": "https://github.com/taskless/taskless/tree/main/packages/dev",
   "repository": "taskless/taskless.git",
   "scripts": {
-    "build": "run-s clean 'build:pre' 'build:next' 'build:post'",
+    "build": "run-s 'build:next'",
     "build:next": "next build",
-    "build:post": "echo 'no build:post tasks for @taskless/dev'",
-    "build:pre": "echo 'no build:pre tasks for @taskless/dev'",
     "clean": "shx rm -rf ./.next",
-    "dev": "node server/start.js",
-    "release:before:init": "run-s test build",
+    "dev": "node ./server.js",
+    "release:before:init": "run-s clean typecheck build test",
     "start": "./bin/cli.js",
     "taskless": "./bin/cli.js",
-    "test": "ava"
+    "test": "ava",
+    "typecheck": "tsc --noEmit"
   },
+  "type": "commonjs",
+  "files": [
+    "package.json",
+    "README.md",
+    ".next",
+    "bin",
+    "server.js",
+    "public"
+  ],
   "engines": {
     "node": ">=14.19.0"
   },
@@ -36,15 +44,13 @@
     "chalk": "^5.0.1",
     "classnames": "^2.3.1",
     "cron-parser": "^4.4.0",
-    "docmq": "^0.2.2",
+    "docmq": "^0.4.0",
     "execa": "^6.1.0",
+    "globalthis": "^1.0.3",
+    "lokijs": "^1.5.12",
     "luxon": "^3.0.3",
-    "mongodb": "^4.7.0",
-    "mongodb-memory-server": "^8.5.2",
-    "mongoose": "^6.3.3",
     "next": "12.3.1",
     "nextjs-cors": "^2.1.1",
-    "node-cron": "^3.0.0",
     "phin": "^3.6.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -63,9 +69,10 @@
     "@tailwindcss/forms": "^0.5.0",
     "@tailwindcss/typography": "^0.5.2",
     "@types/eslint": "",
+    "@types/globalthis": "^1",
+    "@types/lokijs": "^1.5.7",
     "@types/luxon": "^3.0.1",
     "@types/node": "^17.0.41",
-    "@types/node-cron": "^3",
     "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.0",
     "@types/uuid": "^8.3.4",
@@ -76,17 +83,8 @@
     "postcss": "^8.4.12",
     "shx": "^0.3.4",
     "tailwindcss": "^3.0.23",
-    "ts-node": "^10.8.1",
-    "typescript": "^4.7.3"
+    "typescript": "^4.8.3"
   },
-  "files": [
-    "package.json",
-    "README.md",
-    ".next",
-    "bin",
-    "server",
-    "public"
-  ],
   "publishConfig": {
     "access": "public"
   },

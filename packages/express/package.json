@@ -11,25 +11,44 @@
   "homepage": "https://github.com/taskless/taskless/",
   "repository": "taskless/taskless.git",
   "scripts": {
-    "build": "run-s clean 'build:pre' 'build:all' 'build:post'",
-    "build:all": "run-p 'build:x:**'",
-    "build:post": "run-s 'pjson:all'",
-    "build:pre": "echo 'no build:pre tasks for @taskless/express'",
-    "build:x:cjs": "tsc -p tsconfig.build.json -m commonjs --outDir dist/cjs",
-    "build:x:esm": "tsc -p tsconfig.build.json --outDir dist/esm",
-    "build:x:types": "tsc -p tsconfig.build.json --declaration --emitDeclarationOnly --declarationMap --outDir dist/types",
+    "build": "run-s tsup",
     "clean": "shx rm -rf dist",
-    "dev": "run-s watch",
-    "pjson:all": "run-p 'pjson:x:**'",
-    "pjson:x:cjs": "shx echo '{\"type\": \"commonjs\"}' > ./dist/cjs/package.json",
-    "pjson:x:esm": "shx echo '{\"type\": \"module\"}' > ./dist/esm/package.json",
-    "release:before:init": "run-s clean build test",
+    "dev": "tsup --watch",
+    "release:before:init": "run-s clean typecheck build test",
     "test": "ava",
-    "watch": "run-p 'watch:**'",
-    "watch:cjs": "yarn build:x:cjs -w --preserveWatchOutput",
-    "watch:esm": "yarn build:x:esm -w --preserveWatchOutput",
-    "watch:types": "yarn build:x:types -w --preserveWatchOutput"
+    "tsup": "tsup",
+    "typecheck": "tsc --noEmit"
   },
+  "tsup": {
+    "entry": {
+      "index": "src/index.ts"
+    },
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "dts": true,
+    "splitting": true,
+    "sourcemap": true,
+    "clean": true,
+    "minify": false
+  },
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "package.json",
+    "README.md",
+    "dist"
+  ],
   "engines": {
     "node": ">=14.19.0"
   },
@@ -42,10 +61,12 @@
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.41",
     "ava": "^4.3.0",
+    "cross-env": "^7.0.3",
     "npm-run-all": "^4.1.5",
     "shx": "^0.3.4",
     "ts-node": "^10.8.1",
-    "typescript": "^4.7.3"
+    "tsup": "^6.2.3",
+    "typescript": "^4.8.3"
   },
   "peerDependencies": {
     "express": ">= 4.16.0"
@@ -55,23 +76,6 @@
       "optional": true
     }
   },
-  "type": "module",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
-  "exports": {
-    "./package.json": "./package.json",
-    ".": {
-      "types": "./dist/esm/index.d.ts",
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js"
-    }
-  },
-  "files": [
-    "package.json",
-    "README.md",
-    "dist"
-  ],
   "publishConfig": {
     "access": "public"
   }

@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 import { XIcon } from "@heroicons/react/solid";
 import { GetLogsResponse } from "./api/rest/logs";
 import { useRouter } from "next/router";
-import { TaskData } from "mongo/mq";
+import { TaskData } from "db/mq";
 
 export const getLogs: QueryFunction<
   GetLogsResponse,
@@ -46,7 +46,7 @@ const Logs: NextPage = () => {
             {
               name: "ID",
               renderValue: ({ record }) => (
-                <code>{record.metadata.v5id ?? ""}</code>
+                <code>{record.metadata.id ?? ""}</code>
               ),
             },
             {

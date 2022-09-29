@@ -11,6 +11,7 @@
     "dev:taskless": "taskless",
     "start": "node ./bin/www.js"
   },
+  "type": "commonjs",
   "engines": {
     "node": ">=14.19.0"
   },
@@ -27,6 +28,5 @@
     "@taskless/dev": "3.2.1",
     "concurrently": "^7.0.0",
     "dotenv": "^16.0.0"
-  },
-  "type": "commonjs"
+  }
 }

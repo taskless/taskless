@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getJobsCollection, JobDoc } from "mongo/collections";
-import { getQueue } from "mongo/mq";
+import { getQueue } from "db/mq";
+import { getCollection, JobDoc } from "db/loki";
 
 type ErrorResponse = {
   error: string;
@@ -15,7 +15,7 @@ export default async function handler(
   res: NextApiResponse<ReplayJobResponse | ErrorResponse>
 ) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-  const jc = await getJobsCollection();
+  const jc = getCollection<JobDoc>("jobs");
   const queue = await getQueue();
 
   if (!id) {
@@ -26,14 +26,11 @@ export default async function handler(
 
   await queue.replay(id);
 
-  const job = await jc.findOne(
-    { v5id: id },
-    {
-      sort: {
-        visible: -1,
-      },
-    }
-  );
+  const job = jc
+    .chain()
+    .find({ id })
+    .sort((a, b) => a.runAt.getTime() - b.runAt.getTime())
+    .data()?.[0];
 
   res.status(200).json({
     job,

@@ -206,7 +206,7 @@ const Home: NextPage = () => {
                       <button
                         title="Run now"
                         className="ml-2"
-                        onClick={() => promote({ id: record.v5id })}
+                        onClick={() => promote({ id: record.id })}
                       >
                         <FastForwardIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
@@ -228,7 +228,7 @@ const Home: NextPage = () => {
                       <button
                         title="Replay Job"
                         className="ml-2"
-                        onClick={() => replay({ id: record.v5id })}
+                        onClick={() => replay({ id: record.id })}
                       >
                         <ReplyIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
                       </button>
@@ -290,7 +290,7 @@ const Home: NextPage = () => {
                         <button
                           title="Run now"
                           className="ml-2"
-                          onClick={() => promote({ id: record.v5id })}
+                          onClick={() => promote({ id: record.id })}
                         >
                           <FastForwardIcon className="h-3 w-3 fill-gray-800 hover:fill-primary-300 transition" />
                         </button>
@@ -343,7 +343,7 @@ const Home: NextPage = () => {
               <div className="pt-6 text-sm">
                 <Link
                   href={`/logs?${new URLSearchParams({
-                    q: `jobId:${record.v5id}`,
+                    q: `jobId:${record.id}`,
                   }).toString()}`}
                 >
                   <a className="underline text-gray-700 decoration-gray-700 hover:text-primary-700 hover:decoration-primary-700 transition">

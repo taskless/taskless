@@ -1,8 +1,8 @@
 import { graphql } from "@taskless/types";
 import { DateTime } from "luxon";
-import { getJobsCollection, JobDoc } from "mongo/collections";
-import { getQueue } from "mongo/mq";
+import { getQueue } from "db/mq";
 import { Context } from "types";
+import { getCollection, JobDoc } from "db/loki";
 
 export const enqueueJob = async (
   variables: graphql.EnqueueJobMutationVariables,
@@ -26,7 +26,7 @@ export const enqueueJob = async (
       }, {});
 
   const queue = await getQueue();
-  const col = await getJobsCollection();
+  const col = getCollection<JobDoc>("jobs");
 
   let doc: JobDoc | undefined;
 
@@ -49,39 +49,30 @@ export const enqueueJob = async (
       timezone: variables.job.timezone ?? undefined,
     });
 
-    // query / lookups
-    const result = await col.findOneAndUpdate(
-      {
-        v5id: id,
-      },
-      {
-        $set: {
-          v5id: id,
-          queueName: context.queueName,
-          projectId: context.projectId,
-          name: variables.name,
-          endpoint: variables.job.endpoint,
-          enabled: true,
-          headers: JSON.stringify(headers),
-          method: variables.job.method ?? "POST",
-          body: variables.job.body ?? null,
-          retries,
-          runAt: runAt.toJSDate(),
-          runEvery: variables.job.runEvery ?? undefined,
-          timezone: variables.job.timezone ?? undefined,
-        },
-      },
-      {
-        upsert: true,
-        returnDocument: "after",
-      }
-    );
+    const existing = col.findOne({ id });
 
-    if (!result.value) {
-      throw new Error("Unable to update job in local DB");
+    const next: JobDoc = {
+      id,
+      name: variables.name,
+      endpoint: variables.job.endpoint,
+      enabled: true,
+      headers: JSON.stringify(headers),
+      method: variables.job.method ?? "POST",
+      body: variables.job.body ?? null,
+      retries,
+      runAt: runAt.toJSDate(),
+      runEvery: variables.job.runEvery ?? undefined,
+      timezone: variables.job.timezone ?? undefined,
+    };
+
+    if (existing) {
+      col.chain().find({ id }).remove();
     }
 
-    doc = result.value;
+    // insert (upsertish)
+    col.insertOne(next);
+
+    doc = next;
   });
 
   if (typeof doc === "undefined") {
@@ -90,7 +81,7 @@ export const enqueueJob = async (
 
   return {
     enqueueJob: {
-      id: doc.v5id,
+      id: doc.id,
       name: doc.name,
       endpoint: doc.endpoint,
       enabled: true,

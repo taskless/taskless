@@ -1,5 +1,4 @@
-import { Queue, MongoDriver } from "docmq";
-import { getClient } from "./client";
+import { Queue, MemoryDriver } from "docmq";
 
 export interface TaskData {
   projectId: string;
@@ -23,13 +22,16 @@ export class WorkerRequestError extends Error {
 }
 
 export const getQueue = async () => {
-  const c = await getClient();
+  if (!globalThis.memoryCache["mq"]) {
+    globalThis.memoryCache["mq"] = new MemoryDriver("default");
+  }
+
   const q = new Queue<TaskData, AckResult, WorkerRequestError>(
-    new MongoDriver(c),
+    globalThis.memoryCache["mq"] as MemoryDriver,
     "dev",
     {
       statInterval: 15,
     }
   );
-  return q;
+  return Promise.resolve(q);
 };
