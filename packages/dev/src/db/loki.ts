@@ -45,13 +45,13 @@ export const getDb = () => {
       }),
     });
 
-    db.addCollection<JobDoc>("jobs", {
+    db.addCollection<JobDoc>("tds-jobs", {
       unique: ["id"],
       asyncListeners: true,
       clone: true,
     });
 
-    db.addCollection<RunDoc>("runs", {
+    db.addCollection<RunDoc>("tds-runs", {
       asyncListeners: true,
       clone: true,
     });
@@ -63,7 +63,7 @@ export const getDb = () => {
 };
 
 export const getCollection = <T extends object>(
-  name: "jobs" | "runs"
+  name: "tds-jobs" | "tds-runs"
 ): Collection<T> => {
   const db = getDb();
   return db.getCollection<T>(name);

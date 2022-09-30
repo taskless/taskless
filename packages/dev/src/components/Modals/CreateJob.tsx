@@ -1,5 +1,10 @@
 import { DateTime, Duration } from "luxon";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
 import cx from "classnames";
 import {
@@ -7,21 +12,23 @@ import {
   BeakerIcon,
   CalendarIcon,
   CodeIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/solid";
 import {
   Modal,
   TabButton,
-  Region,
   TextInput,
   TextAreaInput,
   SwitchInput,
   SelectInput,
 } from "@taskless/ui";
+import { Transition } from "@headlessui/react";
 
 export interface Fields {
   name: string;
   endpoint: string;
   enabled: boolean;
+  retries: string;
   runAt: string | null;
   runEvery: string | null;
   headers: string | null;
@@ -34,6 +41,7 @@ interface FormValues {
   name: string;
   endpoint: string;
   enabled: boolean;
+  retries: string;
   runAt: string;
   runEveryType: "once" | "iso";
   "runEveryType-other": string;
@@ -49,7 +57,7 @@ interface CreateJobModalProps {
   onRequestConfirm: (data: Fields) => void;
 }
 
-type Tabs = "basic" | "schedule" | "data" | "advanced";
+type Tabs = "basic" | "schedule" | "data" | "advanced" | "examples";
 
 const isJSON = (msg: string) => (v: string) => {
   if (!v || v === "") {
@@ -63,33 +71,82 @@ const isJSON = (msg: string) => (v: string) => {
   }
 };
 
+const DialogSection: React.FC<PropsWithChildren<{ active: boolean }>> = ({
+  children,
+  active,
+}) => (
+  <Transition
+    show={active}
+    unmount={false}
+    enter="transition-all duration-150"
+    enterFrom="opacity-0 -translate-x-full"
+    enterTo="opacity-100 translate-x-0 z-10"
+    leave="transition-all duration-150"
+    leaveFrom="opacity-100 translate-x-0"
+    leaveTo="opacity-0 -translate-x-full z-0"
+    className="w-full"
+  >
+    {children}
+  </Transition>
+);
+
+const Example: React.FC<{
+  title: string;
+  details: string | JSX.Element;
+  onClick: () => void;
+}> = ({ title, details, onClick }) => (
+  <div className="flex flex-row items-center">
+    <p className="flex-grow pr-4">
+      <strong>{title}</strong>
+      <br />
+      {details}
+    </p>
+    <button
+      type="button"
+      onClick={onClick}
+      className="px-2 py-1 border border-primary-500 rounded bg-white hover:bg-primary-500/10 transition-all"
+    >
+      use
+    </button>
+  </div>
+);
+
 export const CreateJobModal: React.FC<CreateJobModalProps> = ({
   show,
   onRequestClose,
   onRequestConfirm,
 }) => {
   const [activeTab, setActiveTab] = useState<Tabs>("basic");
-  const { handleSubmit, register, reset, clearErrors, watch, formState } =
-    useForm<FormValues>({
-      mode: "onSubmit",
-      shouldFocusError: false,
-      defaultValues: {
-        // basic
-        name: "",
-        endpoint: "",
-        enabled: true,
-        // schedule
-        runAt: "",
-        runEveryType: "once",
-        "runEveryType-other": "",
-        // data
-        headers: "",
-        body: "",
-        // advanced
-        timezone: DateTime.local().toFormat("z"),
-        secret: "",
-      },
-    });
+  const {
+    handleSubmit,
+    register,
+    reset,
+    clearErrors,
+    watch,
+    setValue,
+    formState,
+  } = useForm<FormValues>({
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+    shouldFocusError: false,
+    defaultValues: {
+      // basic
+      name: "",
+      endpoint: "",
+      retries: "0",
+      enabled: true,
+      // schedule
+      runAt: "",
+      runEveryType: "once",
+      "runEveryType-other": "",
+      // data
+      headers: "",
+      body: "",
+      // advanced
+      timezone: DateTime.local().toFormat("z"),
+      secret: "",
+    },
+  });
 
   const [resolvedInterval, setResolvedInterval] = useState(
     Duration.fromISO("invalid")
@@ -121,15 +178,12 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
           body: d.body,
           timezone: d.timezone,
           secret: d.secret,
+          retries: d.retries,
         });
       },
       [onRequestConfirm]
     )
   );
-
-  useEffect(() => {
-    console.log(watchRunEveryType);
-  }, [watchRunEveryType]);
 
   useEffect(() => {
     if (show) {
@@ -164,7 +218,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
         autoComplete="off"
       >
         <div className="flex flex-row gap-6">
-          <div className="flex flex-col gap-4 text-sm pt-8 flex-shrink-0">
+          <div className="flex flex-col gap-4 text-sm pt-8 flex-shrink-0 z-20">
             <TabButton
               active={activeTab === "basic"}
               label="Basic Info"
@@ -193,15 +247,18 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               icon={BeakerIcon}
               onClick={() => setActiveTab("advanced")}
             />
+            <TabButton
+              active={activeTab === "examples"}
+              label="Examples"
+              labelClassName="hidden md:block"
+              icon={DocumentTextIcon}
+              onClick={() => setActiveTab("examples")}
+            />
           </div>
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full overflow-hidden">
             <Modal.Title>Create a Job</Modal.Title>
-            <div className="flex flex-row">
-              <Region
-                active={activeTab === "basic"}
-                className="gap-6 w-0 opacity-0 overflow-hidden transition-all flex flex-col gap-6"
-                activeClassName="!w-full !opacity-100"
-              >
+            <div className="flex flex-row pt-3">
+              <DialogSection active={activeTab === "basic"}>
                 <TextInput
                   id="name"
                   label="Job name"
@@ -233,18 +290,30 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                     },
                   })}
                 />
+                <TextInput
+                  id="retries"
+                  label="Retries"
+                  description="Number of times to retry this job"
+                  error={formState.errors.retries?.message}
+                  props={register("retries", {
+                    validate: {
+                      isNumber: (v) => {
+                        return (
+                          /^[\d]+$/.test(`${v}`) ||
+                          "Must provide a numeric value"
+                        );
+                      },
+                    },
+                  })}
+                />
                 <SwitchInput
                   id="enabled"
                   label="Enabled"
                   description="Should this job be enabled?"
                   props={register("enabled")}
                 />
-              </Region>
-              <Region
-                active={activeTab === "schedule"}
-                className="gap-6 w-0 opacity-0 overflow-hidden transition-all flex flex-col gap-6"
-                activeClassName="!w-full !opacity-100"
-              >
+              </DialogSection>
+              <DialogSection active={activeTab === "schedule"}>
                 <TextInput
                   id="runAt"
                   label="Run at"
@@ -281,12 +350,8 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                     </span>
                   </div>
                 ) : null}
-              </Region>
-              <Region
-                active={activeTab === "data"}
-                className="gap-6 w-0 opacity-0 overflow-hidden transition-all flex flex-col gap-6"
-                activeClassName="!w-full !opacity-100"
-              >
+              </DialogSection>
+              <DialogSection active={activeTab === "data"}>
                 <TextAreaInput
                   id="headers"
                   label="Headers"
@@ -317,12 +382,8 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                     },
                   })}
                 />
-              </Region>
-              <Region
-                active={activeTab === "advanced"}
-                className="gap-6 w-0 opacity-0 overflow-hidden transition-all flex flex-col gap-6"
-                activeClassName="!w-full !opacity-100"
-              >
+              </DialogSection>
+              <DialogSection active={activeTab === "advanced"}>
                 <TextInput
                   id="tz"
                   label="Timezone"
@@ -349,7 +410,151 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                   }
                   props={register("secret")}
                 />
-              </Region>
+              </DialogSection>
+              <DialogSection active={activeTab === "examples"}>
+                <p className="text-sm">
+                  Sample Taskless Jobs to get you started. Selecting a template
+                  will pre-fill all of the job arguments, showing the different
+                  ways Taskless jobs can be configured. By default, jobs point
+                  to Taskless&apos; own local echo endpoint.
+                </p>
+                <div className="pt-4 flex flex-col gap-6 text-sm">
+                  <Example
+                    title="Immediate"
+                    details={
+                      <>
+                        A job that runs immediately, by setting{" "}
+                        <code>runAt</code> to an empty value
+                      </>
+                    }
+                    onClick={() => {
+                      setValue(
+                        "body",
+                        JSON.stringify(
+                          { message: "A sample run-immediate message" },
+                          null,
+                          2
+                        )
+                      );
+                      setValue("enabled", true);
+                      setValue(
+                        "endpoint",
+                        "http://localhost:3001/api/queues/tds"
+                      );
+                      setValue(
+                        "headers",
+                        JSON.stringify(
+                          {
+                            "content-type": "application/json",
+                          },
+                          null,
+                          2
+                        )
+                      );
+                      setValue("name", "run-immediate-example");
+                      setValue("retries", "0");
+                      setValue("runAt", "");
+                      setValue("runEveryType", "once");
+                      setValue("runEveryType-other", "");
+                      setValue("secret", "");
+                      setValue("timezone", DateTime.local().toFormat("z"));
+                      setActiveTab("basic");
+                    }}
+                  />
+                  <Example
+                    title="Delayed"
+                    details={
+                      <>
+                        A job that runs in 10 minutes from now, by setting{" "}
+                        <code>runAt</code> to an ISO-8601 value 10 minutes into
+                        the future
+                      </>
+                    }
+                    onClick={() => {
+                      setValue(
+                        "body",
+                        JSON.stringify(
+                          { message: "A sample run-delayed message" },
+                          null,
+                          2
+                        )
+                      );
+                      setValue("enabled", true);
+                      setValue(
+                        "endpoint",
+                        "http://localhost:3001/api/queues/tds"
+                      );
+                      setValue(
+                        "headers",
+                        JSON.stringify(
+                          {
+                            "content-type": "application/json",
+                          },
+                          null,
+                          2
+                        )
+                      );
+                      setValue("name", "run-delayed-example");
+                      setValue("retries", "0");
+                      setValue(
+                        "runAt",
+                        DateTime.now().plus({ minutes: 10 }).toISO()
+                      );
+                      setValue("runEveryType", "once");
+                      setValue("runEveryType-other", "");
+                      setValue("secret", "");
+                      setValue("timezone", DateTime.local().toFormat("z"));
+                      setActiveTab("basic");
+                    }}
+                  />
+                  <Example
+                    title="Recurring ISO-8601"
+                    details={
+                      <>
+                        A job that will run immediately, and then again in 10
+                        minute incrments, by setting the <code>runEvery</code>{" "}
+                        value to a 10 minute ISO-8601 duration
+                      </>
+                    }
+                    onClick={() => {
+                      setValue(
+                        "body",
+                        JSON.stringify(
+                          { message: "A sample run-repeating message" },
+                          null,
+                          2
+                        )
+                      );
+                      setValue("enabled", true);
+                      setValue(
+                        "endpoint",
+                        "http://localhost:3001/api/queues/tds"
+                      );
+                      setValue(
+                        "headers",
+                        JSON.stringify(
+                          {
+                            "content-type": "application/json",
+                          },
+                          null,
+                          2
+                        )
+                      );
+                      setValue("name", "run-repeating-example");
+                      setValue("retries", "0");
+                      setValue(
+                        "runAt",
+                        DateTime.now().plus({ minutes: 10 }).toISO()
+                      );
+                      setValue("runEveryType", "iso");
+                      setValue("runEveryType-other", "PT10M");
+                      setValue("secret", "");
+                      setValue("timezone", DateTime.local().toFormat("z"));
+                      setActiveTab("basic");
+                    }}
+                  />
+                </div>
+              </DialogSection>
             </div>
           </div>
         </div>

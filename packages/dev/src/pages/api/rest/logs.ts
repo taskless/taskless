@@ -20,7 +20,7 @@ export default function handler(
 
   // console.log(JSON.stringify(m));
 
-  const runs = getCollection<RunDoc>("runs");
+  const runs = getCollection<RunDoc>("tds-runs");
   const r = runs
     .chain()
     .find({

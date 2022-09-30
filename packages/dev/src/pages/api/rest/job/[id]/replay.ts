@@ -15,7 +15,7 @@ export default async function handler(
   res: NextApiResponse<ReplayJobResponse | ErrorResponse>
 ) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-  const jc = getCollection<JobDoc>("jobs");
+  const jc = getCollection<JobDoc>("tds-jobs");
   const queue = await getQueue();
 
   if (!id) {

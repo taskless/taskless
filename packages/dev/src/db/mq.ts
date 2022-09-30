@@ -1,4 +1,5 @@
 import { Queue, MemoryDriver } from "docmq";
+import { getDb } from "./loki";
 
 export interface TaskData {
   projectId: string;
@@ -22,8 +23,9 @@ export class WorkerRequestError extends Error {
 }
 
 export const getQueue = async () => {
+  const db = getDb();
   if (!globalThis.memoryCache["mq"]) {
-    globalThis.memoryCache["mq"] = new MemoryDriver("default");
+    globalThis.memoryCache["mq"] = new MemoryDriver(db);
   }
 
   const q = new Queue<TaskData, AckResult, WorkerRequestError>(

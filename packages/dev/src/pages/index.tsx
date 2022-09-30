@@ -23,7 +23,8 @@ import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
 import { CreateJobModal, Fields } from "components/Modals/CreateJob";
 import Link from "next/link";
 import { graphql } from "@taskless/types";
-import { getClient } from "graphql/client";
+import { getClient, ClientError, RequestError } from "graphql/client";
+import { Queue } from "@taskless/next";
 
 const getJobs: QueryFunction<
   GetJobsResponse,
@@ -72,11 +73,24 @@ const upsertJob: MutationFunction<
   graphql.EnqueueJobMutationVariables
 > = async (variables) => {
   const client = getClient();
-  const response = await client.request<
-    graphql.EnqueueJobMutation,
-    graphql.EnqueueJobMutationVariables
-  >(graphql.EnqueueJob, variables);
-  return response;
+  try {
+    const response = await client.request<
+      graphql.EnqueueJobMutation,
+      graphql.EnqueueJobMutationVariables
+    >(graphql.EnqueueJob, variables);
+    return response;
+  } catch (e) {
+    console.error(e);
+    if (e instanceof ClientError) {
+      console.error(e.cause);
+      console.error(e.stack);
+    }
+    if (e instanceof RequestError) {
+      console.error(e.original);
+    }
+
+    throw e;
+  }
 };
 
 /** Get run data (next and last) from a record */
@@ -127,6 +141,7 @@ const Home: NextPage = () => {
 
   const createJob = useCallback(
     (d: Fields) => {
+      console.log(d);
       const h = d.headers ? JSON.parse(d.headers) : {};
       // object => gql-like
       const headers = Object.keys(h).map((hd) => ({
@@ -147,8 +162,9 @@ const Home: NextPage = () => {
           endpoint: d.endpoint,
           runAt: undefString(d.runAt),
           runEvery: undefString(d.runEvery),
+          retries: parseInt(d.retries, 10),
           headers,
-          body: undefString(d.body),
+          body: JSON.stringify(Queue.wrapPayload(JSON.parse(d.body ?? ""))),
         },
       });
 

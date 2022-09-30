@@ -18,7 +18,7 @@ export default function handler(
   const q = Array.isArray(req.query.q) ? req.query.q[0] : req.query.q;
   const m = q ? bqToMango(bp.parseBooleanQuery(q), jobFacets) : null;
 
-  const jc = getCollection<JobDoc>("jobs");
+  const jc = getCollection<JobDoc>("tds-jobs");
 
   const jobs = jc
     .chain()

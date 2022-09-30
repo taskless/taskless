@@ -26,7 +26,7 @@ export const enqueueJob = async (
       }, {});
 
   const queue = await getQueue();
-  const col = getCollection<JobDoc>("jobs");
+  const col = getCollection<JobDoc>("tds-jobs");
 
   let doc: JobDoc | undefined;
 
@@ -44,6 +44,7 @@ export const enqueueJob = async (
         body: variables.job.body ?? null,
         method: variables.job.method ?? "POST",
       },
+      retries: variables.job.retries ?? undefined,
       runAt: runAt.toJSDate(),
       runEvery: variables.job.runEvery ?? undefined,
       timezone: variables.job.timezone ?? undefined,

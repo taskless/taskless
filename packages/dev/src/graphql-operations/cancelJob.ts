@@ -10,7 +10,7 @@ export const cancelJob = async (
   const id = context.v5(variables.name);
 
   const queue = await getQueue();
-  const col = getCollection<JobDoc>("jobs");
+  const col = getCollection<JobDoc>("tds-jobs");
 
   let doc: JobDoc | undefined;
 

@@ -12,8 +12,8 @@ export default async function handler(
 ) {
   // begin processing. Workers are idempotent. Adding a new worker sets the worker for future runs safely
   const q = await getQueue();
-  const jc = getCollection<JobDoc>("jobs");
-  const runs = getCollection<RunDoc>("runs");
+  const jc = getCollection<JobDoc>("tds-jobs");
+  const runs = getCollection<RunDoc>("tds-runs");
   q.process(async (job, api) => {
     const j = jc.findOne({
       id: job.jobId,
