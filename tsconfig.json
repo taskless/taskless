@@ -9,7 +9,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "importHelpers": true,
+    "importHelpers": false, // no longer needed thanks to tsup
     "inlineSources": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,

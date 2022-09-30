@@ -55,7 +55,6 @@
   },
   "dependencies": {
     "tinyduration": "^3.2.2",
-    "tslib": "^2.4.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {
