@@ -4,8 +4,8 @@ import {
   GraphQLResponse,
   Variables,
 } from "./graphql-types.js";
-import phin from "phin";
 import { RequestOptions } from "./request-types.js";
+import fetch from "isomorphic-unfetch";
 
 export async function request<TData, V extends Variables>(
   endpoint: string | URL,
@@ -20,7 +20,7 @@ export async function request<TData, V extends Variables>(
     variables: variables ?? ({} as V), // hard-cast
   };
 
-  let result: phin.IJSONResponse<GraphQLResponse<TData>> | undefined;
+  let result: GraphQLResponse<TData> | undefined;
 
   // legacy CJS dynamic import
   const pRetry =
@@ -28,17 +28,19 @@ export async function request<TData, V extends Variables>(
 
   try {
     result = await pRetry(
-      () =>
-        phin<GraphQLResponse>({
-          url: endpoint,
+      async () => {
+        const r = await fetch(endpoint, {
           method: "POST",
           headers: {
             ...(headers ?? {}),
             "content-type": "application/json",
           },
-          data: JSON.stringify(gqlRequest),
-          parse: "json",
-        }),
+          body: JSON.stringify(gqlRequest),
+        });
+        const j = (await r.json()) as GraphQLResponse<TData>;
+        return j;
+      },
+
       {
         retries: typeof retries === "number" ? retries : 5,
       }
@@ -55,17 +57,17 @@ export async function request<TData, V extends Variables>(
   }
 
   const gqlResponse: GraphQLResponse<TData> = {
-    data: result.body.data,
-    errors: result.body.errors,
-    extensions: result.body.extensions,
-    ...result.body,
+    data: result.data,
+    errors: result.errors,
+    extensions: result.extensions,
+    ...result,
   };
 
-  if (result.body.errors) {
+  if (result.errors) {
     throw new ClientError(gqlResponse, gqlRequest);
   }
 
-  return result.body.data as TData;
+  return result.data as TData;
 }
 
 export class GraphQLClient {
