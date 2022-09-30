@@ -2128,7 +2128,6 @@ __metadata:
     serialize-error: ^11.0.0
     shx: ^0.3.4
     ts-node: ^10.8.1
-    tslib: ^2.4.0
     tsup: ^6.2.3
     typescript: ^4.8.3
     zod: ^3.19.1
@@ -2145,6 +2144,7 @@ __metadata:
     "@tailwindcss/forms": ^0.5.0
     "@tailwindcss/typography": ^0.5.2
     "@taskless/graphinql": 3.2.1
+    "@taskless/next": 3.2.1
     "@taskless/types": 3.2.1
     "@taskless/ui": 3.2.1
     "@types/globalthis": ^1
@@ -2176,7 +2176,6 @@ __metadata:
     react-query: ^3.34.19
     shx: ^0.3.4
     tailwindcss: ^3.0.23
-    tslib: ^2.4.0
     typescript: ^4.8.3
     usehooks-ts: ^2.5.2
     uuid: ^8.3.2
@@ -2197,7 +2196,6 @@ __metadata:
     cookie-parser: ~1.4.4
     express: ^4.17.1
     ts-node: ^10.8.1
-    tslib: ^2.4.0
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft
@@ -2236,7 +2234,6 @@ __metadata:
     nextjs-cors: ^2.1.1
     react: ^17.0.2
     react-dom: ^17.0.2
-    tslib: ^2.4.0
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft
@@ -2254,7 +2251,6 @@ __metadata:
     npm-run-all: ^4.1.5
     shx: ^0.3.4
     ts-node: ^10.8.1
-    tslib: ^2.4.0
     tsup: ^6.2.3
     typescript: ^4.8.3
   peerDependencies:
@@ -2270,14 +2266,14 @@ __metadata:
   resolution: "@taskless/graphinql@workspace:packages/graphinql"
   dependencies:
     "@types/node": ^17.0.41
+    "@types/node-fetch": ^2.6.2
     ava: ^4.3.0
     cross-env: ^7.0.3
+    isomorphic-unfetch: ^3.1.0
     npm-run-all: ^4.1.5
     p-retry: ^4.6.2
-    phin: ^3.6.1
     shx: ^0.3.4
     ts-node: ^10.8.1
-    tslib: ^2.4.0
     tsup: ^6.2.3
     typescript: ^4.8.3
   languageName: unknown
@@ -2298,7 +2294,6 @@ __metadata:
     react-dom: ^17.0.2
     shx: ^0.3.4
     ts-node: ^10.8.1
-    tslib: ^2.4.0
     tsup: ^6.2.3
     typescript: ^4.8.3
   peerDependencies:
@@ -2333,7 +2328,6 @@ __metadata:
     release-it: ^15.4.2
     shx: ^0.3.4
     syncpack: ^7.2.1
-    tslib: ^2.4.0
     typescript: ^4.8.3
   languageName: unknown
   linkType: soft
@@ -2353,7 +2347,6 @@ __metadata:
     shx: ^0.3.4
     tinyduration: ^3.2.2
     ts-node: ^10.8.1
-    tslib: ^2.4.0
     tsup: ^6.2.3
     typescript: ^4.8.3
     zod: ^3.19.1
@@ -2374,7 +2367,6 @@ __metadata:
     react-dom: ^17.0.2
     shx: ^0.3.4
     ts-node: ^10.8.1
-    tslib: ^2.4.0
     tsup: ^6.2.3
     typescript: ^4.8.3
   peerDependencies:
@@ -2588,6 +2580,16 @@ __metadata:
   version: 1.2.2
   resolution: "@types/minimist@npm:1.2.2"
   checksum: b8da83c66eb4aac0440e64674b19564d9d86c80ae273144db9681e5eeff66f238ade9515f5006ffbfa955ceff8b89ad2bd8ec577d7caee74ba101431fb07045d
+  languageName: node
+  linkType: hard
+
+"@types/node-fetch@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "@types/node-fetch@npm:2.6.2"
+  dependencies:
+    "@types/node": "*"
+    form-data: ^3.0.0
+  checksum: 6f73b1470000d303d25a6fb92875ea837a216656cb7474f66cdd67bb014aa81a5a11e7ac9c21fe19bee9ecb2ef87c1962bceeaec31386119d1ac86e4c30ad7a6
   languageName: node
   linkType: hard
 
@@ -8408,6 +8410,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"isomorphic-unfetch@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "isomorphic-unfetch@npm:3.1.0"
+  dependencies:
+    node-fetch: ^2.6.1
+    unfetch: ^4.2.0
+  checksum: 82b92fe4ec2823a81ab0fc0d11bd94d710e6f9a940d56b3cba31896d4345ec9ffc7949f4ff31ebcae84f6b95f7ebf3474c4c7452b834eb4078ea3f2c37e459c5
+  languageName: node
+  linkType: hard
+
 "isomorphic-ws@npm:^5.0.0":
   version: 5.0.0
   resolution: "isomorphic-ws@npm:5.0.0"
@@ -13082,7 +13094,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.4.0":
+"tslib@npm:^1.8.1, tslib@npm:^1.9.0":
+  version: 1.14.1
+  resolution: "tslib@npm:1.14.1"
+  checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2, tslib@npm:^2.0.0, tslib@npm:^2.0.1, tslib@npm:^2.0.3, tslib@npm:^2.1.0, tslib@npm:^2.4.0, tslib@npm:~2.4.0":
   version: 2.4.0
   resolution: "tslib@npm:2.4.0"
   checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
@@ -13345,6 +13364,13 @@ __metadata:
   version: 5.10.0
   resolution: "undici@npm:5.10.0"
   checksum: 7ba2b71dccc74cd2bdf645b83e9aaef374ae04855943d0a2f42a3d0b9e5556f37cc9b5156fb5288277a2fa95fd46a56f3ae0d5cf73db3f008d75ec41104b136c
+  languageName: node
+  linkType: hard
+
+"unfetch@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "unfetch@npm:4.2.0"
+  checksum: 6a4b2557e1d921eaa80c4425ce27a404945ec26491ed06e62598f333996a91a44c7908cb26dc7c2746d735762b13276cf4aa41829b4c8f438dde63add3045d7a
   languageName: node
   linkType: hard
 
