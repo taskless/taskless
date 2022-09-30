@@ -5,6 +5,10 @@
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "yarn workspaces foreach -pitv --no-private run build",
+    "dev": "yarn workspaces foreach -pitv --no-private --exclude=@taskless/dev run build",
+    "dev:express": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-express run dev",
+    "dev:express-ts": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-express-ts run dev",
+    "dev:next": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-next run dev",
     "eslint": "eslint",
     "husky": "husky",
     "lint-staged": "lint-staged",

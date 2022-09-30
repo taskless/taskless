@@ -1,14 +1,12 @@
 {
   "private": true,
-  "name": "taskless-example-express",
+  "name": "@taskless/examples-express",
   "description": "Taskless Express 4 example app",
   "version": "3.2.1",
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "echo 'no express build step required'",
-    "dev": "concurrently -n taskless,express \"yarn:dev:taskless\" \"yarn:dev:express\"",
-    "dev:express": "node -r dotenv/config ./bin/www.js dotenv_config_path=./.env.development",
-    "dev:taskless": "taskless",
+    "dev": "node -r dotenv/config ./bin/www.js dotenv_config_path=./.env.development",
     "start": "node ./bin/www.js"
   },
   "type": "commonjs",
@@ -25,8 +23,6 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
-    "@taskless/dev": "3.2.1",
-    "concurrently": "^7.0.0",
     "dotenv": "^16.0.0"
   }
 }

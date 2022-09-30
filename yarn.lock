@@ -2187,6 +2187,36 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@taskless/examples-express-ts@workspace:examples/express-ts":
+  version: 0.0.0-use.local
+  resolution: "@taskless/examples-express-ts@workspace:examples/express-ts"
+  dependencies:
+    "@taskless/express": 3.2.1
+    "@types/express": ^4.17.13
+    "@types/node": ^17.0.41
+    cookie-parser: ~1.4.4
+    express: ^4.17.1
+    ts-node: ^10.8.1
+    tslib: ^2.4.0
+    typescript: ^4.8.3
+  languageName: unknown
+  linkType: soft
+
+"@taskless/examples-express@workspace:examples/express":
+  version: 0.0.0-use.local
+  resolution: "@taskless/examples-express@workspace:examples/express"
+  dependencies:
+    "@taskless/express": 3.2.1
+    cookie-parser: ~1.4.4
+    debug: ~2.6.9
+    dotenv: ^16.0.0
+    express: ^4.17.1
+    http-errors: ~1.6.3
+    jade: ~1.11.0
+    morgan: ~1.9.1
+  languageName: unknown
+  linkType: soft
+
 "@taskless/examples-next@workspace:examples/next":
   version: 0.0.0-use.local
   resolution: "@taskless/examples-next@workspace:examples/next"
@@ -12813,40 +12843,6 @@ __metadata:
   checksum: a04c07bb9e2d8f46776517d4618f2406fb977a74d914ad98b264fc3db0fe8224da5bec11e5f8902c5b9bcb8ace22d95fbe3c7b36b8593b7dfc8391a25898f32f
   languageName: node
   linkType: hard
-
-"taskless-example-express-ts@workspace:examples/express-ts":
-  version: 0.0.0-use.local
-  resolution: "taskless-example-express-ts@workspace:examples/express-ts"
-  dependencies:
-    "@taskless/dev": 3.2.1
-    "@taskless/express": 3.2.1
-    "@types/express": ^4.17.13
-    "@types/node": ^17.0.41
-    concurrently: ^7.0.0
-    cookie-parser: ~1.4.4
-    express: ^4.17.1
-    ts-node: ^10.8.1
-    tslib: ^2.4.0
-    typescript: ^4.8.3
-  languageName: unknown
-  linkType: soft
-
-"taskless-example-express@workspace:examples/express":
-  version: 0.0.0-use.local
-  resolution: "taskless-example-express@workspace:examples/express"
-  dependencies:
-    "@taskless/dev": 3.2.1
-    "@taskless/express": 3.2.1
-    concurrently: ^7.0.0
-    cookie-parser: ~1.4.4
-    debug: ~2.6.9
-    dotenv: ^16.0.0
-    express: ^4.17.1
-    http-errors: ~1.6.3
-    jade: ~1.11.0
-    morgan: ~1.9.1
-  languageName: unknown
-  linkType: soft
 
 "temp-dir@npm:^2.0.0":
   version: 2.0.0
