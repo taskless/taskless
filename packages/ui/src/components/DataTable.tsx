@@ -60,7 +60,7 @@ export const DataTable = <T = TableValue,>({
   return (
     <table
       className={cx(
-        "min-w-full divide-y divide-gray-300 table-fixed",
+        "min-w-full table-fixed divide-y divide-gray-300",
         className
       )}
     >
