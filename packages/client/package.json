@@ -47,12 +47,14 @@
   "files": [
     "package.json",
     "README.md",
-    "dist"
+    "dist",
+    "src"
   ],
   "engines": {
     "node": ">=14.19.0"
   },
   "dependencies": {
+    "@brillout/load-module": "^0.1.1",
     "@taskless/graphinql": "3.3.0",
     "@taskless/types": "3.3.0",
     "serialize-error": "^11.0.0",

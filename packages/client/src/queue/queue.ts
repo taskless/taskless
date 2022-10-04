@@ -20,6 +20,7 @@ import { headersToGql } from "../graphql-helpers/headers.js";
 import { GraphQLClient } from "../net/graphql-client.js";
 import { decode, encode, sign, verify } from "./encoder.js";
 import { resolveJobOptions } from "./util.js";
+import { loadModule } from "@brillout/load-module";
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -247,7 +248,9 @@ export class Queue<T> {
    */
   async receive(functions: ReceiveCallbacks) {
     // async import for CJS compatibility
-    const serializeError = (await import("serialize-error")).serializeError;
+    const { serializeError } = (await loadModule(
+      "serialize-error"
+    )) as typeof import("serialize-error");
 
     const { getBody, getHeaders, send, sendError } = functions;
 
