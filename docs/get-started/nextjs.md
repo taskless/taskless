@@ -1,4 +1,8 @@
-# Getting Started with Taskless and Next.js
+---
+title: Getting Started with Taskless and Next.js
+---
+
+# {% $frontmatter.title %}
 
 This document guides you through setting up Taskless for Next.js and creating your first Queue in a new project.
 
@@ -122,9 +126,9 @@ _View the full Next.js example at [github:taskless/examples/nextjs](https://gith
 For more information on what to do next, we recommend the following sections:
 
 - **Details**
-  - [@taskless/next](/docs/packages/next.md) - View the full Next.js integration docs
-  - [Environment](/docs/packages/client/env.md) - Learn about the environment variables Taskless uses
-  - [@taskless/dev](/docs/packages/dev.md) - Learn about the Taskless Dev Server
+  - [@taskless/next](/docs/packages/next) - View the full Next.js integration docs
+  - [Environment](/docs/packages/client/env) - Learn about the environment variables Taskless uses
+  - [@taskless/dev](/docs/packages/dev) - Learn about the Taskless Dev Server
 - **Concepts**
-  - [Jobs](/docs/concepts/jobs.md) - Learn the difference between Evented and Scheduled Jobs in Taskless
-  - [Encryption](/docs/concepts/encryption.md) - Learn how end-to-end encryption works with Taskless
+  - [Jobs](/docs/concepts/jobs) - Learn the difference between Evented and Scheduled Jobs in Taskless
+  - [Encryption](/docs/concepts/encryption) - Learn how end-to-end encryption works with Taskless

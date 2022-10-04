@@ -1,4 +1,8 @@
-# @taskless/dev
+---
+title: "@taskless/dev"
+---
+
+# {% $frontmatter.title %}
 
 The Taskless Dev Server **(TDS)** is an
 

@@ -1,4 +1,8 @@
-# @taskless/client
+---
+title: "@taskless/client"
+---
+
+# {% $frontmatter.title %}
 
 ```ts
 class Queue<T> {
@@ -31,16 +35,16 @@ interface ReceiveCallbacks {
 }
 ```
 
-Taskless Queues are stateless classes that only need to persist for the lifecycle of their request. Values set in the constructor are used during `receive` in order to handle an incoming request, or used by the core methods (enqueue & remove). The ultimate goal of the client is to translate developer friendly JavaScript APIs into GraphQL calls to the Taskless.io API in production and emulated RPC calls to the [Taskless Dev Server](./dev.md) in development.
+Taskless Queues are stateless classes that only need to persist for the lifecycle of their request. Values set in the constructor are used during `receive` in order to handle an incoming request, or used by the core methods (enqueue & remove). The ultimate goal of the client is to translate developer friendly JavaScript APIs into GraphQL calls to the Taskless.io API in production and emulated RPC calls to the [Taskless Dev Server](/docs/packages/dev) in development.
 
 ## Constructing a Queue
 
 While the `createQueue` interface is a more natural API, the `TasklessQueueConfig` provides all of the same arguments in an object literal. This allows us to add new features and options to the Queue, without forcing possibly breaking changes on the integrations.
 
 - `name: string` Describes the name of the queue, already defined on taskless.io
-- `route: string | (() => string)` Describes the route this queue is reachable on. If `typeof route === "function"`, then the route will be evaluated as lazily as possible. This allows for integrations such as [express](./express.md) to handle a late-binding of the route parameter in situations where the Taskless queue is not yet mounted to the routing structure
+- `route: string | (() => string)` Describes the route this queue is reachable on. If `typeof route === "function"`, then the route will be evaluated as lazily as possible. This allows for integrations such as [express](/docs/packages/express) to handle a late-binding of the route parameter in situations where the Taskless queue is not yet mounted to the routing structure
 - `handler?: JobHandler<T>` The handler for the job of payload type `<T>`. If undefined, the `Queue` may still be used in order to enqueue and remove Jobs. However, without `handler` defined, attempts to receive a job via `Queue.receive` will throw an error
-- `queueOptions?: QueueOptions` The options for the queue. These allow you to override items for this specific Queue such as the application ID or encryption keys. [See the full list of QueueOptions](./client/queue-options.md), including how to set default job options for all jobs created in this queue
+- `queueOptions?: QueueOptions` The options for the queue. These allow you to override items for this specific Queue such as the application ID or encryption keys. [See the full list of QueueOptions](/docs/packages/client/queue-options), including how to set default job options for all jobs created in this queue
 
 ## Core Methods
 
@@ -65,7 +69,7 @@ A Taskless Queue object can also receive job payloads through the `receive` meth
 
 ## Additional Reading
 
-- [Environment Variables](./client/env.md) Taskless Client uses several environment variables in order to reduce configuration in the `QueueOptions` object
-- [QueueOptions](./client/queue-options.md) the set of Queue options that can be passed into the Taskless client on creation
-- [JobOptions](./client/job-options.md) the set of Job options that can be passed into the Taskless client via `queueOptions.defaultJobOptions` on creation as a default for all Jobs in the queue. Can also be passed to `enqueue` and `update` to change the runtime configuration of a Job.
-- [Return Codes](./client/return-codes.md) beyond `200` and `500` can be controlled with Taskless' `JobError` object
+- [Environment Variables](/docs/packages/client/env) Taskless Client uses several environment variables in order to reduce configuration in the `QueueOptions` object
+- [QueueOptions](/docs/packages/client/queue-options) the set of Queue options that can be passed into the Taskless client on creation
+- [JobOptions](/docs/packages/client/job-options) the set of Job options that can be passed into the Taskless client via `queueOptions.defaultJobOptions` on creation as a default for all Jobs in the queue. Can also be passed to `enqueue` and `update` to change the runtime configuration of a Job.
+- [Return Codes](/docs/packages/client/return-codes) beyond `200` and `500` can be controlled with Taskless' `JobError` object

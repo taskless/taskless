@@ -1,4 +1,8 @@
-# Encryption in Taskless
+---
+title: Encryption in Taskless
+---
+
+# {% $frontmatter.title %}
 
 When using any Taskless client with an encryption key, your payloads are encrypted end-to-end inside the client before they are sent to Taskless. As a result of this, you won't be able to decrypt and view the contents of your payload on Taskless.io.
 

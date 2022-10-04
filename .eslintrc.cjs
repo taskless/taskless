@@ -92,6 +92,7 @@ module.exports = {
     "**/.swc/*",
     "**/.next/*",
     "**/__generated__/*",
+    "**/*.config.js",
   ],
 
   overrides: [
@@ -99,6 +100,24 @@ module.exports = {
     {
       files: ["**/.eslintrc.cjs", ".lintstagedrc.cjs", "commitlint.config.cjs"],
       extends: ["eslint:recommended", "prettier"],
+    },
+
+    // docs-site - Doc Preview, a next.js project
+    {
+      files: lintableFiles("./docs-site"),
+      excludedFiles: ["**/__generated__/*", "**.d.ts"],
+      ...tsProject("./docs-site"),
+      extends: [...tsProject("./docs-site").extends, "next"],
+      settings: {
+        ...tsProject("./docs-site").settings,
+        next: {
+          rootDir: "docs-site/",
+        },
+      },
+      rules: {
+        ...tsProject("./docs-site").rules,
+        ...nextJsImportRules,
+      },
     },
 
     // dev - Taskless Dev Server, a next.js project
