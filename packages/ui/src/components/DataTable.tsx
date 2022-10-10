@@ -34,7 +34,7 @@ type TableValue = Record<string | number | symbol, unknown>;
 
 const DEFAULT_HEAD =
   "py-3.5 px-3 text-left text-sm font-semibold text-gray-900";
-const DEFAULT_CELL = "py-4 px-3 text-sm text-gray-500 max-w-[300px]";
+const DEFAULT_CELL = "py-4 px-3 text-sm text-gray-500 max-w-xs";
 
 export const DataTable = <T = TableValue,>({
   data,
@@ -58,70 +58,75 @@ export const DataTable = <T = TableValue,>({
   }, []);
 
   return (
-    <table
-      className={cx(
-        "min-w-full divide-y divide-gray-300 table-fixed",
-        className
-      )}
-    >
-      <thead>
-        <tr>
-          {columns.map((c) => (
-            <th
-              key={c.name}
-              scope="col"
-              className={cx(DEFAULT_HEAD, c.headerClassName)}
-            >
-              {c.name}
-            </th>
-          ))}
-          {!hasDetailsColumn ? null : <th className={cx(DEFAULT_HEAD)}></th>}
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((row, idx) => {
-          const rowkey = keyOf ? keyOf(row) : `index${idx}`;
-          return (
-            <React.Fragment key={rowkey}>
-              <tr>
-                {columns.map((c) => {
-                  const colkey = `${rowkey}-${c.name}`;
-                  return (
-                    <td
-                      key={colkey}
-                      className={cx(DEFAULT_CELL, c.cellClassName)}
-                      title={c.title ? c.title({ record: row }) : undefined}
-                    >
-                      <c.renderValue record={row} />
-                      {c.renderSummary ? (
-                        <c.renderSummary record={row} />
-                      ) : null}
-                    </td>
-                  );
-                })}
-                {!hasDetailsColumn ? null : (
-                  <td>
-                    <button
-                      onClick={() => toggleDetails(rowkey)}
-                      className={cx(detailsButtonClassName)}
-                    >
-                      details
-                    </button>
-                  </td>
-                )}
-              </tr>
-              {openDetails[rowkey] !== true ||
-              typeof Details === "undefined" ? null : (
+    <div className="overflow-auto lg:overflow-visible">
+      <table
+        className={cx(
+          "min-w-full divide-y divide-gray-300 table-fixed",
+          className
+        )}
+      >
+        <thead>
+          <tr>
+            {columns.map((c) => (
+              <th
+                key={c.name}
+                scope="col"
+                className={cx(DEFAULT_HEAD, c.headerClassName)}
+              >
+                {c.name}
+              </th>
+            ))}
+            {!hasDetailsColumn ? null : <th className={cx(DEFAULT_HEAD)}></th>}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, idx) => {
+            const rowkey = keyOf ? keyOf(row) : `index${idx}`;
+            return (
+              <React.Fragment key={rowkey}>
                 <tr>
-                  <td colSpan={columns.length + 1}>
-                    <Details record={row} close={() => toggleDetails(rowkey)} />
-                  </td>
+                  {columns.map((c) => {
+                    const colkey = `${rowkey}-${c.name}`;
+                    return (
+                      <td
+                        key={colkey}
+                        className={cx(DEFAULT_CELL, c.cellClassName)}
+                        title={c.title ? c.title({ record: row }) : undefined}
+                      >
+                        <c.renderValue record={row} />
+                        {c.renderSummary ? (
+                          <c.renderSummary record={row} />
+                        ) : null}
+                      </td>
+                    );
+                  })}
+                  {!hasDetailsColumn ? null : (
+                    <td>
+                      <button
+                        onClick={() => toggleDetails(rowkey)}
+                        className={cx(detailsButtonClassName)}
+                      >
+                        details
+                      </button>
+                    </td>
+                  )}
                 </tr>
-              )}
-            </React.Fragment>
-          );
-        })}
-      </tbody>
-    </table>
+                {openDetails[rowkey] !== true ||
+                typeof Details === "undefined" ? null : (
+                  <tr>
+                    <td colSpan={columns.length + 1}>
+                      <Details
+                        record={row}
+                        close={() => toggleDetails(rowkey)}
+                      />
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
