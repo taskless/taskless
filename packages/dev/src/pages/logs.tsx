@@ -84,7 +84,6 @@ const Logs: NextPage = () => {
             let payload: TaskData | undefined;
             try {
               payload = JSON.parse(record.payload);
-              console.log({ payload });
             } catch {
               // do nothing
             }
