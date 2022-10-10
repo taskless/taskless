@@ -104,7 +104,7 @@ const Example: React.FC<{
     <button
       type="button"
       onClick={onClick}
-      className="px-2 py-1 border border-primary-500 rounded bg-white hover:bg-primary-500/10 transition-all"
+      className="border-primary-500 hover:bg-primary-500/10 rounded border bg-white px-2 py-1 transition-all"
     >
       use
     </button>
@@ -218,7 +218,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
         autoComplete="off"
       >
         <div className="flex flex-row gap-6">
-          <div className="flex flex-col gap-4 text-sm pt-8 flex-shrink-0 z-20">
+          <div className="z-20 flex flex-shrink-0 flex-col gap-4 pt-8 text-sm">
             <TabButton
               active={activeTab === "basic"}
               label="Basic Info"
@@ -255,7 +255,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
               onClick={() => setActiveTab("examples")}
             />
           </div>
-          <div className="flex flex-col w-full overflow-hidden">
+          <div className="flex w-full flex-col overflow-hidden">
             <Modal.Title>Create a Job</Modal.Title>
             <div className="flex flex-row pt-3">
               <DialogSection active={activeTab === "basic"}>
@@ -340,7 +340,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                       })}
                       error={formState.errors["runEveryType-other"]?.message}
                     />
-                    <span className="text-sm text-gray-500 self-end pr-2">
+                    <span className="self-end pr-2 text-sm text-gray-500">
                       {resolvedInterval && resolvedInterval.isValid
                         ? "Every " +
                           resolvedInterval.toHuman({
@@ -358,7 +358,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                   description={
                     <>
                       Headers to send with this request,{" "}
-                      <code className="not-italic font-mono">JSON</code>{" "}
+                      <code className="font-mono not-italic">JSON</code>{" "}
                       formatted
                     </>
                   }
@@ -402,7 +402,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                     <>
                       To sign your requests in development, provide the value
                       matching your project&apos;s{" "}
-                      <code className="not-italic font-mono">
+                      <code className="font-mono not-italic">
                         TASKLESS_SECRET
                       </code>{" "}
                       value.
@@ -418,7 +418,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                   ways Taskless jobs can be configured. By default, jobs point
                   to Taskless&apos; own local echo endpoint.
                 </p>
-                <div className="pt-4 flex flex-col gap-6 text-sm">
+                <div className="flex flex-col gap-6 pt-4 text-sm">
                   <Example
                     title="Immediate"
                     details={
@@ -562,7 +562,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
           <button
             type="submit"
             className={cx(
-              "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition",
+              "inline-flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium shadow-sm transition focus:outline-none sm:ml-3 sm:w-auto sm:text-sm",
               "bg-primary-700 hover:bg-primary-500 text-white"
             )}
           >
@@ -570,7 +570,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
           </button>
           <button
             className={cx(
-              "w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium focus:outline-none sm:ml-3 sm:w-auto sm:text-sm transition",
+              "inline-flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-base font-medium shadow-sm transition focus:outline-none sm:ml-3 sm:w-auto sm:text-sm",
               "border-gray-300 text-gray-700 hover:text-gray-500"
             )}
             onClick={onRequestClose}

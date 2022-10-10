@@ -33,9 +33,9 @@ const Logs: NextPage = () => {
 
   return (
     <Layout title="Logs - Taskless Development Server">
-      <div className="p-3 overflow-hidden bg-white rounded shadow-lg">
+      <div className="rounded bg-white p-3 shadow-lg">
         <div className="flex flex-row items-center gap-3">
-          <h2 className="flex flex-row items-center pb-1 text-xl font-medium text-ellipsis">
+          <h2 className="flex flex-row items-center text-ellipsis pb-1 text-xl font-medium">
             {q ? "Results for:" : "All Logs"}
           </h2>
           {q ? <code className="text-xs">{q}</code> : null}
@@ -54,7 +54,7 @@ const Logs: NextPage = () => {
               headerClassName: "w-1/3",
               cellClassName: "relative",
               renderValue: ({ record }) => (
-                <span className="absolute overflow-hidden left-3 right-3 top-4 whitespace-nowrap text-ellipsis">
+                <span className="absolute left-3 right-3 top-4 overflow-hidden text-ellipsis whitespace-nowrap">
                   {record.metadata.name ?? "-"}
                 </span>
               ),
@@ -89,29 +89,29 @@ const Logs: NextPage = () => {
               // do nothing
             }
             return (
-              <div className="relative flex flex-col w-full max-w-5xl px-3 pt-2 pb-3 mb-3 ml-6 bg-gray-100 rounded">
+              <div className="relative ml-6 mb-3 flex flex-col rounded bg-gray-100 px-3 pb-3 pt-2">
                 <button
-                  className="absolute self-start self-end text-gray-600 transition hover:text-gray-900 top-3"
+                  className="absolute top-3 self-start self-end text-gray-600 transition hover:text-gray-900"
                   onClick={() => close()}
                 >
-                  <XIcon className="w-3 h-3" />
+                  <XIcon className="h-3 w-3" />
                 </button>
                 <div className="pb-6">
                   <h4 className="flex-grow text-lg font-medium">Details</h4>
-                  <div className="flex flex-col w-full pt-3 text-sm lg:pt-6">
+                  <div className="flex w-full flex-col pt-3 text-sm lg:pt-6">
                     <span className="font-mono text-sm font-bold text-gray-700">
                       Headers
                     </span>
-                    <pre className="p-3 overflow-x-scroll text-xs text-white bg-gray-800 max-w-none">
+                    <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
                       {JSON.stringify(payload?.headers ?? {}, null, 2)}
                     </pre>
                   </div>
 
-                  <div className="flex flex-col w-full pt-3 text-sm lg:pt-6">
+                  <div className="flex w-full flex-col pt-3 text-sm lg:pt-6">
                     <span className="font-mono text-sm font-bold text-gray-700">
                       Body
                     </span>
-                    <pre className="p-3 overflow-x-scroll text-xs text-white bg-gray-800 max-w-none">
+                    <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
                       {JSON.stringify(
                         JSON.parse(payload?.body ?? ("{}" as string)) ?? {},
                         null,
@@ -120,11 +120,11 @@ const Logs: NextPage = () => {
                     </pre>
                   </div>
 
-                  <div className="flex flex-col w-full pt-3 text-sm lg:pt-6">
+                  <div className="flex w-full flex-col pt-3 text-sm lg:pt-6">
                     <span className="font-mono text-sm font-bold text-gray-700">
                       Response
                     </span>
-                    <pre className="p-3 overflow-x-scroll text-xs text-white bg-gray-800 max-w-none">
+                    <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
                       {JSON.stringify(
                         JSON.parse(record.body as string) ?? {},
                         null,

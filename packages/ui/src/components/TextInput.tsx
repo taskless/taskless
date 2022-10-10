@@ -25,7 +25,7 @@ export const TextInput: React.FC<TextInputProps> = ({
           {label ?? null}
           <em
             className={cx(
-              "text-xs ml-2",
+              "ml-2 text-xs",
               error ? "text-orange-500" : "text-gray-500"
             )}
           >
@@ -38,7 +38,7 @@ export const TextInput: React.FC<TextInputProps> = ({
           type="text"
           id={id}
           className={cx(
-            "shadow-sm block w-full sm:text-sm border-gray-300 rounded-md focus:border-gray-600 focus:outline-0 focus:ring-0",
+            "block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-600 focus:outline-0 focus:ring-0 sm:text-sm",
             inputClassName
           )}
           {...inputProps}

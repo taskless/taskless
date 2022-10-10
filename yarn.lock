@@ -745,6 +745,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@brillout/load-module@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@brillout/load-module@npm:0.1.1"
+  checksum: a4a5c1f506071d22ea88dcd6279f60d9c67343a2ba7f8aad8757b8e94a6827fa2f271bf279f701a1710fc001f3b981fad6f335d3ab50355ae18e5274dbcdd04d
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -2115,12 +2122,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@taskless/client@3.2.1, @taskless/client@workspace:packages/client":
+"@taskless/client@3.3.1, @taskless/client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "@taskless/client@workspace:packages/client"
   dependencies:
-    "@taskless/graphinql": 3.2.1
-    "@taskless/types": 3.2.1
+    "@brillout/load-module": ^0.1.1
+    "@taskless/graphinql": 3.3.1
+    "@taskless/types": 3.3.1
     "@types/node": ^17.0.41
     ava: ^4.3.0
     cross-env: ^7.0.3
@@ -2134,7 +2142,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/dev@3.2.1, @taskless/dev@workspace:packages/dev":
+"@taskless/dev@3.3.1, @taskless/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@taskless/dev@workspace:packages/dev"
   dependencies:
@@ -2143,10 +2151,10 @@ __metadata:
     "@tailwindcss/aspect-ratio": ^0.4.0
     "@tailwindcss/forms": ^0.5.0
     "@tailwindcss/typography": ^0.5.2
-    "@taskless/graphinql": 3.2.1
-    "@taskless/next": 3.2.1
-    "@taskless/types": 3.2.1
-    "@taskless/ui": 3.2.1
+    "@taskless/graphinql": 3.3.1
+    "@taskless/next": 3.3.1
+    "@taskless/types": 3.3.1
+    "@taskless/ui": 3.3.1
     "@types/globalthis": ^1
     "@types/lokijs": ^1.5.7
     "@types/luxon": ^3.0.1
@@ -2160,7 +2168,7 @@ __metadata:
     boolean-parser: ^0.0.2
     chalk: ^5.0.1
     classnames: ^2.3.1
-    docmq: ^0.4.1
+    docmq: ^0.4.2
     execa: ^6.1.0
     globalthis: ^1.0.3
     lokijs: ^1.5.12
@@ -2190,7 +2198,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@taskless/examples-express-ts@workspace:examples/express-ts"
   dependencies:
-    "@taskless/express": 3.2.1
+    "@taskless/express": 3.3.1
     "@types/express": ^4.17.13
     "@types/node": ^17.0.41
     cookie-parser: ~1.4.4
@@ -2204,7 +2212,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@taskless/examples-express@workspace:examples/express"
   dependencies:
-    "@taskless/express": 3.2.1
+    "@taskless/express": 3.3.1
     cookie-parser: ~1.4.4
     debug: ~2.6.9
     dotenv: ^16.0.0
@@ -2219,8 +2227,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@taskless/examples-next@workspace:examples/next"
   dependencies:
-    "@taskless/dev": 3.2.1
-    "@taskless/next": 3.2.1
+    "@taskless/dev": 3.3.1
+    "@taskless/next": 3.3.1
     "@types/eslint": ""
     "@types/luxon": ^3.0.1
     "@types/node": ^17.0.41
@@ -2238,12 +2246,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/express@3.2.1, @taskless/express@workspace:packages/express":
+"@taskless/express@3.3.1, @taskless/express@workspace:packages/express":
   version: 0.0.0-use.local
   resolution: "@taskless/express@workspace:packages/express"
   dependencies:
-    "@taskless/client": 3.2.1
-    "@taskless/types": 3.2.1
+    "@taskless/client": 3.3.1
+    "@taskless/types": 3.3.1
     "@types/express": ^4.17.13
     "@types/node": ^17.0.41
     ava: ^4.3.0
@@ -2261,7 +2269,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/graphinql@3.2.1, @taskless/graphinql@workspace:packages/graphinql":
+"@taskless/graphinql@3.3.1, @taskless/graphinql@workspace:packages/graphinql":
   version: 0.0.0-use.local
   resolution: "@taskless/graphinql@workspace:packages/graphinql"
   dependencies:
@@ -2279,12 +2287,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/next@3.2.1, @taskless/next@workspace:packages/next":
+"@taskless/next@3.3.1, @taskless/next@workspace:packages/next":
   version: 0.0.0-use.local
   resolution: "@taskless/next@workspace:packages/next"
   dependencies:
-    "@taskless/client": 3.2.1
-    "@taskless/types": 3.2.1
+    "@taskless/client": 3.3.1
+    "@taskless/types": 3.3.1
     "@types/node": ^17.0.41
     ava: ^4.3.0
     cross-env: ^7.0.3
@@ -2325,6 +2333,7 @@ __metadata:
     madge: ^5.0.1
     npm-run-all: ^4.1.5
     prettier: ^2.6.0
+    prettier-plugin-tailwindcss: ^0.1.13
     release-it: ^15.4.2
     shx: ^0.3.4
     syncpack: ^7.2.1
@@ -2332,7 +2341,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/types@3.2.1, @taskless/types@workspace:packages/types":
+"@taskless/types@3.3.1, @taskless/types@workspace:packages/types":
   version: 0.0.0-use.local
   resolution: "@taskless/types@workspace:packages/types"
   dependencies:
@@ -2353,7 +2362,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@taskless/ui@3.2.1, @taskless/ui@workspace:packages/ui":
+"@taskless/ui@3.3.1, @taskless/ui@workspace:packages/ui":
   version: 0.0.0-use.local
   resolution: "@taskless/ui@workspace:packages/ui"
   dependencies:
@@ -5406,10 +5415,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docmq@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "docmq@npm:0.4.1"
+"docmq@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "docmq@npm:0.4.2"
   dependencies:
+    "@brillout/load-module": ^0.1.1
     abort-controller: ^3.0.0
     cron-parser: ^4.4.0
     lokijs: ^1.5.12
@@ -5426,7 +5436,7 @@ __metadata:
       optional: true
     pg:
       optional: true
-  checksum: 38cfa8a56eeac43e7d6b01293e920355250ed7e889f3cd398efe6a0d8ec66843466196dfbe0f32dd606b6173615026fd270aaa6020af3db60effacbbe206fb20
+  checksum: 440dac1d23bba1d8afe760fac0fbc4ac4e4dff7201ac76bd45b6b22eec22a131579c4a4e6f30eb0f0c8318af823f6d17c6602b2b213a422fce80295c305186ee
   languageName: node
   linkType: hard
 
@@ -11063,6 +11073,15 @@ __metadata:
   version: 1.1.2
   resolution: "prelude-ls@npm:1.1.2"
   checksum: c4867c87488e4a0c233e158e4d0d5565b609b105d75e4c05dc760840475f06b731332eb93cc8c9cecb840aa8ec323ca3c9a56ad7820ad2e63f0261dadcb154e4
+  languageName: node
+  linkType: hard
+
+"prettier-plugin-tailwindcss@npm:^0.1.13":
+  version: 0.1.13
+  resolution: "prettier-plugin-tailwindcss@npm:0.1.13"
+  peerDependencies:
+    prettier: ">=2.2.0"
+  checksum: 1b9000686e661be81de7d36d514c5ee34a98b11639b538bce8dd3a482c073c0148feb9d54b526babaede681d1c5ecb318ad97f38e8d71dd5cc26c33dfcaf8344
   languageName: node
   linkType: hard
 
