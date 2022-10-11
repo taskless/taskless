@@ -203,8 +203,8 @@ const Home: NextPage = () => {
               name: "Name",
               renderValue: ({ record }) => {
                 return (
-                  <div>
-                    <span className="truncate">{record.name}</span>
+                  <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span>{record.name}</span>
                   </div>
                 );
               },
