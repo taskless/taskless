@@ -8,9 +8,10 @@
 
 <!-- Shields (mind the spacing) -->
 <p align="center">
-  <a aria-label="Taskless service status" href="https://status.taskless.io"><img alt="Taskless status" src="https://img.shields.io/website?style=flat-square&down_color=orange&down_message=unknown&label=Service&up_color=%2333CC12&up_message=up&url=https%3A%2F%2Ffor.taskless.io" target="_blank" /></a>
-  <a aria-label="Taskless Client is free to use" href="https://github.com/taskless/taskless/blob/main/LICENSE" target="_blank"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-success.svg?style=flat-square&color=33CC12" target="_blank" /></a>
-  <a aria-label="taskless downloads" href="http://www.npmtrends.com/@taskless/client" target="_blank"><img alt="Downloads" src="https://img.shields.io/npm/dm/taskless.svg?style=flat-square&labelColor=gray&color=33CC12&label=Downloads" /></a>
+  <a aria-label="Taskless on npm" href="https://npmjs.com/package/@taskless/client"><img alt="GitHub release (latest by date including pre-releases)" src="https://img.shields.io/github/v/release/taskless/taskless?include_prereleases&label=latest&style=flat-square"></a>
+  <a aria-label="taskless downloads" href="http://www.npmtrends.com/@taskless/client" target="_blank"><img alt="npm downloads" src="https://img.shields.io/npm/dt/@taskless/client?style=flat-square&color=33CC12"></a>
+  <a aria-label="Taskless service status" href="https://status.taskless.io"><img alt="Taskless status" src="https://img.shields.io/website?style=flat-square&down_color=orange&down_message=unknown&label=Service&up_color=%2333CC12&up_message=up&url=https%3A%2F%2Ffor.taskless.io" /></a>
+  <a aria-label="Taskless Client is free to use" href="https://github.com/taskless/taskless/blob/main/LICENSE" target="_blank"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-success.svg?style=flat-square&color=33CC12" /></a>
 </p>
 
 <!-- Docs -->
