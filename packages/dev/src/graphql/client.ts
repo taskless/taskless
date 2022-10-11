@@ -1,4 +1,8 @@
-import { GraphQLClient as CoreGraphQLClient } from "@taskless/graphinql";
+import {
+  GraphQLClient as CoreGraphQLClient,
+  ClientError,
+  RequestError,
+} from "@taskless/graphinql";
 
 /**
  * Extends the GraphinQL client to explicitly check for an app ID and secret
@@ -14,3 +18,5 @@ export class GraphQLClient extends CoreGraphQLClient {
 }
 
 export const getClient = () => new GraphQLClient();
+
+export { ClientError, RequestError };

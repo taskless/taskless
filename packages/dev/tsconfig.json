@@ -13,12 +13,17 @@
     "incremental": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "noEmit": true,
     "noUnusedParameters": false,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "noEmit": false
   },
-  "include": ["next-env.d.ts", "additional.d.ts", "**/*"],
+  "include": [
+    "next-env.d.ts",
+    "additional.d.ts",
+    "boolean-parser.d.ts",
+    "**/*"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,5 @@
-import { getJobsCollection, JobDoc } from "mongo/collections";
-import { getQueue } from "mongo/mq";
+import { getCollection, JobDoc } from "db/loki";
+import { getQueue } from "db/mq";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type ErrorResponse = {
@@ -15,11 +15,17 @@ export default async function handler(
   res: NextApiResponse<PromoteJobResponse | ErrorResponse>
 ) {
   const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
-  const jc = await getJobsCollection();
+  const jc = getCollection<JobDoc>("tds-jobs");
   const queue = await getQueue();
 
+  if (!id) {
+    return res.status(500).json({
+      error: "No ID",
+    });
+  }
+
   await queue.promote(id);
-  const job = await jc.findOne({ v5id: id });
+  const job = jc.findOne({ id });
 
   res.status(200).json({
     job,

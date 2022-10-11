@@ -26,12 +26,14 @@ In the root of the repository, we have a few common files that affect nearly eve
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device. (`git remote add upstream git@github.com:taskless/taskless.git` 😉). You can use `git clone --depth 1 --single-branch --branch main git@github.com:taskless/taskless.git`, discarding most of branches and history to clone it faster.
 2. Ensure at least [Node 14](https://nodejs.org/) is installed on your computer. (Check version with `node -v`). We have [Volta](https://volta.sh) defined on the root package.json to help out.
 3. Install the dependencies using yarn with `yarn install`
+4. Create an initial build running `yarn dev`, which builds all the libraries initially
 
 > If this didn't work for you as described, please [open an issue.](https://github.com/taskless/taskless/issues/new/choose)
 
-This project uses Yarn workspaces, making it easy to build dependent pacakges outside of the package you're currently working on. The following command builds all dependencies of `@taskless/client` enabling you to then run `yarn dev` and make your changes. The command can be easily adapted to any package or example you're working on.
+This project uses `tsup` (built on `esbuild`) to speed up builds. If you are editing an upstream dependency, please remember to rebuild & test the dependencies that use it. Once you've done an initial build, you can develop a specific package by running `yarn dev` in it. If you'd like to use the Taskless Dev Server with an example app for end-to-end testing or UI work, the following shortcuts are also available in the root package:
 
-`$PACKAGE=@taskless/client yarn workspaces foreach --from $PACKAGE -Rptiv run build`
+- `yarn dev:next` starts the Taskless Dev Server (:3001) and the example next.js app (:3000)
+- `yarn dev:express` starts the Taskless Dev Server (:3001) and the example express app (:3000)
 
 ## 📚 Updating Documentation
 

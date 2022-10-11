@@ -65,20 +65,20 @@ export const duration = z.string().transform((arg: unknown, ctx) => {
 
 /** zod for {@link JobOptions} */
 export const jobOptions = z.object({
-  /** Is the job enabled. Defaults to true. */
-  enabled: z.boolean().default(true),
   /** A key/value object to recieve as headers when your job is called. Defaults to an empty object */
   headers: jobHeaders.passthrough().optional(),
   /** The number of retries to attempt before the job is failed. Defaults to 5 */
   retries: z.number().optional().default(5),
   /**
-   * A future JS date or ISO-8601 formatted timestamp in the future that, when set,
+   * A JS date or ISO-8601 formatted timestamp in the future that, when set,
    * delays the execution of the job until the first opportunity after the specified
    * time. On job creation, a null or undefined value is treated as now().
    */
   runAt: dateOrIsoDate.nullable().optional(),
   /** An optional ISO-8601 Duration that enables repeated running of a job, or `null` to clear recurrence */
   runEvery: duration.nullable().optional(),
+  /** An optional IANA time zone identifier used when calculating future jobs via `runEvery` */
+  timezone: z.string().nullable().optional(),
 });
 
 /** A set of options on a per-job level */
@@ -113,6 +113,8 @@ export const job = z.object({
   runAt: dateOrIsoDate,
   /** An ISO-8601 duration for how often this job will repeat its run. A `null` value indicates no recurrence */
   runEvery: duration.nullable(),
+  /** An optional IANA time zone identifier used when calculating future jobs via `runEvery` */
+  timezone: z.string().nullable().optional(),
   /** The Job's payload to be delivered */
   payload: z.unknown(),
 });

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bp from "boolean-parser";
 import { bqToMango, jobFacets } from "util/bqToMango";
-import { getJobsCollection, JobDoc } from "mongo/collections";
+import { getCollection, JobDoc } from "db/loki";
 
 type ErrorResponse = {
   error: string;
@@ -11,23 +11,27 @@ export type GetJobsResponse = {
   jobs: JobDoc[];
 };
 
-export default async function handler(
+export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<GetJobsResponse | ErrorResponse>
 ) {
   const q = Array.isArray(req.query.q) ? req.query.q[0] : req.query.q;
   const m = q ? bqToMango(bp.parseBooleanQuery(q), jobFacets) : null;
 
-  const jc = await getJobsCollection();
+  const jc = getCollection<JobDoc>("tds-jobs");
 
-  const jobs = await jc
+  const jobs = jc
+    .chain()
     .find({
       ...(m ?? {}),
     })
-    .sort({
-      lastRun: 1,
+    .sort((a, b) => {
+      return (
+        new Date(b.summary?.lastRun ?? 0).getTime() -
+        new Date(a.summary?.lastRun ?? 0).getTime()
+      );
     })
-    .toArray();
+    .data();
 
   res.status(200).json({
     jobs,

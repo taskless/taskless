@@ -1,20 +1,16 @@
-import {
-  type CancelJobMutation,
-  type CancelJobMutationArguments,
-} from "@taskless/types";
-import { DateTime } from "luxon";
-import { getJobsCollection, JobDoc } from "mongo/collections";
-import { getQueue } from "mongo/mq";
+import { graphql } from "@taskless/types";
+import { getQueue } from "db/mq";
 import { Context } from "types";
+import { getCollection, JobDoc } from "db/loki";
 
 export const cancelJob = async (
-  variables: CancelJobMutationArguments,
+  variables: graphql.CancelJobMutationVariables,
   context: Context
-): Promise<CancelJobMutation> => {
+): Promise<graphql.CancelJobMutation> => {
   const id = context.v5(variables.name);
 
   const queue = await getQueue();
-  const col = await getJobsCollection();
+  const col = getCollection<JobDoc>("tds-jobs");
 
   let doc: JobDoc | undefined;
 
@@ -22,22 +18,16 @@ export const cancelJob = async (
     // remove
     await q.remove(variables.name);
 
-    // drop enabled flag
-    const result = await col.findOneAndUpdate(
-      {
-        v5id: id,
-      },
-      {
-        $set: {
-          enabled: false,
-        },
-      },
-      {
-        returnDocument: "after",
-      }
-    );
-
-    doc = result.value ?? undefined;
+    doc = col
+      .chain()
+      .find({
+        id,
+      })
+      .update((doc) => {
+        doc.enabled = false;
+        return doc;
+      })
+      .data()?.[0];
   });
 
   if (typeof doc === "undefined") {
@@ -49,12 +39,12 @@ export const cancelJob = async (
 
   return {
     cancelJob: {
-      id: doc.v5id,
+      id: doc.id,
       name: doc.name,
       endpoint: doc.endpoint,
       enabled: true,
       retries: doc.retries,
-      runAt: DateTime.fromJSDate(doc.runAt).toISO(),
+      runAt: doc.runAt,
       runEvery: doc.runEvery,
       headers: doc.headers ? JSON.parse(doc.headers) : null,
       body: doc.body,

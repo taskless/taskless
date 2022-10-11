@@ -12,7 +12,7 @@ export const Slash: React.FC<SVGProps<SVGSVGElement>> = ({
       strokeLinejoin="round"
       fill="none"
       shapeRendering="geometricPrecision"
-      className={cx("stroke-1 fill-current stroke-current", className)}
+      className={cx("fill-current stroke-current stroke-1", className)}
       {...rest}
     >
       <path d="M16.88 3.549L7.12 20.451"></path>

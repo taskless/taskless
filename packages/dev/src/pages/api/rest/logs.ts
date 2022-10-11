@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bp from "boolean-parser";
 import { bqToMango, runFacets } from "util/bqToMango";
-import { getRunsCollection, RunDoc } from "mongo/collections";
+import { getCollection, RunDoc } from "db/loki";
 
 type ErrorResponse = {
   error: string;
@@ -11,7 +11,7 @@ export type GetLogsResponse = {
   runs: RunDoc[];
 };
 
-export default async function handler(
+export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<GetLogsResponse | ErrorResponse>
 ) {
@@ -20,13 +20,14 @@ export default async function handler(
 
   // console.log(JSON.stringify(m));
 
-  const runs = await getRunsCollection();
-  const r = await runs
+  const runs = getCollection<RunDoc>("tds-runs");
+  const r = runs
+    .chain()
     .find({
       ...(m ?? {}),
     })
-    .sort({ ts: -1 })
-    .toArray();
+    .sort((a, b) => new Date(b.ts).getTime() - new Date(a.ts).getTime())
+    .data();
 
   res.status(200).json({
     runs: r,

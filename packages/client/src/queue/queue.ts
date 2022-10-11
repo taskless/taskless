@@ -1,10 +1,6 @@
 import {
   parsers,
   graphql,
-  type CancelJobMutation,
-  type CancelJobMutationArguments,
-  type EnqueueJobMutation,
-  type EnqueueJobMutationArguments,
   type Job,
   type JobHandler,
   type JobIdentifier,
@@ -24,6 +20,7 @@ import { headersToGql } from "../graphql-helpers/headers.js";
 import { GraphQLClient } from "../net/graphql-client.js";
 import { decode, encode, sign, verify } from "./encoder.js";
 import { resolveJobOptions } from "./util.js";
+import { loadModule } from "@brillout/load-module";
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -78,50 +75,66 @@ export class Queue<T> {
     return Array.isArray(name) ? name.join(s) : `${name}`;
   }
 
-  /** Turn a payload into a Taskless Body */
-  protected wrapPayload(payload: T): TasklessBody {
+  /**
+   * Turn a payload into a Taskless Body
+   * Can be called statically to, given an encryption key and secret, convert
+   * a payload of type P (usually a Record) into a fully-enveloped, optionally
+   * encrypted and optionally signed payload
+   */
+  static wrapPayload<P>(
+    payload: P,
+    options?: { encryptionKey?: string | null; secret?: string | null }
+  ): TasklessBody {
     const { transport, text } = encode(
       payload,
-      this.queueOptions.encryptionKey ?? undefined
+      options?.encryptionKey ?? undefined
     );
     return {
       v: 1,
       transport,
       text,
-      signature: sign(text, this.queueOptions?.credentials?.secret ?? ""),
+      signature: sign(text, options?.secret ?? ""),
     };
   }
 
-  /** Turn a Taskless Body into a payload */
-  protected unwrapPayload(
+  /**
+   * Turn a Taskless Body into a payload-pair
+   * Performs the inverse of Queue.wrapPayload, taking a Taskless envelope
+   * and converting it into a Record containing verified (boolean) and the
+   * original payload (P). If provided, signatures will also be checked
+   */
+  static unwrapPayload<P>(
     body: TasklessBody,
-    allowUnsigned: boolean
-  ): { payload: T; verified: boolean } {
+    options?: {
+      allowUnsigned: boolean;
+      secret?: string | null;
+      expiredSecrets?: (string | null)[];
+      encryptionKey?: string | null;
+      expiredEncryptionKeys?: (string | null)[];
+    }
+  ): { payload: P; verified: boolean } {
     if (body.v !== 1) {
       throw new Error("Unsupported Taskless Envelope");
     }
 
     let checked = false;
     let ver = false;
-    let payload: T | undefined;
+    let payload: P | undefined;
 
     // verify and decode text in the body
     if ("text" in body) {
       ver = verify(
         body.text,
-        [
-          this.queueOptions?.credentials?.secret,
-          ...(this.queueOptions?.credentials?.expiredSecrets ?? []),
-        ],
+        [options?.secret, ...(options?.expiredSecrets ?? [])],
         body.signature
       );
 
-      payload = decode<T>(
+      payload = decode<P>(
         body.text,
         body.transport,
         [
-          this.queueOptions.encryptionKey,
-          ...(this.queueOptions.expiredEncryptionKeys ?? []),
+          options?.encryptionKey,
+          ...(options?.expiredEncryptionKeys ?? []),
         ].filter((t) => t)
       );
 
@@ -130,7 +143,7 @@ export class Queue<T> {
 
     // decode json from the body as unverified data text > json
     if (!checked && "json" in body) {
-      payload = body.json as unknown as T;
+      payload = body.json as unknown as P;
       ver = false;
       checked = true;
     }
@@ -139,7 +152,7 @@ export class Queue<T> {
       throw new TypeError("Unrecognized payload body");
     }
 
-    if (!ver && !allowUnsigned) {
+    if (!ver && !options?.allowUnsigned) {
       if (!IS_DEVELOPMENT) {
         throw new Error("Signature mismatch");
       } else {
@@ -206,6 +219,27 @@ export class Queue<T> {
     });
   }
 
+  /** Call Queue.unwrapPayload with defaults set */
+  protected presetUnwrap(body: TasklessBody) {
+    return Queue.unwrapPayload<T>(body, {
+      allowUnsigned:
+        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
+        false,
+      encryptionKey: this.queueOptions.encryptionKey,
+      expiredEncryptionKeys: this.queueOptions.expiredEncryptionKeys,
+      secret: this.queueOptions.credentials?.secret,
+      expiredSecrets: this.queueOptions.credentials?.expiredSecrets,
+    });
+  }
+
+  /** Call Queue.wrapPayload with defaults set */
+  protected presetWrap(payload: T) {
+    return Queue.wrapPayload(payload, {
+      encryptionKey: this.queueOptions.encryptionKey,
+      secret: this.queueOptions.credentials?.secret,
+    });
+  }
+
   /**
    * Recieve a message and execute the handler for it
    * errors are caught and converted to a 500 response, while
@@ -213,8 +247,10 @@ export class Queue<T> {
    * @param functions A set of accessory functions for accessing the request and dispatching a response
    */
   async receive(functions: ReceiveCallbacks) {
-    const _serializeError = await import("serialize-error");
-    const serializeError = _serializeError.serializeError;
+    // async import for CJS compatibility
+    const { serializeError } = (await loadModule(
+      "serialize-error"
+    )) as typeof import("serialize-error");
 
     const { getBody, getHeaders, send, sendError } = functions;
 
@@ -225,10 +261,7 @@ export class Queue<T> {
     }
 
     const body = await Promise.resolve(getBody());
-    const { payload, verified } = this.unwrapPayload(
-      body,
-      this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ?? false
-    );
+    const { payload, verified } = this.presetUnwrap(body);
     const h: Awaited<ReturnType<typeof getHeaders>> = await getHeaders();
 
     try {
@@ -279,7 +312,7 @@ export class Queue<T> {
       options
     );
     const client = this.getClient();
-    const body = this.wrapPayload(payload);
+    const body = this.presetWrap(payload);
     const resolvedName = this.packName(name);
 
     let runAt: string | undefined = new Date().toISOString();
@@ -292,18 +325,19 @@ export class Queue<T> {
     }
 
     const job = await client.request<
-      EnqueueJobMutation,
-      EnqueueJobMutationArguments
-    >(graphql.enqueueJobMutationDocument, {
+      graphql.EnqueueJobMutation,
+      graphql.EnqueueJobMutationVariables
+    >(graphql.EnqueueJob, {
       name: resolvedName,
       job: {
         endpoint: this.resolveRoute(),
-        method: "POST",
+        method: graphql.JobMethodEnum.Post,
         headers: headersToGql(opts.headers),
         body: JSON.stringify(body),
         retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
         runAt,
         runEvery: opts.runEvery === null ? null : opts.runEvery ?? undefined,
+        timezone: opts.timezone === null ? null : opts.timezone ?? undefined,
       },
     });
 
@@ -314,14 +348,11 @@ export class Queue<T> {
       endpoint: job.enqueueJob.endpoint,
       enabled: job.enqueueJob.enabled === false ? false : true,
       headers: opts.headers,
-      payload: this.unwrapPayload(
-        resolvedBody,
-        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
-          false
-      ).payload,
+      payload: this.presetUnwrap(resolvedBody).payload,
       retries: job.enqueueJob.retries,
       runAt: job.enqueueJob.runAt ? new Date(job.enqueueJob.runAt) : undefined,
       runEvery: job.enqueueJob.runEvery ?? null,
+      timezone: job.enqueueJob.timezone ?? null,
     };
   }
 
@@ -339,9 +370,9 @@ export class Queue<T> {
     const resolvedName = this.packName(name);
 
     const job = await client.request<
-      CancelJobMutation,
-      CancelJobMutationArguments
-    >(graphql.cancelJobMutationDocument, {
+      graphql.CancelJobMutation,
+      graphql.CancelJobMutationVariables
+    >(graphql.CancelJob, {
       name: resolvedName,
     });
 
@@ -355,11 +386,7 @@ export class Queue<T> {
       name: job.cancelJob.name,
       endpoint: job.cancelJob.endpoint,
       enabled: job.cancelJob.enabled === false ? false : true,
-      payload: this.unwrapPayload(
-        resolvedBody,
-        this.queueOptions.__dangerouslyAllowUnverifiedSignatures?.allowed ??
-          false
-      ).payload,
+      payload: this.presetUnwrap(resolvedBody).payload,
       retries: job.cancelJob.retries,
       runAt: job.cancelJob.runAt ? new Date(job.cancelJob.runAt) : undefined,
       runEvery: job.cancelJob.runEvery ?? null,

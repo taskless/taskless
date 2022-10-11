@@ -1,8 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import {
-  CancelJobMutationArguments,
-  EnqueueJobMutationArguments,
-} from "@taskless/types";
+import { graphql } from "@taskless/types";
 import { cancelJob } from "graphql-operations/cancelJob";
 import { enqueueJob } from "graphql-operations/enqueueJob";
 import { type NextApiRequest, type NextApiResponse } from "next";
@@ -52,7 +49,10 @@ export default async function MockGraphqlServer(
   let results: Record<string, unknown> = {};
 
   if (/mutation\s+cancelJob\(/.test(query)) {
-    const r = await cancelJob(variables as CancelJobMutationArguments, context);
+    const r = await cancelJob(
+      variables as graphql.CancelJobMutationVariables,
+      context
+    );
     results = {
       ...results,
       ...r,
@@ -61,7 +61,7 @@ export default async function MockGraphqlServer(
 
   if (/mutation\s+enqueueJob\(/.test(query)) {
     const r = await enqueueJob(
-      variables as EnqueueJobMutationArguments,
+      variables as graphql.EnqueueJobMutationVariables,
       context
     );
     results = {

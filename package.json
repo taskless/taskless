@@ -1,11 +1,14 @@
 {
   "private": true,
   "name": "@taskless/root",
-  "version": "3.1.1",
+  "version": "3.3.1",
   "repository": "taskless/taskless.git",
   "scripts": {
-    "build": "run-s build:all",
-    "build:all": "yarn workspaces foreach -pitv --no-private run build",
+    "build": "yarn workspaces foreach -pitv --no-private run build",
+    "dev": "yarn workspaces foreach -pitv --no-private --exclude=@taskless/dev run build",
+    "dev:express": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-express run dev",
+    "dev:express-ts": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-express-ts run dev",
+    "dev:next": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-next run dev",
     "eslint": "eslint",
     "husky": "husky",
     "lint-staged": "lint-staged",
@@ -19,6 +22,7 @@
     "syncpack": "syncpack",
     "test": "FORCE_COLOR=1 yarn workspaces foreach -ptv --no-private run test"
   },
+  "type": "module",
   "workspaces": [
     "examples/*",
     "packages/*"
@@ -27,9 +31,6 @@
     "node": ">=14.19.0"
   },
   "packageManager": "yarn@3.2.0",
-  "dependencies": {
-    "tslib": "^2.4.0"
-  },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
@@ -37,6 +38,7 @@
     "@release-it-plugins/workspaces": "^3.2.0",
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
+    "chokidar-cli": "^3.0.0",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.7.1",
@@ -47,26 +49,28 @@
     "madge": "^5.0.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.0",
-    "release-it": "^15.3.0",
+    "prettier-plugin-tailwindcss": "^0.1.13",
+    "release-it": "^15.4.2",
     "shx": "^0.3.4",
     "syncpack": "^7.2.1",
-    "typescript": "^4.7.3"
+    "typescript": "^4.8.3"
   },
   "resolutions": {
+    "@brillout/load-module": "^0.1.1",
     "@types/eslint": "*",
     "@types/luxon": "^3.0.1",
     "@types/node": "^17.0.41",
     "@types/react": "^17.0.40",
-    "docmq": "^0.2.1",
+    "chokidar-cli": "^3.0.0",
+    "docmq": "^0.4.2",
     "luxon": "^3.0.3",
     "npm-run-all": "^4.1.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "tslib": "^2.4.0",
     "ts-node": "^10.8.1",
-    "typescript": "^4.7.3"
+    "typescript": "^4.8.3",
+    "tsup": "^6.2.3"
   },
-  "type": "module",
   "volta": {
     "node": "14.19.0"
   }

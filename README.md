@@ -1,7 +1,4 @@
 <!-- Banner -->
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 <p align="center">
   <a href="https://taskless.io">
     <img alt="taskless logo" height="128" src="./.github/resources/taskless.png">
@@ -14,6 +11,9 @@
   <a aria-label="Taskless service status" href="https://status.taskless.io"><img alt="Taskless status" src="https://img.shields.io/website?style=flat-square&down_color=orange&down_message=unknown&label=Service&up_color=%2333CC12&up_message=up&url=https%3A%2F%2Ffor.taskless.io" target="_blank" /></a>
   <a aria-label="Taskless Client is free to use" href="https://github.com/taskless/taskless/blob/main/LICENSE" target="_blank"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-success.svg?style=flat-square&color=33CC12" target="_blank" /></a>
   <a aria-label="taskless downloads" href="http://www.npmtrends.com/@taskless/client" target="_blank"><img alt="Downloads" src="https://img.shields.io/npm/dm/taskless.svg?style=flat-square&labelColor=gray&color=33CC12&label=Downloads" /></a>
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#-contributors)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 
 <!-- Docs -->
@@ -29,7 +29,7 @@
 - [🗺 Project Layout](#-project-layout)
 - [👏 Contributing](#-contributing)
 - [❓ FAQ](#-faq)
-- [❣️ Contributors](#-contributors)
+- [❣️ Contributors](#%EF%B8%8F-contributors)
 - [License](#license)
 
 Taskless makes it effortless to reuse your existing Jamstack for asynchronous job queues. It includes a set of client libraries that make it incredibly easy to queue and respond to tasks and a rich management console for everything from alerting to monitoring.
@@ -62,7 +62,7 @@ If you still have questions you can ask them on our [forums](#) and get support 
 
 ## ❣️ Contributors
 
-Curious about who makes Taskless? Here are our [team members](https://taskless.io/about)! Additionally, Taskless is made possible by the following members of the community who've contributed code, docs, bugs, and more.
+Curious about who makes Taskless? Here are our [team members](https://taskless.io/about)! Additionally, Taskless is made possible by the following members of the community who've contributed code, docs, bugs, and more. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -84,16 +84,3 @@ Curious about who makes Taskless? Here are our [team members](https://taskless.i
 ## License
 
 The Taskless source code in this repository is made available under the [MIT license](LICENSE). Some of the dependencies are licensed differently, with the BSD license, for example.
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

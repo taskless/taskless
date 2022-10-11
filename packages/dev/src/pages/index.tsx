@@ -22,12 +22,9 @@ import { PromoteJobResponse } from "./api/rest/job/[id]/promote";
 import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
 import { CreateJobModal, Fields } from "components/Modals/CreateJob";
 import Link from "next/link";
-import {
-  EnqueueJobMutation,
-  EnqueueJobMutationArguments,
-  graphql,
-} from "@taskless/types";
-import { getClient } from "graphql/client";
+import { graphql } from "@taskless/types";
+import { getClient, ClientError, RequestError } from "graphql/client";
+import { Queue } from "@taskless/next";
 
 const getJobs: QueryFunction<
   GetJobsResponse,
@@ -72,15 +69,28 @@ const replayJob: MutationFunction<
 };
 
 const upsertJob: MutationFunction<
-  EnqueueJobMutation,
-  EnqueueJobMutationArguments
+  graphql.EnqueueJobMutation,
+  graphql.EnqueueJobMutationVariables
 > = async (variables) => {
   const client = getClient();
-  const response = await client.request<
-    EnqueueJobMutation,
-    EnqueueJobMutationArguments
-  >(graphql.enqueueJobMutationDocument, variables);
-  return response;
+  try {
+    const response = await client.request<
+      graphql.EnqueueJobMutation,
+      graphql.EnqueueJobMutationVariables
+    >(graphql.EnqueueJob, variables);
+    return response;
+  } catch (e) {
+    console.error(e);
+    if (e instanceof ClientError) {
+      console.error(e.cause);
+      console.error(e.stack);
+    }
+    if (e instanceof RequestError) {
+      console.error(e.original);
+    }
+
+    throw e;
+  }
 };
 
 /** Get run data (next and last) from a record */
@@ -131,6 +141,7 @@ const Home: NextPage = () => {
 
   const createJob = useCallback(
     (d: Fields) => {
+      console.log(d);
       const h = d.headers ? JSON.parse(d.headers) : {};
       // object => gql-like
       const headers = Object.keys(h).map((hd) => ({
@@ -151,8 +162,9 @@ const Home: NextPage = () => {
           endpoint: d.endpoint,
           runAt: undefString(d.runAt),
           runEvery: undefString(d.runEvery),
+          retries: parseInt(d.retries, 10),
           headers,
-          body: undefString(d.body),
+          body: JSON.stringify(Queue.wrapPayload(JSON.parse(d.body ?? ""))),
         },
       });
 
@@ -164,9 +176,9 @@ const Home: NextPage = () => {
   return (
     <Layout title="Jobs - Taskless Development Server">
       <div className="flex flex-row gap-3 pb-3">
-        <div className="w-full relative flex flex-row">{/* Search */}</div>
+        <div className="relative flex w-full flex-row">{/* Search */}</div>
         <button
-          className="flex-shrink-0 bg-primary-700 text-white px-3 py-2 rounded-md flex flex-row items-center gap-3 hover:bg-primary-500 transition"
+          className="bg-primary-700 hover:bg-primary-500 flex flex-shrink-0 flex-row items-center gap-3 rounded-md px-3 py-2 text-white transition"
           onClick={openCreateModal}
         >
           <PlusIcon className="h-5 w-5" />
@@ -178,9 +190,9 @@ const Home: NextPage = () => {
           onRequestConfirm={createJob}
         />
       </div>
-      <div className="bg-white shadow-lg rounded p-3">
+      <div className="rounded bg-white p-3 shadow-lg">
         <div className="flex flex-row items-center gap-3">
-          <h2 className="text-xl font-medium pb-1 text-ellipsis flex-grow">
+          <h2 className="flex-grow text-ellipsis pb-1 text-xl font-medium">
             All Jobs
           </h2>
         </div>
@@ -191,8 +203,8 @@ const Home: NextPage = () => {
               name: "Name",
               renderValue: ({ record }) => {
                 return (
-                  <div>
-                    <span className="truncate">{record.name}</span>
+                  <div className="overflow-hidden text-ellipsis whitespace-nowrap">
+                    <span>{record.name}</span>
                   </div>
                 );
               },
@@ -210,9 +222,9 @@ const Home: NextPage = () => {
                       <button
                         title="Run now"
                         className="ml-2"
-                        onClick={() => promote({ id: record.v5id })}
+                        onClick={() => promote({ id: record.id })}
                       >
-                        <FastForwardIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
+                        <FastForwardIcon className="hover:fill-primary-300 h-3 w-3 fill-gray-500 transition" />
                       </button>
                     ) : null}
                   </div>
@@ -232,9 +244,9 @@ const Home: NextPage = () => {
                       <button
                         title="Replay Job"
                         className="ml-2"
-                        onClick={() => replay({ id: record.v5id })}
+                        onClick={() => replay({ id: record.id })}
                       >
-                        <ReplyIcon className="h-3 w-3 fill-gray-500 hover:fill-primary-300 transition" />
+                        <ReplyIcon className="hover:fill-primary-300 h-3 w-3 fill-gray-500 transition" />
                       </button>
                     ) : null}
                   </div>
@@ -257,34 +269,34 @@ const Home: NextPage = () => {
           hasDetailsColumn
           detailsButtonClassName="text-sm text-gray-500"
           renderDetails={({ record, close }) => (
-            <div className="ml-6 mb-3 px-3 pb-3 pt-2 bg-gray-100 flex flex-col rounded relative">
+            <div className="relative ml-6 mb-3 flex flex-col rounded bg-gray-100 px-3 pb-3 pt-2">
               <button
-                className="self-end text-gray-600 hover:text-gray-900 transition self-start absolute top-3"
+                className="absolute top-3 self-start self-end text-gray-600 transition hover:text-gray-900"
                 onClick={() => close()}
               >
-                <XIcon className="w-3 h-3" />
+                <XIcon className="h-3 w-3" />
               </button>
               <div className="pb-6">
-                <h4 className="text-lg font-medium flex-grow">Details</h4>
-                <div className="flex flex-row flex-wrap gap-3 lg:gap-6 text-sm">
-                  <div className="flex flex-col w-full md:w-1/3 lg:w-1/4">
+                <h4 className="flex-grow text-lg font-medium">Details</h4>
+                <div className="flex flex-row flex-wrap gap-3 text-sm lg:gap-6">
+                  <div className="flex w-full flex-col md:w-1/3 lg:w-1/4">
                     <div className="font-semibold">Enabled</div>
-                    <div className="text-xs overflow-hidden text-ellipsis">
+                    <div className="overflow-hidden text-ellipsis text-xs">
                       {record.enabled ? "TRUE" : "FALSE"}
                     </div>
                   </div>
 
-                  <div className="flex flex-col w-full md:w-1/3 lg:w-1/4">
+                  <div className="flex w-full flex-col md:w-1/3 lg:w-1/4">
                     <div className="font-semibold">Endpoint</div>
-                    <div className="text-xs overflow-hidden text-ellipsis">
+                    <div className="overflow-hidden text-ellipsis text-xs">
                       {record.endpoint}
                     </div>
                   </div>
 
-                  <div className="flex flex-col w-full md:w-1/3 lg:w-1/4">
+                  <div className="flex w-full flex-col md:w-1/3 lg:w-1/4">
                     <div className="font-semibold">Next Run</div>
                     <div
-                      className="text-xs overflow-hidden text-ellipsis flex flex-row items-center"
+                      className="flex flex-row items-center overflow-hidden text-ellipsis text-xs"
                       title={
                         extractRunData(record).next?.toUTC().toISO() ?? "-"
                       }
@@ -294,18 +306,18 @@ const Home: NextPage = () => {
                         <button
                           title="Run now"
                           className="ml-2"
-                          onClick={() => promote({ id: record.v5id })}
+                          onClick={() => promote({ id: record.id })}
                         >
-                          <FastForwardIcon className="h-3 w-3 fill-gray-800 hover:fill-primary-300 transition" />
+                          <FastForwardIcon className="hover:fill-primary-300 h-3 w-3 fill-gray-800 transition" />
                         </button>
                       ) : null}
                     </div>
                   </div>
 
-                  <div className="flex flex-col w-full md:w-1/3 lg:w-1/4">
+                  <div className="flex w-full flex-col md:w-1/3 lg:w-1/4">
                     <div className="font-semibold">Run Every</div>
                     <div
-                      className="text-xs overflow-hidden text-ellipsis"
+                      className="overflow-hidden text-ellipsis text-xs"
                       title={
                         record.runEvery
                           ? Duration.fromISO(record.runEvery).toISO()
@@ -320,20 +332,20 @@ const Home: NextPage = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col w-full text-sm pt-3 lg:pt-6">
-                <span className="text-sm font-bold font-mono text-gray-700">
+              <div className="flex w-full flex-col pt-3 text-sm lg:pt-6">
+                <span className="font-mono text-sm font-bold text-gray-700">
                   Headers
                 </span>
-                <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
+                <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
                   {JSON.stringify(record.headers ?? {}, null, 2)}
                 </pre>
               </div>
 
-              <div className="flex flex-col w-full text-sm pt-3 lg:pt-6">
-                <span className="text-sm font-bold font-mono text-gray-700">
+              <div className="flex w-full flex-col pt-3 text-sm lg:pt-6">
+                <span className="font-mono text-sm font-bold text-gray-700">
                   Body
                 </span>
-                <pre className="text-xs max-w-none overflow-x-scroll p-3 bg-gray-800 text-white">
+                <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
                   {record.body
                     ? JSON.stringify(
                         JSON.parse(`${record.body}`) ?? {},
@@ -347,10 +359,10 @@ const Home: NextPage = () => {
               <div className="pt-6 text-sm">
                 <Link
                   href={`/logs?${new URLSearchParams({
-                    q: `jobId:${record.v5id}`,
+                    q: `jobId:${record.id}`,
                   }).toString()}`}
                 >
-                  <a className="underline text-gray-700 decoration-gray-700 hover:text-primary-700 hover:decoration-primary-700 transition">
+                  <a className="hover:text-primary-700 hover:decoration-primary-700 text-gray-700 underline decoration-gray-700 transition">
                     View Logs
                   </a>
                 </Link>

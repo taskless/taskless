@@ -21,12 +21,12 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
   return (
     <fieldset>
       <div className="flex flex-row-reverse items-center justify-between gap-6">
-        <span className="flex-grow flex flex-col">
+        <span className="flex flex-grow flex-col">
           <label htmlFor={id} className="text-sm font-medium text-gray-700">
             {label}
             <em
               className={cx(
-                "text-xs block",
+                "block text-xs",
                 error ? "text-orange-500" : "text-gray-500"
               )}
             >
@@ -38,16 +38,16 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
           <input
             id={id}
             type="checkbox"
-            className="peer appearance-none hidden"
+            className="peer hidden appearance-none"
             {...inputProps}
           />
           <label
             htmlFor={id}
             className={cx(
-              "w-10 h-6",
-              "flex items-center flex-shrink-0 p-0.5 bg-gray-300 rounded-full duration-300 ease-in-out",
+              "h-6 w-10",
+              "flex flex-shrink-0 items-center rounded-full bg-gray-300 p-0.5 duration-300 ease-in-out",
               "peer-checked:bg-primary-500",
-              "after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-4",
+              "after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-md after:duration-300 peer-checked:after:translate-x-4",
               inputClassName
             )}
           />

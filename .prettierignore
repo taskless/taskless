@@ -1,3 +1,8 @@
 **/vendor
 reset.css
 **/__generated__/**/*
+.yarn
+.github
+.vscode
+node_modules
+.next

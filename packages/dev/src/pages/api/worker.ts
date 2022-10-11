@@ -1,5 +1,6 @@
-import { getJobsCollection, getRunsCollection } from "mongo/collections";
-import { getQueue, WorkerRequestError } from "mongo/mq";
+import { getCollection, JobDoc, RunDoc } from "db/loki";
+import { getQueue, WorkerRequestError } from "db/mq";
+import { DateTime } from "luxon";
 import type { NextApiRequest, NextApiResponse } from "next";
 import phin from "phin";
 import { logger } from "winston/logger";
@@ -11,11 +12,11 @@ export default async function handler(
 ) {
   // begin processing. Workers are idempotent. Adding a new worker sets the worker for future runs safely
   const q = await getQueue();
-  const jc = await getJobsCollection();
-  const runs = await getRunsCollection();
+  const jc = getCollection<JobDoc>("tds-jobs");
+  const runs = getCollection<RunDoc>("tds-runs");
   q.process(async (job, api) => {
-    const j = await jc.findOne({
-      v5id: job.jobId,
+    const j = jc.findOne({
+      id: job.jobId,
     });
 
     if (!j) {
@@ -69,13 +70,13 @@ export default async function handler(
   });
 
   // informational sync on next, fail, and dead
-  q.events.on("ack", async (info) => {
+  q.events.on("ack", (info) => {
     logger.info(`ACK of ${info.ref}`);
-    const now = new Date();
-    await runs.insertOne({
-      ts: now,
+    const now = DateTime.now();
+    runs.insertOne({
+      ts: now.toISO(),
       metadata: {
-        v5id: info.ref,
+        id: info.ref,
         name: info.payload.name,
       },
       success: true,
@@ -84,28 +85,30 @@ export default async function handler(
       body: JSON.stringify(info.result),
     });
 
-    await jc.updateOne(
-      {
-        v5id: info.ref,
-      },
-      {
-        $set: {
-          ...(info.next ? { runAt: info.next } : {}),
-          summary: {
-            nextRun: info.next,
-            lastRun: now,
-            lastStatus: true,
-          },
-        },
-      }
-    );
+    jc.chain()
+      .find({
+        id: info.ref,
+      })
+      .update((doc) => {
+        if (info.next) {
+          doc.runAt = DateTime.fromJSDate(info.next).toISO();
+        }
+        doc.summary = {
+          nextRun: info.next
+            ? DateTime.fromJSDate(info.next).toISO()
+            : undefined,
+          lastRun: now.toISO(),
+          lastStatus: true,
+        };
+      })
+      .data();
   });
 
   // on fail, add to job db runs
-  q.events.on("fail", async (info) => {
+  q.events.on("fail", (info) => {
     logger.info(`FAIL of ${info.ref}`);
     logger.error(info.error);
-    const now = new Date();
+    const now = DateTime.now();
 
     const code =
       info.error instanceof WorkerRequestError
@@ -117,10 +120,10 @@ export default async function handler(
         : JSON.stringify(info.result) ?? "";
     const name = info.payload?.name ?? info.ref;
 
-    await runs.insertOne({
-      ts: now,
+    runs.insertOne({
+      ts: now.toISO(),
       metadata: {
-        v5id: info.ref,
+        id: info.ref,
         name,
       },
       success: false,
@@ -129,40 +132,38 @@ export default async function handler(
       body,
     });
 
-    await jc.updateOne(
-      {
-        v5id: info.ref,
-      },
-      {
-        $set: {
-          ...(info.next ? { runAt: info.next } : {}),
-          summary: {
-            nextRun: info.next,
-            lastRun: now,
-            lastStatus: false,
-          },
-        },
-      }
-    );
+    jc.chain()
+      .find({
+        id: info.ref,
+      })
+      .update((doc) => {
+        if (info.next) {
+          doc.runAt = DateTime.fromJSDate(info.next).toISO();
+        }
+        doc.summary = {
+          nextRun: info.next
+            ? DateTime.fromJSDate(info.next).toISO()
+            : undefined,
+          lastRun: now.toISO(),
+          lastStatus: true,
+        };
+      })
+      .data();
   });
 
   // on dead, update next if needed
-  q.events.on("dead", async (info) => {
+  q.events.on("dead", (info) => {
     logger.info(`DEAD ITEM: ${info.ref}`);
-    if (!info.next) {
-      return;
-    }
 
-    await jc.updateOne(
-      {
-        v5id: info.ref,
-      },
-      {
-        $set: {
-          runAt: info.next,
-        },
-      }
-    );
+    jc.chain()
+      .find({ id: info.ref })
+      .update((doc) => {
+        if (!info.next) {
+          return;
+        }
+        doc.runAt = DateTime.fromJSDate(info.next).toISO();
+      })
+      .data();
   });
 
   q.events.on("error", (err) => {
