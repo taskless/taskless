@@ -55,4 +55,4 @@ When using `JobOptions` as part of `createQueue()` or the constructor for `Queue
 
 ## Additional Reading
 
-- [QueueOptions](/docs/packages/queue-options) the set of Queue options that can be passed into the Taskless client on creation
+- [QueueOptions](/docs/packages/client/queue-options) the set of Queue options that can be passed into the Taskless client on creation
