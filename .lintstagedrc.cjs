@@ -7,15 +7,21 @@ module.exports = {
   ],
   "packages/**/package.json": [() => "syncpack format", "prettier --write"],
 
-  ...["client", "dev", "express", "graphinql", "next", "types", "ui"].reduce(
-    (actions, package) => {
-      actions[`packages/${package}/**/*.{cjs,mjs,js,jsx,ts,tsx}`] = [
-        "eslint --fix",
-        () => `tsc --project ./packages/${package}/tsconfig.json --noEmit`,
-        "prettier --write",
-      ];
-      return actions;
-    },
-    {}
-  ),
+  ...[
+    "docs-site",
+    "packages/client",
+    "packages/dev",
+    "packages/express",
+    "packages/graphinql",
+    "packages/next",
+    "packages/types",
+    "packages/ui",
+  ].reduce((actions, pkg) => {
+    actions[`${pkg}/**/*.{cjs,mjs,js,jsx,ts,tsx}`] = [
+      "eslint --fix",
+      () => `tsc --project ./${pkg}/tsconfig.json --noEmit`,
+      "prettier --write",
+    ];
+    return actions;
+  }, {}),
 };

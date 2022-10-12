@@ -1,4 +1,8 @@
-# Queue Options
+---
+title: Queue Options
+---
+
+# {% $frontmatter.title %}
 
 ```ts
 interface QueueOptions {
@@ -20,13 +24,13 @@ interface QueueOptions {
 }
 ```
 
-When creating a `Queue`, either through [@taskless/client](../client.md) or one of the integrations, you may control the configuration and setup of a Queue through the use of `QueueOptions`. The majority of options for Queue creation can be retrieved from [environment variables](./env.md). Where possible, they will also use sensible defaults.
+When creating a `Queue`, either through [@taskless/client](/docs/packages/client) or one of the integrations, you may control the configuration and setup of a Queue through the use of `QueueOptions`. The majority of options for Queue creation can be retrieved from [environment variables](/docs/packages/client/env). Where possible, they will also use sensible defaults.
 
 `baseUrl?: string`
 **Default `process.env.TASKLESS_BASE_URL ?? ""`** The `baseUrl` property tells Taskless how to construct a route to the Queue, including the protocol, domain name, and port. Most commonly, you'll set this value to something like `http://localhost:3000` in development and `https://myapp.com` in production.
 
 `separator?: string`
-**Default `/`** When using arrays as a [Job Identifier](../../concepts/jobs.md#job-identifiers), this character is used to separate the namespacing of keys. **NOTE: Changing the separator when there are jobs in the queue can result in `enqueue()` creating duplicate jobs as the ID of a job will change.** In most cases, `/` should be good enough.
+**Default `/`** When using arrays as a [Job Identifier](/docs/concepts/jobs#job-identifiers), this character is used to separate the namespacing of keys. **NOTE: Changing the separator when there are jobs in the queue can result in `enqueue()` creating duplicate jobs as the ID of a job will change.** In most cases, `/` should be good enough.
 
 `credentials.projectId?: string`
 **Default `process.env.TASKLESS_ID` falls back to `undefined` in production, `0000...` in development** Identifies the project to Taskless or the development server. Combined with your secret, this ensures that only you are sending and receiving traffic for your application. It's recommended to take this values from an environment variable, so that it is not committed to your codebase.
@@ -44,11 +48,11 @@ When creating a `Queue`, either through [@taskless/client](../client.md) or one 
 **Default `process.env.TASKLESS_PREVIOUS_ENCRYPTION_KEYS.split(",") ?? []`** Similar to your application secret, encryption keys can be rotated. In the event that you need to rotate your keys, you can add previous keys (comma separated) either to the environment value or directly to the Queue configuration. When attempting to decrypt payloads, the Taskless client will try all previous encryption secrets before giving up. New data sent to Taskless will always be encrypted with the new encryption key, making it safe to remove an expired key after a period of time.
 
 `jobOptions?: JobOptions`
-**Default see [JobOptions](./job-options.md)** Specify job options that will be applied to every job in the queue. Sensible defaults are included, but you may wish to change these (such as disabling retries or passing additional headers) with every request.
+**Default see [JobOptions](/docs/packages/client/job-options)** Specify job options that will be applied to every job in the queue. Sensible defaults are included, but you may wish to change these (such as disabling retries or passing additional headers) with every request.
 
 `__dangerouslyAllowUnverifiedSignatures?: { allowed: boolean; };`
 **Default `undefined`** Allows you to explicitly allow unverified signatures. By default, the Taskless client checks the signatures of all incoming payloads against your `credentials.secret` and `expiredSecrets` values. If set, this option will disable those checks for the provided queue. When setting this flag, please be sure that you are confirming the payload's authenticity in another manner, either through request headers, IP origins, or your own signature checking system.
 
 ## Additional Reading
 
-- [JopOptions](./job-options.md) details on the Job Options which can be set as defaults for all Jobs created in this queue
+- [JopOptions](/docs/packages/client/job-options) details on the Job Options which can be set as defaults for all Jobs created in this queue

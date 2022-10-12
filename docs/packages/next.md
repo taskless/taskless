@@ -1,4 +1,8 @@
-# @taskless/next
+---
+title: "@taskless/next"
+---
+
+# {% $frontmatter.title %}
 
 ## createQueue
 
@@ -43,7 +47,7 @@ When using integrations such as [sentry for next.js](https://docs.sentry.io/plat
 
 In addition to the above, the following items are reexported from `@taskless/client` as a convenience.
 
-- [JobError](./client/job-error.md) An error object capable of handling advanced [return codes](./client/return-codes.md)
-- [Queue](./client/queue.md) The Taskless Queue object for advanced integrations
-- [JobOptions](./client/job-options.md) the set of Job options that can be passed into the Taskless client via `queueOptions.defaultJobOptions` on creation as a default for all Jobs in the queue. Can also be passed to `enqueue` and `update` to change the runtime configuration of a Job.
+- [JobError](/docs/packages/client/job-error) An error object capable of handling advanced [return codes](/docs/packages/client/return-codes)
+- [Queue](/docs/packages/client/queue) The Taskless Queue object for advanced integrations
+- [JobOptions](/docs/packages/client/job-options) the set of Job options that can be passed into the Taskless client via `queueOptions.defaultJobOptions` on creation as a default for all Jobs in the queue. Can also be passed to `enqueue` and `update` to change the runtime configuration of a Job.
 - [core Taskless types](https://github.com/taskless/taskless/tree/main/packages/types) for Typescript users

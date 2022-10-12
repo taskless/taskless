@@ -37,7 +37,7 @@ This project uses `tsup` (built on `esbuild`) to speed up builds. If you are edi
 
 ## 📚 Updating Documentation
 
-Our docs are made with [Next.js](https://github.com/vercel/next.js), built as part of the main Taskless.io website. They're located here in the `docs/` directory as Markdown files, and are deployed regularly.
+When making a docs change, you can run `yarn docs` and start a copy of the local docs server. We use [Markdoc](https://markdoc.dev/) for documentation, which is very similar to Markdown. The doc site preview is a [Next.js](https://github.com/vercel/next.js) app, pulling from the same `/docs` directory for both preview and on Taskless.io. Versioning of docs is handled through git tags.
 
 ## 📝 Writing a Commit Message
 

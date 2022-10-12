@@ -1,4 +1,8 @@
-# Job Options
+---
+title: Job Options
+---
+
+# {% $frontmatter.title %}
 
 ```ts
 type JobOptions = {
@@ -51,4 +55,4 @@ When using `JobOptions` as part of `createQueue()` or the constructor for `Queue
 
 ## Additional Reading
 
-- [QueueOptions](./queue-options.md) the set of Queue options that can be passed into the Taskless client on creation
+- [QueueOptions](/docs/packages/queue-options) the set of Queue options that can be passed into the Taskless client on creation

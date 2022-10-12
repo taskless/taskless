@@ -9,6 +9,7 @@
     "dev:express": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-express run dev",
     "dev:express-ts": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-express-ts run dev",
     "dev:next": "FORCE_COLOR=1 yarn workspaces foreach -pi --include=@taskless/dev --include=@taskless/examples-next run dev",
+    "docs": "yarn workspace @taskless/docs run dev",
     "eslint": "eslint",
     "husky": "husky",
     "lint-staged": "lint-staged",
@@ -24,6 +25,7 @@
   },
   "type": "module",
   "workspaces": [
+    "docs-site",
     "examples/*",
     "packages/*"
   ],

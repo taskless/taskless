@@ -1,4 +1,8 @@
-# Getting Started with Taskless and Express
+---
+title: Getting Started with Taskless and Express
+---
+
+# {% $frontmatter.title %}
 
 This document guides you through setting up Taskless for Express and creating your first Queue in a new project.
 
@@ -148,9 +152,9 @@ _View the full Express example at [github:taskless/examples/express](https://git
 For more information on what to do next, we recommend the following sections:
 
 - **Details**
-  - [@taskless/express](/docs/packages/express.md) - View the full Express integration docs
-  - [Environment](/docs/packages/client/env.md) - Learn about the environment variables Taskless uses
-  - [@taskless/dev](/docs/packages/dev.md) - Learn about the Taskless Dev Server
+  - [@taskless/express](/docs/packages/express) - View the full Express integration docs
+  - [Environment](/docs/packages/client/env) - Learn about the environment variables Taskless uses
+  - [@taskless/dev](/docs/packages/dev) - Learn about the Taskless Dev Server
 - **Concepts**
-  - [Jobs](/docs/concepts/jobs.md) - Learn the difference between Evented and Scheduled Jobs in Taskless
-  - [Encryption](/docs/concepts/encryption.md) - Learn how end-to-end encryption works with Taskless
+  - [Jobs](/docs/concepts/jobs) - Learn the difference between Evented and Scheduled Jobs in Taskless
+  - [Encryption](/docs/concepts/encryption) - Learn how end-to-end encryption works with Taskless
