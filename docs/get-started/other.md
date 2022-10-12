@@ -8,7 +8,7 @@ Creating a Taskless Queue directly lets you manage the integration with a framew
 
 ## Creating a Taskless Queue
 
-To create a Taskless Queue, you'll pass it a set of options that describe its routable URL, a callback for handling jobs, a set of [queue options](/docs/packages/client/queue#queue-options), and the default [job options](/docs/packages/client/queue#job-options).
+To create a Taskless Queue, you'll pass it a set of options that describe its routable URL, a callback for handling jobs, a set of [queue options](/docs/packages/client/queue-options), and the default [job options](/docs/packages/client/job-options).
 
 ```ts
 import { Queue } from "@taskless/client";
@@ -25,8 +25,8 @@ const queue = new Queue<T>({
 
 - `route`: The URL path name this Queue will be reachable on
 - `handler`: A Promise-returning callback that receives a Job of type `T` and associated metadata
-- `queueOptions`: The [`QueueOptions`](/docs/packages/client/queue#queue-options) for this queue
-- `jobOptions`: The default [`JobOptions`](/docs/packages/client/queue#job-options) for this queue
+- `queueOptions`: The [`QueueOptions`](/docs/packages/client/queue-options) for this queue
+- `jobOptions`: The default [`JobOptions`](/docs/packages/client/job-options) for this queue
 
 ## Exposing Taskless Queue Methods
 

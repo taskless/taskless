@@ -47,6 +47,6 @@ Create an [Express Router](https://expressjs.com/en/4x/api.html#router), optiona
 In addition to the above, the following items are reexported from `@taskless/client` as a convenience.
 
 - [JobError](/docs/packages/client/job-error) An error object capable of handling advanced [return codes](/docs/packages/client/return-codes)
-- [Queue](/docs/packages/client/queue) The Taskless Queue object for advanced integrations
+- [Queue](/docs/packages/client/overview) The Taskless Queue object for advanced integrations
 - [JobOptions](/docs/packages/client/job-options) the set of Job options that can be passed into the Taskless client via `queueOptions.defaultJobOptions` on creation as a default for all Jobs in the queue. Can also be passed to `enqueue` and `update` to change the runtime configuration of a Job.
 - [core Taskless types](https://github.com/taskless/taskless/tree/main/packages/types) for Typescript users
