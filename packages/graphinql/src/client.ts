@@ -6,6 +6,7 @@ import {
 } from "./graphql-types.js";
 import { RequestOptions } from "./request-types.js";
 import fetch from "isomorphic-unfetch";
+import { load } from "commonjs.js";
 
 export async function request<TData, V extends Variables>(
   endpoint: string | URL,
@@ -22,9 +23,8 @@ export async function request<TData, V extends Variables>(
 
   let result: GraphQLResponse<TData> | undefined;
 
-  // legacy CJS dynamic import
-  const pRetry =
-    (await import("p-retry"))?.default ?? (await import("p-retry"));
+  // CJS compatible import of an ESM-only module
+  const { default: pRetry } = await load<typeof import("p-retry")>("p-retry");
 
   try {
     result = await pRetry(

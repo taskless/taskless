@@ -6,8 +6,8 @@ This is an example of using the Taskless.io client in an Express application. Pl
 
 To run:
 
-1. run `yarn install`
-2. run `yarn start`
+1. run `pnpm install`
+2. run `pnpm start`
 3. visit `http://localhost:8080/run-sample` with your browser or wget the url with `wget http://localhost:8080/run-sample` from a terminal window
 
 ## Changes from Base App

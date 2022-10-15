@@ -25,19 +25,19 @@ In the root of the repository, we have a few common files that affect nearly eve
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device. (`git remote add upstream git@github.com:taskless/taskless.git` 😉). You can use `git clone --depth 1 --single-branch --branch main git@github.com:taskless/taskless.git`, discarding most of branches and history to clone it faster.
 2. Ensure at least [Node 14](https://nodejs.org/) is installed on your computer. (Check version with `node -v`). We have [Volta](https://volta.sh) defined on the root package.json to help out.
-3. Install the dependencies using yarn with `yarn install`
-4. Create an initial build running `yarn dev`, which builds all the libraries initially
+3. Install the dependencies using [pnpm](https://pnpm.io/) with `pnpm install`
+4. Create an initial build running `pnpm run dev`, which builds all the libraries initially
 
 > If this didn't work for you as described, please [open an issue.](https://github.com/taskless/taskless/issues/new/choose)
 
-This project uses `tsup` (built on `esbuild`) to speed up builds. If you are editing an upstream dependency, please remember to rebuild & test the dependencies that use it. Once you've done an initial build, you can develop a specific package by running `yarn dev` in it. If you'd like to use the Taskless Dev Server with an example app for end-to-end testing or UI work, the following shortcuts are also available in the root package:
+This project uses `tsup` (built on `esbuild`) to speed up builds. If you are editing an upstream dependency, please remember to rebuild & test the dependencies that use it. Once you've done an initial build, you can develop a specific package by running `pnpm run dev` in it. If you'd like to use the Taskless Dev Server with an example app for end-to-end testing or UI work, the following shortcuts are also available in the root package:
 
-- `yarn dev:next` starts the Taskless Dev Server (:3001) and the example next.js app (:3000)
-- `yarn dev:express` starts the Taskless Dev Server (:3001) and the example express app (:3000)
+- `pnpm run dev:next` starts the Taskless Dev Server (:3001) and the example next.js app (:3000)
+- `pnpm run dev:express` starts the Taskless Dev Server (:3001) and the example express app (:3000)
 
 ## 📚 Updating Documentation
 
-When making a docs change, you can run `yarn docs` and start a copy of the local docs server. We use [Markdoc](https://markdoc.dev/) for documentation, which is very similar to Markdown. The doc site preview is a [Next.js](https://github.com/vercel/next.js) app, pulling from the same `/docs` directory for both preview and on Taskless.io. Versioning of docs is handled through git tags.
+When making a docs change, you can run `pnpm run docs` and start a copy of the local docs server. We use [Markdoc](https://markdoc.dev/) for documentation, which is very similar to Markdown. The doc site preview is a [Next.js](https://github.com/vercel/next.js) app, pulling from the same `/docs` directory for both preview and on Taskless.io. Versioning of docs is handled through git tags.
 
 ## 📝 Writing a Commit Message
 
@@ -52,8 +52,8 @@ To help land your contribution, please make sure of the following:
 - Remember to be concise in your Conventional Commit
 - If your change is a `fix`, `feat`, or breaking change, you must update the `CHANGELOG.md` file. We curate this manually for now.
 - If you modified anything in `packages/`:
-  - You verified the transpiled TypeScript with `yarn build` in the directory of whichever package you modified.
-  - Run `yarn test` to ensure all existing tests pass for that package, along with any new tests you would've written.
+  - You verified the transpiled TypeScript with `pnpm run build` in the directory of whichever package you modified.
+  - Run `pnpm test` to ensure all existing tests pass for that package, along with any new tests you would've written.
 
 ## Additional Notes: Testing Against Production
 

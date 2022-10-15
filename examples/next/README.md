@@ -6,8 +6,8 @@ This example also shows how to use a `NextApiHandler` wrapper integration such a
 
 To run:
 
-1. run `yarn install`
-2. run `yarn dev`
+1. run `pnpm install`
+2. run `pnpm dev`
 
 A set of sample API endpoints are available that demonstrate the various job types you can enqueue
 

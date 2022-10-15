@@ -43,7 +43,7 @@
     "boolean-parser": "^0.0.2",
     "chalk": "^5.0.1",
     "classnames": "^2.3.2",
-    "docmq": "^0.4.2",
+    "docmq": "^0.5.1",
     "execa": "^6.1.0",
     "globalthis": "^1.0.3",
     "lokijs": "^1.5.12",
