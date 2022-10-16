@@ -4,9 +4,7 @@ title: "@taskless/dev"
 
 # {% $frontmatter.title %}
 
-The Taskless Dev Server **(TDS)** is an
-
-Taskless comes with an integrated development server at `@taskless/dev`, designed to let you test and run a local Taskless instance for end-to-end tests, development, and prototyping. Because all requests are routed to `@taskless/dev` in development by default, this is an effective way to only use Job invocations for legitimate production traffic.
+The Taskless Dev Server **(TDS)** is a dev dependency that lets you run a local Taskless instance for development and testing without making calls to Taskless.io. As much as possible, we work to ensure TDS has the same feature set as the main Taskless site, simplified down to a node.js-friendly module.
 
 ## Installation
 
