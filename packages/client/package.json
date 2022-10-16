@@ -1,7 +1,7 @@
 {
   "name": "@taskless/client",
   "description": "Core JavaScript client for Taskless.io",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -54,8 +54,8 @@
     "node": ">=14.19.0"
   },
   "dependencies": {
-    "@taskless/graphinql": "3.3.2",
-    "@taskless/types": "3.3.2",
+    "@taskless/graphinql": "3.3.3",
+    "@taskless/types": "3.3.3",
     "serialize-error": "^11.0.0",
     "zod": "^3.19.1"
   },
