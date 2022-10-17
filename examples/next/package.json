@@ -25,7 +25,7 @@
   "devDependencies": {
     "@taskless/dev": "3.3.3",
     "@types/eslint": "",
-    "@types/luxon": "^3.0.1",
+    "@types/luxon": "^3.0.2",
     "@types/node": "^17.0.41",
     "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.0",
