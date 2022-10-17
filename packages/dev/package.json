@@ -1,7 +1,7 @@
 {
   "name": "@taskless/dev",
   "description": "Development Server for Taskless.io",
-  "version": "3.3.3",
+  "version": "3.3.4",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
@@ -36,10 +36,10 @@
   "dependencies": {
     "@headlessui/react": "^1.7.3",
     "@heroicons/react": "^1.0.6",
-    "@taskless/graphinql": "3.3.3",
-    "@taskless/next": "3.3.3",
-    "@taskless/types": "3.3.3",
-    "@taskless/ui": "3.3.3",
+    "@taskless/graphinql": "3.3.4",
+    "@taskless/next": "3.3.4",
+    "@taskless/types": "3.3.4",
+    "@taskless/ui": "3.3.4",
     "boolean-parser": "^0.0.2",
     "chalk": "^5.1.2",
     "classnames": "^2.3.2",
