@@ -1,7 +1,7 @@
 {
   "name": "@taskless/ui",
   "description": "Common UI for Taskless.io and the Taskless Dev Client",
-  "version": "3.3.4",
+  "version": "3.3.5",
   "author": {
     "name": "Taskless.io",
     "email": "oss@taskless.io",
