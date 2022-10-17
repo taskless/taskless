@@ -20,7 +20,6 @@ import { headersToGql } from "../graphql-helpers/headers.js";
 import { GraphQLClient } from "../net/graphql-client.js";
 import { decode, encode, sign, verify } from "./encoder.js";
 import { resolveJobOptions } from "./util.js";
-import { load } from "commonjs.js";
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -248,9 +247,7 @@ export class Queue<T> {
    */
   async receive(functions: ReceiveCallbacks) {
     // CJS export compatibility for ESM-only import
-    const { serializeError } = await load<typeof import("serialize-error")>(
-      "serialize-error"
-    );
+    const { serializeError } = await import("serialize-error");
 
     const { getBody, getHeaders, send, sendError } = functions;
 
