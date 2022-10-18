@@ -32,7 +32,7 @@
 
 Taskless makes it effortless to reuse your existing Jamstack for asynchronous job queues. It includes a set of client libraries that make it incredibly easy to queue and respond to tasks and a rich management console for everything from alerting to monitoring.
 
-[Click here to view the Taskless Community Guidelines](https://taskless.io/guidelines). Thank you for helping keep the Taskless community open and welcoming!
+Thank you for helping keep the Taskless community open and welcoming!
 
 ## 📚 Documentation
 
@@ -63,7 +63,9 @@ If you still have questions you can ask them on our [forums](#) and get support 
 Curious about who makes Taskless? Here are our [team members](https://taskless.io/about)! Additionally, Taskless is made possible by the following members of the community who've contributed code, docs, bugs, and more. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#-contributors)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
