@@ -7,7 +7,7 @@ import {
   useQueryClient,
 } from "react-query";
 import { Layout } from "components/Layout";
-import { DataTable } from "@taskless/ui";
+import { DataTable, Output } from "@taskless/ui";
 import { DateTime, Duration } from "luxon";
 import {
   FastForwardIcon,
@@ -118,7 +118,7 @@ const Home: NextPage = () => {
 
   const qc = useQueryClient();
   const { data } = useQuery(["jobs", { search: "" }], getJobs, {
-    refetchInterval: 5000,
+    // refetchInterval: 5000,
   });
 
   const { mutate: promote } = useMutation(promoteJob, {
@@ -336,24 +336,20 @@ const Home: NextPage = () => {
                 <span className="font-mono text-sm font-bold text-gray-700">
                   Headers
                 </span>
-                <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
-                  {JSON.stringify(record.headers ?? {}, null, 2)}
-                </pre>
+                <Output
+                  className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white rounded"
+                  output={record.headers}
+                />
               </div>
 
               <div className="flex w-full flex-col pt-3 text-sm lg:pt-6">
                 <span className="font-mono text-sm font-bold text-gray-700">
                   Body
                 </span>
-                <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
-                  {record.body
-                    ? JSON.stringify(
-                        JSON.parse(`${record.body}`) ?? {},
-                        null,
-                        2
-                      )
-                    : ""}
-                </pre>
+                <Output
+                  className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white rounded"
+                  output={record.body ?? undefined}
+                />
               </div>
 
               <div className="pt-6 text-sm">

@@ -2,7 +2,7 @@ import { getCollection, JobDoc, RunDoc } from "db/loki";
 import { getQueue, WorkerRequestError } from "db/mq";
 import { DateTime } from "luxon";
 import type { NextApiRequest, NextApiResponse } from "next";
-import phin from "phin";
+import fetch from "isomorphic-fetch";
 import { logger } from "winston/logger";
 
 /** Stats a worker cron that polls and manages events in development */
@@ -31,28 +31,26 @@ export default async function handler(
       "x-taskless-id": job.projectId,
     };
 
-    const request: phin.IOptions = {
-      url: j.endpoint,
-      method: "POST",
-      headers,
-      // attach data if set
-      ...(j.body ? { data: j.body } : {}),
-      followRedirects: true,
-      timeout: 15000,
-    };
-
     let statusCode: number | undefined;
     let responseBody: string | undefined;
 
     try {
-      const resp = await phin({
-        ...request,
-        parse: "json",
+      const c = new AbortController();
+      const t = setTimeout(() => c.abort(), 15000);
+      const r = await fetch(j.endpoint, {
+        method: "POST",
+        headers,
+        // attach data if set
+        ...(j.body ? { body: j.body } : {}),
+        redirect: "follow",
+        signal: c.signal,
       });
+      clearTimeout(t);
+      const resp = await r.json();
 
-      statusCode = resp.statusCode ?? 200;
+      statusCode = r.status ?? 200;
       responseBody = JSON.stringify(resp.body);
-      if (`${resp.statusCode}`.indexOf("2") !== 0) {
+      if (`${statusCode}`.indexOf("2") !== 0) {
         const err = new WorkerRequestError("Received non-2xx response");
         err.code = statusCode;
         err.body = responseBody;
@@ -60,7 +58,7 @@ export default async function handler(
       }
     } catch (e) {
       console.error(e);
-      return api.fail("Unknown error from phin");
+      return api.fail("Error from fetch");
     }
 
     return api.ack({

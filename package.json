@@ -5,7 +5,7 @@
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "pnpm run -r --filter='./packages/*' build",
-    "dev": "pnpm run -r --filter='./packages/*' --filter='!./packages/dev' build",
+    "dev": "pnpm run -r --filter='./packages/*' --parallel --stream dev",
     "dev:express": "FORCE_COLOR=1 pnpm run --filter='@taskless/dev' --filter='@taskless/examples-express' --stream dev",
     "dev:express-ts": "FORCE_COLOR=1 pnpm run --filter='@taskless/dev' --filter='@taskless/examples-express-ts' --stream dev",
     "dev:next": "FORCE_COLOR=1 pnpm run --filter='@taskless/dev' --filter='@taskless/examples-next' --stream dev",

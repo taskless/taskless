@@ -8,7 +8,7 @@
 const { createServer } = require("http");
 const { parse } = require("url");
 const next = require("next");
-const phin = require("phin");
+const fetch = require("isomorphic-fetch");
 const shimmedGlobal = require("globalthis").shim();
 
 // a global shared across all next.js pathways for in-memory databases
@@ -47,7 +47,8 @@ app
     }).listen(port, (err) => {
       if (err) throw err;
       // start worker via URL request
-      phin(new URL("/api/worker", `http://${hostname}:${port}`).toString())
+      fetch(new URL("/api/worker", `http://${hostname}:${port}`).toString())
+        .then((r) => r.json())
         .then(() => {
           console.log(`Taskless Dev Server @ http://${hostname}:${port}`);
         })

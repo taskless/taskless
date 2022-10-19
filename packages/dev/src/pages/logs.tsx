@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { QueryFunction, useQuery } from "react-query";
 import { Layout } from "components/Layout";
-import { DataTable } from "@taskless/ui";
+import { DataTable, Output } from "@taskless/ui";
 import { DateTime } from "luxon";
 import { XIcon } from "@heroicons/react/solid";
 import { GetLogsResponse } from "./api/rest/logs";
@@ -28,7 +28,7 @@ const Logs: NextPage = () => {
   const r = useRouter();
   const q = Array.isArray(r.query.q) ? r.query.q[0] : r.query.q;
   const { data } = useQuery(["logs", { search: q ?? "" }], getLogs, {
-    refetchInterval: 5000,
+    // refetchInterval: 5000,
   });
 
   return (
@@ -101,35 +101,30 @@ const Logs: NextPage = () => {
                     <span className="font-mono text-sm font-bold text-gray-700">
                       Headers
                     </span>
-                    <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
-                      {JSON.stringify(payload?.headers ?? {}, null, 2)}
-                    </pre>
+                    <Output
+                      className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white rounded"
+                      output={payload?.headers}
+                    />
                   </div>
 
                   <div className="flex w-full flex-col pt-3 text-sm lg:pt-6">
                     <span className="font-mono text-sm font-bold text-gray-700">
                       Body
                     </span>
-                    <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
-                      {JSON.stringify(
-                        JSON.parse(payload?.body ?? ("{}" as string)) ?? {},
-                        null,
-                        2
-                      )}
-                    </pre>
+                    <Output
+                      className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white rounded"
+                      output={payload?.body ?? undefined}
+                    />
                   </div>
 
                   <div className="flex w-full flex-col pt-3 text-sm lg:pt-6">
                     <span className="font-mono text-sm font-bold text-gray-700">
                       Response
                     </span>
-                    <pre className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white">
-                      {JSON.stringify(
-                        JSON.parse(record.body as string) ?? {},
-                        null,
-                        2
-                      )}
-                    </pre>
+                    <Output
+                      className="max-w-none overflow-x-scroll bg-gray-800 p-3 text-xs text-white rounded"
+                      output={record.body}
+                    />
                   </div>
                 </div>
               </div>
