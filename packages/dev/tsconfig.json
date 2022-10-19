@@ -3,9 +3,11 @@
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": "./src",
+    // next.js specific module settings
     "target": "es5",
     "module": "esnext",
     "moduleResolution": "node",
+    // -- next.js specific module settings
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "esModuleInterop": true,

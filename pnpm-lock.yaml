@@ -225,7 +225,6 @@ importers:
       '@taskless/types': 3.3.5
       '@taskless/ui': 3.3.5
       '@types/globalthis': ^1
-      '@types/isomorphic-fetch': ^0.0.36
       '@types/lokijs': ^1.5.7
       '@types/luxon': ^3.0.2
       '@types/node': ^17.0.41
@@ -239,11 +238,11 @@ importers:
       chalk: ^5.1.2
       classnames: ^2.3.2
       copy-to-clipboard: ^3.3.2
+      cross-fetch: ^3.1.5
       docmq: ^0.5.2
       encoding: ^0.1.13
       execa: ^6.1.0
       globalthis: ^1.0.3
-      isomorphic-fetch: ^3.0.0
       lokijs: ^1.5.12
       luxon: ^3.0.3
       next: 12.3.1
@@ -272,11 +271,11 @@ importers:
       chalk: 5.1.2
       classnames: 2.3.2
       copy-to-clipboard: 3.3.2
+      cross-fetch: 3.1.5_encoding@0.1.13
       docmq: 0.5.2
       encoding: 0.1.13
       execa: 6.1.0
       globalthis: 1.0.3
-      isomorphic-fetch: 3.0.0_encoding@0.1.13
       lokijs: 1.5.12
       luxon: 3.0.4
       next: 12.3.1_sfoxds7t5ydpegc3knd667wn6m
@@ -294,7 +293,6 @@ importers:
       '@tailwindcss/forms': 0.5.3_tailwindcss@3.1.8
       '@tailwindcss/typography': 0.5.7_tailwindcss@3.1.8
       '@types/globalthis': 1.0.1
-      '@types/isomorphic-fetch': 0.0.36
       '@types/lokijs': 1.5.7
       '@types/luxon': 3.0.2
       '@types/node': 17.0.45
@@ -343,6 +341,7 @@ importers:
       '@types/node-fetch': ^2.6.2
       ava: ^4.3.0
       cross-env: ^7.0.3
+      cross-fetch: ^3.1.5
       isomorphic-unfetch: ^3.1.0
       npm-run-all: ^4.1.5
       p-retry: ^5.1.1
@@ -351,6 +350,7 @@ importers:
       tsup: ^6.2.3
       typescript: ^4.8.3
     dependencies:
+      cross-fetch: 3.1.5
       isomorphic-unfetch: 3.1.0
       p-retry: 5.1.1
     devDependencies:
@@ -2267,10 +2267,6 @@ packages:
     resolution: {integrity: sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ==}
     dev: true
 
-  /@types/isomorphic-fetch/0.0.36:
-    resolution: {integrity: sha512-ulw4d+vW1HKn4oErSmNN2HYEcHGq0N1C5exlrMM0CRqX1UUpFhGb5lwiom5j9KN3LBJJDLRmYIZz1ghm7FIzZw==}
-    dev: true
-
   /@types/js-yaml/4.0.5:
     resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==}
     dev: true
@@ -3882,7 +3878,14 @@ packages:
       node-fetch: 2.6.7
     transitivePeerDependencies:
       - encoding
-    dev: true
+
+  /cross-fetch/3.1.5_encoding@0.1.13:
+    resolution: {integrity: sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==}
+    dependencies:
+      node-fetch: 2.6.7_encoding@0.1.13
+    transitivePeerDependencies:
+      - encoding
+    dev: false
 
   /cross-spawn/6.0.5:
     resolution: {integrity: sha512-eTVLrBSt7fjbDygz805pMnstIs2VTBNkRm0qxZd+M7A5XDdxVRWO5MxGBXZhjY4cqLYLdtrGqRf8mBPmzwSpWQ==}
@@ -6451,15 +6454,6 @@ packages:
     transitivePeerDependencies:
       - encoding
     dev: true
-
-  /isomorphic-fetch/3.0.0_encoding@0.1.13:
-    resolution: {integrity: sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==}
-    dependencies:
-      node-fetch: 2.6.7_encoding@0.1.13
-      whatwg-fetch: 3.6.2
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /isomorphic-unfetch/3.1.0:
     resolution: {integrity: sha512-geDJjpoZ8N0kWexiwkX8F9NkTsXhetLPVbZFQ+JTW239QNOwvB0gniuR1Wc6f0AMTn7/mFGyXvHTifrCp/GH8Q==}
@@ -10033,6 +10027,7 @@ packages:
 
   /whatwg-fetch/3.6.2:
     resolution: {integrity: sha512-bJlen0FcuU/0EMLrdbJ7zOnW6ITZLrZMIarMUVmdKtsGvZna8vxKYaexICWPfZ8qwf9fzNq+UEIZrnSaApt6RA==}
+    dev: true
 
   /whatwg-url/5.0.0:
     resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}

@@ -2,7 +2,7 @@ import { getCollection, JobDoc, RunDoc } from "db/loki";
 import { getQueue, WorkerRequestError } from "db/mq";
 import { DateTime } from "luxon";
 import type { NextApiRequest, NextApiResponse } from "next";
-import fetch from "isomorphic-fetch";
+import fetch from "cross-fetch";
 import { logger } from "winston/logger";
 
 /** Stats a worker cron that polls and manages events in development */

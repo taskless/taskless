@@ -5,7 +5,7 @@ import {
   Variables,
 } from "./graphql-types.js";
 import { RequestOptions } from "./request-types.js";
-import fetch from "isomorphic-unfetch";
+import fetch from "cross-fetch";
 
 export async function request<TData, V extends Variables>(
   endpoint: string | URL,

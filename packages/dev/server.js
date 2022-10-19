@@ -8,7 +8,7 @@
 const { createServer } = require("http");
 const { parse } = require("url");
 const next = require("next");
-const fetch = require("isomorphic-fetch");
+const fetch = require("cross-fetch");
 const shimmedGlobal = require("globalthis").shim();
 
 // a global shared across all next.js pathways for in-memory databases
