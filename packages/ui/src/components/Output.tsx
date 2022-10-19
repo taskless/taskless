@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import cx from "classnames";
-import Highlight, { defaultProps } from "prism-react-renderer";
+import Highlight, { defaultProps, type PrismTheme } from "prism-react-renderer";
 import copy from "copy-to-clipboard";
 
-import theme from "prism-react-renderer/themes/vsDark/index.js";
+// subdir import w/o export map
 import { ClipboardCopyIcon } from "@heroicons/react/solid/index.js";
 
 interface OutputProps {
   className?: string;
   output?: string;
+  theme?: PrismTheme;
 }
 
 const deserializeNestedJson = (key: string, value: unknown) => {
@@ -34,6 +35,7 @@ const noop = () => {
 export const Output: React.FC<OutputProps> = ({
   className: rootClassName,
   output,
+  theme,
 }) => {
   const [copied, setCopied] = React.useState(false);
 
