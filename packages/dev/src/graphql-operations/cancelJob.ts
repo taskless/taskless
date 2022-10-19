@@ -12,23 +12,17 @@ export const cancelJob = async (
   const queue = await getQueue();
   const col = getCollection<JobDoc>("tds-jobs");
 
-  let doc: JobDoc | undefined;
-
-  await queue.transaction(async (q) => {
-    // remove
-    await q.remove(variables.name);
-
-    doc = col
-      .chain()
-      .find({
-        id,
-      })
-      .update((doc) => {
-        doc.enabled = false;
-        return doc;
-      })
-      .data()?.[0];
-  });
+  await queue.remove(variables.name);
+  const doc = col
+    .chain()
+    .find({
+      id,
+    })
+    .update((doc) => {
+      doc.enabled = false;
+      return doc;
+    })
+    .data()?.[0];
 
   if (typeof doc === "undefined") {
     // nothing to remove, null cancelJob

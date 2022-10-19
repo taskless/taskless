@@ -30,9 +30,8 @@ export const enqueueJob = async (
 
   let doc: JobDoc | undefined;
 
-  await queue.transaction(async (q) => {
-    // job
-    await q.enqueue({
+  try {
+    await queue.enqueue({
       ref: id,
       payload: {
         queueName: context.queueName,
@@ -74,7 +73,9 @@ export const enqueueJob = async (
     col.insertOne(next);
 
     doc = next;
-  });
+  } catch (e) {
+    doc = undefined;
+  }
 
   if (typeof doc === "undefined") {
     throw new Error("No doc");

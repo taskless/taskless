@@ -109,7 +109,7 @@ importers:
 
   examples/express:
     specifiers:
-      '@taskless/express': 3.3.5
+      '@taskless/express': 3.4.0
       cookie-parser: ~1.4.4
       debug: ~2.6.9
       dotenv: ^16.0.0
@@ -130,7 +130,7 @@ importers:
 
   examples/express-ts:
     specifiers:
-      '@taskless/express': 3.3.5
+      '@taskless/express': 3.4.0
       '@types/express': ^4.17.13
       '@types/node': ^17.0.41
       cookie-parser: ~1.4.4
@@ -149,8 +149,8 @@ importers:
 
   examples/next:
     specifiers:
-      '@taskless/dev': 3.3.5
-      '@taskless/next': 3.3.5
+      '@taskless/dev': 3.4.0
+      '@taskless/next': 3.4.0
       '@types/eslint': ''
       '@types/luxon': ^3.0.2
       '@types/node': ^17.0.41
@@ -186,8 +186,8 @@ importers:
 
   packages/client:
     specifiers:
-      '@taskless/graphinql': 3.3.5
-      '@taskless/types': 3.3.5
+      '@taskless/graphinql': 3.4.0
+      '@taskless/types': 3.4.0
       '@types/node': ^17.0.41
       ava: ^4.3.0
       cross-env: ^7.0.3
@@ -220,10 +220,10 @@ importers:
       '@tailwindcss/aspect-ratio': ^0.4.2
       '@tailwindcss/forms': ^0.5.0
       '@tailwindcss/typography': ^0.5.7
-      '@taskless/graphinql': 3.3.5
-      '@taskless/next': 3.3.5
-      '@taskless/types': 3.3.5
-      '@taskless/ui': 3.3.5
+      '@taskless/graphinql': 3.4.0
+      '@taskless/next': 3.4.0
+      '@taskless/types': 3.4.0
+      '@taskless/ui': 3.4.0
       '@types/globalthis': ^1
       '@types/lokijs': ^1.5.7
       '@types/luxon': ^3.0.2
@@ -239,7 +239,7 @@ importers:
       classnames: ^2.3.2
       copy-to-clipboard: ^3.3.2
       cross-fetch: ^3.1.5
-      docmq: ^0.5.2
+      docmq: ^0.5.3
       encoding: ^0.1.13
       execa: ^6.1.0
       globalthis: ^1.0.3
@@ -272,7 +272,7 @@ importers:
       classnames: 2.3.2
       copy-to-clipboard: 3.3.2
       cross-fetch: 3.1.5_encoding@0.1.13
-      docmq: 0.5.2
+      docmq: 0.5.3
       encoding: 0.1.13
       execa: 6.1.0
       globalthis: 1.0.3
@@ -310,8 +310,8 @@ importers:
 
   packages/express:
     specifiers:
-      '@taskless/client': 3.3.5
-      '@taskless/types': 3.3.5
+      '@taskless/client': 3.4.0
+      '@taskless/types': 3.4.0
       '@types/express': ^4.17.13
       '@types/node': ^17.0.41
       ava: ^4.3.0
@@ -366,8 +366,8 @@ importers:
 
   packages/next:
     specifiers:
-      '@taskless/client': 3.3.5
-      '@taskless/types': 3.3.5
+      '@taskless/client': 3.4.0
+      '@taskless/types': 3.4.0
       '@types/node': ^17.0.41
       ava: ^4.3.0
       cross-env: ^7.0.3
@@ -4271,8 +4271,8 @@ packages:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
     dev: true
 
-  /docmq/0.5.2:
-    resolution: {integrity: sha512-pxh2MKRhS/gmLhVUvEmwveG1J5BP/eh0w9xdTubxypqFOw/PlUMHvYAN0XCFrOnJ5KXlXVLhpQI6Hv6OY8YhSQ==}
+  /docmq/0.5.3:
+    resolution: {integrity: sha512-MUxTlrOhk5Z1HrjwzDl8AcD42Ry4JVoTpTubrAM6ro+fDsdTxE+exmlcKqOqgKf+JFtGhct4dmZTPp8qDyC8Kg==}
     engines: {node: '>=14.19.0', pnpm: 7.x}
     peerDependencies:
       mongodb: ^4.7.0

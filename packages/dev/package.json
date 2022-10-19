@@ -45,7 +45,7 @@
     "classnames": "^2.3.2",
     "copy-to-clipboard": "^3.3.2",
     "cross-fetch": "^3.1.5",
-    "docmq": "^0.5.2",
+    "docmq": "^0.5.3",
     "encoding": "^0.1.13",
     "execa": "^6.1.0",
     "globalthis": "^1.0.3",
