@@ -7,3 +7,4 @@ export { SwitchInput } from "./SwitchInput.js";
 export { TabButton } from "./TabButton.js";
 export { TextAreaInput } from "./TextAreaInput.js";
 export { TextInput } from "./TextInput.js";
+export { Output } from "./Output.js";
