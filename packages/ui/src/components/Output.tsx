@@ -3,10 +3,8 @@ import cx from "classnames";
 import Highlight, { defaultProps } from "prism-react-renderer";
 import copy from "copy-to-clipboard";
 
-// eslint-disable-next-line node/file-extension-in-import
-import theme from "prism-react-renderer/themes/vsDark";
-// eslint-disable-next-line node/file-extension-in-import
-import { ClipboardCopyIcon } from "@heroicons/react/solid";
+import theme from "prism-react-renderer/themes/vsDark/index.js";
+import { ClipboardCopyIcon } from "@heroicons/react/solid/index.js";
 
 interface OutputProps {
   className?: string;
