@@ -1,0 +1,11 @@
+{
+  "name": "taskless-cjs-verify",
+  "type": "commonjs",
+  "private": true,
+  "dependencies": {
+    "@taskless/graphinql": "file:../../packages/graphinql",
+    "@taskless/client": "file:../../packages/client",
+    "@taskless/express": "file:../../packages/express",
+    "@taskless/next": "file:../../packages/next"
+  }
+}

@@ -8,7 +8,7 @@ Creating a Taskless Queue directly lets you manage the integration with a framew
 
 ## Creating a Taskless Queue
 
-To create a Taskless Queue, you'll pass it a set of options that describe its routable URL, a callback for handling jobs, a set of [queue options](/docs/packages/client/queue-options), and the default [job options](/docs/packages/client/job-options).
+To create a Taskless Queue, you'll pass it a set of options that describe its routable URL, a callback for handling jobs, a set of [queue options](/docs/api/create#queue-options), and the default [job options](/docs/api/enqueue#job-options).
 
 ```ts
 import { Queue } from "@taskless/client";
@@ -25,8 +25,8 @@ const queue = new Queue<T>({
 
 - `route`: The URL path name this Queue will be reachable on
 - `handler`: A Promise-returning callback that receives a Job of type `T` and associated metadata
-- `queueOptions`: The [`QueueOptions`](/docs/packages/client/queue-options) for this queue
-- `jobOptions`: The default [`JobOptions`](/docs/packages/client/job-options) for this queue
+- `queueOptions`: The [`QueueOptions`](/docs/api/create#queue-options) for this queue
+- `jobOptions`: The default [`JobOptions`](/docs/api/enqueue#job-options) for this queue
 
 ## Exposing Taskless Queue Methods
 
@@ -62,10 +62,6 @@ By default, returning from your job handler will be seen as a successful call, r
 
 For more information on what to do next, we recommend the following sections:
 
-- **Details**
-  - [@taskless/client](/docs/packages/client) - View the full Taskless Client docs
-  - [Environment](/docs/packages/client/env) - Learn about the environment variables Taskless uses
-  - [@taskless/dev](/docs/packages/dev) - Learn about the Taskless Dev Server
-- **Concepts**
-  - [Jobs](/docs/concepts/jobs) - Learn the difference between Evented and Scheduled Jobs in Taskless
-  - [Encryption](/docs/concepts/encryption) - Learn how end-to-end encryption works with Taskless
+- [API Overview](/docs/api) - Learn about the Taskless API methods in greater detail
+- [Dev Server](/docs/features/dev-server) - Learn more about the Taskless Dev Server you set up in this guide
+- [Encryption](/docs/features/encryption) - Learn how end-to-end encryption works with Taskless

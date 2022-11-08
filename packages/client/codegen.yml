@@ -1,0 +1,11 @@
+overwrite: true
+schema: "https://for.taskless.io/schema.graphql"
+documents: "src/**/*.graphql"
+generates:
+  src/__generated__/taskless.ts:
+    config:
+      documentMode: "string"
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-document-nodes"

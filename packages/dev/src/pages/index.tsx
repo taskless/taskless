@@ -1,4 +1,4 @@
-import type { NextPage } from "next";
+import { type NextPage } from "next";
 import {
   MutationFunction,
   QueryFunction,
@@ -22,9 +22,13 @@ import { PromoteJobResponse } from "./api/rest/job/[id]/promote";
 import { ReplayJobResponse } from "./api/rest/job/[id]/replay";
 import { CreateJobModal, Fields } from "components/Modals/CreateJob";
 import Link from "next/link";
-import { graphql } from "@taskless/types";
-import { getClient, ClientError, RequestError } from "graphql/client";
+import { getClient, ClientError, RequestError } from "graphql-client/client";
 import { Queue } from "@taskless/next";
+import {
+  EnqueueJob,
+  type EnqueueJobMutation,
+  type EnqueueJobMutationVariables,
+} from "@taskless/client/graphql";
 
 const getJobs: QueryFunction<
   GetJobsResponse,
@@ -69,15 +73,15 @@ const replayJob: MutationFunction<
 };
 
 const upsertJob: MutationFunction<
-  graphql.EnqueueJobMutation,
-  graphql.EnqueueJobMutationVariables
+  EnqueueJobMutation,
+  EnqueueJobMutationVariables
 > = async (variables) => {
   const client = getClient();
   try {
     const response = await client.request<
-      graphql.EnqueueJobMutation,
-      graphql.EnqueueJobMutationVariables
-    >(graphql.EnqueueJob, variables);
+      EnqueueJobMutation,
+      EnqueueJobMutationVariables
+    >(EnqueueJob, variables);
     return response;
   } catch (e) {
     console.error(e);

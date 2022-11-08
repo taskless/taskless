@@ -1,10 +1,10 @@
-import { Queue } from "@taskless/client";
 import {
-  guards,
+  Queue,
+  tasklessBody,
   type CreateQueueMethods,
   type JobHandler,
   type QueueOptions,
-} from "@taskless/types";
+} from "@taskless/client";
 import * as express from "express";
 
 // re-export core client
@@ -14,31 +14,7 @@ export * from "@taskless/client";
  * An Express compatible API Handler, with Taskless Queue support
  * @template T Used for typing the {@link CreateQueueMethods}
  */
-export interface TasklessExpressRouter<T> {
-  /**
-   * Adds an item to the queue. If an item of the same name exists, it will be
-   * replaced with this new data. If a job was already scheduled with this
-   * `name` property, then its information will be updated to the
-   * new provided values. You should always call `enqueue()` as if you are
-   * calling it for the first time.
-   * ([docs](https://taskless.io/docs/packages/client#enqueue))
-   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
-   * @param payload The Job's payload to be delivered
-   * @param options Job options. These overwrite the default job options specified on the queue at creation time
-   * @throws Error when the job could not be created in the Taskless system
-   * @returns The `Job` object
-   */
-  enqueue: CreateQueueMethods<T>["enqueue"];
-  /**
-   * Cancels any scheduled work for this item in the queue. Any jobs in
-   * process are allowed to complete. If a job has recurrence, future jobs
-   * will be cancelled.
-   * ([docs](https://taskless.io/docs/packages/client#cancel))
-   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
-   * @throws Error if the job could not be cancelled
-   * @returns The cancelled `Job` object, or `null` if no job was found with `name`
-   */
-  cancel: CreateQueueMethods<T>["cancel"];
+export interface TasklessExpressRouter<T> extends CreateQueueMethods<T> {
   /**
    * Generate an express Router object, optionally with mount information.
    * Unfortunately, express does not provide a way for a router to retrieve its `mountpath`,
@@ -114,11 +90,12 @@ export function createQueue<T = undefined>(
       const run = async () => {
         await t.receive({
           getBody: () => {
-            // https://expressjs.com/en/4x/api.html#express.json
-            if (guards.isTasklessBody(request.body)) {
-              return request.body;
+            try {
+              return tasklessBody.parse(request.body);
+            } catch (e) {
+              // console.error(e);
+              throw new Error("req.body does not match a Taskless payload");
             }
-            throw new Error("req.body does not match a Taskless payload");
           },
           getHeaders: () => request.headers,
           send: (json) => {
@@ -152,6 +129,10 @@ export function createQueue<T = undefined>(
     enqueue: (name, payload, options) => t.enqueue(name, payload, options),
     cancel: (name) => t.cancel(name),
     router: (at?: string) => mount(at),
+    bulk: {
+      enqueue: (...args) => t.bulk.enqueue(...args),
+      cancel: (...args) => t.bulk.cancel(...args),
+    },
   };
 
   return queueApi;

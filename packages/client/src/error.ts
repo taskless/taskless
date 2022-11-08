@@ -1,4 +1,4 @@
-import { type OutgoingHttpHeaders } from "node:http";
+import { type OutgoingHttpHeaders } from "node:http2";
 
 /**
  * A set of options unique to Job Errors

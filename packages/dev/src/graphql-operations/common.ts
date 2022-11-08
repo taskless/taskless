@@ -1,4 +1,4 @@
-import { JobHeaders } from "@taskless/types";
+import { type JobHeaders } from "@taskless/client";
 
 type GQLHeaders =
   | {

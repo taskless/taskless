@@ -1,0 +1,11 @@
+{
+  "name": "taskless-esm-verify",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@taskless/graphinql": "file:../../packages/graphinql",
+    "@taskless/client": "file:../../packages/client",
+    "@taskless/express": "file:../../packages/express",
+    "@taskless/next": "file:../../packages/next"
+  }
+}

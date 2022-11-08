@@ -9,32 +9,26 @@
       url: /docs/get-started/express
     - title: Other Integrations
       url: /docs/get-started/other
-- title: Concepts
+- title: Methods and APIs
   routes:
-    - title: Jobs
-      url: /docs/concepts/jobs
-    - title: E2E Encryption
-      url: /docs/concepts/encryption
-- title: Packages
+    - title: Creating a Queue
+      url: /docs/api/create
+    - title: Adding Jobs
+      url: /docs/api/enqueue
+    - title: Cancelling Jobs
+      url: /docs/api/cancel
+    - title: Bulk Operations
+      url: /docs/api/bulk
+- title: Integrations
   routes:
-    - title: "@taskless/express"
-      url: /docs/packages/express
-    - title: "@taskless/next"
-      url: /docs/packages/next
-    - title: "@taskless/client"
-      routes:
-        - title: Overview
-          url: /docs/packages/client
-        - title: Environment Variables
-          url: /docs/packages/client/env
-        - title: Queue Options
-          url: /docs/packages/client/queue-options
-        - title: Job Options
-          url: /docs/packages/client/job-options
-        - title: Using Return Codes
-          url: /docs/packages/client/return-codes
-    - title: "@taskless/dev"
-      url: /docs/packages/dev
+    - title: Express
+      url: /docs/integrations/express
+    - title: Next.js
+      url: /docs/integrations/next
+- title: Encryption
+  url: /docs/features/encryption
+- title: Dev Server
+  url: /docs/features/dev-server
 - title: Support
   routes:
     - title: Help Forum

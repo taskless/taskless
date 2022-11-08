@@ -1,8 +1,9 @@
-import { graphql, type JobHeaders } from "@taskless/types";
+import { type JobHeaders } from "../types/job.js";
+import { type MutationEnqueueJobArgs } from "__generated__/taskless.js";
 
 // convert & extract headers from graphql schema
 type EnqueueJobInputHeadersType = Required<
-  graphql.MutationEnqueueJobArgs["job"]["headers"]
+  MutationEnqueueJobArgs["job"]["headers"]
 >;
 
 /** Convert optional headers into a GraphQL friendly header input */
@@ -27,16 +28,4 @@ export const headersToGql = (
       value: `${valueAsString}`,
     };
   });
-};
-
-/** Convert a GraphQL header payload into request-friendly JSON structure */
-export const gqlToHeaders = (
-  h?: EnqueueJobInputHeadersType | null
-): JobHeaders => {
-  if (!h) return {};
-
-  return h.reduce<JobHeaders>((all, curr) => {
-    all[curr.name] = curr.value;
-    return all as Record<string, string>;
-  }, {});
 };

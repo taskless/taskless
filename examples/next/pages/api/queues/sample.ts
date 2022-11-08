@@ -33,13 +33,5 @@ export default createQueue<SampleQueue>(
       success: true,
       originalMessage: job.message,
     };
-  },
-  // you may also just set these in process.env and let Taskless use them directly
-  {
-    baseUrl: process.env.TASKLESS_BASE_URL,
-    credentials: {
-      appId: `${process.env.TASKLESS_APP_ID ?? ""}`,
-      secret: `${process.env.TASKLESS_SECRET ?? ""}`,
-    },
   }
 );

@@ -14,7 +14,8 @@
     "before:init": [
       "syncpack list-mismatches",
       "syncpack format",
-      "pnpm run --filter='./packages/*' -r --if-present release:before:init"
+      "pnpm run --filter='./packages/*' -r --if-present release:before:init",
+      "pnpm run verify"
     ]
   }
 }

@@ -6,9 +6,6 @@
   "scripts": {
     "build": "pnpm run -r --filter='./packages/*' build",
     "dev": "pnpm run -r --filter='./packages/*' --parallel --stream dev",
-    "dev:express": "FORCE_COLOR=1 pnpm run --filter='@taskless/dev' --filter='@taskless/examples-express' --stream dev",
-    "dev:express-ts": "FORCE_COLOR=1 pnpm run --filter='@taskless/dev' --filter='@taskless/examples-express-ts' --stream dev",
-    "dev:next": "FORCE_COLOR=1 pnpm run --filter='@taskless/dev' --filter='@taskless/examples-next' --stream dev",
     "docs": "pnpm run --filter='@taskless/docs' --stream dev",
     "eslint": "eslint",
     "husky": "husky",
@@ -18,7 +15,10 @@
     "rel": "release-it",
     "rev": "release-it --preRelease",
     "syncpack": "syncpack",
-    "test": "FORCE_COLOR=1 pnpm run -r --filter='./packages/*' --aggregate-output test"
+    "test": "FORCE_COLOR=1 pnpm run -r --filter='./packages/*' --aggregate-output test",
+    "verify": "run-p 'verify:*'",
+    "verify:cjs": "cd verify/cjs && npm install && node cjs.verify.js",
+    "verify:esm": "cd verify/esm && npm install && node esm.verify.js"
   },
   "type": "module",
   "engines": {

@@ -1,12 +1,15 @@
-import { graphql } from "@taskless/types";
 import { getQueue } from "db/mq";
 import { Context } from "types";
 import { getCollection, JobDoc } from "db/loki";
+import {
+  type CancelJobMutation,
+  type CancelJobMutationVariables,
+} from "@taskless/client/graphql";
 
 export const cancelJob = async (
-  variables: graphql.CancelJobMutationVariables,
+  variables: CancelJobMutationVariables,
   context: Context
-): Promise<graphql.CancelJobMutation> => {
+): Promise<CancelJobMutation> => {
   const id = context.v5(variables.name);
 
   const queue = await getQueue();

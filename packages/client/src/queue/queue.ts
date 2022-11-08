@@ -1,14 +1,9 @@
 import {
-  parsers,
-  graphql,
-  type Job,
-  type JobHandler,
-  type JobIdentifier,
-  type JobOptions,
-  type QueueOptions,
+  queueOptions,
   type ReceiveCallbacks,
-  type TasklessBody,
-} from "@taskless/types";
+  type JobHandler,
+  type QueueOptions,
+} from "../types/queue.js";
 import {
   IS_DEVELOPMENT,
   IS_PRODUCTION,
@@ -17,9 +12,30 @@ import {
 } from "../constants.js";
 import { JobError } from "../error.js";
 import { headersToGql } from "../graphql-helpers/headers.js";
-import { GraphQLClient } from "../net/graphql-client.js";
+import { GraphQLClient } from "../net/client.js";
 import { decode, encode, sign, verify } from "./encoder.js";
-import { resolveJobOptions } from "./util.js";
+import { asError, chunk, resolveJobOptions } from "./util.js";
+import { Job, JobIdentifier, JobOptions } from "types/job.js";
+import { TasklessBody } from "types/tasklessBody.js";
+import {
+  type CancelJobMutation,
+  type CancelJobMutationVariables,
+  CancelJobs,
+  type CancelJobsMutation,
+  type CancelJobsMutationVariables,
+  EnqueueJob,
+  type EnqueueJobMutation,
+  type EnqueueJobMutationVariables,
+  EnqueueJobs,
+  type EnqueueJobsMutation,
+  type EnqueueJobsMutationVariables,
+  JobMethodEnum,
+} from "__generated__/taskless.js";
+
+function isDefined<T>(value: T | null | undefined): value is NonNullable<T> {
+  if (value === null || value === undefined) return false;
+  return true;
+}
 
 /**
  * Constructor arguments for the Taskless Queue
@@ -62,7 +78,7 @@ export class Queue<T> {
   private queueName: string;
 
   constructor(args: TasklessQueueConfig<T>) {
-    this.queueOptions = parsers.queueOptions.parse(args.queueOptions ?? {});
+    this.queueOptions = queueOptions.parse(args.queueOptions ?? {});
     this.queueName = args.name;
     this.route = args.route;
     this.handler = args.handler;
@@ -322,13 +338,13 @@ export class Queue<T> {
     }
 
     const job = await client.request<
-      graphql.EnqueueJobMutation,
-      graphql.EnqueueJobMutationVariables
-    >(graphql.EnqueueJob, {
+      EnqueueJobMutation,
+      EnqueueJobMutationVariables
+    >(EnqueueJob, {
       name: resolvedName,
       job: {
         endpoint: this.resolveRoute(),
-        method: graphql.JobMethodEnum.Post,
+        method: JobMethodEnum.Post,
         headers: headersToGql(opts.headers),
         body: JSON.stringify(body),
         retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
@@ -354,6 +370,94 @@ export class Queue<T> {
   }
 
   /**
+   * Enqueue a set of items via a batch API call in chunks up to 100 in size
+   * accessed via client.bulk.enqueue
+   */
+  protected async bulkEnqueue(
+    jobs: { name: JobIdentifier; payload: T; options?: JobOptions }[]
+  ): Promise<[Job<T>[], Error[]]> {
+    const client = this.getClient();
+
+    const collection = jobs.map((j) => {
+      const opts = resolveJobOptions(
+        {
+          headers: {
+            // actions are always json unless overridden
+            "content-type": "application/json",
+          },
+        },
+        this.queueOptions.defaultJobOptions,
+        j.options
+      );
+      const body = this.presetWrap(j.payload);
+      const resolvedName = this.packName(j.name);
+
+      let runAt: string | undefined = new Date().toISOString();
+      if (opts.runAt instanceof Date) {
+        runAt = opts.runAt.toISOString();
+      } else if (typeof opts.runAt === "string") {
+        runAt = opts.runAt;
+      } else if (typeof opts.runAt === "undefined") {
+        runAt = undefined;
+      }
+
+      return {
+        name: resolvedName,
+        job: {
+          endpoint: this.resolveRoute(),
+          method: JobMethodEnum.Post,
+          headers: headersToGql(opts.headers),
+          body: JSON.stringify(body),
+          retries: opts.retries === 0 ? 0 : opts.retries ?? 0,
+          runAt,
+          runEvery: opts.runEvery === null ? null : opts.runEvery ?? undefined,
+          timezone: opts.timezone === null ? null : opts.timezone ?? undefined,
+        },
+      };
+    });
+
+    const settled = await Promise.allSettled(
+      chunk(collection, 100).map((c) =>
+        client.request<EnqueueJobsMutation, EnqueueJobsMutationVariables>(
+          EnqueueJobs,
+          {
+            jobs: c,
+          }
+        )
+      )
+    );
+
+    const resolved: Job<T>[] = [];
+    const errors = [];
+
+    // unzip
+    for (const s of settled) {
+      if (s.status === "rejected") {
+        errors.push(asError(s.reason));
+        continue;
+      }
+      resolved.push(
+        ...(s.value.enqueueJobs ?? []).map((j) => {
+          const resolvedBody = JSON.parse(j.body ?? "") as TasklessBody;
+          return {
+            name: j.name,
+            endpoint: j.endpoint,
+            enabled: j.enabled === false ? false : true,
+            headers: JSON.parse(j.headers),
+            payload: this.presetUnwrap(resolvedBody).payload,
+            retries: j.retries,
+            runAt: j.runAt ? new Date(j.runAt) : undefined,
+            runEvery: j.runEvery ?? null,
+            timezone: j.timezone ?? null,
+          };
+        })
+      );
+    }
+
+    return [resolved, errors];
+  }
+
+  /**
    * Cancels any scheduled work for this item in the queue. Any jobs in
    * process are allowed to complete. If a job has recurrence, future jobs
    * will be cancelled.
@@ -367,9 +471,9 @@ export class Queue<T> {
     const resolvedName = this.packName(name);
 
     const job = await client.request<
-      graphql.CancelJobMutation,
-      graphql.CancelJobMutationVariables
-    >(graphql.CancelJob, {
+      CancelJobMutation,
+      CancelJobMutationVariables
+    >(CancelJobs, {
       name: resolvedName,
     });
 
@@ -389,4 +493,78 @@ export class Queue<T> {
       runEvery: job.cancelJob.runEvery ?? null,
     };
   }
+
+  protected async bulkCancel(
+    names: JobIdentifier[]
+  ): Promise<[Job<T>[], Error[]]> {
+    const client = this.getClient();
+    const resolvedNames = names.map((n) => this.packName(n));
+
+    const settled = await Promise.allSettled(
+      chunk(resolvedNames, 100).map((c) =>
+        client.request<CancelJobsMutation, CancelJobsMutationVariables>(
+          CancelJobs,
+          {
+            names: c,
+          }
+        )
+      )
+    );
+
+    const resolved: Job<T>[] = [];
+    const errors = [];
+
+    // unzip
+    for (const s of settled) {
+      if (s.status === "rejected") {
+        errors.push(asError(s.reason));
+        continue;
+      }
+      resolved.push(
+        ...(s.value.cancelJobs ?? [])
+          .map((j) => {
+            if (j === null) {
+              return null;
+            }
+            const resolvedBody = JSON.parse(j.body ?? "") as TasklessBody;
+            return {
+              name: j.name,
+              endpoint: j.endpoint,
+              enabled: j.enabled === false ? false : true,
+              headers: JSON.parse(j.headers),
+              payload: this.presetUnwrap(resolvedBody).payload,
+              retries: j.retries,
+              runAt: j.runAt ? new Date(j.runAt) : undefined,
+              runEvery: j.runEvery ?? null,
+              timezone: j.timezone ?? null,
+            };
+          })
+          .filter(isDefined)
+      );
+    }
+
+    return [resolved, errors];
+  }
+
+  /** The Taskless Bulk interface */
+  bulk = {
+    /**
+     * Enqueue items in bulk into Taskless
+     * In some situations, it may be useful to enqueue jobs at a rate of > 1/request,
+     * and for those situations Taskless provides a bulk api via client.bulk.*. Using
+     * the bulk API comes with a few limitations, specifically:
+     * - errors encountered during the bulk operation are logged and returned at the end
+     */
+    enqueue: async (
+      jobs: { name: JobIdentifier; payload: T; options?: JobOptions }[]
+    ) => this.bulkEnqueue(jobs),
+    /**
+     * Cancel items in bulk on Taskless
+     * In some situations, it may be useful to cancel jobs at a rate of > 1/request,
+     * and for those situations Taskless provides a bulk api via client.bulk.*. Using
+     * the bulk API comes with a few limitations, specifically:
+     * - errors encountered during the bulk operation are logged and returned at the end
+     */
+    cancel: (names: JobIdentifier[]) => this.bulkCancel(names),
+  };
 }
