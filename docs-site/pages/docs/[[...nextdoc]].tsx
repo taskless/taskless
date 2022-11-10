@@ -7,7 +7,8 @@ import React, { useMemo } from "react";
 import cx from "classnames";
 import { markdocComponents, markdocSchema } from "../../markdoc/schema";
 import { useRouter } from "next/router";
-import Link from "next/link";
+import { createLinkWithQuery } from "../../markdoc/components/Link";
+import { bestPromise } from "../../util/bestPromise";
 
 interface Manifest {
   title: string;
@@ -18,27 +19,32 @@ interface Manifest {
 interface NavigationItemProps {
   item: Manifest;
   depth?: number;
+  query?: Record<string, unknown>;
 }
 
-const NavigationItem: React.FC<NavigationItemProps> = ({ item, depth = 0 }) => {
+const NavigationItem: React.FC<NavigationItemProps> = ({
+  item,
+  depth = 0,
+  query,
+}) => {
   const router = useRouter();
   const isCurrent = router.asPath === item.url;
+  const Link = createLinkWithQuery(query);
 
   return (
     <>
       <div style={{ paddingLeft: depth === 0 ? "0" : `${depth}em` }}>
         {item.url ? (
-          <Link href={item.url}>
-            <a
-              className={cx(
-                isCurrent
-                  ? "bg-gray-100 text-gray-900"
-                  : "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                "group w-full flex items-center px-2 py-2 text-sm font-medium rounded-md"
-              )}
-            >
-              {item.title}
-            </a>
+          <Link
+            href={item.url}
+            className={cx(
+              isCurrent
+                ? "bg-gray-100 text-gray-900"
+                : "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+              "group w-full flex items-center px-2 py-2 text-sm font-medium rounded-md"
+            )}
+          >
+            {item.title}
           </Link>
         ) : (
           <span
@@ -52,7 +58,12 @@ const NavigationItem: React.FC<NavigationItemProps> = ({ item, depth = 0 }) => {
         )}
       </div>
       {(item?.routes || []).map((sub) => (
-        <NavigationItem key={sub.title} depth={depth + 1} item={sub} />
+        <NavigationItem
+          key={sub.title}
+          depth={depth + 1}
+          item={sub}
+          query={query}
+        />
       ))}
     </>
   );
@@ -61,15 +72,23 @@ const NavigationItem: React.FC<NavigationItemProps> = ({ item, depth = 0 }) => {
 interface DocsProps {
   manifest: Manifest[];
   content: RenderableTreeNode;
+  version: string | null;
 }
 
-const Docs: NextPage<DocsProps> = ({ manifest, content }) => {
+const Docs: NextPage<DocsProps> = ({ manifest, content, version }) => {
+  const query = useMemo(() => ({ version }), [version]);
+
   const docs = useMemo(
     () =>
-      Markdoc.renderers.react(content, React, {
-        components: markdocComponents,
-      }),
-    [content]
+      content
+        ? Markdoc.renderers.react(content, React, {
+            components: {
+              ...markdocComponents,
+              Link: createLinkWithQuery(query),
+            },
+          })
+        : null,
+    [content, query]
   );
 
   return (
@@ -84,8 +103,18 @@ const Docs: NextPage<DocsProps> = ({ manifest, content }) => {
           className="flex-shrink-0 pr-2 pt-6 space-y-1 bg-white"
           aria-label="Sidebar"
         >
+          {version ? (
+            <p className="m-0 p-2 text-sm bg-orange-100 prose">
+              Version: {version ?? "latest"}
+            </p>
+          ) : null}
           {(manifest ?? []).map((item) => (
-            <NavigationItem depth={0} item={item} key={item.title} />
+            <NavigationItem
+              depth={0}
+              item={item}
+              key={item.title}
+              query={query}
+            />
           ))}
         </nav>
         <div className="max-w-6xl mx-auto py-6 min-h-screen">
@@ -118,43 +147,89 @@ export const getStaticPaths: GetStaticPaths = async () => {
   });
 };
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
+export const getStaticProps: GetStaticProps<DocsProps> = async (ctx) => {
   const nextdoc =
     typeof ctx.params?.nextdoc === "undefined"
       ? []
       : Array.isArray(ctx.params.nextdoc)
       ? ctx.params.nextdoc
       : [ctx.params.nextdoc];
-  const fp = path.resolve(process.cwd(), "../docs/", nextdoc.join("/") + ".md");
-  const mp = path.resolve(process.cwd(), "../docs/manifest.yml");
+  const last = nextdoc.pop();
+  const version = /@[0-9.]+/.test(last ?? "");
 
-  const fileContents = await readFile(fp);
-  const manifestContents = await readFile(mp);
-  const manifest = yaml.load(manifestContents.toString()) as Manifest[];
+  try {
+    const fileContents = await bestPromise(
+      [
+        // literal path
+        path.resolve(
+          process.cwd(),
+          "../docs",
+          [...nextdoc, last].filter(Boolean).join("/") + ".md"
+        ),
+        // versioned path
+        !version
+          ? undefined
+          : path.resolve(
+              process.cwd(),
+              "../docs",
+              [!version ? undefined : `versions/${last}`, ...nextdoc]
+                .filter(Boolean)
+                .join("/") + ".md"
+            ),
+      ]
+        .filter((s): s is string => !!s)
+        .map((p) => readFile(p))
+    );
 
-  const ast = Markdoc.parse(fileContents.toString());
+    const manifestContents = await bestPromise(
+      [
+        // versioned manifest
+        path.resolve(
+          process.cwd(),
+          "../docs",
+          [version ? `versions/${last}` : undefined, "manifest.yml"]
+            .filter(Boolean)
+            .join("/")
+        ),
+        // unversioned manifest
+        !version
+          ? undefined
+          : path.resolve(process.cwd(), "../docs/manifest.yml"),
+      ]
+        .filter((s): s is string => !!s)
+        .map((p) => readFile(p))
+    );
 
-  const frontmatter = ast.attributes.frontmatter
-    ? yaml.load(ast.attributes.frontmatter)
-    : {};
+    const manifest = yaml.load(manifestContents.toString()) as Manifest[];
+    const ast = Markdoc.parse(fileContents.toString());
+    const frontmatter = ast.attributes.frontmatter
+      ? yaml.load(ast.attributes.frontmatter)
+      : {};
 
-  const content = JSON.parse(
-    JSON.stringify(
-      Markdoc.transform(ast, {
-        ...markdocSchema,
-        variables: {
-          ...markdocSchema.variables,
-          frontmatter,
-        },
-      })
-    )
-  );
+    const content = JSON.parse(
+      JSON.stringify(
+        Markdoc.transform(ast, {
+          ...markdocSchema,
+          variables: {
+            ...markdocSchema.variables,
+            frontmatter,
+          },
+        })
+      )
+    );
 
-  return {
-    props: {
-      manifest,
-      content,
-    },
-    revalidate: 1,
-  };
+    return {
+      props: {
+        manifest,
+        content,
+        version: (version ? last : null) ?? null,
+      },
+      revalidate: 1,
+    };
+  } catch {
+    // 404 for file (temporarily)
+    return {
+      notFound: true,
+    };
+  }
 };

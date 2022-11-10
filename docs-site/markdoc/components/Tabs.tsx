@@ -24,7 +24,7 @@ export const Tabs: React.FC<TabsProps> = ({ labels, children }) => {
           <select
             id="tabs"
             name="tabs"
-            className="block w-full rounded-t-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+            className="block w-full rounded-t-md border-gray-300 focus:border-primary-500 focus:ring-primary-500"
             defaultValue={labels[0]}
           >
             {labels.map((tab) => (

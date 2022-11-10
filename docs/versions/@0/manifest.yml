@@ -1,0 +1,5 @@
+# Documentation Manifest for Taskless
+- title: Introduction to Taskless
+  url: /docs/welcome
+- title: Local Versioned File
+  url: /docs/local

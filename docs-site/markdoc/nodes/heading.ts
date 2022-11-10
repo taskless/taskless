@@ -20,7 +20,6 @@ export const heading: Schema = {
   ...nodes.heading,
   render: "Heading",
   transform(node, config) {
-    console.log(node);
     const attributes = node.transformAttributes(config);
     const children = node.transformChildren(config);
     const id = generateID(children, attributes);
