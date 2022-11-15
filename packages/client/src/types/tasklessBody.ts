@@ -31,7 +31,7 @@ export const tasklessBody = z
     /** The Taskless Body Version */
     v: z.number(),
     /** The encoder transport */
-    transport: transport,
+    transport: transport.optional(),
   })
   .and(z.union([signedTextPayload, unsignedJsonPayload]));
 

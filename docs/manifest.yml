@@ -31,6 +31,8 @@
   url: /docs/features/encryption
 - title: Dev Server
   url: /docs/features/dev-server
+- title: Testing
+  url: /docs/features/testing
 - title: Support
   routes:
     - title: Help Forum

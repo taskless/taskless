@@ -187,3 +187,8 @@ Taskless recommends storing the bulk of your configuration in env values.
 - `TASKLESS_ENDPOINT` (example: `http://localhost:8080/api/graphql`) Changes the GraphQL endpoint used by the client. When not set, Taskless will select a default URL based on the value of `process.env.TASKLESS_ENV ?? process.env.NODE_ENV`. Changing this value is useful if you are running the Taskless Dev Server on a different port or for sending jobs to your production Taskless instance from development. The default endpoints are:
   - **development** `http://localhost:3001/api/graphql`
   - **production** `https://for.taskless.io/api/graphql`
+
+Taskless also is aware of the following environment variables if set
+
+- `CI` (example `1`) When set, Taskless will treat the environment as if it is development for the purposes of emitting warnings instead of throwing errors
+- `SILENT` (example `1`) When set, Taskless will silence all warnings and logs

@@ -8,6 +8,7 @@ import {
 import {
   IS_DEVELOPMENT,
   IS_PRODUCTION,
+  IS_TESTING,
   TASKLESS_DEV_ENDPOINT,
   TASKLESS_ENDPOINT,
 } from "../constants.js";
@@ -42,6 +43,8 @@ function isDefined<T>(value: T | null | undefined): value is NonNullable<T> {
 const firstOf = <T>(unk: T | T[]): T => {
   return Array.isArray(unk) ? unk[0] : unk;
 };
+
+let unsignedWarning = false;
 
 /**
  * Describes a Taskless Queue instance
@@ -130,7 +133,8 @@ export class Queue<T> implements QueueMethods<T> {
       expiredEncryptionKeys?: (string | null)[];
     }
   ): { payload: P; verified: boolean } {
-    if (body.v !== 1) {
+    // check for versioning
+    if (!("v" in body) || body.v !== 1) {
       throw new Error("Unsupported Taskless Envelope");
     }
 
@@ -138,8 +142,14 @@ export class Queue<T> implements QueueMethods<T> {
     let ver = false;
     let payload: P | undefined;
 
-    // verify and decode text in the body
-    if ("text" in body) {
+    // if text & transport info are in the body, check signature
+    // and e2e decrypt the result
+    if (
+      "text" in body &&
+      "transport" in body &&
+      typeof body.text !== "undefined" &&
+      typeof body.transport !== "undefined"
+    ) {
       ver = verify(
         body.text,
         [options?.secret, ...(options?.expiredSecrets ?? [])],
@@ -169,13 +179,19 @@ export class Queue<T> implements QueueMethods<T> {
       throw new TypeError("Unrecognized payload body");
     }
 
+    // non-verified and unsigned payloads need to be checked if they're allowed
     if (!ver && !options?.allowUnsigned) {
-      if (!IS_DEVELOPMENT) {
-        throw new Error("Signature mismatch");
+      // warn in test/dev, throw in production
+      if (IS_DEVELOPMENT || IS_TESTING) {
+        // only warn once
+        if (!unsignedWarning) {
+          unsignedWarning = true;
+          console.warn(
+            "Signature mismatch or no signature available. This can happen if you've enqueued a job with one secret, but dequeued the job with another. In production, this will throw an error."
+          );
+        }
       } else {
-        console.error(
-          "Signature mismatch or no signature available. This can happen if you've enqueued a job with one secret, but dequeued the job with another. In production, this will throw an error."
-        );
+        throw new Error("Signature mismatch");
       }
     }
 

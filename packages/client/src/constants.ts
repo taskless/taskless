@@ -16,3 +16,9 @@ export const IS_DEVELOPMENT =
   typeof process.env.TASKLESS_ENV !== "undefined"
     ? process.env.TASKLESS_ENV === "development"
     : process.env.NODE_ENV === "development";
+
+export const IS_TESTING =
+  typeof process.env.CI !== "undefined" ||
+  (typeof process.env.TASKLESS_ENV !== "undefined"
+    ? process.env.TASKLESS_ENV === "test"
+    : process.env.NODE_ENV === "test");
