@@ -2,7 +2,7 @@
   "private": true,
   "name": "@taskless/examples-express-ts",
   "description": "Taskless Express 4 example app in Typescript",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "echo 'no express build step required'",
@@ -12,7 +12,7 @@
     "node": ">=14.19.0"
   },
   "dependencies": {
-    "@taskless/express": "3.6.0",
+    "@taskless/express": "3.6.1",
     "cookie-parser": "~1.4.4",
     "express": "^4.17.1"
   },
