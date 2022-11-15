@@ -2,7 +2,7 @@
   "private": true,
   "name": "@taskless/examples-next",
   "description": "Taskless next.js example app",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "next build",
@@ -15,7 +15,7 @@
     "node": ">=14.19.0"
   },
   "dependencies": {
-    "@taskless/next": "3.5.0",
+    "@taskless/next": "3.6.0",
     "encoding": "^0.1.13",
     "luxon": "^3.0.3",
     "next": "^12.3.1",
@@ -24,7 +24,7 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
-    "@taskless/dev": "3.5.0",
+    "@taskless/dev": "3.6.0",
     "@types/eslint": "",
     "@types/luxon": "^3.0.2",
     "@types/node": "^17.0.45",
