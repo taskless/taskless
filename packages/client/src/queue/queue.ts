@@ -3,6 +3,7 @@ import {
   type ReceiveCallbacks,
   type JobHandler,
   type QueueOptions,
+  type QueueMethods,
 } from "../types/queue.js";
 import {
   IS_DEVELOPMENT,
@@ -37,47 +38,48 @@ function isDefined<T>(value: T | null | undefined): value is NonNullable<T> {
   return true;
 }
 
-/**
- * Constructor arguments for the Taskless Queue
- * @template T Describes the payload used in the {@link JobHandler}
- */
-export type TasklessQueueConfig<T> = {
-  /**
-   * The name for the queue
-   * Queues in Taskless are a search based grouping, used to quickly search for related jobs. If
-   * you need to separate traffic for the purposes of rate limiting, consider using applications,
-   * each which can receive its own ID and secret.
-   */
-  name: string;
-
-  /**
-   * The route slug this Queue is managing. Can either be a string or a function
-   * that provides a string if being invoked at a later time
-   */
-  route: string | (() => string);
-
-  /**
-   * A callback handler for processing the job
-   * @template T The expected payload object
-   */
-  handler?: JobHandler<T>;
-
-  /** Options applied to the Queue globally such as custom credentials or a base URL */
-  queueOptions?: QueueOptions;
-};
-
 /** Get either the first object of the array or the object if not an array */
 const firstOf = <T>(unk: T | T[]): T => {
   return Array.isArray(unk) ? unk[0] : unk;
 };
 
-export class Queue<T> {
+/**
+ * Describes a Taskless Queue instance
+ * Taskless Queues are the objects that provide interface APIs to taskless.io via their
+ * instance methods. When using an integration, this Queue object is created
+ * automatically via the integration's `createQueue` method. When using the raw
+ * taskless/client, a queue object can be created by calling `new Queue(...args)`
+ */
+export class Queue<T> implements QueueMethods<T> {
   private route: string | (() => string);
-  private handler?: JobHandler<T>;
+  private handler?: JobHandler<T, QueueMethods<T>>;
   private queueOptions: QueueOptions;
   private queueName: string;
 
-  constructor(args: TasklessQueueConfig<T>) {
+  constructor(args: {
+    /**
+     * The name for the queue
+     * Queues in Taskless are a search based grouping, used to quickly search for related jobs. If
+     * you need to separate traffic for the purposes of rate limiting, consider using applications,
+     * each which can receive its own ID and secret.
+     */
+    name: string;
+
+    /**
+     * The route slug this Queue is managing. Can either be a string or a function
+     * that provides a string if being invoked at a later time
+     */
+    route: string | (() => string);
+
+    /**
+     * A callback handler for processing the job
+     * @template T The expected payload object
+     */
+    handler?: JobHandler<T, QueueMethods<T>>;
+
+    /** Options applied to the Queue globally such as custom credentials or a base URL */
+    queueOptions?: QueueOptions;
+  }) {
     this.queueOptions = queueOptions.parse(args.queueOptions ?? {});
     this.queueName = args.name;
     this.route = args.route;
@@ -255,12 +257,7 @@ export class Queue<T> {
     });
   }
 
-  /**
-   * Recieve a message and execute the handler for it
-   * errors are caught and converted to a 500 response, while
-   * any success is returned as a 200
-   * @param functions A set of accessory functions for accessing the request and dispatching a response
-   */
+  // defined on implementing type
   async receive(functions: ReceiveCallbacks) {
     // CJS export compatibility for ESM-only import
     const { serializeError } = await import("serialize-error");
@@ -279,9 +276,10 @@ export class Queue<T> {
 
     try {
       const result = await this.handler(payload, {
-        queue: firstOf(h["x-taskless-queue"]) ?? null,
+        name: firstOf(h["x-taskless-queue"]) ?? null,
         projectId: firstOf(h["x-taskless-id"]) ?? null,
         verified,
+        queue: this,
       });
       await send(JSON.parse(JSON.stringify(result ?? {})));
       return;
@@ -296,19 +294,7 @@ export class Queue<T> {
     }
   }
 
-  /**
-   * Adds an item to the queue. If an item of the same name exists, it will be
-   * replaced with this new data. If a job was already scheduled with this
-   * `name` property, then its information will be updated to the
-   * new provided values. You should always call `enqueue()` as if you are
-   * calling it for the first time.
-   * ([docs](https://taskless.io/docs/packages/client#enqueue))
-   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
-   * @param payload The Job's payload to be delivered
-   * @param options Job options. These overwrite the default job options specified on the queue at creation time
-   * @throws Error when the job could not be created in the Taskless system
-   * @returns The `Job` object
-   */
+  // defined on implementing type
   async enqueue(
     name: JobIdentifier,
     payload: T,
@@ -457,15 +443,7 @@ export class Queue<T> {
     return [resolved, errors];
   }
 
-  /**
-   * Cancels any scheduled work for this item in the queue. Any jobs in
-   * process are allowed to complete. If a job has recurrence, future jobs
-   * will be cancelled.
-   * ([docs](https://taskless.io/docs/packages/client#cancel))
-   * @param name The Job's identifiable name. If an array is provided, all values will be concatenated with {@link QueueOptions.separator}, which is `-` by default
-   * @throws Error if the job could not be cancelled
-   * @returns The cancelled `Job` object, or `null` if no job was found with `name`
-   */
+  // defined on implementing type
   async cancel(name: JobIdentifier): Promise<Job<T> | null> {
     const client = this.getClient();
     const resolvedName = this.packName(name);
@@ -546,25 +524,13 @@ export class Queue<T> {
     return [resolved, errors];
   }
 
-  /** The Taskless Bulk interface */
+  // bulk interface on instance
   bulk = {
-    /**
-     * Enqueue items in bulk into Taskless
-     * In some situations, it may be useful to enqueue jobs at a rate of > 1/request,
-     * and for those situations Taskless provides a bulk api via client.bulk.*. Using
-     * the bulk API comes with a few limitations, specifically:
-     * - errors encountered during the bulk operation are logged and returned at the end
-     */
+    // defined on implementing type
     enqueue: async (
       jobs: { name: JobIdentifier; payload: T; options?: JobOptions }[]
     ) => this.bulkEnqueue(jobs),
-    /**
-     * Cancel items in bulk on Taskless
-     * In some situations, it may be useful to cancel jobs at a rate of > 1/request,
-     * and for those situations Taskless provides a bulk api via client.bulk.*. Using
-     * the bulk API comes with a few limitations, specifically:
-     * - errors encountered during the bulk operation are logged and returned at the end
-     */
+    // defined on implementing type
     cancel: (names: JobIdentifier[]) => this.bulkCancel(names),
   };
 }

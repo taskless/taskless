@@ -28,6 +28,7 @@ export default async function handler(
       "user-agent": "Taskless DevServer Worker",
       "content-type": "application/json",
       "x-taskless-queue": job.queueName,
+      "x-taskless-job": job.name,
       "x-taskless-id": job.projectId,
     };
 
@@ -49,7 +50,7 @@ export default async function handler(
       const resp = await r.json();
 
       statusCode = r.status ?? 200;
-      responseBody = JSON.stringify(resp.body);
+      responseBody = JSON.stringify(resp);
       if (`${statusCode}`.indexOf("2") !== 0) {
         const err = new WorkerRequestError("Received non-2xx response");
         err.code = statusCode;

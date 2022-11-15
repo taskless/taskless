@@ -5,7 +5,7 @@
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "pnpm run -r --filter='./packages/*' build",
-    "dev": "pnpm run -r --filter='./packages/*' --parallel --stream dev",
+    "dev": "pnpm run -r --filter='./packages/*' --filter=!./packages/dev --parallel --stream dev",
     "docs": "pnpm run --filter='@taskless/docs' --stream dev",
     "eslint": "eslint",
     "husky": "husky",
@@ -15,6 +15,7 @@
     "rel": "release-it",
     "rev": "release-it --preRelease",
     "syncpack": "syncpack",
+    "tds": "pnpm run -r --filter='@taskless/dev' --stream dev",
     "test": "FORCE_COLOR=1 pnpm run -r --filter='./packages/*' --aggregate-output test",
     "verify": "run-p 'verify:*'",
     "verify:cjs": "cd verify/cjs && npm install && node cjs.verify.js",

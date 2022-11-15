@@ -4,7 +4,6 @@ import { type MaybePromised } from "./common.js";
 import {
   type Job,
   type JobIdentifier,
-  type JobMetadata,
   type JobOptions,
   jobOptions,
 } from "./job.js";
@@ -162,6 +161,16 @@ export type QueueOptions = z.input<typeof queueOptions>;
 
 export type BulkOperationResult<T> = [Job<T>[], Error[] | undefined];
 
+export interface BaseQueue {
+  /**
+   * Recieve a message and execute the handler for it
+   * errors are caught and converted to a 500 response, while
+   * any success is returned as a 200
+   * @param functions A set of accessory functions for accessing the request and dispatching a response
+   */
+  receive: (functions: ReceiveCallbacks) => Promise<void>;
+}
+
 /**
  * Describes the set of Queue Methods available on a Taskless Integration
  * @template T Types the payload expected in `enqueue` and `update`, as well as the payload key returned from `enqueue`, `update`, `delete`, and `get`
@@ -219,9 +228,34 @@ export interface CreateQueueMethods<T> {
   };
 }
 
+/**
+ * Describes the methods available on a Taskless Queue instance
+ * Taskless Queues are the objects that provide interface APIs to taskless.io via their
+ * instance methods. When using an integration, this Queue object is created
+ * automatically via the integration's `createQueue` method. When using the raw
+ * taskless/client, a queue object can be created by calling `new Queue(...args)`
+ */
+export interface QueueMethods<T> extends BaseQueue, CreateQueueMethods<T> {}
+
+export const jobMetadata = z.object({
+  /** The name of the queue that made the request */
+  name: z.string().nullable(),
+  /** The project ID associated with the queue */
+  projectId: z.string().nullable(),
+  /** `true` if the payload's signature was verified */
+  verified: z.boolean(),
+  /** The queue object being used in executing this job */
+  queue: z.unknown(),
+});
+
+/** Metadata regarding the currently running Job */
+export type JobMetadata<Q> = z.infer<typeof jobMetadata> & {
+  queue: Q;
+};
+
 /** The Job Handler signature, taking a `payload` and `meta` */
-export interface JobHandler<T> {
-  (payload: T, meta: JobMetadata): MaybePromised<unknown>;
+export interface JobHandler<T, Q extends QueueMethods<T> = QueueMethods<T>> {
+  (payload: T, meta: JobMetadata<Q>): MaybePromised<unknown>;
 }
 
 /** The result of the Job Handler callback */

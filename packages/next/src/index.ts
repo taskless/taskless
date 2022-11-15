@@ -42,19 +42,19 @@ export interface TasklessNextApiHandler<T>
  * @param name A friendly Queue name for debugging and querying on Taskless.io
  * @param route The URL path to reach this route
  * @param handler A {@link JobHandler} that supports a payload of type `T`
- * @param queueOptions The {@link QueueOptions} for this queue
+ * @param options The {@link QueueOptions} for this queue
  */
 export function createQueue<T = undefined>(
   name: string,
   route: string,
   handler: JobHandler<T>,
-  queueOptions?: QueueOptions
+  options?: QueueOptions
 ): TasklessNextApiHandler<T> {
   const t = new Queue({
     name,
     route,
     handler,
-    queueOptions,
+    queueOptions: options,
   });
 
   // a next.js API handler

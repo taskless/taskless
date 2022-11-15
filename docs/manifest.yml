@@ -17,6 +17,8 @@
       url: /docs/api/enqueue
     - title: Cancelling Jobs
       url: /docs/api/cancel
+    - title: Handling Jobs
+      url: /docs/api/job-handler
     - title: Bulk Operations
       url: /docs/api/bulk
 - title: Integrations

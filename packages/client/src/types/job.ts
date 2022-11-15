@@ -99,18 +99,6 @@ export type JobOptions = z.input<typeof jobOptions> & {
   headers?: JobHeaders; // add standard headers as allowed
 };
 
-export const jobMetadata = z.object({
-  /** The name of the queue that made the request */
-  queue: z.string().nullable(),
-  /** The project ID associated with the queue */
-  projectId: z.string().nullable(),
-  /** `true` if the payload's signature was verified */
-  verified: z.boolean(),
-});
-
-/** Metadata regarding the currently running Job */
-export type JobMetadata = z.infer<typeof jobMetadata>;
-
 export const job = z.object({
   /** The name of the job, unique to the application */
   name: z.string(),
