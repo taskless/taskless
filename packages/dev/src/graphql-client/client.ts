@@ -5,7 +5,7 @@ import {
 } from "@taskless/graphinql";
 
 /**
- * Extends the GraphinQL client to explicitly check for an app ID and secret
+ * Extends the GraphinQL client to explicitly set the URL relative to the browser environment
  */
 export class GraphQLClient extends CoreGraphQLClient {
   constructor() {
