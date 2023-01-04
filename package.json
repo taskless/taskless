@@ -6,6 +6,9 @@
   "scripts": {
     "build": "pnpm run -r --filter='./packages/*' build",
     "dev": "pnpm run -r --filter='./packages/*' --filter=!./packages/dev --parallel --stream dev",
+    "dev:aio": "run-p 'dev' 'dev:example' 'dev:tds'",
+    "dev:example": "pnpm run -r --filter='./examples/next' --stream dev",
+    "dev:tds": "pnpm run -r --filter='./packages/dev' --stream dev",
     "docs": "pnpm run --filter='@taskless/docs' --stream dev",
     "eslint": "eslint",
     "husky": "husky",
