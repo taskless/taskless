@@ -2,7 +2,7 @@
   "private": true,
   "name": "@taskless/examples-express",
   "description": "Taskless Express 4 example app",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "echo 'no express build step required'",
@@ -14,7 +14,7 @@
     "node": ">=14.19.0"
   },
   "dependencies": {
-    "@taskless/express": "3.6.1",
+    "@taskless/express": "3.6.2",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "^4.17.1",
