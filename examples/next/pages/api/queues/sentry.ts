@@ -32,7 +32,7 @@ const queue = createQueue<SampleQueue>(
   {
     baseUrl: process.env.TASKLESS_BASE_URL,
     credentials: {
-      appId: `${process.env.TASKLESS_APP_ID ?? ""}`,
+      projectId: `${process.env.TASKLESS_ID ?? ""}`,
       secret: `${process.env.TASKLESS_SECRET ?? ""}`,
     },
   }

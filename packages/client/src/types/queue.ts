@@ -9,41 +9,6 @@ import {
 } from "./job.js";
 import { type TasklessBody } from "./tasklessBody.js";
 
-const credentialsByAppId = z.object({
-  /**
-   * The Application ID from Taskless
-   * If unset, will default to process.env.TASKLESS_APP_ID
-   * @deprecated Prefer projectId, as individual application auth will be removed 2022Q4
-   */
-  appId: z.string(),
-  /**
-   * The secret token from taskless.io
-   * If unset, will default to process.env.TASKLESS_APP_SECRET
-   * A secret is required when running Taskless in production mode
-   */
-  secret: z
-    .union([z.string(), z.null()])
-    .optional()
-    .default(() => process.env.TASKLESS_APP_SECRET ?? null),
-  /**
-   * A list of expired / rotated secrets to maintain compatibility
-   * for unprocessed jobs. If unset, will default to a comma
-   * separated string from  process.env.TASKLESS_PREVIOUS_APP_SECRETS
-   * and will be automatically split into an array by the Taskless
-   * client.
-   */
-  expiredSecrets: z
-    .array(z.string())
-    .optional()
-    .default(() =>
-      process.env.TASKLESS_PREVIOUS_APP_SECRETS
-        ? process.env.TASKLESS_PREVIOUS_APP_SECRETS.split(",").map((s) =>
-            s.trim()
-          )
-        : []
-    ),
-});
-
 const credentialsByProjectId = z.object({
   /**
    * The Project ID from Taskless
@@ -88,27 +53,13 @@ export const queueOptions = z.object({
    * a per-queue basis.
    */
   separator: z.string().optional().default("/"),
-  /** Your Application's credential pair */
-  credentials: z
-    .union([credentialsByAppId, credentialsByProjectId])
-    .optional()
-    .default(() => {
-      const isModern = typeof process.env.TASKLESS_ID !== "undefined";
-      if (isModern) {
-        // console.log("parse modern");
-        return credentialsByProjectId.parse({
-          projectId:
-            process.env.TASKLESS_ID ?? "00000000-0000-0000-0000-000000000000",
-        });
-      } else {
-        // console.log("parse legacy");
-        return credentialsByAppId.parse({
-          appId:
-            process.env.TASKLESS_APP_ID ??
-            "00000000-0000-0000-0000-000000000000",
-        });
-      }
-    }),
+  /** Your Project's credential pair */
+  credentials: credentialsByProjectId.optional().default(() => {
+    return credentialsByProjectId.parse({
+      projectId:
+        process.env.TASKLESS_ID ?? "00000000-0000-0000-0000-000000000000",
+    });
+  }),
 
   /**
    * An optional encryption key for e2e encryption of job data.

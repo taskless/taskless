@@ -33,7 +33,7 @@ In the clear, we pass `v` which tells us the version of the Taskless body, as we
 - `at` is the AuthTag itself, which helps us confirm the message was not altered
 - `iv` is the [Initialization Vector](https://en.wikipedia.org/wiki/Initialization_vector) which makes it computationally impossible to reverse our encrypted text back into a key
 
-Finally, our `text` is encrypted, and we generate a `signature` using your `APP_SECRET` value.
+Finally, our `text` is encrypted, and we generate a `signature` using your `TASKLESS_SECRET` value.
 
 # Making Jobs Searchable
 
@@ -44,7 +44,7 @@ Because Jobs on Taskless are encrypted, it can make finding data very difficult.
 
 # Rotating Encryption Secrets
 
-In the event that your encryption secret was leaked, you should understand that the damage is limited. With only an encryption key, an attacker can (at best) read the payload of pending jobs, but only if they also gained access to your `TASKLESS_APP_ID` and `TASKLESS_APP_SECRET`. Regardless, if you feel your encryption secret was leaked, you can (and should) update it. To replace your leaked secret with a new one:
+In the event that your encryption secret was leaked, you should understand that the damage is limited. With only an encryption key, an attacker can (at best) read the payload of pending jobs, but only if they also gained access to your `TASKLESS_ID` and `TASKLESS_SECRET`. Regardless, if you feel your encryption secret was leaked, you can (and should) update it. To replace your leaked secret with a new one:
 
 1. set the env value `TASKLESS_PREVIOUS_ENCRYPTION_SECRETS` to `your-old-secret`. This will allow existing jobs to still be decrypted safely.
 2. Set `TASKLESS_ENCRYPTION_SECRET` to a new value.

@@ -237,14 +237,6 @@ export class Queue<T> implements QueueMethods<T> {
       });
     }
 
-    if (typeof creds !== "undefined" && "appId" in creds) {
-      return new GraphQLClient(endpoint, {
-        appId: creds.appId ?? undefined,
-        queueName: this.queueName,
-        secret: creds.secret ?? undefined,
-      });
-    }
-
     return new GraphQLClient(endpoint, {
       projectId: undefined,
       queueName: this.queueName,
