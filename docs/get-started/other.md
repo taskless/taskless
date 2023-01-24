@@ -15,6 +15,7 @@ import { Queue } from "@taskless/client";
 
 const queue = new Queue<T>({
   route: "/route/to/this/queue",
+  name: "my-queue-name",
   handler: async (job, meta) => {
     // handles your job of type <T>
   },
@@ -24,6 +25,7 @@ const queue = new Queue<T>({
 ```
 
 - `route`: The URL path name this Queue will be reachable on
+- `name`: A URL-safe name for the queue, max 100 characters
 - `handler`: A Promise-returning callback that receives a Job of type `T` and associated metadata
 - `queueOptions`: The [`QueueOptions`](/docs/api/create#queue-options) for this queue
 - `jobOptions`: The default [`JobOptions`](/docs/api/enqueue#job-options) for this queue

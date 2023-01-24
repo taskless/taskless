@@ -62,7 +62,7 @@ type Echo = {
 };
 
 export default createQueue<Echo>(
-  "My queue name", // 👈🏼 A memorable name for the queue
+  "my-queue-name", // 👈🏼 The name of this queue, URL safe and up to 100 characters
   "/api/queues/echo", // 👈🏼 The URL path this queue is reachable on
   async (job, meta) => {
     // 👇🏻 When your job executes, this is what runs
