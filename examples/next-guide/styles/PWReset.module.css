@@ -1,0 +1,19 @@
+.grid {
+  display: grid;
+  gap: 14px;
+  width: var(--max-width);
+  max-width: 500px;
+  z-index: 10;
+}
+
+.grid-2 {
+  grid-template-rows: repeat(1, minmax(0, 1fr));
+}
+
+.grid-3 {
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+
+.input {
+  padding: 0.5rem 1rem;
+}
