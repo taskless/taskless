@@ -10,7 +10,7 @@ In this guide, we're going to build a simple background job processor in Taskles
 
 We're going to be fixing up a very simple password reset flow for a hypothetical website. A completed example is available [in the examples folder](https://github.com/taskless/taskless/tree/main/examples/next-gudie) if you'd like to just look at the final product.
 
-In this example, we're using a third party service for sending email, emulated through some `setTimeout` calls. Like any other service, there can be hiccups. What we're building is a solution to that flaky service; it's long running retries without making the user stare at a "loading" icon while we do it. This process, _doing work in the background_ is where Taskless excels.
+In this example, we're using a third party service for sending email, emulated through some `setTimeout` calls. Like any other service, there can be hiccups, downtime, and slow connections. Because we don't want our users waiting while we talk to the email service, we're going to shift this work out of the API request the user makes to request the reset. This process, _doing work in the background_ is perfect for Taskless.
 
 ## Environment Setup
 
@@ -30,7 +30,7 @@ That's it for setup. When we run `pnpm dev` from our console, we'll get the fami
 
 ## The Password Reset Page
 
-Our password reset page isn't special; most of it is a clone of the landing page for the Next.js framework. We're going to keep things simple, so our example doesn't do any client-side validation. It's just the input and a submit button. The file is `/pages/auth/reset.tsx`:
+To keep things simple, we'll borrow several of the Next.js starter styles and add a basic input and button for password resetting. In a production app, you'd likely use `react-hook-form`, `Formik`, or another form management library. The file we're looking at is `/pages/auth/reset.tsx`:
 
 ```tsx
 import Head from "next/head";
@@ -104,7 +104,7 @@ export default function Home() {
 }
 ```
 
-As you interact with the page at [http://localhost:3000/auth/reset](http://localhost:3000/auth/reset), you'll notice that the page "hangs" for a moment or two. Looking in our console, we can see our Mail Service timed out.
+As you interact with the page at [http://localhost:3000/auth/reset](http://localhost:3000/auth/reset), you'll notice that the page "hangs" for a moment or two. Looking in our console, we can see our Mail Service is occasioanly timing out. And while we're waiting on our Mail Service to respond, the user's stuck waiting with us. 😬
 
 ```
 [dev:next] ⤵️   Making request via reset-slow
@@ -118,13 +118,9 @@ As you interact with the page at [http://localhost:3000/auth/reset](http://local
 [dev:next] [💥] Call Mail Service API Timed Out (7s)
 ```
 
-😬
-
-The user just sat waiting for seven seconds while we waited on our mail service to respond. Even worse, we never sent the email! Instead of building retry logic, error handling, and backoffs for every endpoint, we can just use Taskless.
-
 ## Enter the Taskless Queue
 
-Queues in Taskless are small, publicly accessible functions in your app. We recommend making them available inside of a `queues` directory. We've taken the slow parts (literally) of our API endpoint and put them inside of a Taskless runner:
+Queues in Taskless are small, publicly accessible functions in your app. We recommend making them available inside of a `queues` directory; wherever your data endpoints go best. We've taken the slow parts (literally) of our API endpoint and put them inside of a Taskless runner. For Next.js, this would be `/pages/api/queues/reset.ts`:
 
 ```ts
 import { createQueue } from "@taskless/next";
@@ -138,6 +134,7 @@ export default createQueue<ResetData>(
   "password-reset",
   "/api/queues/reset",
   async (job, api) => {
+    console.info("⤵️   Running Taskless Background Job");
     await performSlowGlitchyPasswordReset();
     return { ok: true };
   }
@@ -173,16 +170,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   await reset.enqueue(key, { email }, { retries: 3 });
 
+  console.info("[✅] Sent to Taskless");
   res.status(200).json({ ok: true });
 };
 
 export default handler;
 ```
 
-This follows the `createQueue` example from the [next.js + taskless docs](/docs/get-started/nextjs). Now, when our password reset flow times out and fails, the request is automatically requeued and retried. A log of the action shows up in the Taskless Dev Server too.
+Now, when "Use Taskless" is selected, we'll push everything to the background. Even if our service is slow to respond, the user always gets an immediate response from our API. When our flaky Mail Service fails, Taskless backs off for a few seconds and tries again.
 
 ```
 [dev:next] ⤵️   Making request via reset-fast
+[dev:next] [✅] Sent to Taskless
+[dev:next] ⤵️   Running Taskless Background Job
 [dev:next] [⏳] Check abuse rate limits
 [dev:next] [✅] Check abuse rate limits
 [dev:next] [⏳] Lookup user by email
@@ -195,6 +195,7 @@ This follows the `createQueue` example from the [next.js + taskless docs](/docs/
 [dev:next]     at ...
 [dev:t   ] info   - 17:10:41.41 (root) FAIL of c496c6be-cc69-507f-bd14-4e4380be8945
 [dev:t   ] error  - 17:10:41.41 (root) Received non-2xx response
+[dev:next] ⤵️   Running Taskless Background Job
 [dev:next] [⏳] Check abuse rate limits
 [dev:next] [✅] Check abuse rate limits
 [dev:next] [⏳] Lookup user by email

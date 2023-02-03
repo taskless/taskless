@@ -24,6 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   await reset.enqueue(key, { email }, { retries: 3 });
 
+  console.info("[✅] Sent to Taskless");
   res.status(200).json({ ok: true });
 };
 

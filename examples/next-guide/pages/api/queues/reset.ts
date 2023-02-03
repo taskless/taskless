@@ -9,6 +9,7 @@ export default createQueue<ResetData>(
   "password-reset",
   "/api/queues/reset",
   async (job, api) => {
+    console.info("⤵️   Running Taskless Background Job");
     await performSlowGlitchyPasswordReset();
     return { ok: true };
   }
