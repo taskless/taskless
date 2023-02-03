@@ -47,33 +47,54 @@ export const queueOptions = z.object({
     .union([z.string(), z.null()])
     .optional()
     .default(() => {
-      /** Extract the netlify URL from env if set */
+      /**
+       * Extract the netlify URL from env if set
+       * source: https://docs.netlify.com/functions/environment-variables/#functions
+       */
       const getNetlifyUrl = () => {
+        const isNetlify = process.env.NETLIFY;
         const siteId = process.env.SITE_ID;
-        const netlifyDev = process.env.NETLIFY_DEV;
-        const deployUrl = process.env.DEPLOY_URL;
-        if (siteId) {
-          return "https://" + siteId + ".netlify.app";
-        } else {
-          if (netlifyDev) {
-            return deployUrl;
-          }
+        const url = process.env.URL;
+        if (isNetlify && siteId && url) {
+          return url;
         }
         return undefined;
       };
 
-      /** Extract the vercel URL from env is set */
+      /**
+       * Extract the vercel URL from env if set
+       * source: https://vercel.com/docs/concepts/projects/environment-variables#system-environment-variables
+       */
       const getVercelUrl = () => {
-        return process.env.VERCEL_URL
+        return process.env.VERCEL && process.env.VERCEL_URL
           ? `https://${process.env.VERCEL_URL}`
           : undefined;
       };
 
+      /**
+       * Extract the render URL from env if set
+       * source: https://render.com/docs/environment-variables
+       */
+      const getRenderUrl = () => {
+        return process.env.RENDER && process.env.RENDER_EXTERNAL_URL
+          ? process.env.RENDER_EXTERNAL_URL
+          : undefined;
+      };
+
+      /**
+       * Return the taskless URL from the env if set
+       */
       const getTasklessUrl = () => {
         return process.env.TASKLESS_BASE_URL ?? undefined;
       };
 
-      return getTasklessUrl() ?? getNetlifyUrl() ?? getVercelUrl() ?? null;
+      return (
+        getTasklessUrl() ??
+        getNetlifyUrl() ??
+        getVercelUrl() ??
+        getRenderUrl() ??
+        null
+      );
     }),
   /**
    * A separator for compound keys (passed as arrays). Defaults to `/`,
