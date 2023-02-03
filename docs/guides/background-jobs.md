@@ -8,9 +8,9 @@ In this guide, we're going to build a simple background job processor in Taskles
 
 ## Password Resets, but Faster and More Reliable
 
-We're going to be fixing up a very simple password reset flow for a hypothetical website. A completed example is available [in the examples folder](https://github.com/taskless/taskless/tree/main/examples/next-postmark) if you'd like to just look at the final product.
+We're going to be fixing up a very simple password reset flow for a hypothetical website. A completed example is available [in the examples folder](https://github.com/taskless/taskless/tree/main/examples/next-gudie) if you'd like to just look at the final product.
 
-In this example, we're using a third party service for sending email. We call it [Postmark](https://postmarkapp.com/), but it could be Mandrill, Mailchimp, or any other email gateway. Like any other service, there can be hiccups. We don't want the user waiting for a password reset to be stuck waiting on our server-to-server communication; this is doubly true if we need to retry sending the email multiple times. This process, _doing work in the background_ is where Taskless excels.
+In this example, we're using a third party service for sending email, emulated through some `setTimeout` calls. Like any other service, there can be hiccups. What we're building is a solution to that flaky service; it's long running retries without making the user stare at a "loading" icon while we do it. This process, _doing work in the background_ is where Taskless excels.
 
 ## Environment Setup
 
@@ -19,15 +19,9 @@ We'll start by creating a copy of our [next-guide](https://github.com/taskless/t
 > **Note:** You can also use npm or yarn for dependency management.
 
 ```sh
-npx create-next-app@latest next-postmark --use-pnpm --example "https://github.com/taskless/examples/next-guide"
+npx create-next-app@latest next-background --use-pnpm --example "https://github.com/taskless/examples/next-guide"
 cd next-guide
 touch .env.local
-```
-
-Secrets such as our postmark token go into `.env.local`
-
-```
-POSTMARK_TOKEN=your_postmark_api_token
 ```
 
 That's it for setup. When we run `pnpm dev` from our console, we'll get the familiar next.js starter page. Next.js will run on port `3000`, while the Taskless Dev Server runs on `3001`,
@@ -110,7 +104,7 @@ export default function Home() {
 }
 ```
 
-As you interact with the page at [http://localhost:3000/auth/reset](http://localhost:3000/auth/reset), you'll notice that the page "hangs" for a moment or two. Looking in our console, we can see our Postmark service timed out.
+As you interact with the page at [http://localhost:3000/auth/reset](http://localhost:3000/auth/reset), you'll notice that the page "hangs" for a moment or two. Looking in our console, we can see our Mail Service timed out.
 
 ```
 [dev:next] ⤵️   Making request via reset-slow
