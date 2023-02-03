@@ -46,7 +46,35 @@ export const queueOptions = z.object({
   baseUrl: z
     .union([z.string(), z.null()])
     .optional()
-    .default(() => process.env.TASKLESS_BASE_URL ?? null),
+    .default(() => {
+      /** Extract the netlify URL from env if set */
+      const getNetlifyUrl = () => {
+        const siteId = process.env.SITE_ID;
+        const netlifyDev = process.env.NETLIFY_DEV;
+        const deployUrl = process.env.DEPLOY_URL;
+        if (siteId) {
+          return "https://" + siteId + ".netlify.app";
+        } else {
+          if (netlifyDev) {
+            return deployUrl;
+          }
+        }
+        return undefined;
+      };
+
+      /** Extract the vercel URL from env is set */
+      const getVercelUrl = () => {
+        return process.env.VERCEL_URL
+          ? `https://${process.env.VERCEL_URL}`
+          : undefined;
+      };
+
+      const getTasklessUrl = () => {
+        return process.env.TASKLESS_BASE_URL ?? undefined;
+      };
+
+      return getTasklessUrl() ?? getNetlifyUrl() ?? getVercelUrl() ?? null;
+    }),
   /**
    * A separator for compound keys (passed as arrays). Defaults to `/`,
    * which is suitable for most situations but may also be overridden on
