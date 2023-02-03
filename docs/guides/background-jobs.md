@@ -32,7 +32,7 @@ POSTMARK_TOKEN=your_postmark_api_token
 
 That's it for setup. When we run `pnpm dev` from our console, we'll get the familiar next.js starter page. Next.js will run on port `3000`, while the Taskless Dev Server runs on `3001`,
 
-x$image - next13-home
+![next13-home](https://user-images.githubusercontent.com/1795/216490240-3c8cd35e-ef55-42e3-bd47-03252c3d9f33.png)
 
 ## The Password Reset Page
 
@@ -212,7 +212,7 @@ This follows the `createQueue` example from the [next.js + taskless docs](/docs/
 [dev:t   ] info   - 17:11:15.745 (root) ACK of c496c6be-cc69-507f-bd14-4e4380be8945
 ```
 
-x$image - fail-success
+![fail-success](https://user-images.githubusercontent.com/1795/216490321-b5187cda-76b2-44f9-9a55-dd6a998c1eb1.png)
 
 ## What's Next
 
