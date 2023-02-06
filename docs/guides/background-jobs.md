@@ -211,4 +211,4 @@ Now, when "Use Taskless" is selected, we'll push everything to the background. E
 
 ## What's Next
 
-Background jobs are just one of the many things you can do with Taskless. Check out the [getting started guide](/docs/welcome) for other guides and ideas.
+Background jobs are just one of the many things you can do with Taskless. Check out the [getting started doc](/docs/welcome) for other guides and ideas.
