@@ -9,6 +9,12 @@
       url: /docs/get-started/express
     - title: Other Integrations
       url: /docs/get-started/other
+- title: Guides
+  routes:
+    - title: Background Jobs
+      url: /docs/guides/background-jobs
+    - title: Timezone Aware Jobs
+      url: /docs/guides/tz-aware
 - title: Methods and APIs
   routes:
     - title: Creating a Queue
