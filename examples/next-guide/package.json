@@ -8,7 +8,8 @@
     "dev:next": "next dev",
     "dev:t": "taskless",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@next/font": "13.1.6",

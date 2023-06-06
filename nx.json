@@ -7,6 +7,7 @@
           "lint",
           "build",
           "codegen",
+          "eslint",
           "test",
           "tsup",
           "typecheck"
@@ -16,16 +17,19 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build", "codegen"]
+      "dependsOn": ["^build", "codegen"],
+      "outputs": ["{projectRoot}/dist"]
     },
     "codegen": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/src/__generated__"]
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["build"]
     },
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/tsconfig.tsbuildinfo"]
     }
   },
   "affected": {

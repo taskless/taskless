@@ -14,6 +14,7 @@
     "build": "run-s tsup",
     "clean": "shx rm -rf dist && shx mkdir dist",
     "dev": "tsup --watch",
+    "eslint": "eslint .",
     "release:before:init": "run-s clean typecheck build test",
     "test": "ava",
     "tsup": "tsup",

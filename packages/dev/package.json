@@ -15,6 +15,7 @@
     "build:next": "next build",
     "clean": "shx rm -rf ./.next",
     "dev": "node ./server.js",
+    "lint": "next lint",
     "release:before:init": "run-s clean typecheck build test",
     "start": "./bin/cli.js",
     "taskless": "./bin/cli.js",

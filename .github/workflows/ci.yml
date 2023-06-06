@@ -95,10 +95,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm recursive install --frozen-lockfile
-      - name: Eslint
+      - name: Run lint tasks
         # TODO: factor out into lint tasks in each package
         # TODO: also run prettier
-        run: pnpm eslint
+        run: pnpm exec nx run-many --target=eslint --target=lint
+      - name: Check formatting
+        run: pnpm exec nx format:check
       - name: Typecheck
         run: pnpm exec nx run-many --target=typecheck
 
