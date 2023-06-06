@@ -6,6 +6,8 @@
     "@taskless/graphinql": "file:../../packages/graphinql",
     "@taskless/client": "file:../../packages/client",
     "@taskless/express": "file:../../packages/express",
-    "@taskless/next": "file:../../packages/next"
+    "@taskless/next": "file:../../packages/next",
+    "express": "^4.18.2",
+    "next": "^13.4.4"
   }
 }

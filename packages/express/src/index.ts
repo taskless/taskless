@@ -5,10 +5,13 @@ import {
   type JobHandler,
   type QueueOptions,
 } from "@taskless/client";
-import * as express from "express";
+import type * as Express from "express";
+import { createRequire } from "node:module";
 
 // re-export core client
 export * from "@taskless/client";
+
+const __require = require ?? createRequire(import.meta.url);
 
 /**
  * An Express compatible API Handler, with Taskless Queue support
@@ -24,7 +27,7 @@ export interface TasklessExpressRouter<T> extends CreateQueueMethods<T> {
    * @param mount Specify an optional mount path for this express router
    * @returns An express Router object
    */
-  router: (mount?: string) => express.Router;
+  router: (mount?: string) => Express.Router;
 }
 
 /**
@@ -76,8 +79,8 @@ export function createQueue<T = undefined>(
    */
   const mount = (
     at?: string,
-    options?: express.RouterOptions
-  ): express.Router => {
+    options?: Express.RouterOptions
+  ): Express.Router => {
     if (isMounted) {
       throw new Error("TasklessExpressRouter should not be mounted twice");
     }
@@ -85,7 +88,7 @@ export function createQueue<T = undefined>(
     mountAt = at ?? "/";
     isMounted = true;
 
-    const handle: express.RequestHandler = (request, response, next) => {
+    const handle: Express.RequestHandler = (request, response, next) => {
       // compatible with express' non-sync handlers
       const run = async () => {
         await t.receive({
@@ -115,7 +118,8 @@ export function createQueue<T = undefined>(
       });
     };
 
-    const router = express.Router(options);
+    const express = __require("express");
+    const router: Express.Router = express.Router(options);
     const cr = cleanRoute(route);
     router.get(cr, (_req, res) => {
       res.status(400).end("Bad Request");

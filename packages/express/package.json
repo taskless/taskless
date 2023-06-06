@@ -69,11 +69,6 @@
   "peerDependencies": {
     "express": ">= 4.16.0"
   },
-  "peerDependenciesMeta": {
-    "express": {
-      "optional": true
-    }
-  },
   "publishConfig": {
     "access": "public"
   }

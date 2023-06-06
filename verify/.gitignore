@@ -1,0 +1,2 @@
+# ignore generated package-lock for verifiers
+package-lock.json

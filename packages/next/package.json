@@ -71,11 +71,6 @@
   "peerDependencies": {
     "next": ">=11.0"
   },
-  "peerDependenciesMeta": {
-    "next": {
-      "optional": true
-    }
-  },
   "publishConfig": {
     "access": "public"
   }
