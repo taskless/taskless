@@ -4,6 +4,7 @@ interface HeadingProps {
   id?: string;
   level?: number;
   className?: string;
+  children: React.ReactNode;
 }
 
 export const Heading: React.FC<HeadingProps> = ({

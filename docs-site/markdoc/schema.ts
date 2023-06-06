@@ -33,7 +33,7 @@ export const markdocSchema: Config = {
   partials: {},
 };
 
-export const markdocComponents: Record<string, React.ReactNode> = {
+export const markdocComponents = {
   Fence,
   Heading,
   Document,

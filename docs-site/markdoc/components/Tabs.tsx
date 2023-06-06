@@ -2,6 +2,7 @@ import React from "react";
 
 interface TabsProps {
   labels: string[];
+  children: React.ReactNode;
 }
 
 export const TabContext = React.createContext("");
@@ -61,6 +62,7 @@ export const Tabs: React.FC<TabsProps> = ({ labels, children }) => {
 
 interface TabProps {
   label: string;
+  children: React.ReactNode;
 }
 
 export const Tab: React.FC<TabProps> = ({ label, children }) => {

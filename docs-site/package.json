@@ -6,7 +6,8 @@
   "repository": "taskless/taskless.git",
   "scripts": {
     "dev": "next dev",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build": "next build"
   },
   "engines": {
     "node": ">=14.19.0"

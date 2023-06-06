@@ -11,10 +11,11 @@ type Yaml = Record<string, unknown>;
 export const Document: React.FC<
   BaseHTMLAttributes<HTMLDivElement> & DocumentProps
 > = ({ matter, ...rest }) => {
+  const title = (matter?.title as string) ?? "Taskless Docs";
   return (
     <>
       <Head>
-        <title key="title">{matter?.title ?? "Taskless Docs"}</title>
+        <title key="title">{title}</title>
       </Head>
       <article {...rest} />
     </>
