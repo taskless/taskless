@@ -23,6 +23,9 @@
     },
     "test": {
       "dependsOn": ["^build"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
     }
   },
   "affected": {
