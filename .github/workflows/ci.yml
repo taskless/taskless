@@ -16,7 +16,7 @@ jobs:
         node-version: ["16.20"]
         pnpm-version: [7.x]
 
-    name: test [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]
+    name: "test [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -38,14 +38,14 @@ jobs:
       - name: Build & test all packages
         run: pnpm exec nx run-many --target=build --target=test
 
-  lint:
+  verify:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: ["16.20"]
         pnpm-version: [7.x]
 
-    name: lint [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]
+    name: "verify [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -64,17 +64,52 @@ jobs:
 
       - name: Install dependencies
         run: pnpm recursive install --frozen-lockfile
-      - name: Build & test all packages
-        run: pnpm exec nx run-many --target=lint
+      - name: Build packages
+        run: pnpm exec nx run-many --target=build
+      - name: Verify imports
+        run: pnpm verify
 
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["16.20"]
+        pnpm-version: [7.x]
+
+    name: "lint [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm recursive install --frozen-lockfile
+      - name: Eslint
+        # TODO: factor out into lint tasks in each package
+        # TODO: also run prettier
+        run: pnpm eslint
+      - name: Typecheck
+        run: pnpm exec nx run-many --target=typecheck
 
   ci_success:
     runs-on: ubuntu-latest
     name: CI Success
-    needs: [test, lint]
+    needs: [test, verify, lint]
     if: |
       always() &&
       (needs.test.result == 'success' || needs.test.result == 'skipped') &&
+      (needs.verify.result == 'success' || needs.verify.result == 'skipped') &&
       (needs.lint.result == 'success' || needs.lint.result == 'skipped')
     steps:
       - name: Trace
