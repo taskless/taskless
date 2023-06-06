@@ -265,6 +265,7 @@ importers:
       '@tailwindcss/aspect-ratio': ^0.4.2
       '@tailwindcss/forms': ^0.5.0
       '@tailwindcss/typography': ^0.5.7
+      '@taskless/client': 3.6.2
       '@taskless/graphinql': 3.6.2
       '@taskless/next': 3.6.2
       '@taskless/ui': 3.6.2
@@ -307,6 +308,7 @@ importers:
     dependencies:
       '@headlessui/react': 1.7.3_biqbaboplfbrettd7655fr4n2y
       '@heroicons/react': 1.0.6_react@18.2.0
+      '@taskless/client': link:../client
       '@taskless/graphinql': link:../graphinql
       '@taskless/next': link:../next
       '@taskless/ui': link:../ui

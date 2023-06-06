@@ -1,13 +1,12 @@
 # Contributing to the Taskless Libraries
 
-- [🗺 Repository Layout](#-repository-layout)
-- [📦 Download and Setup](#-download-and-setup)
-- [⏱ Testing Your Changes](#-testing-your-changes)
-  - [✅ Unit Testing](#-unit-testing)
-  - [🏁 E2E Testing](#-e2e-testing)
-- [📚 Updating Documentation](#-updating-documentation)
-- [📝 Writing a Commit Message](#-writing-a-commit-message)
-- [🔎 Before Submitting](#-before-submitting)
+- [Contributing to the Taskless Libraries](#contributing-to-the-taskless-libraries)
+  - [🗺 Repository Layout](#-repository-layout)
+  - [📦 Download and Setup](#-download-and-setup)
+  - [📚 Updating Documentation](#-updating-documentation)
+  - [📝 Writing a Commit Message](#-writing-a-commit-message)
+  - [🔎 Before Submitting](#-before-submitting)
+  - [Additional Notes: Testing Against Production](#additional-notes-testing-against-production)
 
 Thanks for the help! We currently review PRs for `packages/`, `docs/`, `examples/`, and markdown files.
 
@@ -24,9 +23,9 @@ In the root of the repository, we have a few common files that affect nearly eve
 > 💽 The development environment for this repository does not support Windows. To contribute from Windows you must use WSL.
 
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device. (`git remote add upstream git@github.com:taskless/taskless.git` 😉). You can use `git clone --depth 1 --single-branch --branch main git@github.com:taskless/taskless.git`, discarding most of branches and history to clone it faster.
-2. Ensure at least [Node 14](https://nodejs.org/) is installed on your computer. (Check version with `node -v`). We have [Volta](https://volta.sh) defined on the root package.json to help out.
+2. Ensure at least [Node 16](https://nodejs.org/) is installed on your computer. (Check version with `node -v`). Any tool works, we're partial to ASDF but Volta, nvmrc, n, etc are all great.
 3. Install the dependencies using [pnpm](https://pnpm.io/) with `pnpm install`
-4. Create an initial build running `pnpm run dev`, which builds all the libraries initially
+4. Create an initial build running `pnpm run build`, which builds all the libraries initially. That'll make sure you've got everything working
 
 > If this didn't work for you as described, please [open an issue.](https://github.com/taskless/taskless/issues/new/choose)
 
