@@ -5,9 +5,9 @@
   "version": "3.6.2",
   "repository": "taskless/taskless.git",
   "scripts": {
+    "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
-    "build": "next build"
+    "lint": "next lint"
   },
   "engines": {
     "node": ">=14.19.0"
@@ -31,7 +31,7 @@
     "@tailwindcss/typography": "^0.5.7",
     "@types/eslint": "",
     "@types/js-yaml": "^4",
-    "@types/luxon": "^3.0.2",
+    "@types/luxon": "^3.0.3",
     "@types/markdown-it": "^12.2.3",
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
