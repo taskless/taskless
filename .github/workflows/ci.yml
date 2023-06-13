@@ -103,6 +103,8 @@ jobs:
         run: pnpm prettier . --check
       - name: Run eslint
         run: pnpm -r run eslint
+      - name: Build packages
+        run: pnpm -r run build
       - name: Typecheck
         run: pnpm -r run typecheck
       - name: Check for mismatched dependencies
