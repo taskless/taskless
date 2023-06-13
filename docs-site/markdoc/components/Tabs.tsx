@@ -1,9 +1,8 @@
 import React from "react";
 
-interface TabsProps {
+type TabsProps = React.PropsWithChildren<{
   labels: string[];
-  children: React.ReactNode;
-}
+}>;
 
 export const TabContext = React.createContext("");
 
@@ -60,10 +59,9 @@ export const Tabs: React.FC<TabsProps> = ({ labels, children }) => {
   );
 };
 
-interface TabProps {
+type TabProps = React.PropsWithChildren<{
   label: string;
-  children: React.ReactNode;
-}
+}>;
 
 export const Tab: React.FC<TabProps> = ({ label, children }) => {
   const currentTab = React.useContext(TabContext);

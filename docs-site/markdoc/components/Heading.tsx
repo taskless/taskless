@@ -1,11 +1,10 @@
 import * as React from "react";
 
-interface HeadingProps {
+type HeadingProps = React.PropsWithChildren<{
   id?: string;
   level?: number;
   className?: string;
-  children: React.ReactNode;
-}
+}>;
 
 export const Heading: React.FC<HeadingProps> = ({
   id = "",
