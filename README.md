@@ -63,9 +63,7 @@ If you still have questions you can ask them on our [forums](#) and get support 
 Curious about who makes Taskless? Here are our [team members](https://taskless.io/about)! Additionally, Taskless is made possible by the following members of the community who've contributed code, docs, bugs, and more. This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#-contributors)
-
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -74,8 +72,9 @@ Curious about who makes Taskless? Here are our [team members](https://taskless.i
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="https://codedrift.com"><img src="https://avatars.githubusercontent.com/u/1795?v=4?s=100" width="100px;" alt="Jakob Heuser"/><br /><sub><b>Jakob Heuser</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Code">💻</a> <a href="#infra-jakobo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Documentation">📖</a></td>
-      <td align="center"><a href="https://github.com/TAKANOME-DEV"><img src="https://avatars.githubusercontent.com/u/79809121?v=4?s=100" width="100px;" alt="takanome_dev"/><br /><sub><b>takanome_dev</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Documentation">📖</a> <a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://codedrift.com"><img src="https://avatars.githubusercontent.com/u/1795?v=4?s=100" width="100px;" alt="Jakob Heuser"/><br /><sub><b>Jakob Heuser</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Code">💻</a> <a href="#infra-jakobo" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=jakobo" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/TAKANOME-DEV"><img src="https://avatars.githubusercontent.com/u/79809121?v=4?s=100" width="100px;" alt="takanome_dev"/><br /><sub><b>takanome_dev</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Documentation">📖</a> <a href="https://github.com/taskless/taskless/commits?author=TAKANOME-DEV" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://segiddins.me"><img src="https://avatars.githubusercontent.com/u/1946610?v=4?s=100" width="100px;" alt="Samuel Giddins"/><br /><sub><b>Samuel Giddins</b></sub></a><br /><a href="https://github.com/taskless/taskless/commits?author=segiddins" title="Code">💻</a> <a href="#infra-segiddins" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/taskless/taskless/commits?author=segiddins" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
 </table>

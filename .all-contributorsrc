@@ -26,6 +26,17 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "segiddins",
+      "name": "Samuel Giddins",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1946610?v=4",
+      "profile": "https://segiddins.me",
+      "contributions": [
+        "code",
+        "infra",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -33,5 +44,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "projectName": "taskless",
-  "projectOwner": "taskless"
+  "projectOwner": "taskless",
+  "commitType": "docs"
 }
