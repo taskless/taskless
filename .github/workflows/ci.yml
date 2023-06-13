@@ -82,6 +82,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          # fetch-depth: 0 is required to get all commits for commitlint
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v2
         name: Install pnpm
