@@ -73,7 +73,7 @@ export default async function handler(
     logger.info(`ACK of ${info.ref}`);
     const now = DateTime.now();
     runs.insertOne({
-      ts: now.toISO(),
+      ts: now.toISO() || "",
       metadata: {
         id: info.ref,
         name: info.payload.name,
@@ -90,13 +90,13 @@ export default async function handler(
       })
       .update((doc) => {
         if (info.next) {
-          doc.runAt = DateTime.fromJSDate(info.next).toISO();
+          doc.runAt = DateTime.fromJSDate(info.next).toISO() ?? "";
         }
         doc.summary = {
           nextRun: info.next
-            ? DateTime.fromJSDate(info.next).toISO()
+            ? DateTime.fromJSDate(info.next).toISO() ?? undefined
             : undefined,
-          lastRun: now.toISO(),
+          lastRun: now.toISO() ?? undefined,
           lastStatus: true,
         };
       })
@@ -120,7 +120,7 @@ export default async function handler(
     const name = info.payload?.name ?? info.ref;
 
     runs.insertOne({
-      ts: now.toISO(),
+      ts: now.toISO() ?? "",
       metadata: {
         id: info.ref,
         name,
@@ -137,13 +137,13 @@ export default async function handler(
       })
       .update((doc) => {
         if (info.next) {
-          doc.runAt = DateTime.fromJSDate(info.next).toISO();
+          doc.runAt = DateTime.fromJSDate(info.next).toISO() ?? "";
         }
         doc.summary = {
           nextRun: info.next
-            ? DateTime.fromJSDate(info.next).toISO()
+            ? DateTime.fromJSDate(info.next).toISO() ?? undefined
             : undefined,
-          lastRun: now.toISO(),
+          lastRun: now.toISO() ?? undefined,
           lastStatus: true,
         };
       })
@@ -160,7 +160,7 @@ export default async function handler(
         if (!info.next) {
           return;
         }
-        doc.runAt = DateTime.fromJSDate(info.next).toISO();
+        doc.runAt = DateTime.fromJSDate(info.next).toISO() ?? "";
       })
       .data();
   });

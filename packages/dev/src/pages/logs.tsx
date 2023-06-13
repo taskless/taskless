@@ -63,9 +63,11 @@ const Logs: NextPage = () => {
               name: "Run",
               renderValue: ({ record }) => (
                 <span
-                  title={DateTime.fromJSDate(new Date(record.ts ?? 0))
-                    .toLocal()
-                    .toISO()}
+                  title={
+                    DateTime.fromJSDate(new Date(record.ts ?? 0))
+                      .toLocal()
+                      .toISO() ?? undefined
+                  }
                 >
                   {DateTime.fromJSDate(new Date(record.ts ?? 0)).toRelative()}
                 </span>

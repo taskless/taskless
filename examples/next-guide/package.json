@@ -8,7 +8,8 @@
     "dev:next": "next dev",
     "dev:t": "taskless",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@next/font": "13.1.6",
@@ -18,6 +19,7 @@
     "@types/react-dom": "18.0.10",
     "eslint": "8.41.0",
     "eslint-config-next": "13.1.6",
+    "luxon": "^3.0.3",
     "next": "13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@taskless/dev": "3.6.2",
+    "@types/luxon": "^3.0.3",
     "npm-run-all": "^4.1.5"
   }
 }

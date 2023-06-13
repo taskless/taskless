@@ -6,7 +6,8 @@
   "repository": "taskless/taskless.git",
   "scripts": {
     "build": "echo 'no express build step required'",
-    "dev": "ts-node src/server.ts"
+    "dev": "ts-node src/server.ts",
+    "eslint": "eslint ."
   },
   "engines": {
     "node": ">=14.19.0"

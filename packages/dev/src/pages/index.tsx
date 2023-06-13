@@ -219,7 +219,11 @@ const Home: NextPage = () => {
                 const run = extractRunData(record);
                 return (
                   <div className="flex flex-row items-center">
-                    <span title={run.next ? run.next.toISO() : undefined}>
+                    <span
+                      title={
+                        run.next ? run.next.toISO() ?? undefined : undefined
+                      }
+                    >
                       {run.next ? run.next.toRelative() : "-"}
                     </span>
                     {run.next ? (
@@ -241,7 +245,11 @@ const Home: NextPage = () => {
                 const run = extractRunData(record);
                 return (
                   <div className="flex flex-row items-center">
-                    <span title={run.last ? run.last.toISO() : undefined}>
+                    <span
+                      title={
+                        run.last ? run.last.toISO() ?? undefined : undefined
+                      }
+                    >
                       {run.last ? run.last.toRelative() : "-"}
                     </span>
                     {run.last ? (
@@ -324,12 +332,14 @@ const Home: NextPage = () => {
                       className="overflow-hidden text-ellipsis text-xs"
                       title={
                         record.runEvery
-                          ? Duration.fromISO(record.runEvery).toISO()
+                          ? Duration.fromISO(record.runEvery).toISO() ??
+                            undefined
                           : "-"
                       }
                     >
                       {record.runEvery
-                        ? Duration.fromISO(record.runEvery).toHuman()
+                        ? Duration.fromISO(record.runEvery).toHuman() ??
+                          undefined
                         : "-"}
                     </div>
                   </div>

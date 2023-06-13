@@ -1,0 +1,135 @@
+name: ci
+
+on:
+  # build pushes to main
+  push:
+    branches:
+      - main
+  # build PRs from forks
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["16.20"]
+        pnpm-version: [7.x]
+
+    name: "test [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm recursive install --frozen-lockfile
+      - name: Build all packages
+        run: pnpm -r run build
+      - name: Test all packages
+        run: pnpm -r test
+
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["16.20"]
+        pnpm-version: [7.x]
+
+    name: "verify [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm recursive install --frozen-lockfile
+      - name: Build packages
+        run: pnpm -r run build
+      - name: Verify imports
+        run: pnpm verify
+
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["16.20"]
+        pnpm-version: [7.x]
+
+    name: "lint [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          # fetch-depth: 0 is required to get all commits for commitlint
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: ${{ matrix.pnpm-version }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm recursive install --frozen-lockfile
+      - name: Run lint tasks
+        run: pnpm -r run lint
+      - name: Prettier
+        run: pnpm prettier . --check
+      - name: Run eslint
+        run: pnpm -r run eslint
+      - name: Build packages
+        run: pnpm -r run build
+      - name: Typecheck
+        run: pnpm -r run typecheck
+      - name: Check for mismatched dependencies
+        run: pnpm syncpack list-mismatches
+      - name: Check for non-semver dependencies
+        run: pnpm syncpack lint-semver-ranges || echo "Non-semver dependencies found"
+      - name: Validate current commit (last commit) with commitlint
+        if: github.event_name == 'push'
+        run: pnpm commitlint --from HEAD~1 --to HEAD --verbose
+      - name: Validate PR commits with commitlint
+        if: github.event_name == 'pull_request'
+        run: pnpm commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+  ci_success:
+    runs-on: ubuntu-latest
+    name: CI Success
+    needs: [test, verify, lint]
+    if: |
+      always() &&
+      (needs.test.result == 'success' || needs.test.result == 'skipped') &&
+      (needs.verify.result == 'success' || needs.verify.result == 'skipped') &&
+      (needs.lint.result == 'success' || needs.lint.result == 'skipped')
+    steps:
+      - name: Trace
+        run: echo "All jobs finished"

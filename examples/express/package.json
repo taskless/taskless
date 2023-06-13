@@ -7,6 +7,7 @@
   "scripts": {
     "build": "echo 'no express build step required'",
     "dev": "node -r dotenv/config ./bin/www.js dotenv_config_path=./.env.development",
+    "eslint": "eslint .",
     "start": "node ./bin/www.js"
   },
   "type": "commonjs",
