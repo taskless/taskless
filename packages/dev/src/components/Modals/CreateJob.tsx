@@ -498,7 +498,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                       setValue("retries", "0");
                       setValue(
                         "runAt",
-                        DateTime.now().plus({ minutes: 10 }).toISO()
+                        DateTime.now().plus({ minutes: 10 }).toISO() ?? ""
                       );
                       setValue("runEveryType", "once");
                       setValue("runEveryType-other", "");
@@ -544,7 +544,7 @@ export const CreateJobModal: React.FC<CreateJobModalProps> = ({
                       setValue("retries", "0");
                       setValue(
                         "runAt",
-                        DateTime.now().plus({ minutes: 10 }).toISO()
+                        DateTime.now().plus({ minutes: 10 }).toISO() ?? ""
                       );
                       setValue("runEveryType", "iso");
                       setValue("runEveryType-other", "PT10M");
