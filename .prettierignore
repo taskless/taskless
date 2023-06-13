@@ -6,3 +6,4 @@ reset.css
 .vscode
 node_modules
 .next
+pnpm-lock.yaml
