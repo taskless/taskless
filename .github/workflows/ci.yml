@@ -146,7 +146,7 @@ jobs:
       - name: Validate changelog
         if: |
           always() &&
-            contains(steps.changed-files.outputs.modified_files, 'CHANGELOG.md') &&
+            (!contains(steps.changed-files.outputs.modified_files, 'CHANGELOG.md')) &&
             (steps.changed-files-client.outputs.any_changed == 'true')
         run: |
           echo "Please update the CHANGELOG.md file since you have changed the client package" >> $GITHUB_STEP_SUMMARY
