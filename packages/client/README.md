@@ -19,7 +19,7 @@ A typescript client for communicating with Taskless.io
 
 **[Getting Started Guide](https://taskless.io/docs/get-started/other)**
 
-In some cases, you may not want to use a Taskless integration directly. For those situations, there's @taskless/client 💪🏻
+In some cases, you may not want to use a Taskless integration directly. For those situations, there's @taskless/client 💪🏻.
 
 ### Installation
 
