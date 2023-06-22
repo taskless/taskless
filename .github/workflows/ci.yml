@@ -153,6 +153,11 @@ jobs:
         uses: tj-actions/changed-files@v36
         with:
           files: packages/client
+      - name: DEBUG
+        run: |
+          echo "changed-files: ${{ steps.changed-files.outputs.modified_files }}"
+          echo "changed-files-client: ${{ steps.changed-files-client.outputs.modified_files }}"
+          echo "changed-files-client.any_changed: ${{ steps.changed-files-client.outputs.any_changed }}"
 
       - name: Validate changelog
         if: |
