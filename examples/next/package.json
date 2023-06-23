@@ -24,7 +24,6 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@taskless/dev": "3.6.2",
     "@types/eslint": "",
     "@types/luxon": "^3.0.3",
     "@types/node": "18.11.18",
