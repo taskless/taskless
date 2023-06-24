@@ -18,7 +18,7 @@ jobs:
         pnpm-version: [7.x]
     if: |
       success() &&
-        (github.event_name != 'pull_request' || (github.event.pull_request.type != 'labeled' && github.event.pull_request.type != 'unlabeled'))
+        (github.event_name != 'pull_request' || !contains(fromJson('["labeled", "unlabeled"]'), github.event.pull_request.type))
 
     name: "test [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
     steps:
@@ -52,7 +52,7 @@ jobs:
         pnpm-version: [7.x]
     if: |
       success() &&
-        (github.event_name != 'pull_request' || (github.event.pull_request.type != 'labeled' && github.event.pull_request.type != 'unlabeled'))
+        (github.event_name != 'pull_request' || !contains(fromJson('["labeled", "unlabeled"]'), github.event.pull_request.type))
 
     name: "verify [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
     steps:
@@ -86,7 +86,7 @@ jobs:
         pnpm-version: [7.x]
     if: |
       success() &&
-        (github.event_name != 'pull_request' || (github.event.pull_request.type != 'labeled' && github.event.pull_request.type != 'unlabeled'))
+      (github.event_name != 'pull_request' || !contains(fromJson('["labeled", "unlabeled"]'), github.event.pull_request.type))
 
     name: "lint [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
     steps:
