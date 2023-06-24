@@ -7,7 +7,6 @@ on:
       - main
   # build PRs from forks
   pull_request:
-    types: [opened, reopened, synchronize, labeled, unlabeled]
 
 jobs:
   test:
@@ -16,9 +15,6 @@ jobs:
       matrix:
         node-version: ["16.20"]
         pnpm-version: [7.x]
-    if: |
-      success() &&
-        (github.event_name != 'pull_request' || !contains(fromJson('["labeled", "unlabeled"]'), github.event.pull_request.type))
 
     name: "test [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
     steps:
@@ -50,9 +46,6 @@ jobs:
       matrix:
         node-version: ["16.20"]
         pnpm-version: [7.x]
-    if: |
-      success() &&
-        (github.event_name != 'pull_request' || !contains(fromJson('["labeled", "unlabeled"]'), github.event.pull_request.type))
 
     name: "verify [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
     steps:
@@ -84,9 +77,6 @@ jobs:
       matrix:
         node-version: ["16.20"]
         pnpm-version: [7.x]
-    if: |
-      success() &&
-      (github.event_name != 'pull_request' || !contains(fromJson('["labeled", "unlabeled"]'), github.event.pull_request.type))
 
     name: "lint [node ${{ matrix.node-version }}, pnpm ${{ matrix.pnpm-version }}]"
     steps:
@@ -156,7 +146,7 @@ jobs:
 
       - name: Validate changelog
         if: |
-          success() &&
+          always() &&
             (!contains(steps.changed-files.outputs.modified_files, 'CHANGELOG.md')) &&
             (steps.changed-files-client.outputs.any_changed == 'true')
         run: |
