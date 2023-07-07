@@ -21,5 +21,11 @@ module.exports = {
     ],
     "subject-case": [2, "always", "sentence-case"],
     "signed-off-by": [0, "always"],
+    "footer-max-line-length": [1, "always", 100],
+  },
+  parserPreset: {
+    parserOpts: {
+      noteKeywords: ["\\[[^\\]]+]:"],
+    },
   },
 };
