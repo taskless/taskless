@@ -121,15 +121,50 @@ jobs:
         if: github.event_name == 'pull_request'
         run: pnpm commitlint --from ${{ github.event.pull_request.head.sha }}~${{ github.event.pull_request.commits }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
+  validate_changelog:
+    runs-on: ubuntu-latest
+    name: Validate changelog
+    if: |
+      always() &&
+        (github.event_name == 'pull_request') &&
+        (!contains(github.event.pull_request.labels.*.name, 'pr: skip-changelog'))
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # fetch-depth: 0 is required to get all commits for changed-files
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v36
+
+      - name: Get changed files in the client package
+        id: changed-files-client
+        uses: tj-actions/changed-files@v36
+        with:
+          files: packages/client
+
+      - name: Validate changelog
+        if: |
+          always() &&
+            (!contains(steps.changed-files.outputs.modified_files, 'CHANGELOG.md')) &&
+            (steps.changed-files-client.outputs.any_changed == 'true')
+        run: |
+          echo "Please update the CHANGELOG.md file since you have changed the client package" >> $GITHUB_STEP_SUMMARY
+          exit 1
+
+
+
   ci_success:
     runs-on: ubuntu-latest
     name: CI Success
-    needs: [test, verify, lint]
+    needs: [test, verify, lint, validate_changelog]
     if: |
       always() &&
       (needs.test.result == 'success' || needs.test.result == 'skipped') &&
       (needs.verify.result == 'success' || needs.verify.result == 'skipped') &&
-      (needs.lint.result == 'success' || needs.lint.result == 'skipped')
+      (needs.lint.result == 'success' || needs.lint.result == 'skipped') &&
+      (needs.validate_changelog.result == 'success' || needs.validate_changelog.result == 'skipped')
     steps:
       - name: Trace
         run: echo "All jobs finished"
