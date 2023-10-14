@@ -40,11 +40,5 @@
     "peerDependenciesMeta",
     "scripts",
     "workspaces"
-  ],
-  "versionGroups": [
-    {
-      "dependencies": ["next"],
-      "packages": ["@taskless/dev"]
-    }
   ]
 }
